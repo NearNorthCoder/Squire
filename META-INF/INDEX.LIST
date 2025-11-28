@@ -1,0 +1,12 @@
+JarIndex-Version: 1.0
+
+jcef.jar
+org
+org/cef
+org/cef/browser
+org/cef/browser/mac
+org/cef/callback
+org/cef/handler
+org/cef/misc
+org/cef/network
+
