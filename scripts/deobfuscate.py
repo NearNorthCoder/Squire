@@ -268,6 +268,138 @@ class IdentifierRenamer:
         return content
 
 
+class PluginMapper:
+    """Maps hash-based plugin directories to their actual names."""
+
+    # Comprehensive mapping of hash IDs to plugin names and descriptions
+    HASH_TO_PLUGIN = {
+        # Bosses
+        '70c49992': ('Vorkath', 'Kills the big blue dragon'),
+        'f9e8fbd0': ('Zulrah', 'Zulrah killing plugin'),
+        'f9dee1ad': ('Hydra', 'Alchemical Hydra automation'),
+        'a79d2820': ('CorporealBeast', 'Kills Corp beast'),
+        'f13c63fa': ('Bandos', 'Kills General Graardor'),
+        '9cc2ff9a': ('Saradomin', 'Kills Commander Zilyana'),
+        'f8a8c131': ('Zamorak', 'Kills Kril Tsutsaroth'),
+        '2266a50d': ('DukeSucellus', 'DT2 boss'),
+        '861c713a': ('Vardorvis', 'DT2 boss'),
+        '0e178634': ('Whisperer', 'DT2 boss'),
+        '5c667a01': ('Scurrius', 'Rat King boss'),
+        '29f97a50': ('Shamans', 'Kills Lizardman Shamans'),
+
+        # Raids
+        '778e0a57': ('ChambersOfXeric', 'COX raid automation'),
+        '581bf999': ('AutoTOA', 'Full TOA automation'),
+
+        # Minigames
+        '3b638005': ('Barrows', 'Barrows runs'),
+        'fabe4829': ('FightCaves', 'Fight Caves automation'),
+        '2fcaa9ca': ('HallowedSepulchre', 'Sepulchre runs'),
+        '146c6f65': ('Gauntlet', 'Normal/Corrupted Gauntlet'),
+        'a295c4aa': ('GiantsFoundry', 'Giants Foundry minigame'),
+        '37ff9308': ('Mixology', 'Mixology minigame'),
+        '75784950': ('MoonsOfPeril', 'Moons of Peril'),
+        '1242c893': ('NightmareZone', 'NMZ automation'),
+        'd3ba43e2': ('PestControl', 'Pest Control'),
+        '36afa564': ('SorceressGarden', 'Sorceress Garden'),
+        '185d2d5a': ('Wintertodt', 'Wintertodt minigame'),
+
+        # Skilling
+        '29a54919': ('Agility', 'Agility courses'),
+        '06deb524': ('BlastFurnace', 'Blast Furnace'),
+        '99cb6034': ('Farmer', 'Farm runs'),
+        '5d6a9183': ('Herblore', 'Herblore automation'),
+        'e2a56d76': ('Hunter', 'Hunter skill'),
+        '3f45ab50': ('Miner', 'Mining automation'),
+        'afc9cf98': ('TitheFarm', 'Tithe Farm'),
+        'f90b6cea': ('Woodcutter', 'Woodcutting'),
+        '9bb83689': ('AerialFisher', 'Aerial fishing'),
+        'df6d2a51': ('Herbiboar', 'Herbiboar hunting'),
+
+        # Runecrafting
+        'd11e2dee': ('ZeahRunecrafter', 'Zeah runecrafting'),
+
+        # Slayer
+        '2e35b2d3': ('TuraelSkipper', 'Turael task skipping'),
+
+        # Account Building
+        'd1f9e3af': ('EasyClueBuilder', 'Easy clue account builder'),
+        '51c4371d': ('BarrowsBuilder', 'Barrows account builder'),
+        '7ff08cb7': ('GWDBuilder', 'GWD account builder'),
+        'fdd2f9b9': ('RoguesOutfitBuilder', 'Rogues outfit builder'),
+        '57051692': ('ShamanBuilder', 'Shaman account builder'),
+        '7c1d3521': ('SotfBuilder', 'SOTF account builder'),
+        '3047f210': ('TempletrekBuilder', 'Temple Trekking builder'),
+        '9e609a1b': ('RatKingBuilder', 'Rat King account builder'),
+
+        # Questing
+        '9740bba2': ('Quester', 'Quest automation'),
+        '1a91e21b': ('TempleTrekking', 'Temple Trekking'),
+
+        # Utility
+        '4d97445a': ('Basics', 'Many utility sub-plugins'),
+        '21e931a2': ('Leagues', 'Leagues mode tools'),
+        'a162439f': ('CharterShips', 'Charter ship navigation'),
+        'd1b70a7e': ('Tempoross', 'Tempoross fish barrel'),
+    }
+
+    # Known NPC IDs for content identification
+    NPC_IDS = {
+        # Warriors Guild Cyclops
+        2463: 'Cyclops',
+        2464: 'Cyclops',
+        2465: 'Cyclops',
+        2466: 'Cyclops',
+        2467: 'Cyclops',
+        2468: 'Cyclops',
+        2137: 'Cyclops',
+        2138: 'Cyclops',
+        2139: 'Cyclops',
+        2140: 'Cyclops',
+        2141: 'Cyclops',
+        2142: 'Cyclops',
+        # Mahogany Homes
+        3266: 'Norman',
+        10414: 'Bob',
+        10415: 'Jeff',
+        10416: 'Sarah',
+        10417: 'Tau',
+        10418: 'Larry',
+        10419: 'Noella',
+        10420: 'Ross',
+        10421: 'Jess',
+        10422: 'Mariah',
+        10423: 'Leela',
+        10424: 'Barbara',
+    }
+
+    @classmethod
+    def get_plugin_info(cls, hash_id: str) -> tuple:
+        """Get plugin name and description from hash ID."""
+        return cls.HASH_TO_PLUGIN.get(hash_id, (None, None))
+
+    @classmethod
+    def add_plugin_header(cls, content: str, hash_id: str) -> str:
+        """Add a header comment with plugin information."""
+        name, desc = cls.get_plugin_info(hash_id)
+        if name:
+            header = f"""/*
+ * Squire Plugin: {name}
+ * Description: {desc}
+ * Original Hash: {hash_id}
+ * Deobfuscated by Squire Deobfuscator
+ */
+
+"""
+            # Add header after package declaration if present
+            if 'package ' in content:
+                parts = content.split('\n', 1)
+                if parts[0].startswith('package '):
+                    return parts[0] + '\n\n' + header + parts[1]
+            return header + content
+        return content
+
+
 class PackageMapper:
     """Maps obfuscated package names to readable names."""
 
@@ -324,6 +456,13 @@ class SquireDeobfuscator:
             content = f.read()
 
         original_len = len(content)
+
+        # 0. Detect plugin hash from path and add header
+        path_parts = file_path.parts
+        for part in path_parts:
+            if re.match(r'^[a-f0-9]{8}$', part):
+                content = PluginMapper.add_plugin_header(content, part)
+                break
 
         # 1. Decrypt strings
         encrypted_strings = self.find_encrypted_strings(content)
@@ -406,9 +545,17 @@ class SquireDeobfuscator:
 
     def generate_cipher_report(self):
         """Generate a cipher mapping report."""
+        # Convert plugin mappings to a more readable format
+        plugin_map = {
+            hash_id: {'name': name, 'description': desc}
+            for hash_id, (name, desc) in PluginMapper.HASH_TO_PLUGIN.items()
+        }
+
         report = {
             'identifier_mappings': dict(self.renamer.name_cache),
             'package_mappings': PackageMapper.PACKAGE_MAP,
+            'plugin_mappings': plugin_map,
+            'npc_ids': {str(k): v for k, v in PluginMapper.NPC_IDS.items()},
             'stats': self.stats,
         }
 
@@ -417,6 +564,7 @@ class SquireDeobfuscator:
             json.dump(report, f, indent=2)
 
         print(f"\n[+] Cipher report saved to: {report_path}")
+        print(f"[+] Plugin mappings: {len(PluginMapper.HASH_TO_PLUGIN)} plugins identified")
 
 
 def main():
