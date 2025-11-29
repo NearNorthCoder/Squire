@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group = 'gg.squire'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.runelite.net' }
+}
+
+dependencies {
+    compileOnly 'net.runelite:client:1.10.+'
+    compileOnly 'org.projectlombok:lombok:1.18.+'
+    annotationProcessor 'org.projectlombok:lombok:1.18.+'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
