@@ -1,0 +1,135 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.google.inject.Inject
+ *  gg.squire.client.plugins.fw.Task
+ *  gg.squire.client.plugins.fw.TaskDesc
+ *  gg.squire.client.util.Log
+ *  net.runelite.api.Locatable
+ *  net.runelite.api.NPC
+ *  net.runelite.api.Player
+ *  net.runelite.api.coords.WorldPoint
+ *  net.unethicalite.api.entities.Players
+ *  net.unethicalite.api.movement.Movement
+ *  net.unethicalite.api.movement.Reachable
+ */
+package gg.squire.construction.tasks;
+
+import com.google.inject.Inject;
+import gg.squire.basics.cerberus.SquireCerberusConfig;
+import gg.squire.client.plugins.fw.Task;
+import gg.squire.client.plugins.fw.TaskDesc;
+import gg.squire.client.util.Log;
+import gg.squire.construction.tasks.ConstructionManager;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.Locatable;
+import net.runelite.api.NPC;
+import net.runelite.api.Player;
+import net.runelite.api.coords.WorldPoint;
+import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.movement.Movement;
+import net.unethicalite.api.movement.Reachable;
+
+@TaskDesc(name="Attacking Cerberus", priority=5)
+public class AttackingCerberusTask
+extends Task {
+    private final  a aA;
+    private final  SquireCerberusConfig aB;
+
+    private static void lllllIlI() {
+        lIIIIII = new String[lIIIIIl[5]];
+        r.lIIIIII[r.lIIIIIl[0]] = "Attack";
+        r.lIIIIII[r.lIIIIIl[2]] = "Cerberus is not attackable yet.";
+        r.lIIIIII[r.lIIIIIl[4]] = "Attack";
+    }
+
+    private static boolean lllllllI(int n2) {
+        return n2 != 0;
+    }
+
+    private static boolean llllllII(Object object) {
+        return object != null;
+    }
+
+    private static boolean lIIIIIIIl(int n2, int n3) {
+        return n2 >= n3;
+    }
+
+    private static boolean lIIIIIIII(int n2, int n3) {
+        return n2 > n3;
+    }
+
+        return String.valueOf(llllIIlIlIIlIII);
+    }
+
+    @Inject
+    private AttackingCerberusTask(a a2, SquireCerberusConfig squireCerberusConfig) {
+        this.aA = a2;
+        this.aB = squireCerberusConfig;
+    }
+
+    private static boolean lIIIIIIlI(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static boolean llllllll(int n2) {
+        return n2 == 0;
+    }
+
+    static {
+        r.lllllIll();
+        r.lllllIlI();
+    }
+
+    private static boolean llllllIl(Object object) {
+        return object == null;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    public boolean run() {
+        void var1_1;
+        r llllIIlIllIIlII;
+        NPC llllIIlIllIIIll;
+        if (!r.llllllII(this.aA.k()) || r.llllllIl(this.aA.k().y())) {
+            return lIIIIIl[0];
+        }
+        if (!r.llllllIl(Players.getLocal().getInteracting()) || r.lllllllI(Players.getLocal().isMoving() ? 1 : 0)) {
+            return lIIIIIl[0];
+        }
+        if (r.llllllll(Movement.isRunEnabled() ? 1 : 0) && r.lIIIIIIII(Movement.getRunEnergy(), lIIIIIl[1])) {
+            Movement.toggleRun();
+        }
+        if (r.llllllIl(llllIIlIllIIIll = llllIIlIllIIlII.aA.k().y())) {
+            return lIIIIIl[0];
+        }
+        if (r.lllllllI(llllIIlIllIIlII.aA.l() ? 1 : 0)) {
+            llllIIlIllIIlII.aA.a(lIIIIIl[0]);
+        }
+        if (r.llllllll(Reachable.isInteractable((Locatable)llllIIlIllIIIll) ? 1 : 0)) {
+            return llllIIlIllIIlII.aA.c();
+        }
+        String[] stringArray = new String[lIIIIIl[2]];
+        stringArray[r.lIIIIIl[0]] = lIIIIII[lIIIIIl[0]];
+        if (r.llllllll(llllIIlIllIIIll.hasAction(stringArray) ? 1 : 0)) {
+            Player llllIIlIllIIIlI = Players.getLocal();
+            if (r.llllllll(llllIIlIllIIlII.aA.l() ? 1 : 0) && r.lIIIIIIIl(llllIIlIllIIIlI.getWorldLocation().distanceTo((Locatable)llllIIlIllIIIll), lIIIIIl[3])) {
+                Movement.setDestination((WorldPoint)llllIIlIllIIIll.getWorldLocation());
+                return lIIIIIl[2];
+            }
+            Log.info((String)lIIIIII[lIIIIIl[2]]);
+            return lIIIIIl[0];
+        }
+        var1_1.interact(lIIIIII[lIIIIIl[4]]);
+        this.sleep(lIIIIIl[4]);
+        return lIIIIIl[2];
+    }
+}
+

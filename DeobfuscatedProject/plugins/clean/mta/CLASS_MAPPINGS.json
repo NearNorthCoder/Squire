@@ -1,0 +1,21 @@
+{
+  "t": "EnablingRunTask",
+  "o": "OHelper",
+  "b": "MtaTaskBase",
+  "i": "GameEnum",
+  "w": "MtaTaskBase",
+  "j": "JHelper",
+  "v": "GraveyardRoomTask",
+  "s": "CheckingPointsTask",
+  "c": "GameEnum8",
+  "e": "EHelper",
+  "l": "LHelper",
+  "u": "EnchantmentRoomTask",
+  "r": "EnchantmentRoomTask",
+  "m": "GameEnum13",
+  "x": "TelekineticRoomTask",
+  "d": "GameEnum15",
+  "h": "GameEnum16",
+  "n": "MtaManager",
+  "f": "MtaManager"
+}

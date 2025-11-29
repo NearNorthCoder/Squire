@@ -1,0 +1,23 @@
+{
+  "t": "RefillingWateringCansTask",
+  "n": "DrinkingEnergyBoostTask",
+  "o": "GettingNewSeedsTask",
+  "q": "LeavingTitheInstanceTask",
+  "b": "BHelper",
+  "i": "IHelper",
+  "k": "BuyingRewardsTask",
+  "g": "GameEnum",
+  "v": "WateringPlantTask",
+  "s": "PlantingSeedTask",
+  "c": "GameEnum10",
+  "a": "GameEnum11",
+  "e": "GameEnum12",
+  "l": "ClearingBlightedPlantsTask",
+  "u": "WalkingTowardsTheNextPatchTask",
+  "r": "TithefarmTaskBase",
+  "m": "DepositingFruitTask",
+  "f": "GameEnum17",
+  "p": "HarvestingPlantTask",
+  "h": "GameEnum19",
+  "j": "TithefarmManager"
+}

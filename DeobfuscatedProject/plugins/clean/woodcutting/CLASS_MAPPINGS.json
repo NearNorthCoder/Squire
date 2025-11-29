@@ -1,0 +1,15 @@
+{
+  "b": "BankingTask",
+  "i": "GameEnum",
+  "k": "ChoppingFastTask",
+  "g": "UsingSpecialAttackTask",
+  "j": "MovingToNextTreeTask",
+  "c": "ChoppingTask",
+  "a": "GameEnum6",
+  "e": "FletchingLogsTask",
+  "l": "TrackingTheTreeTask",
+  "m": "WalkingToNextTileTask",
+  "d": "DroppingLogsTask",
+  "f": "PickingUpNestTask",
+  "h": "CheckingStateTask"
+}

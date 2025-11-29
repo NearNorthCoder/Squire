@@ -1,0 +1,17 @@
+{
+  "n": "FletchingLogsTask",
+  "o": "LightingBrazierTask",
+  "b": "BHelper",
+  "i": "DodgingBrazierTask",
+  "k": "DroppingEmptyJugTask",
+  "g": "BurningAtBrazierTask",
+  "j": "DodgingSnowfallDamageTask",
+  "c": "GameEnum",
+  "a": "GameEnum8",
+  "e": "EnteringWintertodtAreaTask",
+  "l": "EatingTask",
+  "m": "FixingBrazierTask",
+  "d": "DHelper",
+  "f": "ChoppingBrumaTreeTask",
+  "h": "CreatingRejuvenationPotionsTask"
+}

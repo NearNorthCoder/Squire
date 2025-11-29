@@ -1,0 +1,22 @@
+{
+  "t": "GameEnum",
+  "n": "MixingVesselTask",
+  "o": "OperateLeversTask",
+  "q": "TurningInPotionTask",
+  "b": "GameEnum2",
+  "i": "DepositHopperTask",
+  "k": "HandleAlembicTask",
+  "g": "MixologyManager",
+  "j": "AgitatorTask",
+  "s": "MixologyManager",
+  "c": "GameEnum3",
+  "a": "GameEnum4",
+  "e": "GameEnum5",
+  "l": "RetortTask",
+  "r": "MixologyManager",
+  "m": "MakePasteTask",
+  "d": "GameEnum6",
+  "f": "GameEnum7",
+  "p": "TalkToSupervisorTask",
+  "h": "BankForStaminasTask"
+}

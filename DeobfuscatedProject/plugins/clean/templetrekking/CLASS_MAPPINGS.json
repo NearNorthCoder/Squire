@@ -1,0 +1,20 @@
+{
+  "t": "HandlingBogTask",
+  "n": "LoggingOutTask",
+  "o": "RewardhandlertaskTask",
+  "q": "StartingRouteTask",
+  "b": "BHelper",
+  "w": "HandlingEvadeTask",
+  "v": "HandlingBridgeTask",
+  "s": "BankingTask",
+  "c": "GameEnum",
+  "a": "AHelper",
+  "y": "HandlingRopeSwingTask",
+  "l": "BankingTask",
+  "u": "UHelper",
+  "r": "StartTrekTask",
+  "m": "DropTask",
+  "x": "TempletrekkingTaskBase",
+  "d": "GameEnum16",
+  "p": "StaminaHandlerTask"
+}

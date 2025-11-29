@@ -1,0 +1,170 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.runelite.api.NPC
+ *  net.runelite.api.Prayer
+ */
+package gg.squire.construction.tasks;
+
+import net.runelite.api.NPC;
+import net.runelite.api.Prayer;
+
+public final class GameEnum3
+extends Enum<Z> {
+    public static final  /* enum */ Z WALLASALKI;
+    public static final  /* enum */ Z HELL_HOUND_TESTING;
+    public static final  /* enum */ Z DAGANNOTH_RANGE;
+    private static  int[] lIlllIll;
+    private static  String[] lIlllIIl;
+    public static final  /* enum */ Z PRIME;
+    private final  int id;
+    public static final  /* enum */ Z GIANT_ROCK_CRAB;
+    private final  int animation;
+    public static final  /* enum */ Z REX;
+    private static final  Z[] $VALUES;
+    private final  Prayer protection;
+    public static final  /* enum */ Z DAGANNOTH_RANGE2;
+    public static final  /* enum */ Z ROCK_LOBSTER;
+    public static final  /* enum */ Z DAGANNOTH;
+    public static final  /* enum */ Z SUPREME;
+
+    private static boolean var1(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    public static Z valueOf(String string) {
+        return Enum.valueOf(GameEnum3.class, string);
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    public static Z h(NPC nPC) {
+        void var2;
+        Z[] zArray = Z.values();
+        int n2 = zArray.length;
+        int var3 = lIlllIll[0];
+        while (Z.var1(var3, (int)var2)) {
+            NPC var4;
+            void var5;
+            void var6 = var5[var3];
+            if (Z.var7(var6.P(), var4.getId())) {
+                return var6;
+            }
+            ++var3;
+            0;
+            if (3 > 1) continue;
+            return null;
+        }
+        return null;
+    }
+
+    public int ba() {
+        return this.animation;
+    }
+
+        catch (Exception var13) {
+            var13.printStackTrace();
+            return null;
+        }
+    }
+
+    public Prayer aZ() {
+        return this.protection;
+    }
+
+    private static void var14() {
+        lIlllIll = new int[30];
+        Z.lIlllIll[0] = (66 + 112 - 46 + 16 ^ 133 + 57 - 99 + 99) & (0xD2 ^ 0xB1 ^ (0xC4 ^ 0x8D) ^ -1);
+        Z.lIlllIll[1] = -(0xFFFFBF65 & 0x73BB) & (0xFFFFBBFF & 0x7FFB);
+        Z.lIlllIll[2] = -(0xFFFFB8E1 & 0x779F) & (0xFFFFBBBD & 0x7FE7);
+        Z.lIlllIll[3] = 1;
+        Z.lIlllIll[4] = -(0xFFFFEDFB & 0x3726) & (0xFFFFADFB & Short.MAX_VALUE);
+        Z.lIlllIll[5] = -(0xFFFFFCFF & 0x4709) & (0xFFFFDF6E & 0x6FBF);
+        Z.lIlllIll[6] = 2;
+        Z.lIlllIll[7] = 0xFFFFE8F9 & 0x1FDF;
+        Z.lIlllIll[8] = -(0xFFFFF49F & 0x6FF9) & (0xFFFFFFBF & 0x6FFF);
+        Z.lIlllIll[9] = 3;
+        Z.lIlllIll[10] = 0xFFFFADFD & 0x5E73;
+        Z.lIlllIll[11] = -(0xFFFFDECD & 0x33B3) & (0xFFFFF7FD & 0x1FBF);
+        Z.lIlllIll[12] = 9 ^ 0xD ^ (0x8B ^ 0x9A) & ~(0x4D ^ 0x5C);
+        Z.lIlllIll[13] = -(0xFFFFB63F & 0x7BEB) & (0xFFFFBEFF & 0x7BFF);
+        Z.lIlllIll[14] = 0xFFFF9FD8 & 0x6967;
+        Z.lIlllIll[15] = 0x54 ^ 0x20 ^ (0xEC ^ 0x9D);
+        Z.lIlllIll[16] = -(0xFFFFEDF9 & 0x7A4F) & (0xFFFFFF7F & 0x7FFB);
+        Z.lIlllIll[17] = -(0xFFFFF6C3 & 0x4B3F) & (0xFFFFCB7F & 0x7FBF);
+        Z.lIlllIll[18] = 0xB8 ^ 0xB7 ^ (0 ^ 9);
+        Z.lIlllIll[19] = -(0xFFFFFBEE & 0x44DB) & (0xFFFFDFFF & 0x77FF);
+        Z.lIlllIll[20] = 0xFFFFEDBF & 0x177F;
+        Z.lIlllIll[21] = 0x69 ^ 0x6E;
+        Z.lIlllIll[22] = 0xFFFFB73F & 0x5FF7;
+        Z.lIlllIll[23] = 0x4F ^ 0x33 ^ (0x67 ^ 0x13);
+        Z.lIlllIll[24] = -(0xFFFFEEFD & 0x7103) & (0xFFFFF7FA & 0x7F3D);
+        Z.lIlllIll[25] = -(0xFFFFF655 & 0x7DFF) & (0xFFFFFF7F & Short.MAX_VALUE);
+        Z.lIlllIll[26] = 0x32 ^ 0x3B;
+        Z.lIlllIll[27] = 0x45 ^ 0x2D;
+        Z.lIlllIll[28] = -(0xFFFFFD76 & 0x66CF) & (0xFFFFFDEF & 0x7FF7);
+        Z.lIlllIll[29] = 0x85 ^ 0x8F;
+    }
+
+    private GameEnum3(int n3, Prayer prayer, int n4) {
+        this.id = n3;
+        this.protection = prayer;
+        this.animation = n4;
+    }
+
+    public static Z[] values() {
+        return (Z[])$VALUES.clone();
+    }
+
+    private static String var15(String var16, String var17) {
+        var16 = new String(Base64.getDecoder().decode(var16.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder var18 = new StringBuilder();
+        char[] var19 = var17.toCharArray();
+        int var20 = lIlllIll[0];
+        char[] var21 = var16.toCharArray();
+        int var22 = var21.length;
+        int var23 = lIlllIll[0];
+        while (Z.var1(var23, var22)) {
+            char var24 = var21[var23];
+            var18.append((char)(var24 ^ var19[var20 % var19.length]));
+            0;
+            ++var20;
+            ++var23;
+            0;
+            if null == null continue;
+            return null;
+        }
+        return String.valueOf(var18);
+    }
+
+    public int P() {
+        return this.id;
+    }
+
+    private static void var25() {
+        lIlllIIl = new String[lIlllIll[29]];
+        Z.lIlllIIl[Z.lIlllIll[0]] = "REX";
+        Z.lIlllIIl[Z.lIlllIll[3]] = "PRIME";
+        Z.lIlllIIl[Z.lIlllIll[6]] = "SUPREME";
+        Z.lIlllIIl[Z.lIlllIll[9]] = "DAGANNOTH";
+        Z.lIlllIIl[Z.lIlllIll[12]] = "GIANT_ROCK_CRAB";
+        Z.lIlllIIl[Z.lIlllIll[15]] = "WALLASALKI";
+        Z.lIlllIIl[Z.lIlllIll[18]] = "DAGANNOTH_RANGE";
+        Z.lIlllIIl[Z.lIlllIll[21]] = "DAGANNOTH_RANGE2";
+        Z.lIlllIIl[Z.lIlllIll[23]] = "ROCK_LOBSTER";
+        Z.lIlllIIl[Z.lIlllIll[26]] = "HELL_HOUND_TESTING";
+    }
+
+    private static boolean var7(int n2, int n3) {
+        return n2 == n3;
+    }
+
+        catch (Exception var31) {
+            var31.printStackTrace();
+            return null;
+        }
+    }
+}
+

@@ -1,0 +1,21 @@
+{
+  "n": "TeleportingToCorpTask",
+  "o": "TeleportingToHouseTask",
+  "q": "EnteringCorpLairTask",
+  "b": "EnablingRunTask",
+  "i": "KillingCoreTask",
+  "k": "EnteringHousePortalTask",
+  "g": "EatingFoodTask",
+  "j": "DrinkingFromPoolTask",
+  "s": "CorpManager",
+  "c": "HandlingPrayersTask",
+  "e": "BankingTask",
+  "l": "HoppingForFreeWorldTask",
+  "r": "SpecingCorpTask",
+  "m": "CorpManager",
+  "d": "CheckingIfWeShouldBankTask",
+  "f": "DrinkingBoostTask",
+  "p": "LootingItemTask",
+  "h": "AttackingCorporealBeastTask",
+  "a": "CorpTaskBase"
+}

@@ -1,0 +1,16 @@
+{
+  "n": "TraversingToTuraelTask",
+  "b": "GameEnum",
+  "i": "FixBossTaskThingTask",
+  "k": "GettingNewTask",
+  "g": "DrinkingStaminaTask",
+  "j": "GettingHuntingTask",
+  "c": "AttackingTask",
+  "a": "GameEnum7",
+  "e": "CheckingForTask",
+  "l": "KillingBlowTask",
+  "m": "RestoringFromPoolTask",
+  "d": "BankingTask",
+  "f": "DrinkingAntiPoisonTask",
+  "h": "EatingTask"
+}
