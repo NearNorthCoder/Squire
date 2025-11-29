@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  com.google.inject.Inject
  *  gg.squire.client.plugins.fw.TaskDesc
@@ -11,55 +11,45 @@ import com.google.inject.Inject;
 import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
 import java.util.concurrent.ExecutorService;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+/**
+ * Handles gear swapping for the Obelisk encounter in TOA.
+ * Switches to configured Obelisk gear when entering the Obelisk room.
+ *
+ * The Obelisk has specific gear requirements for optimal DPS,
+ * so this task ensures the player swaps to the appropriate setup.
+ */
 @TaskDesc(name="Swapping for obelisk", register=true)
-public class SwappingForObeliskTask
-extends AutotoaManager {
-
-    private static void var3() {
-        var1 = new int[3];
-        aC.var1[0] = (0x68 ^ 0x50 ^ (0xDF ^ 0xB5)) & (0xE5 ^ 0xB9 ^ (0x81 ^ 0x8F) ^ -1);
-        aC.var1[1] = 1;
-        aC.var1[2] = 2;
-    }
-
-    private static boolean var4(int n2) {
-        return n2 != 0;
-    }
-
-    @Override
-    public boolean aL() {
-        return this.cf.obeliskGear().isSelected();
-    }
-
-    private static void var5() {
-        var2 = new String[var1[1]];
-        aC.var2[aC.var1[0]] = "Obelisk";
-    }
-
-    static {
-        aC.var3();
-        aC.var5();
-    }
+public class SwappingForObeliskTask extends TOAGearSwapper {
 
     @Inject
-    public SwappingForObeliskTask(TOAConfig tOAConfig, ExecutorService executorService) {
-        super(tOAConfig, executorService);
+    public SwappingForObeliskTask(TOAConfig config, ExecutorService executorService) {
+        super(config, executorService);
     }
 
+    /**
+     * Checks if this gear swap should be active.
+     * Active when the obelisk gear configuration is selected.
+     *
+     * @return true if obelisk gear is configured
+     */
     @Override
-    public int[] j(String string) {
-        if (aC.var4(string.contains(var2[var1[0]]) ? 1 : 0)) {
-            return this.a(this.cf.obeliskGear());
-        }
-        return new int[var1[0]];
+    public boolean shouldSwap() {
+        return this.config.obeliskGear().isSelected();
     }
 
-        catch (Exception var11) {
-            var11.printStackTrace();
-            return null;
+    /**
+     * Gets the gear IDs to swap to for the given room.
+     * Returns obelisk gear when the room name contains "Obelisk".
+     *
+     * @param roomName The name of the current room
+     * @return Array of item IDs for obelisk gear, or empty array for other rooms
+     */
+    @Override
+    public int[] getGearForRoom(String roomName) {
+        if (roomName.contains("Obelisk")) {
+            return this.getGearIds(this.config.obeliskGear());
         }
+        return new int[0];
     }
 }
-

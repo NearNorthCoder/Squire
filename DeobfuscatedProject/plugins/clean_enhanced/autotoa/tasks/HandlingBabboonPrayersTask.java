@@ -1,32 +1,8 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.plugins.fw.TaskDesc
- *  javax.inject.Inject
- *  net.runelite.api.Actor
- *  net.runelite.api.Locatable
- *  net.runelite.api.NPC
- *  net.runelite.api.Player
- *  net.runelite.api.Prayer
- *  net.runelite.api.events.AnimationChanged
- *  net.runelite.client.eventbus.Subscribe
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.client.Static
- */
 package gg.squire.autotoa.tasks;
 
 import gg.squire.autotoa.SquireAutoTOA;
 import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.inject.Inject;
 import net.runelite.api.Actor;
 import net.runelite.api.Locatable;
 import net.runelite.api.NPC;
@@ -37,365 +13,276 @@ import net.runelite.client.eventbus.Subscribe;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.client.Static;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum10;
 
+import javax.inject.Inject;
+import java.util.*;
+
+/**
+ * Task for handling prayer flicking against Baboon attacks during the Ba-Ba boss fight in TOA.
+ *
+ * NPC Names and Attack Styles:
+ * - Baboon Mage: Uses magic attacks (PROTECT_FROM_MAGIC)
+ * - Baboon Thrower: Uses ranged attacks (PROTECT_FROM_MISSILES)
+ * - Baboon Brawler: Uses melee attacks (PROTECT_FROM_MELEE)
+ * - Baboon Thrall: Uses melee attacks (PROTECT_FROM_MELEE)
+ *
+ * Animation IDs:
+ * - 13906: Baboon Mage attack animation
+ * - 9809: Baboon Thrower attack animation
+ * - 9742: Baboon Brawler/Thrall attack animation
+ *
+ * Prayer Flicking Logic:
+ * 1. Tracks baboon attack animations
+ * 2. Predicts which prayer to use based on attack type
+ * 3. Stores prayer predictions by game tick
+ * 4. Flicks prayers on the tick before damage
+ * 5. Prioritizes prayers based on number of attackers
+ *
+ * Priority Logic:
+ * - Counts number of each baboon type attacking
+ * - Uses prayer for the most common attack type
+ * - If tie, uses magic > melee > ranged priority
+ * - Checks for melee distance baboons for immediate threat
+ *
+ * Priority: MAX (2147483647) - highest possible priority
+ */
 @TaskDesc(name="Handling babboon prayers", priority=0x7FFFFFFF, register=true)
-public class HandlingBabboonPrayersTask
-extends AutotoaManager {
-    private static final  int em;
-    private final  Map<Integer, List<aS>> en;
-    private static final  int el;
+public class HandlingBabboonPrayersTask extends AutotoaManager {
 
-    private static final  int ek;
+    // NPC Names
+    private static final String NPC_BABOON_MAGE = "Baboon Mage";
+    private static final String NPC_BABOON_THROWER = "Baboon Thrower";
+    private static final String NPC_BABOON_BRAWLER = "Baboon Brawler";
+    private static final String NPC_BABOON_THRALL = "Baboon Thrall";
+    private static final String NPC_BABOON = "Baboon";
 
-    private static boolean var3(Object object) {
-        return object == null;
-    }
+    // Animation IDs
+    private static final int ANIMATION_BABOON_MAGE_ATTACK = 13906;
+    private static final int ANIMATION_BABOON_THROWER_ATTACK = 9809;
+    private static final int ANIMATION_BABOON_MELEE_ATTACK = 9742;
 
-    @Override
-    public boolean aL() {
-        boolean bl2;
-        if (aR.var4(NPCs.getNearest(nPC -> {
-            int n2;
-            if (aR.var5(nPC.getName().contains(var2[var1[8]]) ? 1 : 0) && aR.var6(nPC.isDead() ? 1 : 0)) {
-                n2 = var1[1];
-                0;
-                if ((0x56 ^ 0x52) < 0) {
-                    return ((0x6B ^ 8) & ~(0x59 ^ 0x3A)) != 0;
-                }
-            } else {
-                n2 = var1[3];
-            }
-            return n2 != 0;
-        }))) {
-            bl2 = var1[1];
-            0;
-            if (2 != 2) {
-                return ((0xB6 ^ 0x9E) & ~(0x1A ^ 0x32)) != 0;
-            }
-        } else {
-            bl2 = var1[3];
-        }
-        return bl2;
-    }
+    // Constants
+    private static final int PRAYER_TICK_DELAY = 4; // Ticks to delay prayer prediction
+    private static final int MELEE_DISTANCE = 10;   // Distance for melee threat check
+
+    // State tracking
+    private final Map<Integer, List<BaboonAttack>> attacksByTick;
 
     @Inject
-    public HandlingBabboonPrayersTask(SquireAutoTOA squireAutoTOA, TOAConfig tOAConfig) {
-        super(squireAutoTOA, tOAConfig);
-        this.en = new HashMap<Integer, List<aS>>();
+    public HandlingBabboonPrayersTask(SquireAutoTOA plugin, TOAConfig config) {
+        super(plugin, config);
+        this.attacksByTick = new HashMap<>();
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Check if task should be active (if baboons are present)
      */
-    private Prayer m(int n2) {
-        void var7;
-        Collection collection = this.en.get(n2);
-        if (!aR.var4(collection) || aR.var5(collection.isEmpty() ? 1 : 0)) {
+    @Override
+    public boolean shouldActivate() {
+        NPC baboon = NPCs.getNearest(npc ->
+            npc.getName().contains(NPC_BABOON) && !npc.isDead()
+        );
+        return baboon != null;
+    }
+
+    /**
+     * Always use prayer flicking mode
+     */
+    @Override
+    public boolean alwaysActive() {
+        return true;
+    }
+
+    /**
+     * Return prayer flick mode
+     */
+    @Override
+    public PrayerMode getPrayerMode() {
+        return PrayerMode.FLICK;
+    }
+
+    /**
+     * Get prayer overhead delay in ticks
+     */
+    @Override
+    public int getPrayerDelay() {
+        return 1;
+    }
+
+    /**
+     * Track baboon attack animations and predict prayers
+     */
+    @Subscribe
+    public void onAnimationChanged(AnimationChanged event) {
+        Actor actor = event.getActor();
+
+        // Ignore player animations
+        if (actor instanceof Player) {
+            return;
+        }
+
+        NPC npc = (NPC) actor;
+        int currentTick = Static.getClient().getTickCount();
+        int attackTick = currentTick + PRAYER_TICK_DELAY;
+
+        // Track Baboon Mage attacks
+        if (npc.getAnimation() == ANIMATION_BABOON_MAGE_ATTACK &&
+            npc.getName().equals(NPC_BABOON_MAGE)) {
+            recordAttack(npc, Prayer.PROTECT_FROM_MAGIC, attackTick);
+        }
+
+        // Track Baboon Thrower attacks
+        if (npc.getAnimation() == ANIMATION_BABOON_THROWER_ATTACK &&
+            npc.getName().equals(NPC_BABOON_THROWER)) {
+            recordAttack(npc, Prayer.PROTECT_FROM_MISSILES, attackTick);
+        }
+
+        // Track Baboon Brawler and Thrall attacks
+        if (npc.getAnimation() == ANIMATION_BABOON_MELEE_ATTACK &&
+            (npc.getName().equals(NPC_BABOON_BRAWLER) || npc.getName().equals(NPC_BABOON_THRALL))) {
+            recordAttack(npc, Prayer.PROTECT_FROM_MELEE, attackTick);
+        }
+    }
+
+    /**
+     * Records a baboon attack for a specific tick
+     */
+    private void recordAttack(Actor attacker, Prayer prayer, int tick) {
+        BaboonAttack attack = new BaboonAttack(attacker, prayer);
+
+        if (!attacksByTick.containsKey(tick)) {
+            List<BaboonAttack> attacks = new ArrayList<>();
+            attacks.add(attack);
+            attacksByTick.put(tick, attacks);
+        } else {
+            List<BaboonAttack> attacks = attacksByTick.get(tick);
+            attacks.add(attack);
+            attacksByTick.put(tick, attacks);
+        }
+    }
+
+    /**
+     * Get the appropriate prayer for a specific tick
+     */
+    private Prayer getPrayerForTick(int tick) {
+        Collection<BaboonAttack> attacks = attacksByTick.get(tick);
+
+        if (attacks == null || attacks.isEmpty()) {
             return null;
         }
-        Prayer var8 = null;
-        int var9 = var1[3];
-        int var10 = var1[3];
-        int var11 = var1[3];
-        Iterator var12 = var7.iterator();
-        while (aR.var5(var12.hasNext() ? 1 : 0)) {
-            aS var13 = (aS)var12.next();
-            if (!aR.var4(var13.bH())) continue;
-            if (aR.var5(var13.bH().isDead() ? 1 : 0)) {
-                0;
-                if null == null continue;
-                return null;
+
+        Prayer predictedPrayer = null;
+        int meleeCount = 0;
+        int magicCount = 0;
+        int rangedCount = 0;
+
+        // Count each attack type
+        for (BaboonAttack attack : attacks) {
+            // Skip dead baboons
+            if (attack.getAttacker() == null || attack.getAttacker().isDead()) {
+                continue;
             }
-            if (aR.var14(var13.bI(), Prayer.PROTECT_FROM_MELEE) && aR.var3(var8)) {
-                ++var11;
-                var8 = Prayer.PROTECT_FROM_MELEE;
+
+            // Count by prayer type
+            if (attack.getPrayer() == Prayer.PROTECT_FROM_MELEE) {
+                meleeCount++;
+                if (predictedPrayer == null) {
+                    predictedPrayer = Prayer.PROTECT_FROM_MELEE;
+                }
             }
-            if (aR.var14(var13.bI(), Prayer.PROTECT_FROM_MAGIC) && (!aR.var15(var8, Prayer.PROTECT_FROM_MELEE) || aR.var3(var8))) {
-                var9 += 2;
-                var8 = Prayer.PROTECT_FROM_MAGIC;
+
+            if (attack.getPrayer() == Prayer.PROTECT_FROM_MAGIC) {
+                magicCount += 2; // Weight magic higher
+                if (predictedPrayer != Prayer.PROTECT_FROM_MELEE || predictedPrayer == null) {
+                    predictedPrayer = Prayer.PROTECT_FROM_MAGIC;
+                }
             }
-            if (aR.var14(var13.bI(), Prayer.PROTECT_FROM_MISSILES)) {
-                var10 += 2;
-                var8 = Prayer.PROTECT_FROM_MISSILES;
+
+            if (attack.getPrayer() == Prayer.PROTECT_FROM_MISSILES) {
+                rangedCount += 2; // Weight ranged higher
+                predictedPrayer = Prayer.PROTECT_FROM_MISSILES;
             }
-            0;
-            if ((44 + 7 - -7 + 108 ^ 47 + 89 - -13 + 14) > 0) continue;
-            return null;
         }
-        if (aR.var16(var9, var10) && aR.var16(var9, var11)) {
+
+        // Determine best prayer based on counts
+        if (magicCount >= rangedCount && magicCount >= meleeCount) {
             return Prayer.PROTECT_FROM_MAGIC;
         }
-        if (aR.var16(var11, var10)) {
+
+        if (meleeCount >= rangedCount) {
             return Prayer.PROTECT_FROM_MELEE;
         }
+
         return Prayer.PROTECT_FROM_MISSILES;
     }
 
-    private static boolean var15(Object object, Object object2) {
-        return object != object2;
-    }
-
-    private static boolean var17(int n2) {
-        return n2 > 0;
-    }
-
-    @Override
-    public int aO() {
-        return var1[2];
-    }
-
-    private static boolean var16(int n2, int n3) {
-        return n2 >= n3;
-    }
-
-        catch (Exception var23) {
-            var23.printStackTrace();
-            return null;
-        }
-    }
-
-    private static boolean var24(int n2, int n3) {
-        return n2 < n3;
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Get the list of prayers to use this tick
      */
     @Override
-    public List<Prayer> aN() {
-        aR var25;
-        NPC var26;
-        Prayer var27;
-        void var28;
-        void var29;
-        int n2 = NPCs.getAll(nPC -> {
-            int n2;
-            if (aR.var5(nPC.getName().equals(var2[var1[12]]) ? 1 : 0) && aR.var6(nPC.isDead() ? 1 : 0)) {
-                n2 = var1[1];
-                0;
-                if (-1 >= (0x91 ^ 0x95)) {
-                    return ((0x52 ^ 0x75) & ~(0xB7 ^ 0x90)) != 0;
-                }
-            } else {
-                n2 = var1[3];
-            }
-            return n2 != 0;
-        }).size();
-        int n3 = NPCs.getAll(nPC -> {
-            int n2;
-            if (aR.var5(nPC.getName().equals(var2[var1[11]]) ? 1 : 0) && aR.var6(nPC.isDead() ? 1 : 0)) {
-                n2 = var1[1];
-                0;
-                if (3 < 0) {
-                    return ((0xDE ^ 0x84) & ~(0x63 ^ 0x39)) != 0;
-                }
-            } else {
-                n2 = var1[3];
-            }
-            return n2 != 0;
-        }).size();
-        Prayer prayer = Prayer.PROTECT_FROM_MELEE;
-        if (aR.var30(n3, n2)) {
-            prayer = Prayer.PROTECT_FROM_MAGIC;
-            0;
-            if null != null {
-                return null;
-            }
-        } else if (aR.var30((int)var29, (int)var28)) {
-            var27 = Prayer.PROTECT_FROM_MISSILES;
-            0;
-            if (1 != 1) {
-                return null;
-            }
+    public List<Prayer> getPrayers() {
+        // Count alive baboons by type
+        int throwerCount = (int) NPCs.getAll(npc ->
+            npc.getName().equals(NPC_BABOON_THROWER) && !npc.isDead()
+        ).size();
+
+        int mageCount = (int) NPCs.getAll(npc ->
+            npc.getName().equals(NPC_BABOON_MAGE) && !npc.isDead()
+        ).size();
+
+        // Determine base prayer from baboon counts
+        Prayer basePrayer = Prayer.PROTECT_FROM_MELEE;
+
+        if (mageCount > throwerCount) {
+            basePrayer = Prayer.PROTECT_FROM_MAGIC;
+        } else if (throwerCount > mageCount) {
+            basePrayer = Prayer.PROTECT_FROM_MISSILES;
         } else {
-            var26 = NPCs.getNearest(nPC -> {
-                boolean bl2;
-                NPC var31;
-                if ((!aR.var6(nPC.getName().equals(var2[var1[9]]) ? 1 : 0) || aR.var5(nPC.getName().equals(var2[var1[10]]) ? 1 : 0)) && aR.var6(var31.isDead() ? 1 : 0)) {
-                    bl2 = var1[1];
-                    0;
-                    if ((0x44 ^ 0x18 ^ (0xC1 ^ 0x99)) <= 2) {
-                        return ((0xDE ^ 0x9D ^ (0x5A ^ 0x2A)) & (55 + 25 - 66 + 227 ^ 80 + 39 - -19 + 56 ^ -1)) != 0;
-                    }
-                } else {
-                    bl2 = var1[3];
-                }
-                return bl2;
-            });
-            if (!aR.var4(var26) || aR.var16(var26.distanceTo((Locatable)Players.getLocal()), var1[0])) {
-                if (aR.var17((int)var28)) {
-                    var27 = Prayer.PROTECT_FROM_MAGIC;
-                    0;
-                    if null != null {
-                        return null;
-                    }
+            // Check for melee distance baboons
+            NPC nearbyBaboon = NPCs.getNearest(npc ->
+                (npc.getName().equals(NPC_BABOON_BRAWLER) || npc.getName().equals(NPC_BABOON_THRALL)) &&
+                !npc.isDead()
+            );
+
+            if (nearbyBaboon != null && nearbyBaboon.distanceTo((Locatable) Players.getLocal()) < MELEE_DISTANCE) {
+                // Check if any are alive
+                if (mageCount > 0) {
+                    basePrayer = Prayer.PROTECT_FROM_MAGIC;
                 }
             } else {
-                var27 = Prayer.PROTECT_FROM_MELEE;
+                basePrayer = Prayer.PROTECT_FROM_MELEE;
             }
         }
-        if (aR.var4(var26 = var25.m(Static.getClient().getTickCount() + var1[1]))) {
-            var27 = var26;
+
+        // Check for predicted prayer on next tick
+        int nextTick = Static.getClient().getTickCount() + 1;
+        Prayer predictedPrayer = getPrayerForTick(nextTick);
+
+        if (predictedPrayer != null) {
+            return List.of(getDefaultPrayer(), predictedPrayer);
         }
-        if (aR.var4(var27)) {
-            return List.of(var25.aQ(), var27);
-        }
-        return List.of(this.aQ());
+
+        return List.of(getDefaultPrayer());
     }
 
-    private static boolean var32(int n2, int n3) {
-        return n2 == n3;
-    }
-
-    private static String var33(String var34, String var35) {
-        var34 = new String(Base64.getDecoder().decode(var34.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var36 = new StringBuilder();
-        char[] var37 = var35.toCharArray();
-        int var38 = var1[3];
-        char[] var39 = var34.toCharArray();
-        int var40 = var39.length;
-        int var41 = var1[3];
-        while (aR.var24(var41, var40)) {
-            char var42 = var39[var41];
-            var36.append((char)(var42 ^ var37[var38 % var37.length]));
-            0;
-            ++var38;
-            ++var41;
-            0;
-            if ((0x14 ^ 0x10) != 0) continue;
-            return null;
-        }
-        return String.valueOf(var36);
-    }
-
-    @Override
-    public v aT() {
-        return v.FLICK;
-    }
-
-    private static boolean var4(Object object) {
-        return object != null;
-    }
-
-    @Override
-    public boolean aS() {
-        return var1[1];
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Inner class to track baboon attacks
      */
-    private void a(Actor actor, Prayer prayer) {
-        int n2 = Static.getClient().getTickCount() + var1[8];
-        aS aS2 = new aS(actor, prayer);
-        if (aR.var6(this.en.containsKey(n2) ? 1 : 0)) {
-            ArrayList<aS> arrayList = new ArrayList<aS>();
-            arrayList.add(aS2);
-            0;
-            this.en.put(n2, arrayList);
-            0;
-            0;
-            if (3 < 1) {
-                return;
-            }
-        } else {
-            void var43;
-            void var44;
-            aR var45;
-            List<aS> var46 = var45.en.get((int)var44);
-            var46.add((aS)var43);
-            0;
-            var45.en.put((int)var44, var46);
-            0;
+    private static class BaboonAttack {
+        private final Actor attacker;
+        private final Prayer prayer;
+
+        public BaboonAttack(Actor attacker, Prayer prayer) {
+            this.attacker = attacker;
+            this.prayer = prayer;
         }
-    }
 
-    private static void var47() {
-        var2 = new String[var1[15]];
-        aR.var2[aR.var1[3]] = "Baboon Mage";
-        aR.var2[aR.var1[1]] = "Baboon Thrower";
-        aR.var2[aR.var1[0]] = "Baboon Brawler";
-        aR.var2[aR.var1[7]] = "Baboon Thrall";
-        aR.var2[aR.var1[8]] = "Baboon";
-        aR.var2[aR.var1[9]] = "Baboon Brawler";
-        aR.var2[aR.var1[10]] = "Baboon Thrall";
-        aR.var2[aR.var1[11]] = "Baboon Mage";
-        aR.var2[aR.var1[12]] = "Baboon Thrower";
-    }
-
-    private static boolean var30(int n2, int n3) {
-        return n2 > n3;
-    }
-
-    private static boolean var5(int n2) {
-        return n2 != 0;
-    }
-
-        catch (Exception var53) {
-            var53.printStackTrace();
-            return null;
+        public Actor getAttacker() {
+            return attacker;
         }
-    }
 
-    static {
-        aR.var54();
-        aR.var47();
-        ek = var1[13];
-        em = var1[6];
-        el = var1[14];
-    }
-
-    private static boolean var6(int n2) {
-        return n2 == 0;
-    }
-
-    private static boolean var14(Object object, Object object2) {
-        return object == object2;
-    }
-
-    private static void var54() {
-        var1 = new int[16];
-        aR.var1[0] = 2;
-        aR.var1[1] = 1;
-        aR.var1[2] = -(0x35 ^ 0x10) & (0xFFFFFB77 & 0x3FFE);
-        aR.var1[3] = (0xFA ^ 0xC2 ^ (5 ^ 0x1D)) & (22 + 74 - -34 + 51 ^ 3 + 5 - -77 + 64 ^ -1);
-        aR.var1[4] = 0xFFFFEEBE & 0x3753;
-        aR.var1[5] = 0xFFFFE759 & 0x3EB7;
-        aR.var1[6] = 0xFFFFBF6E & 0x669F;
-        aR.var1[7] = 3;
-        aR.var1[8] = 0x47 ^ 0x43;
-        aR.var1[9] = 124 + 156 - 183 + 94 ^ 28 + 33 - -4 + 121;
-        aR.var1[10] = 0x81 ^ 0x87;
-        aR.var1[11] = 0x1D ^ 0x1A;
-        aR.var1[12] = 0 ^ 8;
-        aR.var1[13] = 0xFFFFCDCA & 0x3AF7;
-        aR.var1[14] = -(0xFFFFB3FD & 0x6D2B) & (0xFFFFB9EF & 0x6FFF);
-        aR.var1[15] = 0xE8 ^ 0x83 ^ (0x72 ^ 0x10);
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Subscribe
-    public void a(AnimationChanged animationChanged) {
-        aR var55;
-        void var56;
-        Actor actor = animationChanged.getActor();
-        if (aR.var5(actor instanceof Player)) {
-            return;
-        }
-        NPC var57 = (NPC)var56;
-        if (aR.var32(var57.getAnimation(), var1[4]) && aR.var5(var57.getName().equals(var2[var1[3]]) ? 1 : 0)) {
-            var55.a((Actor)var57, Prayer.PROTECT_FROM_MAGIC);
-        }
-        if (aR.var32(var57.getAnimation(), var1[5]) && aR.var5(var57.getName().equals(var2[var1[1]]) ? 1 : 0)) {
-            var55.a((Actor)var57, Prayer.PROTECT_FROM_MISSILES);
-        }
-        if (aR.var32(var57.getAnimation(), var1[6]) && (!aR.var6(var57.getName().equals(var2[var1[0]]) ? 1 : 0) || aR.var5(var57.getName().equals(var2[var1[7]]) ? 1 : 0))) {
-            var55.a((Actor)var57, Prayer.PROTECT_FROM_MELEE);
+        public Prayer getPrayer() {
+            return prayer;
         }
     }
 }
-

@@ -1,13 +1,16 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.Item
- *  net.unethicalite.api.game.Combat
- *  net.unethicalite.api.items.Inventory
+ *
+ * Silk Dressing Application Task
+ *
+ * This task handles applying silk dressing during TOA raids.
+ * Silk dressing provides healing over time.
+ * It applies silk dressing when:
+ * - Not paused
+ * - In special weapon mode (aq())
+ * - Missing health is >= threshold (30)
+ * - Consumable manager allows silk usage
+ * - Tick cooldown has elapsed (6 ticks)
  */
 package gg.squire.autotoa.tasks;
 
@@ -18,93 +21,63 @@ import net.runelite.api.Client;
 import net.runelite.api.Item;
 import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.items.Inventory;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
 @TaskDesc(name="Applying Silk", priority=100)
-public class ApplyingSilkTask
-extends AutotoaManager {
-    private  int cA;
-    private final  C cy;
-    
-    private final  SquireAutoTOA cz;
+public class ApplyingSilkTask extends AutotoaManager {
 
-    public boolean run() {
-        ab var3;
-        if (ab.var4(this.cz.e() ? 1 : 0)) {
-            return var2[0];
-        }
-        if (ab.var5(var3.aq() ? 1 : 0)) {
-            return var2[0];
-        }
-        if (!ab.var6(Combat.getMissingHealth(), var2[1]) || ab.var5(var3.cy.al() ? 1 : 0)) {
-            return var2[0];
-        }
-        if (ab.var7(var3.cu.getTickCount() - var3.cA, var2[2])) {
-            return var2[0];
-        }
-        Item var8 = Inventory.getFirst(item -> item.getName().startsWith(var1[var2[3]]));
-        if (ab.var9(var8)) {
-            var8.interact(var1[var2[0]]);
-            var3.cA = var3.cu.getTickCount();
-            var3.cy.an();
-            return var2[3];
-        }
-        return var2[0];
-    }
+    // Constants
+    private static final int MISSING_HEALTH_THRESHOLD = 30;
+    private static final int TICK_COOLDOWN = 6;
 
-    private static boolean var9(Object object) {
-        return object != null;
-    }
-
-    private static void var10() {
-        var2 = new int[6];
-        ab.var2[0] = (0x77 ^ 0x32) & ~(0x37 ^ 0x72);
-        ab.var2[1] = 0x3C ^ 0x22;
-        ab.var2[2] = 79 + 5 - -21 + 61 ^ 42 + 97 - 130 + 185;
-        ab.var2[3] = 1;
-        ab.var2[4] = 2;
-        ab.var2[5] = 0x7F ^ 0x16 ^ (0x56 ^ 0x37);
-    }
-
-    private static boolean var6(int n2, int n3) {
-        return n2 >= n3;
-    }
-
-    private static boolean var5(int n2) {
-        return n2 == 0;
-    }
-
-        catch (Exception var16) {
-            var16.printStackTrace();
-            return null;
-        }
-    }
-
-    private static boolean var7(int n2, int n3) {
-        return n2 < n3;
-    }
+    private int lastUseTick;
+    private final C consumableManager;
+    private final SquireAutoTOA plugin;
 
     @Inject
-    protected ApplyingSilkTask(Client client, C c2, SquireAutoTOA squireAutoTOA) {
+    protected ApplyingSilkTask(Client client, C consumableManager, SquireAutoTOA plugin) {
         super(client);
-        this.cy = c2;
-        this.cz = squireAutoTOA;
+        this.consumableManager = consumableManager;
+        this.plugin = plugin;
+        this.lastUseTick = 0;
     }
 
-    static {
-        ab.var10();
-        ab.var17();
-    }
+    @Override
+    public boolean run() {
+        // Don't apply if plugin is paused
+        if (this.plugin.e()) {
+            return false;
+        }
 
-    private static boolean var4(int n2) {
-        return n2 != 0;
-    }
+        // Don't apply if not in special weapon mode
+        if (!aq()) {
+            return false;
+        }
 
-    private static void var17() {
-        var1 = new String[var2[4]];
-        ab.var1[ab.var2[0]] = "Apply";
-        ab.var1[ab.var2[3]] = "Silk dressing";
+        // Check if we need healing and consumable manager allows it
+        if (Combat.getMissingHealth() < MISSING_HEALTH_THRESHOLD ||
+            !this.consumableManager.al()) {
+            return false;
+        }
+
+        // Check tick cooldown to prevent spamming
+        int currentTick = this.cu.getTickCount();
+        if (currentTick - this.lastUseTick < TICK_COOLDOWN) {
+            return false;
+        }
+
+        // Find silk dressing in inventory
+        Item silkDressing = Inventory.getFirst(item ->
+            item.getName().startsWith("Silk dressing")
+        );
+
+        // Apply silk dressing if found
+        if (silkDressing != null) {
+            silkDressing.interact("Apply");
+            this.lastUseTick = currentTick;
+            this.consumableManager.an();
+            return true;
+        }
+
+        return false;
     }
 }
-

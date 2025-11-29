@@ -1,18 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.plugins.fw.TaskDesc
- *  javax.inject.Inject
- *  net.runelite.api.Client
- *  net.runelite.api.NPC
- *  net.runelite.api.Player
- *  net.runelite.api.coords.WorldPoint
- *  net.unethicalite.api.coords.RegionPoint
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
- */
 package gg.squire.autotoa.tasks;
 
 import gg.squire.autotoa.TOAConfig;
@@ -29,116 +14,88 @@ import net.unethicalite.api.coords.RegionPoint;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum16;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+/**
+ * Handles moving the player to the optimal attack position during TOA raids.
+ * This task finds the best spot to attack from by considering:
+ * - NPC melee distance (to avoid being hit)
+ * - Walkable tiles
+ * - Proximity to the raid path and target location
+ * - Avoids dangerous ground markers
+ */
 @TaskDesc(name="Moving to best spot", priority=20)
-public class MovingToBestSpotTask
-extends AutotoaManager {
-    private static final  RegionPoint fe;
-    private static final  RegionPoint ff;
+public class MovingToBestSpotTask extends AutotoaManager {
 
-    private static boolean var2(int n2) {
-        return n2 != 0;
-    }
+    // Region coordinates for predefined safe spots
+    // Region point at coordinates (34, 47, plane 0, region 14164)
+    private static final RegionPoint SAFE_SPOT_1 = new RegionPoint(34, 47, 0, 14164);
 
-    private static  boolean g(NPC nPC, WorldPoint worldPoint) {
-        boolean bl2;
-        if (bl.var3(nPC.getWorldArea().contains(worldPoint) ? 1 : 0)) {
-            bl2 = var1[1];
-            0;
-            if ((39 + 10 - -133 + 6 ^ 61 + 177 - 213 + 159) <= 2) {
-                return ((0xD6 ^ 0xBC ^ (0x95 ^ 0xC6)) & (0x2C ^ 0x67 ^ (0xFF ^ 0x8D) ^ -1)) != 0;
-            }
-        } else {
-            bl2 = var1[0];
-        }
-        return bl2;
-    }
+    // Region point at coordinates (34, 29, plane 0, region 14164)
+    private static final RegionPoint SAFE_SPOT_2 = new RegionPoint(34, 29, 0, 14164);
 
-    private static  boolean f(NPC nPC, WorldPoint worldPoint) {
-        return nPC.getWorldArea().isInMeleeDistance(worldPoint);
-    }
+    // Maximum distance to move (2 tiles)
+    private static final int MAX_MOVEMENT_DISTANCE = 2;
 
-    private static boolean var3(int n2) {
-        return n2 == 0;
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    protected boolean bL() {
-        void var6_6;
-        void var4;
-        bl var5;
-        Player player = Players.getLocal();
-        NPC nPC = this.bO();
-        if (bl.var6(nPC)) {
-            return var1[0];
-        }
-        if (!bl.var3(var5.bR() ? 1 : 0) || bl.var2(bl.bV() ? 1 : 0)) {
-            return var1[0];
-        }
-        Set<WorldPoint> var7 = var5.bU();
-        if (bl.var3(var7.isEmpty() ? 1 : 0)) {
-            return var1[0];
-        }
-        List<WorldPoint> var8 = var5.bS();
-        WorldPoint var9 = var5.bT();
-        WorldPoint var10 = var4.getWorldArea().offset(var1[1]).toWorldPointList().stream().filter(arg_0 -> bl.g((NPC)var4, arg_0)).filter(arg_0 -> bl.f((NPC)var4, arg_0)).filter(Reachable::isWalkable).filter(worldPoint -> {
-            boolean bl2;
-            if (bl.var3(var8.contains(worldPoint) ? 1 : 0)) {
-                bl2 = var1[1];
-                0;
-                if (3 < 0) {
-                    return ((101 + 121 - 146 + 74 ^ 11 + 65 - -62 + 39) & (0xAC ^ 0xA1 ^ (0xED ^ 0xC7) ^ -1)) != 0;
-                }
-            } else {
-                bl2 = var1[0];
-            }
-            return bl2;
-        }).min(Comparator.comparingDouble(object -> ((WorldPoint)object).distanceToPath(this.cu, var9)).thenComparing(object -> Float.valueOf(((WorldPoint)object).distanceTo2DHypotenuse(var9)))).orElse(null);
-        if (!bl.var11(var10) || bl.var12(var10.distanceTo2D(Players.getLocal().getWorldLocation()), var1[2])) {
-            return var1[0];
-        }
-        Movement.setDestination((WorldPoint)var6_6);
-        return var1[1];
-    }
-
-    static {
-        bl.var13();
-        fe = new RegionPoint(var1[3], var1[4], var1[0], var1[5]);
-        ff = new RegionPoint(var1[3], var1[6], var1[0], var1[5]);
-    }
+    // Tile offset for NPC area calculation
+    private static final int NPC_AREA_OFFSET = 1;
 
     @Inject
     protected MovingToBestSpotTask(Client client, z z2, TOAConfig tOAConfig) {
         super(client, z2, tOAConfig, bi.ATTACK);
     }
 
-    private static void var13() {
-        var1 = new int[7];
-        bl.var1[0] = (0xA ^ 0x42 ^ (0x2B ^ 0x7F)) & (0x6A ^ 0x7E ^ (0x2A ^ 0x22) ^ -1);
-        bl.var1[1] = 1;
-        bl.var1[2] = 2;
-        bl.var1[3] = 125 + 74 - 74 + 56 ^ 94 + 104 - 138 + 91;
-        bl.var1[4] = 70 + 113 - 80 + 71 ^ 30 + 69 - 50 + 92;
-        bl.var1[5] = -(0x65 ^ 0x47) & (0xFFFFB7FD & 0x7F77);
-        bl.var1[6] = 0x82 ^ 0x9F;
-    }
+    @Override
+    protected boolean bL() {
+        Player localPlayer = Players.getLocal();
+        NPC targetNPC = this.bO(); // Get the target boss NPC
 
-    private static boolean var12(int n2, int n3) {
-        return n2 <= n3;
-    }
+        // No NPC target found, skip task
+        if (targetNPC == null) {
+            return false;
+        }
 
-    private static boolean var11(Object object) {
-        return object != null;
-    }
+        // Only move if we're in attack mode and not already positioned
+        if (!this.bR() || this.bV()) {
+            return false;
+        }
 
-    private static boolean var6(Object object) {
-        return object == null;
+        // Get dangerous ground markers to avoid
+        Set<WorldPoint> dangerousGroundMarkers = this.bU();
+        if (dangerousGroundMarkers.isEmpty()) {
+            return false;
+        }
+
+        // Get the raid path points
+        List<WorldPoint> raidPath = this.bS();
+        WorldPoint targetLocation = this.bT();
+
+        // Find the best position to attack from:
+        // 1. Start with tiles adjacent to the NPC (offset by 1)
+        // 2. Filter to tiles that don't contain the NPC (to avoid standing under it)
+        // 3. Filter to tiles in melee distance of the NPC
+        // 4. Filter to walkable tiles
+        // 5. Filter to tiles that are not on the raid path
+        // 6. Sort by distance to raid path, then by distance to target location
+        WorldPoint bestPosition = targetNPC.getWorldArea()
+            .offset(NPC_AREA_OFFSET)
+            .toWorldPointList()
+            .stream()
+            .filter(worldPoint -> !targetNPC.getWorldArea().contains(worldPoint)) // Don't stand under NPC
+            .filter(worldPoint -> targetNPC.getWorldArea().isInMeleeDistance(worldPoint)) // Stay in melee range
+            .filter(Reachable::isWalkable) // Must be walkable
+            .filter(worldPoint -> !raidPath.contains(worldPoint)) // Avoid raid path
+            .min(Comparator
+                .comparingDouble(worldPoint -> worldPoint.distanceToPath(this.cu, targetLocation)) // Closest to path
+                .thenComparing(worldPoint -> worldPoint.distanceTo2DHypotenuse(targetLocation))) // Then closest to target
+            .orElse(null);
+
+        // No suitable position found or already close enough
+        if (bestPosition == null || bestPosition.distanceTo2D(Players.getLocal().getWorldLocation()) <= MAX_MOVEMENT_DISTANCE) {
+            return false;
+        }
+
+        // Move to the best position
+        Movement.setDestination(bestPosition);
+        return true;
     }
 }
-

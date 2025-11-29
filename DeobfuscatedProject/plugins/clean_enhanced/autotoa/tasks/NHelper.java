@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  javax.inject.Inject
  *  net.runelite.api.Client
@@ -30,53 +30,94 @@ import net.runelite.client.ui.overlay.OverlayUtil;
 import gg.squire.autotoa.tasks.AutotoaTaskBase;
 import gg.squire.autotoa.tasks.AutotoaManager;
 
-public class NHelper
-extends AutotoaTaskBase {
-    private final  Client bJ;
-    private final  j bK;
+/**
+ * NPCOverlay - Renders NPC convex hulls as blue outlines.
+ *
+ * This overlay highlights NPCs by drawing their convex hull boundaries
+ * in blue. Used to visually identify NPCs of interest during
+ * Tombs of Amascut gameplay.
+ */
+public class NPCOverlay extends AutotoaTaskBase {
 
-    public Dimension render(Graphics2D graphics2D) {
-        this.b(graphics2D);
+    /** RuneLite client instance */
+    private final Client client;
+
+    /** Reference to the task manager providing NPC data */
+    private final AutotoaManager taskManager;
+
+    /**
+     * Renders the overlay by drawing NPC highlights.
+     *
+     * @param graphics The graphics context to draw on
+     * @return null (no specific dimension requirements)
+     */
+    public Dimension render(Graphics2D graphics) {
+        this.renderNPCHighlights(graphics);
         return null;
     }
 
-    private static boolean var1(int n2) {
-        return n2 != 0;
+    /**
+     * Checks if an integer represents a true boolean value.
+     *
+     * @param value The integer to check
+     * @return true if value is non-zero
+     */
+    private static boolean isTrue(int value) {
+        return value != 0;
     }
 
-    private static boolean var2(Object object) {
+    /**
+     * Checks if an object is null.
+     *
+     * @param object The object to check
+     * @return true if object is null
+     */
+    private static boolean isNull(Object object) {
         return object == null;
     }
 
+    /**
+     * Creates a new NPC overlay.
+     *
+     * @param config TOA configuration
+     * @param client RuneLite client instance
+     * @param taskManager The task manager providing NPC data
+     */
     @Inject
-    protected NHelper(TOAConfig tOAConfig, Client client, j j2) {
-        super(tOAConfig);
-        this.bJ = client;
-        this.bK = j2;
+    protected NPCOverlay(TOAConfig config, Client client, AutotoaManager taskManager) {
+        super(config);
+        this.client = client;
+        this.taskManager = taskManager;
         this.setPriority(OverlayPriority.HIGH);
         this.setPosition(OverlayPosition.DYNAMIC);
         this.setLayer(OverlayLayer.UNDER_WIDGETS);
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Renders blue outlines around NPC convex hulls.
+     *
+     * @param graphics The graphics context to draw on
      */
-    private void b(Graphics2D graphics2D) {
-        Iterator<NPC> var3 = this.bK.B().iterator();
-        while (N.var1(var3.hasNext() ? 1 : 0)) {
-            void var4;
-            NPC var5 = var3.next();
-            Shape var6 = var5.getConvexHull();
-            if (N.var2(var6)) {
-                0;
-                if ((0x3F ^ 0x3B) > 3) continue;
-                return;
+    private void renderNPCHighlights(Graphics2D graphics) {
+        // Iterate through all NPCs tracked by the task manager
+        Iterator<NPC> npcIterator = this.taskManager.getTrackedNPCs().iterator();
+
+        while (isTrue(npcIterator.hasNext() ? 1 : 0)) {
+            NPC npc = npcIterator.next();
+            Shape convexHull = npc.getConvexHull();
+
+            // Skip if NPC has no visible convex hull
+            if (isNull(convexHull)) {
+                continue;
             }
-            OverlayUtil.renderPolygon((Graphics2D)var4, (Shape)var6, (Color)Color.BLUE, (Stroke)new BasicStroke(1.0f));
-            0;
-            if (((65 + 110 - 93 + 70 ^ 31 + 92 - 23 + 77) & (153 + 140 - 134 + 80 ^ 17 + 63 - 66 + 184 ^ -1)) == 0) continue;
-            return;
+
+            // Draw the NPC convex hull in blue with 1px stroke
+            OverlayUtil.renderPolygon(
+                graphics,
+                convexHull,
+                Color.BLUE,
+                new BasicStroke(1.0f)
+            );
         }
     }
 }
-

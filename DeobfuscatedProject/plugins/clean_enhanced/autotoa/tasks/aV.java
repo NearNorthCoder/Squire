@@ -3,43 +3,33 @@
  */
 package gg.squire.autotoa.tasks;
 
-import gg.squire.autotoa.tasks.GameEnum9;
-
-class aV {
-    static final  int[] ev;
+/**
+ * Switch mapper for DoingTask enum values.
+ * Maps the Task enum ordinals to switch case values for the DoingTask handler.
+ */
+class DoingTaskSwitchMapper {
+    static final int[] taskOrdinalMapping;
 
     static {
-        block6: {
-            block5: {
-                aV.var2();
-                ev = new int[aW.values().length];
-                try {
-                    aV.ev[aW.PILLARS.ordinal()] = var1[0];
-                    0;
-                }
-                catch (NoSuchFieldError var3) {
-                    // empty catch block
-                }
-                if ((116 + 133 - 109 + 12 ^ 140 + 138 - 215 + 93) >= 0) break block5;
-                break block6;
-            }
-            try {
-                aV.ev[aW.VENTS.ordinal()] = var1[1];
-                0;
-            }
-            catch (NoSuchFieldError noSuchFieldError) {
-                // empty catch block
-            }
-            if ((0x38 ^ 0x3C) != (0x55 ^ 0x51)) {
-                // empty if block
-            }
+        initializeOrdinalMapping();
+        taskOrdinalMapping = new int[Task.values().length];
+
+        try {
+            // PILLARS task maps to case 1
+            taskOrdinalMapping[Task.PILLARS.ordinal()] = 1;
+        } catch (NoSuchFieldError error) {
+            // Enum value doesn't exist, skip
+        }
+
+        try {
+            // VENTS task maps to case 2
+            taskOrdinalMapping[Task.VENTS.ordinal()] = 2;
+        } catch (NoSuchFieldError error) {
+            // Enum value doesn't exist, skip
         }
     }
 
-    private static void var2() {
-        var1 = new int[2];
-        aV.var1[0] = 1;
-        aV.var1[1] = 2;
+    private static void initializeOrdinalMapping() {
+        // Not used in this simple mapper
     }
 }
-

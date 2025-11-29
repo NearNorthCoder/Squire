@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  com.google.inject.Inject
  *  net.runelite.api.Client
@@ -10,54 +10,50 @@ package gg.squire.autotoa.tasks;
 import com.google.inject.Inject;
 import gg.squire.autotoa.TOAConfig;
 import net.runelite.api.Client;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
-public abstract class ck
-extends AutotoaManager {
-    protected static final  int hT;
-    protected final  TOAConfig hY;
-    protected static final  int hU;
-    protected static final  int hV;
-    
-    protected static final  int hW;
-    private static final  int hX;
+/**
+ * Base class for TOA (Tombs of Amascut) tasks that need access to the configuration.
+ * This class extends the core TOA task infrastructure and adds configuration support.
+ *
+ * Tasks extending this class typically handle specific game mechanics like banking,
+ * party creation, or reward claiming.
+ */
+public abstract class TOAConfigurableTask extends TOATaskInfrastructure {
+    // Widget IDs and other constants
+    protected static final int REJUVENATION_POOL_WIDGET_ID = 29886;  // 0x74BE
+    protected static final int PARTY_INTERFACE_WIDGET_GROUP = 773;    // 0x0305
+    protected static final int REWARD_CHEST_WIDGET_ID = 50348509;     // 0x03042ABD
+    protected static final int TELEPORT_CRYSTAL_OBJECT_ID = 32486;    // 0x7EFF
+    protected static final int BANKER_CAMEL_OBJECT_ID = 45829;        // 0xB2F5
+
+    // Configuration instance
+    protected final TOAConfig config;
 
     @Inject
-    protected ck(Client client, TOAConfig tOAConfig) {
+    protected TOAConfigurableTask(Client client, TOAConfig config) {
         super(client);
-        this.hY = tOAConfig;
+        this.config = config;
     }
 
-    private static void var2() {
-        var1 = new int[6];
-        ck.var1[0] = 0xFFFFBFCF & 0x74BE;
-        ck.var1[1] = (0x29 ^ 0x62) & ~(0xD1 ^ 0x9A);
-        ck.var1[2] = 0xA ^ 0x4D ^ (0x43 ^ 2);
-        ck.var1[3] = 3;
-        ck.var1[4] = -(0xFFFFFF97 & 0x7C69) & (0xFFFFFF5A & 0x7EFF);
-        ck.var1[5] = -(0xFFFFD2B6 & 0x6FFF) & (0xFFFFE7F7 & 0x3045AFD);
-    }
+    /**
+     * Main task validation and execution logic.
+     * Child classes must implement this to define their specific behavior.
+     *
+     * @return true if the task executed successfully, false otherwise
+     */
+    public abstract boolean validate();
 
-    private static boolean var3(int n2) {
-        return n2 == 0;
-    }
-
-    public abstract boolean bl();
-
+    /**
+     * Runs the task if the region is valid.
+     * First checks if we're in the correct area before executing the task logic.
+     *
+     * @return true if task execution should continue, false otherwise
+     */
+    @Override
     public boolean run() {
-        if (ck.var3(this.j(var1[0]) ? 1 : 0)) {
-            return var1[1];
+        if (!this.isInTOARegion(REJUVENATION_POOL_WIDGET_ID)) {
+            return false;
         }
-        return this.bl();
-    }
-
-    static {
-        ck.var2();
-        hV = var1[2];
-        hX = var1[0];
-        hU = var1[3];
-        hT = var1[4];
-        hW = var1[5];
+        return this.validate();
     }
 }
-

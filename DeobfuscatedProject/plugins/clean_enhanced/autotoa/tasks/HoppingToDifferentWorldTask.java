@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  com.google.inject.Inject
  *  gg.squire.client.plugins.fw.TaskDesc
@@ -33,238 +33,175 @@ import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.widgets.Widgets;
 
+/**
+ * Handles world hopping for TOA raids.
+ * This task automatically hops to different worlds based on configuration
+ * to avoid crowded raids or find optimal world conditions.
+ *
+ * The task:
+ * 1. Checks if hopping is enabled in config
+ * 2. Validates current game state
+ * 3. Selects an appropriate world based on criteria
+ * 4. Performs the hop
+ */
 @TaskDesc(name="Hopping to different world", priority=1000, blocking=true, register=true)
-public class HoppingToDifferentWorldTask
-extends ck {
-    
-    private  World hS;
+public class HoppingToDifferentWorldTask extends TOAConfigurableTask {
+    // Widget IDs
+    private static final int LOGOUT_WIDGET_GROUP = 25343;       // 0x62FF - Logout panel
+    private static final int PARTY_INTERFACE_WIDGET = 50594626; // 0x3042AC2 - Party interface
+    private static final int MAX_WORLD_PLAYER_COUNT = 28255;    // 0x6E5F - Player count threshold
 
-    private static  boolean b(World world, World world2) {
-        int n2;
-        if (cj.var3(world2.getId(), world.getId()) && cj.var4(world2.isNormal() ? 1 : 0) && cj.var4(world2.isMembers() ? 1 : 0) && cj.var4(Objects.equals(world2.getLocation(), world.getLocation()) ? 1 : 0)) {
-            n2 = var2[4];
-            0;
-            if (1 < 0) {
-                return ((0xE8 ^ 0xA3) & ~(0xCF ^ 0x84)) != 0;
-            }
-        } else {
-            n2 = var2[0];
-        }
-        return n2 != 0;
-    }
+    // Sleep time before hopping
+    private static final int HOP_DELAY_MS = 200;
 
-    private static boolean var5(int n2, int n3) {
-        return n2 < n3;
-    }
-
-    private static  boolean a(World world, World world2) {
-        int n2;
-        if (cj.var3(world2.getId(), world.getId()) && cj.var4(world2.isNormal() ? 1 : 0)) {
-            n2 = var2[4];
-            0;
-            if (1 <= ((0x1D ^ 0x21) & ~(5 ^ 0x39))) {
-                return ((0x19 ^ 7) & ~(0xA6 ^ 0xB8)) != 0;
-            }
-        } else {
-            n2 = var2[0];
-        }
-        return n2 != 0;
-    }
-
-        catch (Exception var11) {
-            var11.printStackTrace();
-            return null;
-        }
-    }
-
-    private static boolean var12(Object object, Object object2) {
-        return object != object2;
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    public boolean bl() {
-        void var5_5;
-        void var4_4;
-        cj var13;
-        if (cj.var4(this.hY.disableHopping() ? 1 : 0)) {
-            return var2[0];
-        }
-        if (cj.var12(Game.getState(), GameState.LOGGED_IN)) {
-            return var2[0];
-        }
-        Widget var14 = Widgets.get((int)var2[1], (int)var2[2]);
-        if (cj.var4(Widgets.isVisible((Widget)var14) ? 1 : 0)) {
-            return var2[0];
-        }
-        Widget var15 = var13.cu.getWidget(var2[3]);
-        if (cj.var4(Widgets.isVisible((Widget)var15) ? 1 : 0)) {
-            return var2[0];
-        }
-        if (cj.var4(Bank.isOpen() ? 1 : 0)) {
-            return var2[0];
-        }
-        BankLoadout var16 = (BankLoadout)var13.hY.loadout().selected(BankLoadout.class);
-        if (cj.var17(var16.needsToBank() ? 1 : 0)) {
-            var13.hS = Worlds.getCurrentWorld();
-            return var2[0];
-        }
-        Log.info((String)var1[var2[0]]);
-        World var18 = Worlds.getCurrentWorld();
-        if (cj.var19(var18)) {
-            Log.info((String)var1[var2[4]]);
-            return var2[4];
-        }
-        if (cj.var20(var13.hS) && cj.var3(var18.getId(), var13.hS.getId())) {
-            Log.info((String)var1[var2[5]]);
-            return var2[0];
-        }
-        World var21 = var13.a(var18);
-        if (cj.var19(var21)) {
-            Log.info((String)var1[var2[2]]);
-            return var2[4];
-        }
-        if (cj.var17(Worlds.isHopperOpen() ? 1 : 0)) {
-            Log.info((String)var1[var2[6]]);
-            Worlds.openHopper();
-            return var2[4];
-        }
-        this.sleep(var2[7]);
-        this.hS = var4_4;
-        Worlds.hopTo((World)var5_5);
-        Log.info((String)var1[var2[8]]);
-        return var2[4];
-    }
-
-    private static boolean var20(Object object) {
-        return object != null;
-    }
-
-    private static boolean var3(int n2, int n3) {
-        return n2 != n3;
-    }
-
-    private static String var22(String var23, String var24) {
-        var23 = new String(Base64.getDecoder().decode(var23.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var25 = new StringBuilder();
-        char[] var26 = var24.toCharArray();
-        int var27 = var2[0];
-        char[] var28 = var23.toCharArray();
-        int var29 = var28.length;
-        int var30 = var2[0];
-        while (cj.var5(var30, var29)) {
-            char var31 = var28[var30];
-            var25.append((char)(var31 ^ var26[var27 % var26.length]));
-            0;
-            ++var27;
-            ++var30;
-            0;
-            if (-(0x9C ^ 0xB0 ^ (0xA ^ 0x22)) <= 0) continue;
-            return null;
-        }
-        return String.valueOf(var25);
-    }
-
-    private static boolean var17(int n2) {
-        return n2 == 0;
-    }
-
-    private static void var32() {
-        var2 = new int[13];
-        cj.var2[0] = (0x47 ^ 5 ^ (0x84 ^ 0x81)) & (199 + 64 - 232 + 196 ^ 95 + 31 - 120 + 158 ^ -1);
-        cj.var2[1] = 0xFFFF9F5A & 0x62FF;
-        cj.var2[2] = 3;
-        cj.var2[3] = 0xFFFFD57D & 0x3042AC2;
-        cj.var2[4] = 1;
-        cj.var2[5] = 2;
-        cj.var2[6] = 112 + 89 - 156 + 111 ^ 82 + 84 - 111 + 97;
-        cj.var2[7] = 0xE6 ^ 0xAB ^ (0x12 ^ 0x77);
-        cj.var2[8] = 0x26 ^ 0x3F ^ (0x26 ^ 0x3A);
-        cj.var2[9] = 129 + 112 - 180 + 129 ^ 55 + 166 - 172 + 135;
-        cj.var2[10] = 0xFFFF93F8 & 0x6E5F;
-        cj.var2[11] = 0x71 ^ 0x76;
-        cj.var2[12] = 0x3A ^ 0x32;
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    private World a(World world) {
-        World world3;
-        void var33;
-        String string = this.hY.worldsHopping();
-        if (cj.var17(string.isEmpty() ? 1 : 0)) {
-            String[] stringArray = string.split(var1[var2[9]]);
-            return Worlds.getRandom(world2 -> {
-                int n2;
-                if (cj.var3(world2.getId(), world.getId()) && cj.var4(Stream.of(stringArray).anyMatch(string -> String.valueOf(world2.getId()).equals(string)) ? 1 : 0)) {
-                    n2 = var2[4];
-                    0;
-                    if (1 < 0) {
-                        return ((0x96 ^ 0xC4 ^ (3 ^ 8) & ~(0x7D ^ 0x76)) & (0xE3 ^ 0x97 ^ (0x81 ^ 0xA7) ^ -1)) != 0;
-                    }
-                } else {
-                    n2 = var2[0];
-                }
-                return n2 != 0;
-            });
-        }
-        World var34 = Worlds.getRandom(arg_0 -> cj.c((World)var33, arg_0));
-        if (cj.var19(var34) && cj.var19(var34 = Worlds.getRandom(arg_0 -> cj.b((World)var33, arg_0)))) {
-            world3 = Worlds.getRandom(arg_0 -> cj.a((World)var33, arg_0));
-        }
-        return world3;
-    }
-
-        catch (Exception var40) {
-            var40.printStackTrace();
-            return null;
-        }
-    }
+    // Tracks the world we're hopping from
+    private World previousWorld;
 
     @Inject
-    protected HoppingToDifferentWorldTask(Client client, TOAConfig tOAConfig) {
-        super(client, tOAConfig);
+    protected HoppingToDifferentWorldTask(Client client, TOAConfig config) {
+        super(client, config);
     }
 
-    private static void var41() {
-        var1 = new String[var2[11]];
-        cj.var1[cj.var2[0]] = "[HopTask] Need to hop";
-        cj.var1[cj.var2[4]] = "[HopTask] Cannot determine our current world";
-        cj.var1[cj.var2[5]] = "[HopTask] No need to hop since we are already on a different world";
-        cj.var1[cj.var2[2]] = "[HopTask] Failing to find a world to hop to??";
-        cj.var1[cj.var2[6]] = "[HopTask] World hopper is not open";
-        cj.var1[cj.var2[8]] = "[HopTask] We just hopped";
-        cj.var1[cj.var2[9]] = ",";
-    }
-
-    static {
-        cj.var32();
-        cj.var41();
-    }
-
-    private static boolean var19(Object object) {
-        return object == null;
-    }
-
-    private static boolean var4(int n2) {
-        return n2 != 0;
-    }
-
-    private static  boolean c(World world, World world2) {
-        int n2;
-        if (cj.var3(world2.getId(), world.getId()) && cj.var4(world2.isNormal() ? 1 : 0) && cj.var4(world2.isMembers() ? 1 : 0) && cj.var4(Objects.equals(world2.getLocation(), world.getLocation()) ? 1 : 0) && cj.var5(world2.getPlayerCount(), var2[10])) {
-            n2 = var2[4];
-            0;
-            if (3 <= 0) {
-                return ((0xF ^ 0x5A) & ~(0xCD ^ 0x98)) != 0;
-            }
-        } else {
-            n2 = var2[0];
+    @Override
+    public boolean validate() {
+        // Check if hopping is disabled in config
+        if (this.config.disableHopping()) {
+            return false;
         }
-        return n2 != 0;
+
+        // Must be logged in to hop
+        if (Game.getState() != GameState.LOGGED_IN) {
+            return false;
+        }
+
+        // Don't hop if logout panel is open
+        Widget logoutWidget = Widgets.get(LOGOUT_WIDGET_GROUP, 3);
+        if (Widgets.isVisible(logoutWidget)) {
+            return false;
+        }
+
+        // Don't hop if party interface is open
+        Widget partyWidget = this.client.getWidget(PARTY_INTERFACE_WIDGET);
+        if (Widgets.isVisible(partyWidget)) {
+            return false;
+        }
+
+        // Don't hop while bank is open
+        if (Bank.isOpen()) {
+            return false;
+        }
+
+        // Check if we need to bank - if so, remember current world
+        BankLoadout loadout = (BankLoadout) this.config.loadout().selected(BankLoadout.class);
+        if (!loadout.needsToBank()) {
+            this.previousWorld = Worlds.getCurrentWorld();
+            return false;
+        }
+
+        Log.info("[HopTask] Need to hop");
+
+        // Get current world
+        World currentWorld = Worlds.getCurrentWorld();
+        if (currentWorld == null) {
+            Log.info("[HopTask] Cannot determine our current world");
+            return true;
+        }
+
+        // Check if we already hopped (on different world than before)
+        if (this.previousWorld != null && currentWorld.getId() != this.previousWorld.getId()) {
+            Log.info("[HopTask] No need to hop since we are already on a different world");
+            return false;
+        }
+
+        // Find a world to hop to
+        World targetWorld = this.findWorldToHopTo(currentWorld);
+        if (targetWorld == null) {
+            Log.info("[HopTask] Failing to find a world to hop to??");
+            return true;
+        }
+
+        // Open world hopper if not already open
+        if (!Worlds.isHopperOpen()) {
+            Log.info("[HopTask] World hopper is not open");
+            Worlds.openHopper();
+            return true;
+        }
+
+        // Perform the hop
+        this.sleep(HOP_DELAY_MS);
+        this.previousWorld = targetWorld;
+        Worlds.hopTo(targetWorld);
+        Log.info("[HopTask] We just hopped");
+
+        return true;
+    }
+
+    /**
+     * Finds an appropriate world to hop to based on configuration and criteria.
+     *
+     * @param currentWorld The current world
+     * @return A suitable world to hop to, or null if none found
+     */
+    private World findWorldToHopTo(World currentWorld) {
+        String worldsConfig = this.config.worldsHopping();
+
+        // If specific worlds are configured, use those
+        if (!worldsConfig.isEmpty()) {
+            String[] configuredWorlds = worldsConfig.split(",");
+            return Worlds.getRandom(world -> {
+                // Must be different world and in the configured list
+                return world.getId() != currentWorld.getId() &&
+                       Stream.of(configuredWorlds).anyMatch(worldId ->
+                           String.valueOf(world.getId()).equals(worldId));
+            });
+        }
+
+        // Otherwise, find a world matching criteria
+        // First try: Same location, members, normal world, low population
+        World targetWorld = Worlds.getRandom(world ->
+            this.isPreferredWorld(world, currentWorld));
+
+        // Second try: Same location, members, normal world (any population)
+        if (targetWorld == null) {
+            targetWorld = Worlds.getRandom(world ->
+                this.isAcceptableWorld(world, currentWorld));
+        }
+
+        // Third try: Just a normal members world
+        if (targetWorld == null) {
+            targetWorld = Worlds.getRandom(world ->
+                this.isAnyNormalWorld(world, currentWorld));
+        }
+
+        return targetWorld;
+    }
+
+    /**
+     * Checks if a world is preferred (low population, same location).
+     */
+    private boolean isPreferredWorld(World world, World currentWorld) {
+        return world.getId() != currentWorld.getId() &&
+               world.isNormal() &&
+               world.isMembers() &&
+               Objects.equals(world.getLocation(), currentWorld.getLocation()) &&
+               world.getPlayerCount() < MAX_WORLD_PLAYER_COUNT;
+    }
+
+    /**
+     * Checks if a world is acceptable (same location, any population).
+     */
+    private boolean isAcceptableWorld(World world, World currentWorld) {
+        return world.getId() != currentWorld.getId() &&
+               world.isNormal() &&
+               world.isMembers() &&
+               Objects.equals(world.getLocation(), currentWorld.getLocation());
+    }
+
+    /**
+     * Checks if a world is any normal members world.
+     */
+    private boolean isAnyNormalWorld(World world, World currentWorld) {
+        return world.getId() != currentWorld.getId() &&
+               world.isNormal();
     }
 }
-

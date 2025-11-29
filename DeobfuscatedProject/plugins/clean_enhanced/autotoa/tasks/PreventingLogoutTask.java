@@ -1,11 +1,15 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.Task
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
+ *
+ * Logout Prevention Task
+ *
+ * This task prevents the player from being logged out due to inactivity.
+ * It works by simulating key events when the player has been idle for too long.
+ *
+ * The task:
+ * - Monitors mouse and keyboard idle ticks
+ * - Simulates backspace key events when idle threshold is reached
+ * - Uses random cooldown intervals to appear more human-like
  */
 package gg.squire.autotoa.tasks;
 
@@ -18,89 +22,115 @@ import java.util.concurrent.ThreadLocalRandom;
 import net.runelite.api.Client;
 
 @TaskDesc(name="Preventing Logout")
-public class PreventingLogoutTask
-extends Task {
-    
-    private  long cq;
+public class PreventingLogoutTask extends Task {
+
+    // Constants - KeyEvent IDs
+    private static final int KEY_PRESSED = 401;   // 0x77F7
+    private static final int KEY_RELEASED = 402;  // 0x2FFA
+    private static final int KEY_TYPED = 400;     // 0x1B6
+
+    // Key code for backspace
+    private static final int VK_BACK_SPACE = 8;
+
+    // Modifier keys (none used)
+    private static final int MODIFIERS = 0;
+
+    private long nextIdleThreshold;
+
     @Inject
-    private  Client ai;
+    private Client client;
 
-    private static boolean var2(int n2, int n3) {
-        return n2 < n3;
-    }
-
-    private boolean aW() {
-        boolean bl2;
-        Y var3;
-        int var4;
-        int n2 = this.ai.getKeyboardIdleTicks();
-        if (Y.var2(this.ai.getMouseIdleTicks(), n2)) {
-            var4 = this.ai.getMouseIdleTicks();
-        }
-        if (Y.var5(Y.var6(var4, var3.cq))) {
-            bl2 = var1[0];
-            0;
-            if (2 == 3) {
-                return ((19 + 69 - 7 + 49 ^ 31 + 4 - -56 + 78) & (66 + 69 - 109 + 114 ^ 69 + 30 - 44 + 112 ^ -1)) != 0;
-            }
-        } else {
-            bl2 = var1[1];
-        }
-        return bl2;
-    }
-
-    static {
-        Y.var7();
-    }
-
-    private long aU() {
-        return (long)this.a(Math.round(ThreadLocalRandom.current().nextGaussian() * 8000.0));
-    }
-
-    private static boolean var8(int n2) {
-        return n2 != 0;
-    }
-
-    private static void var7() {
-        var1 = new int[7];
-        Y.var1[0] = 1;
-        Y.var1[1] = (0xA ^ 0x4C) & ~(0xF9 ^ 0xBF);
-        Y.var1[2] = 0xFFFF8999 & 0x77F7;
-        Y.var1[3] = -(0xFFFFBEED & 0x4BB7) & (0xFFFF9EBD & 0x6FE6);
-        Y.var1[4] = 0x92 ^ 0x9A;
-        Y.var1[5] = 0xFFFFD197 & 0x2FFA;
-        Y.var1[6] = 0xFFFFFFD9 & 0x1B6;
-    }
-
+    @Override
     public boolean run() {
-        if (Y.var8(this.aW() ? 1 : 0)) {
-            this.cq = this.aU();
-            Executors.newSingleThreadExecutor().submit(this::aV);
-            0;
-            return var1[0];
+        // Check if player is idle
+        if (isPlayerIdle()) {
+            // Calculate new random threshold
+            this.nextIdleThreshold = calculateRandomThreshold();
+
+            // Simulate key events in background thread
+            Executors.newSingleThreadExecutor().submit(this::simulateKeyEvents);
+
+            return true;
         }
-        return var1[1];
+
+        return false;
     }
 
-    private void aV() {
-        KeyEvent keyEvent = new KeyEvent(this.ai.getCanvas(), var1[2], System.currentTimeMillis(), var1[3], var1[4]);
-        this.ai.getCanvas().dispatchEvent(keyEvent);
-        KeyEvent keyEvent2 = new KeyEvent(this.ai.getCanvas(), var1[5], System.currentTimeMillis(), var1[1], var1[4]);
-        this.ai.getCanvas().dispatchEvent(keyEvent2);
-        KeyEvent keyEvent3 = new KeyEvent(this.ai.getCanvas(), var1[6], System.currentTimeMillis(), var1[1], var1[4]);
-        this.ai.getCanvas().dispatchEvent(keyEvent3);
+    /**
+     * Checks if the player is idle based on mouse and keyboard ticks
+     * @return true if player is idle and threshold exceeded
+     */
+    private boolean isPlayerIdle() {
+        int keyboardIdleTicks = this.client.getKeyboardIdleTicks();
+        int mouseIdleTicks = this.client.getMouseIdleTicks();
+
+        // Get the maximum of keyboard and mouse idle ticks
+        int maxIdleTicks = Math.max(keyboardIdleTicks, mouseIdleTicks);
+
+        // Check if idle time exceeds threshold
+        return maxIdleTicks >= this.nextIdleThreshold;
     }
 
-    private double a(double d2) {
-        return Math.max(1.0, Math.min(13000.0, d2));
+    /**
+     * Calculates a random idle threshold using Gaussian distribution
+     * This makes the timing more human-like and less predictable
+     * @return random threshold in ticks
+     */
+    private long calculateRandomThreshold() {
+        // Generate random value with Gaussian distribution (mean=0, stddev=1)
+        double gaussian = ThreadLocalRandom.current().nextGaussian();
+
+        // Scale to approximately 8000 ticks (8 seconds at 100 ticks/sec)
+        double rawValue = gaussian * 8000.0;
+
+        // Clamp between 1 and 13000 ticks (1-13 seconds)
+        return Math.round(clampValue(rawValue));
     }
 
-    private static boolean var5(int n2) {
-        return n2 >= 0;
+    /**
+     * Clamps a value between 1.0 and 13000.0
+     * @param value the value to clamp
+     * @return clamped value
+     */
+    private double clampValue(double value) {
+        return Math.max(1.0, Math.min(13000.0, value));
     }
 
-    private static int var6(long l2, long l3) {
-        return l2 == l3 ? 0 : (l2 < l3 ? -1 : 1);
+    /**
+     * Simulates key events to prevent logout
+     * Dispatches KEY_PRESSED, KEY_RELEASED, and KEY_TYPED events for backspace
+     */
+    private void simulateKeyEvents() {
+        long currentTime = System.currentTimeMillis();
+
+        // KEY_PRESSED event
+        KeyEvent keyPressed = new KeyEvent(
+            this.client.getCanvas(),
+            KEY_PRESSED,
+            currentTime,
+            MODIFIERS,
+            VK_BACK_SPACE
+        );
+        this.client.getCanvas().dispatchEvent(keyPressed);
+
+        // KEY_RELEASED event
+        KeyEvent keyReleased = new KeyEvent(
+            this.client.getCanvas(),
+            KEY_RELEASED,
+            currentTime,
+            MODIFIERS,
+            VK_BACK_SPACE
+        );
+        this.client.getCanvas().dispatchEvent(keyReleased);
+
+        // KEY_TYPED event
+        KeyEvent keyTyped = new KeyEvent(
+            this.client.getCanvas(),
+            KEY_TYPED,
+            currentTime,
+            MODIFIERS,
+            VK_BACK_SPACE
+        );
+        this.client.getCanvas().dispatchEvent(keyTyped);
     }
 }
-

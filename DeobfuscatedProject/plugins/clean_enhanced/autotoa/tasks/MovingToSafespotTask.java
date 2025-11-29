@@ -1,22 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  com.google.inject.Singleton
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.GameObject
- *  net.runelite.api.Point
- *  net.runelite.api.coords.LocalPoint
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.api.events.GraphicsObjectCreated
- *  net.runelite.client.config.ConfigStorageBox
- *  net.runelite.client.eventbus.Subscribe
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.TileObjects
- *  net.unethicalite.api.movement.Movement
- */
 package gg.squire.autotoa.tasks;
 
 import com.google.inject.Inject;
@@ -34,100 +15,120 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.squire.equipment.EquipmentSetup;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.movement.Movement;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+/**
+ * Handles moving to safe spots when specific boss attack graphics appear.
+ * This task reacts to dangerous visual effects (graphics objects) and quickly
+ * moves the player to predetermined safe locations to avoid damage.
+ *
+ * The task monitors for two types of attack graphics:
+ * - Graphics ID 26812: Triggers movement to one safe spot (with 42 tick cooldown)
+ * - Graphics ID (negative value): Triggers movement to an alternate spot (with 6 tick cooldown)
+ */
 @Singleton
 @TaskDesc(name="Moving to safespot", priority=25, blocking=true, register=true)
-public class MovingToSafespotTask
-extends AutotoaManager {
-    private static final  int gi;
-    
-    private  int gj;
-    private static final  Point gg;
-    private static final  Point ge;
-    private static final  int gh;
-    private static final  Point gf;
-    private  Point gk;
+public class MovingToSafespotTask extends AutotoaManager {
+
+    // Graphics object IDs for different boss attacks
+    private static final int GRAPHICS_ATTACK_TYPE_1 = 26812;
+    private static final int GRAPHICS_ATTACK_TYPE_2 = (int)(short)0xCB1B; // -13541 as signed short
+
+    // Safe spot coordinates (screen/local points)
+    private static final Point SAFESPOT_PRIMARY = new Point(56, 37);    // Main safe spot
+    private static final Point SAFESPOT_ALT_1 = new Point(30, 37);      // Alternative safe spot 1
+    private static final Point SAFESPOT_ALT_2 = new Point(29, 34);      // Alternative safe spot 2
+
+    // Cooldown values in game ticks
+    private static final int SHORT_COOLDOWN_TICKS = 6;
+    private static final int LONG_COOLDOWN_TICKS = 42;
+    private static final int INITIAL_COOLDOWN = 4;
+
+    // Current safe spot target and cooldown timer
+    private Point currentSafespotTarget;
+    private int cooldownTicksRemaining;
+
+    @Inject
+    protected MovingToSafespotTask(Client client, z z2, TOAConfig tOAConfig) {
+        super(client, z2, tOAConfig);
+        this.cooldownTicksRemaining = 0;
+    }
 
     @Override
     public boolean bl() {
-        WorldPoint var2;
-        bD var3;
-        WorldPoint worldPoint = this.a(ge);
-        if (bD.var4(this.gj)) {
-            this.gj -= var1[1];
-            if (bD.var5(this.gk, gg) && bD.var6(this.gj, var1[2])) {
-                return var1[0];
+        // Calculate the world location from the primary safe spot point
+        WorldPoint primarySafespotWorld = this.a(SAFESPOT_PRIMARY);
+        WorldPoint destinationWorld;
+
+        // If cooldown is active, decrement it
+        if (this.cooldownTicksRemaining > 0) {
+            this.cooldownTicksRemaining -= 1;
+
+            // Check if we should return to primary spot after cooldown
+            if (this.currentSafespotTarget == SAFESPOT_ALT_2 && this.cooldownTicksRemaining > INITIAL_COOLDOWN) {
+                return false;
             }
-            var2 = var3.a(var3.gk);
+
+            // Get the world location of the current target safe spot
+            destinationWorld = this.a(this.currentSafespotTarget);
+        } else {
+            // Use primary safe spot when no cooldown
+            destinationWorld = primarySafespotWorld;
         }
-        if (bD.var7(var3.cu.getLocalPlayer().getWorldLocation().equals((Object)var2) ? 1 : 0)) {
-            return var1[0];
+
+        // Already at the destination
+        if (this.cu.getLocalPlayer().getWorldLocation().equals(destinationWorld)) {
+            return false;
         }
-        WorldPoint var8 = var2;
-        if (bD.var4(TileObjects.getAll(tileObject -> {
-            int n2;
-            if (bD.var7(tileObject instanceof GameObject) && bD.var7(((GameObject)tileObject).getWorldArea().contains(var8) ? 1 : 0)) {
-                n2 = var1[1];
-                0;
-                if ((87 + 59 - 62 + 53 ^ 95 + 39 - 42 + 49) < ((0x54 ^ 0xB ^ (0xF ^ 0x4F)) & (0xDB ^ 0xBA ^ (1 ^ 0x7F) ^ -1))) {
-                    return (2 & (2 ^ -1)) != 0;
-                }
+
+        // Check if there's a game object blocking the safe spot
+        // (e.g., rubble, debris, or other obstacles)
+        boolean isBlocked = TileObjects.getAll(tileObject -> {
+            if (tileObject instanceof GameObject) {
+                return ((GameObject)tileObject).getWorldArea().contains(destinationWorld);
+            }
+            return false;
+        }).size() > 0;
+
+        if (isBlocked) {
+            return false;
+        }
+
+        // Move to the safe spot
+        Movement.setDestination(destinationWorld);
+        return true;
+    }
+
+    /**
+     * Listens for graphics objects being created (boss attack animations).
+     * When a dangerous attack graphic appears at the player's location,
+     * sets a cooldown timer and designates an appropriate safe spot.
+     */
+    @Subscribe
+    public void b(GraphicsObjectCreated graphicsObjectCreated) {
+        // Ignore if we're already on cooldown
+        if (this.cooldownTicksRemaining > this.cu.getTickCount()) {
+            return;
+        }
+
+        int graphicsId = graphicsObjectCreated.getGraphicsObject().getId();
+        WorldPoint graphicsLocation = WorldPoint.fromLocal(
+            this.cu,
+            graphicsObjectCreated.getGraphicsObject().getLocation()
+        );
+
+        // Check if the dangerous graphics spawned at the primary safe spot
+        if ((graphicsId != GRAPHICS_ATTACK_TYPE_1 || graphicsId == GRAPHICS_ATTACK_TYPE_2) &&
+            graphicsLocation.equals(this.a(SAFESPOT_PRIMARY))) {
+
+            // Set cooldown and safe spot based on attack type
+            if (graphicsId == GRAPHICS_ATTACK_TYPE_1) {
+                this.cooldownTicksRemaining = SHORT_COOLDOWN_TICKS;
+                this.currentSafespotTarget = SAFESPOT_ALT_1;
             } else {
-                n2 = var1[0];
+                this.cooldownTicksRemaining = LONG_COOLDOWN_TICKS;
+                this.currentSafespotTarget = SAFESPOT_ALT_2;
             }
-            return n2 != 0;
-        }).size())) {
-            return var1[0];
         }
-        Movement.setDestination((WorldPoint)worldPoint);
-        return var1[1];
-    }
-
-    private static void var9() {
-        var1 = new int[12];
-        bD.var1[0] = (0x28 ^ 0x1B) & ~(0x20 ^ 0x13);
-        bD.var1[1] = 1;
-        bD.var1[2] = 73 + 70 - 31 + 33 ^ 95 + 15 - 36 + 75;
-        bD.var1[3] = 0xFFFF9FBF & 0x68FC;
-        bD.var1[4] = -(0xFFFFFF5B & 0x34E5) & (0xFFFFBEFB & 0x7DFF);
-        bD.var1[5] = 0x18 ^ 0x1E;
-        bD.var1[6] = 0x6B ^ 0x43 ^ (0x5B ^ 0x79);
-        bD.var1[7] = 1 + 122 - -46 + 0 ^ 150 + 42 - 136 + 125;
-        bD.var1[8] = 0xC ^ 0x29;
-        bD.var1[9] = 0x32 ^ 0x2C;
-        bD.var1[10] = 9 ^ 0x14;
-        bD.var1[11] = 76 + 88 - 79 + 94 ^ 110 + 94 - 201 + 146;
-    }
-
-    private static boolean var10(int n2, int n3) {
-        return n2 != n3;
-    }
-
-    private static boolean var5(Object object, Object object2) {
-        return object == object2;
-    }
-
-    private static boolean var7(int n2) {
-        return n2 != 0;
-    }
-
-    static {
-        bD.var9();
-        gi = var1[4];
-        gh = var1[3];
-        ge = new Point(var1[7], var1[8]);
-        gf = new Point(var1[9], var1[8]);
-        gg = new Point(var1[10], var1[11]);
-    }
-
-    private static boolean var4(int n2) {
-        return n2 > 0;
-    }
-
-    private static boolean var11(int n2, int n3) {
-        return n2 == n3;
     }
 
     @Override
@@ -135,56 +136,10 @@ extends AutotoaManager {
         return null;
     }
 
-    /*
-     * WARNING - void declaration
-     */
-    @Subscribe
-    public void b(GraphicsObjectCreated graphicsObjectCreated) {
-        void var12;
-        bD var13;
-        WorldPoint var14;
-        int n2 = graphicsObjectCreated.getGraphicsObject().getId();
-        if ((!bD.var10(n2, var1[3]) || bD.var11(n2, var1[4])) && bD.var7((var14 = WorldPoint.fromLocal((Client)var13.cu, (LocalPoint)var12.getGraphicsObject().getLocation())).equals((Object)var13.a(ge)) ? 1 : 0)) {
-            Point point;
-            int n3;
-            void var15;
-            if (bD.var11((int)var15, var1[3])) {
-                n3 = var1[5];
-                0;
-                if (-3 > 0) {
-                    return;
-                }
-            } else {
-                n3 = var13.gj = var1[6];
-            }
-            if (bD.var11((int)var15, var1[3])) {
-                point = gf;
-                0;
-                if (2 != 2) {
-                    return;
-                }
-            } else {
-                point = gg;
-            }
-            var13.gk = point;
-        }
-    }
-
-    @Inject
-    protected MovingToSafespotTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
-        this.gj = var1[0];
-    }
-
     @Override
     public void r() {
         super.r();
-        this.gk = null;
-        this.gj = var1[0];
-    }
-
-    private static boolean var6(int n2, int n3) {
-        return n2 > n3;
+        this.currentSafespotTarget = null;
+        this.cooldownTicksRemaining = 0;
     }
 }
-

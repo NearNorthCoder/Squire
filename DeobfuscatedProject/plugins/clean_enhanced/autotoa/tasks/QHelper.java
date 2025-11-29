@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  javax.inject.Inject
  *  net.runelite.api.Client
@@ -37,78 +37,134 @@ import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import gg.squire.autotoa.tasks.AutotoaManager;
 
-public class QHelper
-extends Overlay {
-    private final  TOAConfig bR;
-    private final  m bQ;
-    private final  Client bP;
+/**
+ * ObjectNPCOverlay - Renders tile objects and NPCs with colored outlines.
+ *
+ * This overlay highlights important game objects and NPCs:
+ * - Tile objects are outlined in yellow (ColorScheme.BRAND_YELLOW)
+ * - NPCs are outlined in orange (ColorScheme.BRAND_ORANGE)
+ *
+ * Used to visually identify important targets during Tombs of Amascut gameplay.
+ */
+public class ObjectNPCOverlay extends Overlay {
 
-    public Dimension render(Graphics2D graphics2D) {
-        this.f(graphics2D);
-        this.e(graphics2D);
+    /** TOA configuration */
+    private final TOAConfig config;
+
+    /** The task manager providing object and NPC data */
+    private final AutotoaManager taskManager;
+
+    /** RuneLite client instance */
+    private final Client client;
+
+    /**
+     * Renders the overlay by drawing object and NPC highlights.
+     *
+     * @param graphics The graphics context to draw on
+     * @return null (no specific dimension requirements)
+     */
+    public Dimension render(Graphics2D graphics) {
+        this.renderTileObjects(graphics);
+        this.renderNPCs(graphics);
         return null;
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Renders yellow outlines around tile objects.
+     *
+     * @param graphics The graphics context to draw on
      */
-    private void f(Graphics2D graphics2D) {
-        Iterator<TileObject> var1 = this.bQ.H().iterator();
-        while (Q.var2(var1.hasNext() ? 1 : 0)) {
-            void var3;
-            TileObject var4 = var1.next();
-            Polygon var5 = var4.getCanvasTilePoly();
-            if (Q.var6(var5)) {
-                0;
-                if (((117 + 150 - 103 + 26 ^ 25 + 88 - 91 + 125) & (0x36 ^ 0x66 ^ (0x6E ^ 0x13) ^ -1)) >= ((0x38 ^ 0x41 ^ (0x23 ^ 0x1C)) & (0x91 ^ 0xB0 ^ (0x2B ^ 0x4C) ^ -1))) continue;
-                return;
+    private void renderTileObjects(Graphics2D graphics) {
+        Iterator<TileObject> objectIterator = this.taskManager.getTrackedTileObjects().iterator();
+
+        while (isTrue(objectIterator.hasNext() ? 1 : 0)) {
+            TileObject tileObject = objectIterator.next();
+            Polygon tilePoly = tileObject.getCanvasTilePoly();
+
+            // Skip if tile has no visible polygon
+            if (isNull(tilePoly)) {
+                continue;
             }
-            OverlayUtil.renderPolygon((Graphics2D)var3, (Shape)var5, (Color)ColorScheme.BRAND_YELLOW, (Stroke)new BasicStroke(1.0f));
-            0;
-            
-            return;
+
+            // Draw the tile object in yellow with 1px stroke
+            OverlayUtil.renderPolygon(
+                graphics,
+                tilePoly,
+                ColorScheme.BRAND_YELLOW,
+                new BasicStroke(1.0f)
+            );
         }
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Renders orange outlines around NPCs.
+     *
+     * @param graphics The graphics context to draw on
      */
-    private void e(Graphics2D graphics2D) {
-        List<NPC> list = this.bQ.I();
-        Iterator<NPC> var7 = list.iterator();
-        while (Q.var2(var7.hasNext() ? 1 : 0)) {
-            NPC var8 = var7.next();
-            Shape var9 = var8.getConvexHull();
-            if (Q.var10(var9)) {
-                void var11;
-                OverlayUtil.renderPolygon((Graphics2D)var11, (Shape)var9, (Color)ColorScheme.BRAND_ORANGE, (Stroke)new BasicStroke(1.0f));
+    private void renderNPCs(Graphics2D graphics) {
+        List<NPC> npcList = this.taskManager.getTrackedNPCList();
+        Iterator<NPC> npcIterator = npcList.iterator();
+
+        while (isTrue(npcIterator.hasNext() ? 1 : 0)) {
+            NPC npc = npcIterator.next();
+            Shape convexHull = npc.getConvexHull();
+
+            // Only render if NPC has a visible convex hull
+            if (isNotNull(convexHull)) {
+                OverlayUtil.renderPolygon(
+                    graphics,
+                    convexHull,
+                    ColorScheme.BRAND_ORANGE,
+                    new BasicStroke(1.0f)
+                );
             }
-            0;
-            if null == null continue;
-            return;
         }
     }
 
-    private static boolean var10(Object object) {
+    /**
+     * Checks if an object is not null.
+     *
+     * @param object The object to check
+     * @return true if object is not null
+     */
+    private static boolean isNotNull(Object object) {
         return object != null;
     }
 
+    /**
+     * Creates a new object/NPC overlay.
+     *
+     * @param client RuneLite client instance
+     * @param taskManager The task manager providing data
+     * @param config TOA configuration
+     */
     @Inject
-    protected QHelper(Client client, m m2, TOAConfig tOAConfig) {
-        this.bP = client;
-        this.bQ = m2;
-        this.bR = tOAConfig;
+    protected ObjectNPCOverlay(Client client, AutotoaManager taskManager, TOAConfig config) {
+        this.client = client;
+        this.taskManager = taskManager;
+        this.config = config;
         this.setPriority(OverlayPriority.HIGH);
         this.setPosition(OverlayPosition.DYNAMIC);
         this.setLayer(OverlayLayer.UNDER_WIDGETS);
     }
 
-    private static boolean var6(Object object) {
+    /**
+     * Checks if an object is null.
+     *
+     * @param object The object to check
+     * @return true if object is null
+     */
+    private static boolean isNull(Object object) {
         return object == null;
     }
 
-    private static boolean var2(int n2) {
-        return n2 != 0;
+    /**
+     * Checks if an integer represents a true boolean value.
+     *
+     * @param value The integer to check
+     * @return true if value is non-zero
+     */
+    private static boolean isTrue(int value) {
+        return value != 0;
     }
 }
-

@@ -1,11 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.plugins.fw.TaskDesc
- *  javax.inject.Inject
- *  net.runelite.api.Prayer
- */
 package gg.squire.autotoa.tasks;
 
 import gg.squire.autotoa.SquireAutoTOA;
@@ -14,51 +6,66 @@ import gg.squire.client.plugins.fw.TaskDesc;
 import java.util.List;
 import javax.inject.Inject;
 import net.runelite.api.Prayer;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum10;
 
+/**
+ * Manages prayer during puzzle rooms in Tombs of Amascut.
+ *
+ * This task ensures Protect from Missiles is active during puzzle rooms
+ * to mitigate damage from environmental hazards like arrows, boulders,
+ * and other ranged attacks.
+ *
+ * The prayer is flickered to conserve prayer points while maintaining protection.
+ */
 @TaskDesc(name="Puzzle Prayer Handler", priority=100)
-public class PuzzlePrayerHandlerTask
-extends AutotoaManager {
+public class PuzzlePrayerHandlerTask extends AutotoaManager {
+
+    private static final int PRAYER_OVERHEAD_PRIORITY = 28591; // 0x6FAF - Prayer priority value
 
     @Inject
-    public PuzzlePrayerHandlerTask(SquireAutoTOA squireAutoTOA, TOAConfig tOAConfig) {
-        super(squireAutoTOA, tOAConfig);
+    public PuzzlePrayerHandlerTask(SquireAutoTOA plugin, TOAConfig config) {
+        super(plugin, config);
     }
 
+    /**
+     * Indicates this task should always be active during puzzle rooms.
+     */
     @Override
-    public boolean aL() {
-        return var1[1];
+    public boolean alwaysActive() {
+        return true;
     }
 
-    private static void var2() {
-        var1 = new int[2];
-        bu.var1[0] = -(0xFFFFDA72 & 0x6DAF) & (0xFFFFFF73 & Short.MAX_VALUE);
-        bu.var1[1] = 1;
-    }
-
+    /**
+     * Returns the prayer priority level for overhead prayers.
+     * Higher values indicate more important prayers that should be maintained.
+     */
     @Override
-    public int aO() {
-        return var1[0];
+    public int getPrayerPriority() {
+        return PRAYER_OVERHEAD_PRIORITY;
     }
 
+    /**
+     * Indicates prayers should be used during puzzle challenges.
+     */
     @Override
-    public boolean aS() {
-        return var1[1];
+    public boolean usePrayers() {
+        return true;
     }
 
+    /**
+     * Specifies the prayer handling mode.
+     * FLICK mode activates prayer only when needed to save prayer points.
+     */
     @Override
-    public v aT() {
-        return v.FLICK;
+    public PrayerMode getPrayerMode() {
+        return PrayerMode.FLICK;
     }
 
-    static {
-        bu.var2();
-    }
-
+    /**
+     * Returns the list of prayers to activate.
+     * Protect from Missiles provides protection against ranged attacks.
+     */
     @Override
-    public List<Prayer> aN() {
+    public List<Prayer> getPrayers() {
         return List.of(Prayer.PROTECT_FROM_MISSILES);
     }
 }
-

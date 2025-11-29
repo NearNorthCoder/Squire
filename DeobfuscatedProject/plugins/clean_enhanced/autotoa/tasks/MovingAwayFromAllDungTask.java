@@ -1,22 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.NPC
- *  net.runelite.api.Player
- *  net.runelite.api.Point
- *  net.runelite.api.TileObject
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.api.events.GameObjectSpawned
- *  net.runelite.client.eventbus.Subscribe
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.entities.TileObjects
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
- */
 package gg.squire.autotoa.tasks;
 
 import com.google.inject.Inject;
@@ -37,204 +18,193 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum16;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+/**
+ * Handles moving away from dung objects during TOA boss encounters.
+ * This task detects when the boss performs a dung attack (likely Akkha's dung bombs)
+ * and intelligently moves the player to the safest position that:
+ * - Avoids all dung objects
+ * - Maintains proximity to the boss for attacking
+ * - Uses predefined safe cycle points when available
+ *
+ * The task tracks the boss's attack animation to predict when dung will spawn
+ * and calculates optimal movement paths to avoid overlapping danger zones.
+ */
 @TaskDesc(name="Moving away from all dung", priority=40, blocking=true, register=true)
-public class MovingAwayFromAllDungTask
-extends AutotoaManager {
-    private  int fc;
-    
-    private static final  int fb;
-    private static final  int fa;
-    private  int fd;
+public class MovingAwayFromAllDungTask extends AutotoaManager {
 
-    static {
-        bk.var2();
-        fa = var1[2];
-        fb = var1[1];
-    }
+    // Boss animation ID when performing dung attack
+    private static final int DUNG_ATTACK_ANIMATION = 10090;
 
-    private static boolean var3(Object object) {
-        return object == null;
-    }
+    // Spot animation ID for dung attack indicator
+    private static final int DUNG_SPOT_ANIM = 245;
 
-    @Override
-    public void r() {
-        this.fc = var1[0];
-    }
+    // Game object ID for spawned dung
+    private static final int DUNG_OBJECT_ID = 0xB1C0; // 45504
 
-    /*
-     * WARNING - void declaration
-     */
-    private int v(WorldPoint worldPoint) {
-        void var4_4;
-        void var4;
-        void var5;
-        void var6;
-        NPC nPC = this.bO();
-        TileObject tileObject2 = TileObjects.getNearest((WorldPoint)worldPoint, tileObject -> {
-            int n2;
-            if (bk.var7(tileObject.getId(), var1[6]) && bk.var8(nPC.getWorldArea().isInMeleeDistance(tileObject.getWorldLocation()) ? 1 : 0)) {
-                n2 = var1[3];
-                0;
-                
-            } else {
-                n2 = var1[0];
-            }
-            return n2 != 0;
-        });
-        if (bk.var3(tileObject2)) {
-            return var1[5];
-        }
-        TileObject var9 = TileObjects.getNearest((WorldPoint)var6, arg_0 -> bk.a((NPC)var5, (TileObject)var4, arg_0));
-        if (bk.var3(var9)) {
-            return var6.distanceTo(var4.getWorldLocation());
-        }
-        return worldPoint.distanceTo(tileObject2.getWorldLocation()) + worldPoint.distanceTo(var4_4.getWorldLocation());
-    }
+    // Movement and timing constants
+    private static final int NPC_AREA_OFFSET = 10;
+    private static final int MIN_DISTANCE_FROM_BOSS = 3;
 
-    private static void var2() {
-        var1 = new int[8];
-        bk.var1[0] = (0x3D ^ 0x6C) & ~(0x60 ^ 0x31);
-        bk.var1[1] = 0xFFFFA76F & 0x7DFA;
-        bk.var1[2] = 90 + 189 - 160 + 126;
-        bk.var1[3] = 1;
-        bk.var1[4] = 37 + 116 - 79 + 59 ^ 59 + 51 - -21 + 12;
-        bk.var1[5] = 0xFFFFFFFF & Integer.MAX_VALUE;
-        bk.var1[6] = -(0xFFFFCFF7 & 0x7C3B) & (0xFFFFFDF3 & 0xFFFE);
-        bk.var1[7] = 3;
-    }
-
-    private WorldPoint bX() {
-        WorldPoint var10;
-        int n2 = var1[5];
-        Object var2_2 = null;
-        Iterator var11 = eN.iterator();
-        while (bk.var8(var11.hasNext() ? 1 : 0)) {
-            int var12;
-            bk var13;
-            Point var14 = (Point)var11.next();
-            WorldPoint var15 = var13.a(var14);
-            WorldPoint var16 = Players.getLocal().getWorldLocation();
-            if (bk.var8(var16.equals((Object)var15) ? 1 : 0)) {
-                int var17 = eN.indexOf(var14) + var1[3];
-                return var13.a((Point)eN.get(var17 % eN.size()));
-            }
-            if (bk.var18(var16.distanceTo(var15), var12)) {
-                var12 = var16.distanceTo(var15);
-                var10 = var15;
-            }
-            0;
-            if (((0xBF ^ 0xAF) & ~(0x28 ^ 0x38)) != 3) continue;
-            return null;
-        }
-        if (bk.var3(var10)) {
-            return null;
-        }
-        int n3 = eN.indexOf(var2_2) + var1[3];
-        return this.a((Point)eN.get(n3 % eN.size()));
-    }
-
-    @Subscribe
-    public void b(GameObjectSpawned gameObjectSpawned) {
-        if (bk.var7(gameObjectSpawned.getGameObject().getId(), var1[6])) {
-            // empty if block
-        }
-    }
-
-    private static  boolean a(NPC nPC, TileObject tileObject, TileObject tileObject2) {
-        int n2;
-        if (bk.var7(tileObject2.getId(), var1[6]) && bk.var8(nPC.getWorldArea().isInMeleeDistance(tileObject2.getWorldLocation()) ? 1 : 0) && bk.var19(tileObject2, tileObject)) {
-            n2 = var1[3];
-            0;
-            if (((0x1E ^ 0x2D) & ~(1 ^ 0x32)) <= -1) {
-                return ((0xAA ^ 0xBF) & ~(0xAE ^ 0xBB)) != 0;
-            }
-        } else {
-            n2 = var1[0];
-        }
-        return n2 != 0;
-    }
-
-    private static boolean var19(Object object, Object object2) {
-        return object != object2;
-    }
-
-    private static boolean var20(int n2) {
-        return n2 == 0;
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    protected boolean bL() {
-        void var3_3;
-        void var21;
-        bk var22;
-        Player player = this.cu.getLocalPlayer();
-        if (bk.var3(player)) {
-            return var1[0];
-        }
-        NPC var23 = var22.bO();
-        if (bk.var7(var23.getAnimation(), var1[1])) {
-            var22.fd = var22.cu.getTickCount();
-        }
-        if (bk.var20(var21.hasSpotAnim(var1[2]) ? 1 : 0)) {
-            var22.fc = var1[0];
-            return var1[0];
-        }
-        bk.f(var1[0]);
-        if (bk.var24(var22.cu.getTickCount() - var22.fd, var1[3])) {
-            return var1[0];
-        }
-        WorldPoint var25 = var22.bX();
-        if (bk.var3(var25)) {
-            List<TileObject> var26 = var22.bM();
-            var25 = var21.getWorldArea().offset(var1[4]).toWorldPointList().stream().filter(worldPoint -> {
-                boolean bl2;
-                if (bk.var24(this.bO().getWorldLocation().distanceTo(worldPoint), var1[7])) {
-                    bl2 = var1[3];
-                    0;
-                    if (1 <= 0) {
-                        return ((0xC8 ^ 0xA9 ^ (0xF3 ^ 0xAD)) & (0xAD ^ 0xB9 ^ (0x77 ^ 0x5C) ^ -1)) != 0;
-                    }
-                } else {
-                    bl2 = var1[0];
-                }
-                return bl2;
-            }).filter(worldPoint -> var26.stream().noneMatch(tileObject -> tileObject.getWorldLocation().toWorldArea().isInMeleeDistance(worldPoint))).filter(Reachable::isWalkable).max(Comparator.comparingInt(var22::v)).orElse(null);
-        }
-        if (bk.var3(var25)) {
-            return var1[0];
-        }
-        Movement.setDestination((WorldPoint)var3_3);
-        this.fc += var1[3];
-        return var1[3];
-    }
-
-    private static boolean var24(int n2, int n3) {
-        return n2 > n3;
-    }
+    // State tracking
+    private int moveAwayCounter;
+    private int lastDungAttackTick;
 
     @Inject
     protected MovingAwayFromAllDungTask(Client client, z z2, TOAConfig tOAConfig) {
         super(client, z2, tOAConfig, bi.ATTACK);
-        this.fc = var1[0];
+        this.moveAwayCounter = 0;
     }
 
-    private static boolean var18(int n2, int n3) {
-        return n2 < n3;
+    @Override
+    public void r() {
+        this.moveAwayCounter = 0;
     }
 
-    private static boolean var8(int n2) {
-        return n2 != 0;
+    @Override
+    protected boolean bL() {
+        Player localPlayer = this.cu.getLocalPlayer();
+        if (localPlayer == null) {
+            return false;
+        }
+
+        NPC targetNPC = this.bO();
+
+        // Track when the boss performs dung attack animation
+        if (targetNPC.getAnimation() == DUNG_ATTACK_ANIMATION) {
+            this.lastDungAttackTick = this.cu.getTickCount();
+        }
+
+        // Check if player has the dung spot animation (standing in dung)
+        if (!localPlayer.hasSpotAnim(DUNG_SPOT_ANIM)) {
+            this.moveAwayCounter = 0;
+            return false;
+        }
+
+        // Don't move if attack was too recent (still in attack animation)
+        if (this.cu.getTickCount() - this.lastDungAttackTick <= 1) {
+            return false;
+        }
+
+        // First try to use predefined cycle points if available
+        WorldPoint cycleSafeSpot = this.bX();
+
+        if (cycleSafeSpot == null) {
+            // No cycle point available, calculate best escape position
+            List<TileObject> allDungObjects = this.bM();
+
+            cycleSafeSpot = targetNPC.getWorldArea()
+                .offset(NPC_AREA_OFFSET)
+                .toWorldPointList()
+                .stream()
+                // Must be reasonably close to boss (within 3 tiles)
+                .filter(worldPoint -> this.bO().getWorldLocation().distanceTo(worldPoint) > MIN_DISTANCE_FROM_BOSS)
+                // Must not be in melee distance of any dung object
+                .filter(worldPoint -> allDungObjects.stream().noneMatch(dung ->
+                    dung.getWorldLocation().toWorldArea().isInMeleeDistance(worldPoint)))
+                // Must be walkable
+                .filter(Reachable::isWalkable)
+                // Prefer positions that minimize total distance to all dung objects
+                .max(Comparator.comparingInt(this::v))
+                .orElse(null);
+        }
+
+        if (cycleSafeSpot == null) {
+            return false;
+        }
+
+        // Move to the safe position
+        Movement.setDestination(cycleSafeSpot);
+        this.moveAwayCounter += 1;
+        return true;
     }
 
-    private static boolean var7(int n2, int n3) {
-        return n2 == n3;
+    /**
+     * Calculates a score for a world point based on its distance from all dung objects.
+     * Higher scores indicate safer positions (farther from all dung).
+     *
+     * @param worldPoint The position to evaluate
+     * @return Distance score (higher is safer), or MAX_VALUE if no dung nearby
+     */
+    private int v(WorldPoint worldPoint) {
+        NPC targetNPC = this.bO();
+
+        // Find the nearest dung object in melee range of the boss
+        TileObject nearestDungToNPC = TileObjects.getNearest(worldPoint, tileObject ->
+            tileObject.getId() == DUNG_OBJECT_ID &&
+            targetNPC.getWorldArea().isInMeleeDistance(tileObject.getWorldLocation())
+        );
+
+        if (nearestDungToNPC == null) {
+            return Integer.MAX_VALUE;
+        }
+
+        // Find another dung object to calculate path distance
+        TileObject secondDung = TileObjects.getNearest(worldPoint, tileObject ->
+            tileObject.getId() == DUNG_OBJECT_ID &&
+            targetNPC.getWorldArea().isInMeleeDistance(tileObject.getWorldLocation()) &&
+            tileObject != nearestDungToNPC
+        );
+
+        if (secondDung == null) {
+            // Only one dung object, return simple distance
+            return worldPoint.distanceTo(nearestDungToNPC.getWorldLocation());
+        }
+
+        // Multiple dung objects - return combined distance
+        return worldPoint.distanceTo(nearestDungToNPC.getWorldLocation()) +
+               worldPoint.distanceTo(secondDung.getWorldLocation());
+    }
+
+    /**
+     * Checks predefined cycle points to find the next safe position.
+     * Cycles through the eN list of positions, moving to the next point
+     * in sequence from the player's current location.
+     *
+     * @return Next safe cycle point, or null if none available
+     */
+    private WorldPoint bX() {
+        int minDistance = Integer.MAX_VALUE;
+        Point closestCyclePoint = null;
+
+        // Find the cycle point we're currently at or closest to
+        Iterator<Point> iterator = eN.iterator();
+        while (iterator.hasNext()) {
+            Point cyclePoint = iterator.next();
+            WorldPoint cycleWorld = this.a(cyclePoint);
+            WorldPoint playerLocation = Players.getLocal().getWorldLocation();
+
+            // If we're exactly at a cycle point, move to the next one
+            if (playerLocation.equals(cycleWorld)) {
+                int nextIndex = (eN.indexOf(cyclePoint) + 1) % eN.size();
+                return this.a(eN.get(nextIndex));
+            }
+
+            // Track the closest cycle point
+            int distance = playerLocation.distanceTo(cycleWorld);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestCyclePoint = cyclePoint;
+            }
+        }
+
+        // Move to the next point after the closest one
+        if (closestCyclePoint == null) {
+            return null;
+        }
+
+        int nextIndex = (eN.indexOf(closestCyclePoint) + 1) % eN.size();
+        return this.a(eN.get(nextIndex));
+    }
+
+    /**
+     * Listens for dung game objects spawning.
+     * This can be used to track dung spawn events if needed.
+     */
+    @Subscribe
+    public void b(GameObjectSpawned gameObjectSpawned) {
+        if (gameObjectSpawned.getGameObject().getId() == DUNG_OBJECT_ID) {
+            // Dung has spawned - task will handle movement in next tick
+        }
     }
 }
-

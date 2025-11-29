@@ -5,29 +5,69 @@ package gg.squire.autotoa.tasks;
 
 import gg.squire.autotoa.tasks.FHelper;
 
-class HHelper {
-    private  String bx;
-    private  boolean by;
-    private  String name;
-    final  F bz;
+/**
+ * TaskState - Data class holding task state with a name, description, and boolean flag.
+ *
+ * This class appears to store state information for tasks, including:
+ * - A name identifier
+ * - A description or details string
+ * - A boolean flag (possibly completion status or active state)
+ *
+ * Immutable data holder with final fields.
+ */
+class TaskState {
 
-    String l() {
+    /** The description or details */
+    private final String description;
+
+    /** Boolean flag (possibly completion or active status) */
+    private final boolean flag;
+
+    /** The name/identifier for this state */
+    private final String name;
+
+    /** Reference to parent FHelper manager */
+    final FHelper manager;
+
+    /**
+     * Gets the name/identifier for this state.
+     *
+     * @return The name
+     */
+    String getName() {
         return this.name;
     }
 
-    boolean aI() {
-        return this.by;
+    /**
+     * Gets the boolean flag value.
+     *
+     * @return The flag value
+     */
+    boolean getFlag() {
+        return this.flag;
     }
 
-    String aH() {
-        return this.bx;
+    /**
+     * Gets the description or details.
+     *
+     * @return The description
+     */
+    String getDescription() {
+        return this.description;
     }
 
-    HHelper(F f2, String string, String string2, boolean bl2) {
-        this.bz = f2;
-        this.name = string;
-        this.bx = string2;
-        this.by = bl2;
+    /**
+     * Creates a new task state.
+     *
+     * @param manager The parent FHelper manager
+     * @param name The name/identifier
+     * @param description The description or details
+     * @param flag The boolean flag value
+     */
+    TaskState(FHelper manager, String name, String description, boolean flag) {
+        this.manager = manager;
+        this.name = name;
+        this.description = description;
+        this.flag = flag;
     }
 }
-

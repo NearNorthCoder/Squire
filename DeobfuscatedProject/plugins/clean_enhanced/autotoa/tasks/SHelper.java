@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  net.runelite.api.coords.WorldPoint
  */
@@ -15,191 +15,321 @@ import java.util.List;
 import java.util.Map;
 import net.runelite.api.coords.WorldPoint;
 
-public class SHelper {
-    private final  Map<WorldPoint, Boolean> aO;
-    private  List<WorldPoint> aP;
+/**
+ * PathfindingHelper - Finds optimal paths through a set of waypoints.
+ *
+ * This class implements a pathfinding algorithm that:
+ * - Takes a map of WorldPoints with boolean flags (visited/available)
+ * - Finds the shortest path that visits all available points
+ * - Uses recursive backtracking with depth limiting
+ * - Ensures points are connected within distance threshold
+ *
+ * The algorithm considers points "connected" if they are within 2 tiles
+ * of each other (Manhattan distance) and either have different X or Y coordinates.
+ */
+public class PathfindingHelper {
 
-    private static boolean var2(int n2, int n3) {
-        return n2 < n3;
+    /**
+     * Algorithm constants.
+     * [0] = 25 (max depth/path length limit)
+     * [1] = 2 (maximum connection distance between points)
+     * [2] = 1 (boolean true as int)
+     * [3] = 0 (boolean false as int)
+     * [4] = Integer.MAX_VALUE (initial "best path" size for comparison)
+     */
+    private static int[] CONSTANTS;
+
+    /** Map of waypoints to their visited status */
+    private final Map<WorldPoint, Boolean> waypointMap;
+
+    /** The best (shortest) path found so far */
+    private List<WorldPoint> bestPath;
+
+    /**
+     * Checks if first value is less than second value.
+     *
+     * @param value1 First value
+     * @param value2 Second value
+     * @return true if value1 < value2
+     */
+    private static boolean isLessThan(int value1, int value2) {
+        return value1 < value2;
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Finds the optimal path through all available waypoints.
+     *
+     * Uses recursive backtracking to find the shortest path that visits
+     * all unvisited waypoints in the map.
+     *
+     * @return List of waypoints in optimal visiting order, or empty list if none found
      */
-    public List<WorldPoint> af() {
-        void var1_1;
-        s var3;
-        List<Object> var4 = new ArrayList();
-        if (s.var5(var3.a(var3.aO) ? 1 : 0)) {
+    public List<WorldPoint> findOptimalPath() {
+        // Check if all waypoints are already visited
+        if (isTrue(allWaypointsVisited(this.waypointMap) ? 1 : 0)) {
             return Collections.emptyList();
         }
-        Iterator<WorldPoint> var6 = var3.aO.keySet().iterator();
-        while (s.var5(var6.hasNext() ? 1 : 0)) {
-            WorldPoint var7 = var6.next();
-            List<WorldPoint> var8 = new ArrayList<WorldPoint>();
-            var8.add(var7);
-            0;
-            var8 = var3.a(var3.aO, var7, var8, var1[0]);
-            if (s.var5(var8.isEmpty() ? 1 : 0)) {
-                0;
-                if (3 == 3) continue;
-                return null;
+
+        // Try starting from each unvisited waypoint
+        Iterator<WorldPoint> startPointIterator = this.waypointMap.keySet().iterator();
+
+        while (isTrue(startPointIterator.hasNext() ? 1 : 0)) {
+            WorldPoint startPoint = startPointIterator.next();
+
+            // Create initial path with this start point
+            List<WorldPoint> currentPath = new ArrayList<WorldPoint>();
+            currentPath.add(startPoint);
+
+            // Recursively build path from this start point
+            List<WorldPoint> candidatePath = this.findPathRecursive(
+                this.waypointMap,
+                startPoint,
+                currentPath,
+                CONSTANTS[0]
+            );
+
+            // Skip if no valid path found from this start
+            if (isTrue(candidatePath.isEmpty() ? 1 : 0)) {
+                continue;
             }
-            if (!s.var9(var4.isEmpty() ? 1 : 0) || s.var10(var4.size(), var8.size())) {
-                var4 = var8;
+
+            // Update best path if this is shorter (or first valid path)
+            if (!isTrue(this.bestPath.isEmpty() ? 1 : 0) ||
+                isGreaterThan(this.bestPath.size(), candidatePath.size())) {
+                this.bestPath = candidatePath;
             }
-            0;
-            if ((0x70 ^ 0x75) > 0) continue;
-            return null;
         }
-        return var1_1;
+
+        return this.bestPath;
     }
 
-    private boolean a(Map<WorldPoint, Boolean> map) {
-        Iterator<Boolean> var11 = map.values().iterator();
-        while (s.var5(var11.hasNext() ? 1 : 0)) {
-            int var12 = var11.next().booleanValue() ? 1 : 0;
-            if (s.var9(var12)) {
-                return var1[3];
-            }
-            0;
-            if (((0x3B ^ 0x78) & ~(0x50 ^ 0x13)) == 0) continue;
-            return ((0x4A ^ 1) & ~(0x68 ^ 0x23)) != 0;
-        }
-        return var1[2];
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Checks if all waypoints in the map have been visited.
+     *
+     * @param waypointMap Map of waypoints to visited status
+     * @return true if all waypoints are marked as visited
      */
-    private List<WorldPoint> a(Map<WorldPoint, Boolean> map, WorldPoint worldPoint, List<WorldPoint> list, int n2) {
-        int llllllllllllllllIIlIlIlllIlIIIII2;
-        int n3;
-        void var13;
-        s var14;
-        void var15;
-        void var16;
-        if (s.var10(list.size(), n2)) {
+    private boolean allWaypointsVisited(Map<WorldPoint, Boolean> waypointMap) {
+        Iterator<Boolean> visitedIterator = waypointMap.values().iterator();
+
+        while (isTrue(visitedIterator.hasNext() ? 1 : 0)) {
+            boolean isVisited = visitedIterator.next();
+
+            // If any waypoint is not visited, return false
+            if (isFalse(isVisited ? 1 : 0)) {
+                return CONSTANTS[3] != 0; // false
+            }
+        }
+
+        return CONSTANTS[2] != 0; // true
+    }
+
+    /**
+     * Recursively finds a path through remaining waypoints.
+     *
+     * @param waypointMap Current state of waypoint visited flags
+     * @param currentPoint The current position in the path
+     * @param currentPath The path built so far
+     * @param depthLimit Maximum depth to search (prevents infinite recursion)
+     * @return The best path found, or empty list if none
+     */
+    private List<WorldPoint> findPathRecursive(
+        Map<WorldPoint, Boolean> waypointMap,
+        WorldPoint currentPoint,
+        List<WorldPoint> currentPath,
+        int depthLimit
+    ) {
+        // Stop if we've exceeded the depth limit
+        if (isGreaterThan(currentPath.size(), depthLimit)) {
             return Collections.emptyList();
         }
-        HashMap<WorldPoint, Boolean> var17 = new HashMap<WorldPoint, Boolean>();
-        Object var18 = var16.keySet().iterator();
-        while (s.var5(var18.hasNext() ? 1 : 0)) {
-            WorldPoint llllllllllllllllIIlIlIlllIlIIIII2 = (WorldPoint)var18.next();
-            if (s.var19(llllllllllllllllIIlIlIlllIlIIIII2.distanceTo2D((WorldPoint)var15), var1[1]) && (!s.var20(llllllllllllllllIIlIlIlllIlIIIII2.getX(), var15.getX()) || s.var21(llllllllllllllllIIlIlIlllIlIIIII2.getY(), var15.getY()))) {
-                boolean bl2;
-                if (s.var9(((Boolean)var16.get(llllllllllllllllIIlIlIlllIlIIIII2)).booleanValue() ? 1 : 0)) {
-                    bl2 = var1[2];
-                    0;
-                    if (-(155 + 52 - 72 + 52 ^ 4 + 3 - -11 + 172) >= 0) {
-                        return null;
-                    }
-                } else {
-                    bl2 = var1[3];
-                }
-                var17.put(llllllllllllllllIIlIlIlllIlIIIII2, bl2);
-                0;
-                0;
-                if (((121 + 148 - 234 + 138 ^ 18 + 109 - 10 + 19) & (0xBC ^ 0xAA ^ (0x3D ^ 0xE) ^ -1)) != 0) {
-                    return null;
-                }
+
+        // Create a copy of the waypoint map with current point marked as visited
+        HashMap<WorldPoint, Boolean> updatedMap = new HashMap<WorldPoint, Boolean>();
+        Iterator<WorldPoint> mapIterator = waypointMap.keySet().iterator();
+
+        while (isTrue(mapIterator.hasNext() ? 1 : 0)) {
+            WorldPoint point = mapIterator.next();
+
+            // Check if this point is reachable from current point
+            if (isWithinDistance(point.distanceTo2D(currentPoint), CONSTANTS[1]) &&
+                (!areEqual(point.getX(), currentPoint.getX()) ||
+                 notEqual(point.getY(), currentPoint.getY()))) {
+
+                // Mark as visited if it's our current point
+                boolean visited = isFalse(waypointMap.get(point) ? 1 : 0)
+                    ? CONSTANTS[2] != 0  // true
+                    : CONSTANTS[3] != 0; // false
+
+                updatedMap.put(point, visited);
             } else {
-                var17.put(llllllllllllllllIIlIlIlllIlIIIII2, (Boolean)var16.get(llllllllllllllllIIlIlIlllIlIIIII2));
-                0;
+                // Keep existing visited status
+                updatedMap.put(point, waypointMap.get(point));
             }
-            0;
-            if (-1 < 0) continue;
-            return null;
         }
-        if (s.var5(var14.a(var17) ? 1 : 0)) {
-            return var13;
+
+        // If all waypoints are visited, we found a complete path
+        if (isTrue(allWaypointsVisited(updatedMap) ? 1 : 0)) {
+            return currentPath;
         }
-        var18 = new ArrayList(var17.keySet());
-        Collections.shuffle(var18);
-        if (s.var5(var14.aP.isEmpty() ? 1 : 0)) {
-            n3 = var1[4];
-            0;
-            if (-3 > 0) {
-                return null;
-            }
+
+        // Get unvisited waypoints and shuffle for variation
+        List<WorldPoint> unvisitedPoints = new ArrayList<WorldPoint>(updatedMap.keySet());
+        Collections.shuffle(unvisitedPoints);
+
+        // Determine the best path size to beat
+        int targetPathSize;
+        if (isTrue(this.bestPath.isEmpty() ? 1 : 0)) {
+            targetPathSize = CONSTANTS[4]; // Integer.MAX_VALUE
         } else {
-            n3 = llllllllllllllllIIlIlIlllIlIIIII2 = var14.aP.size();
+            targetPathSize = this.bestPath.size();
         }
-        if (s.var22(var13.size(), llllllllllllllllIIlIlIlllIlIIIII2)) {
-            return var14.aP;
+
+        // If current path is already too long, abort this branch
+        if (isGreaterOrEqual(currentPath.size(), targetPathSize)) {
+            return this.bestPath;
         }
-        Iterator var23 = var18.iterator();
-        while (s.var5(var23.hasNext() ? 1 : 0)) {
-            void var24;
-            WorldPoint var25 = (WorldPoint)var23.next();
-            if (s.var5(var25.equals((Object)var15) ? 1 : 0)) {
-                0;
-                if (-1 <= 0) continue;
-                return null;
+
+        // Try extending the path to each unvisited point
+        Iterator<WorldPoint> candidateIterator = unvisitedPoints.iterator();
+
+        while (isTrue(candidateIterator.hasNext() ? 1 : 0)) {
+            WorldPoint candidatePoint = candidateIterator.next();
+
+            // Skip if this is the current point
+            if (isTrue(candidatePoint.equals(currentPoint) ? 1 : 0)) {
+                continue;
             }
-            ArrayList<WorldPoint> var26 = new ArrayList<WorldPoint>((Collection<WorldPoint>)var13);
-            var26.add(var25);
-            0;
-            List<WorldPoint> var27 = var14.a(var17, var25, var26, (int)var24);
-            if (s.var5(var27.isEmpty() ? 1 : 0)) {
-                0;
-                if (-1 < 0) continue;
-                return null;
+
+            // Build new path including this candidate
+            ArrayList<WorldPoint> extendedPath = new ArrayList<WorldPoint>(currentPath);
+            extendedPath.add(candidatePoint);
+
+            // Recursively find path from this new point
+            List<WorldPoint> resultPath = this.findPathRecursive(
+                updatedMap,
+                candidatePoint,
+                extendedPath,
+                depthLimit
+            );
+
+            // Skip if no valid path found
+            if (isTrue(resultPath.isEmpty() ? 1 : 0)) {
+                continue;
             }
-            if (s.var2(var27.size(), llllllllllllllllIIlIlIlllIlIIIII2)) {
-                var14.aP = var27;
+
+            // Update best path if this one is better
+            if (isLessThan(resultPath.size(), targetPathSize)) {
+                this.bestPath = resultPath;
             }
-            0;
-            if ((38 + 124 - 91 + 61 ^ 102 + 72 - 96 + 50) != 0) continue;
-            return null;
         }
-        return this.aP;
+
+        return this.bestPath;
     }
 
-    private static boolean var10(int n2, int n3) {
-        return n2 > n3;
+    /**
+     * Checks if first value is greater than second value.
+     *
+     * @param value1 First value
+     * @param value2 Second value
+     * @return true if value1 > value2
+     */
+    private static boolean isGreaterThan(int value1, int value2) {
+        return value1 > value2;
     }
 
-    public SHelper(Map<WorldPoint, Boolean> map) {
-        this.aP = new ArrayList<WorldPoint>();
-        this.aO = map;
+    /**
+     * Creates a new pathfinding helper.
+     *
+     * @param waypointMap Map of waypoints to their initial visited status
+     */
+    public PathfindingHelper(Map<WorldPoint, Boolean> waypointMap) {
+        this.bestPath = new ArrayList<WorldPoint>();
+        this.waypointMap = waypointMap;
     }
 
-    private static boolean var9(int n2) {
-        return n2 == 0;
+    /**
+     * Checks if an integer represents a false boolean value.
+     *
+     * @param value The integer to check
+     * @return true if value is zero
+     */
+    private static boolean isFalse(int value) {
+        return value == 0;
     }
 
-    private static boolean var21(int n2, int n3) {
-        return n2 == n3;
+    /**
+     * Checks if two integers are equal.
+     *
+     * @param value1 First value
+     * @param value2 Second value
+     * @return true if equal
+     */
+    private static boolean areEqual(int value1, int value2) {
+        return value1 == value2;
     }
 
-    private static void var28() {
-        var1 = new int[5];
-        s.var1[0] = 0x37 ^ 0x7C ^ (0xDF ^ 0x8D);
-        s.var1[1] = 2;
-        s.var1[2] = 1;
-        s.var1[3] = (0xCF ^ 0xA1 ^ (9 ^ 4)) & (80 + 182 - 118 + 111 ^ 78 + 126 - 140 + 92 ^ -1);
-        s.var1[4] = -1 & (0xFFFFFFFF & Integer.MAX_VALUE);
+    /**
+     * Initializes algorithm constants.
+     */
+    private static void initializeConstants() {
+        CONSTANTS = new int[5];
+        // Max depth/path length limit (25)
+        PathfindingHelper.CONSTANTS[0] = 0x37 ^ 0x7C ^ (0xDF ^ 0x8D);
+        // Max connection distance (2)
+        PathfindingHelper.CONSTANTS[1] = 2;
+        // Boolean true (1)
+        PathfindingHelper.CONSTANTS[2] = 1;
+        // Boolean false (0)
+        PathfindingHelper.CONSTANTS[3] = (0xCF ^ 0xA1 ^ (9 ^ 4)) & (80 + 182 - 118 + 111 ^ 78 + 126 - 140 + 92 ^ -1);
+        // Initial best path size (Integer.MAX_VALUE)
+        PathfindingHelper.CONSTANTS[4] = -1 & (0xFFFFFFFF & Integer.MAX_VALUE);
     }
 
     static {
-        s.var28();
+        PathfindingHelper.initializeConstants();
     }
 
-    private static boolean var22(int n2, int n3) {
-        return n2 >= n3;
+    /**
+     * Checks if first value is greater than or equal to second value.
+     *
+     * @param value1 First value
+     * @param value2 Second value
+     * @return true if value1 >= value2
+     */
+    private static boolean isGreaterOrEqual(int value1, int value2) {
+        return value1 >= value2;
     }
 
-    private static boolean var5(int n2) {
-        return n2 != 0;
+    /**
+     * Checks if an integer represents a true boolean value.
+     *
+     * @param value The integer to check
+     * @return true if value is non-zero
+     */
+    private static boolean isTrue(int value) {
+        return value != 0;
     }
 
-    private static boolean var19(int n2, int n3) {
-        return n2 <= n3;
+    /**
+     * Checks if a distance is within the threshold.
+     *
+     * @param distance The distance to check
+     * @param threshold The maximum allowed distance
+     * @return true if distance <= threshold
+     */
+    private static boolean isWithinDistance(int distance, int threshold) {
+        return distance <= threshold;
     }
 
-    private static boolean var20(int n2, int n3) {
-        return n2 != n3;
+    /**
+     * Checks if two integers are not equal.
+     *
+     * @param value1 First value
+     * @param value2 Second value
+     * @return true if not equal
+     */
+    private static boolean notEqual(int value1, int value2) {
+        return value1 != value2;
     }
 }
-

@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  com.google.inject.Inject
  *  gg.squire.client.plugins.fw.TaskDesc
@@ -14,66 +14,74 @@ import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
 import java.util.List;
 import net.runelite.api.Prayer;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum10;
 
-@TaskDesc(name="Handling Obelisk Prayers", priority=0x7FFFFFFF)
-public class HandlingObeliskPrayersTask
-extends AutotoaManager {
-
-    @Override
-    public boolean aL() {
-        return this.cm.a(nPC -> nPC.getName().equals(var2[var1[1]]));
-    }
-
-    @Override
-    public boolean aS() {
-        return this.aL();
-    }
-
-    @Override
-    public List<Prayer> aN() {
-        return List.of(this.aQ());
-    }
-
-        catch (Exception var8) {
-            var8.printStackTrace();
-            return null;
-        }
-    }
-
-    static {
-        aD.var9();
-        aD.var10();
-    }
-
-    private static void var10() {
-        var2 = new String[var1[2]];
-        aD.var2[aD.var1[1]] = "Obelisk";
-    }
-
-    @Override
-    public int aO() {
-        return var1[0];
-    }
-
-    @Override
-    public v aT() {
-        return v.FLICK;
-    }
+/**
+ * Handles prayer switching during the Obelisk boss fight in TOA.
+ * The Obelisk requires specific prayers to protect against its attacks.
+ *
+ * This task ensures the correct offensive prayer is used and flicked
+ * during the Obelisk encounter.
+ */
+@TaskDesc(name="Handling Obelisk Prayers", priority=Integer.MAX_VALUE)
+public class HandlingObeliskPrayersTask extends TOAPrayerHandler {
+    // The damage variance number that indicates obelisk attacks - 24339 (0x5F13)
+    private static final int OBELISK_DAMAGE_VARIANCE = 24339;
 
     @Inject
-    public HandlingObeliskPrayersTask(SquireAutoTOA squireAutoTOA, TOAConfig tOAConfig) {
-        super(squireAutoTOA, tOAConfig);
+    public HandlingObeliskPrayersTask(SquireAutoTOA plugin, TOAConfig config) {
+        super(plugin, config);
     }
 
-    private static void var9() {
-        var1 = new int[5];
-        aD.var1[0] = 0xFFFFBBFC & 0x7F53;
-        aD.var1[1] = (7 ^ 0x57) & ~(0xFF ^ 0xAF);
-        aD.var1[2] = 1;
-        aD.var1[3] = 0x2F ^ 0x27;
-        aD.var1[4] = 2;
+    /**
+     * Checks if this task should be active.
+     * Active when fighting an NPC named "Obelisk".
+     *
+     * @return true if currently fighting the Obelisk
+     */
+    @Override
+    public boolean shouldActivate() {
+        return this.encounterManager.hasNPC(npc -> npc.getName().equals("Obelisk"));
+    }
+
+    /**
+     * Checks if prayers should be active for this encounter.
+     *
+     * @return true if should use prayers
+     */
+    @Override
+    public boolean shouldUsePrayers() {
+        return this.shouldActivate();
+    }
+
+    /**
+     * Gets the list of prayers to use.
+     * Returns the appropriate offensive prayer based on the player's gear.
+     *
+     * @return List containing the recommended offensive prayer
+     */
+    @Override
+    public List<Prayer> getPrayers() {
+        return List.of(this.getOffensivePrayer());
+    }
+
+    /**
+     * Gets the prayer mode for this encounter.
+     * Obelisk prayers should be flicked for efficiency.
+     *
+     * @return FLICK mode
+     */
+    @Override
+    public PrayerMode getPrayerMode() {
+        return PrayerMode.FLICK;
+    }
+
+    /**
+     * Gets the tick offset for prayer activation.
+     *
+     * @return 0 for immediate activation
+     */
+    @Override
+    public int getTickOffset() {
+        return OBELISK_DAMAGE_VARIANCE;
     }
 }
-

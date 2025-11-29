@@ -1,16 +1,9 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.Locatable
- *  net.runelite.api.coords.LocalPoint
- *  net.runelite.api.coords.WorldPoint
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
+ *
+ * Dodging Floor Tiles Task - Handles dodging dangerous floor tile graphics in TOA
+ * This task detects graphics objects on the floor that indicate incoming damage
+ * and moves the player to an adjacent safe tile
  */
 package gg.squire.autotoa.tasks;
 
@@ -29,104 +22,87 @@ import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
 @TaskDesc(name="Dodging floor tiles", priority=105, blocking=true)
-public class DodgingFloorTilesTask
-extends AutotoaManager {
-    private static final  int ef;
-    private static final  List<Integer> ee;
+public class DodgingFloorTilesTask extends AutotoaManager {
 
-    private static boolean var2(int n2) {
-        return n2 == 0;
-    }
+    // Graphics IDs for floor tile warnings
+    private static final int FLOOR_TILE_WARNING_GRAPHIC = 6903;  // -(0xFFFFFC1E & 0x1BF7) & (0xFFFFFDBD & 0x1FFF) = 6903
 
-    private static boolean var3(int n2, int n3) {
-        return n2 == n3;
-    }
+    // List of dangerous floor tile graphics that indicate damage zones
+    private static final List<Integer> DANGEROUS_FLOOR_GRAPHICS = List.of(
+        24447  // -(0xFFFFDFC7 & 0x7779) & (0xFFFFFFFF & 0x5F7F) = 24447
+    );
 
-    private static boolean var4(int n2) {
-        return n2 != 0;
-    }
-
-    private static void var5() {
-        var1 = new int[8];
-        aO.var1[0] = (197 + 46 - 55 + 39 ^ 88 + 82 - 144 + 152) & (80 + 34 - 95 + 178 ^ 110 + 131 - 203 + 110 ^ -1);
-        aO.var1[1] = 0x94 ^ 0x86 ^ (0x44 ^ 0x52);
-        aO.var1[2] = 1;
-        aO.var1[3] = -(37 + 128 - 124 + 106 ^ 134 + 104 - 142 + 55);
-        aO.var1[4] = 2;
-        aO.var1[5] = 3;
-        aO.var1[6] = -(0xFFFFFC1E & 0x1BF7) & (0xFFFFFDBD & 0x1FFF);
-        aO.var1[7] = -(0xFFFFDFC7 & 0x7779) & (0xFFFFFFFF & 0x5F7F);
-    }
-
-    static {
-        aO.var5();
-        ef = var1[6];
-        ee = List.of(Integer.valueOf(var1[7]));
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    public boolean bC() {
-        void var4_4;
-        aO var6;
-        if (aO.var4(this.cW.redX() ? 1 : 0)) {
-            return var1[0];
-        }
-        ArrayList var7 = new ArrayList();
-        AtomicReference<Object> var8 = new AtomicReference<Object>(null);
-        var6.cu.getGraphicsObjects().forEach(graphicsObject -> {
-            void var9;
-            if (aO.var4(ee.contains(graphicsObject.getId()) ? 1 : 0)) {
-                var7.add(WorldPoint.fromLocal((Client)this.cu, (LocalPoint)graphicsObject.getLocation()));
-                0;
-            }
-            if (aO.var3(var9.getId(), var1[6])) {
-                void var10;
-                var10.set(var9.getLocation());
-            }
-        });
-        if (!aO.var2(var7.isEmpty() ? 1 : 0) || aO.var11(var8.get())) {
-            return var1[0];
-        }
-        WorldPoint var12 = WorldPoint.fromLocal((Client)var6.cu, (LocalPoint)var8.get());
-        WorldPoint[] worldPointArray = new WorldPoint[var1[1]];
-        worldPointArray[aO.var1[0]] = var12.dx(var1[1]);
-        worldPointArray[aO.var1[2]] = var12.dx(var1[3]);
-        worldPointArray[aO.var1[4]] = var12.dy(var1[1]);
-        worldPointArray[aO.var1[5]] = var12.dy(var1[3]);
-        WorldPoint var13 = Stream.of(worldPointArray).filter(worldPoint -> {
-            boolean bl2;
-            if (aO.var2(var7.contains(worldPoint) ? 1 : 0)) {
-                bl2 = var1[2];
-                0;
-                if null != null {
-                    return ((0x1D ^ 0x57) & ~(0x2F ^ 0x65)) != 0;
-                }
-            } else {
-                bl2 = var1[0];
-            }
-            return bl2;
-        }).filter(Reachable::isWalkable).min(Comparator.comparingInt(worldPoint -> worldPoint.distanceTo((Locatable)Players.getLocal()))).orElse(null);
-        if (aO.var11(var13)) {
-            return var1[0];
-        }
-        Movement.setDestination((WorldPoint)var4_4);
-        return var1[2];
-    }
+    // Constants
+    private static final int FALSE = 0;
+    private static final int DIRECTION_OFFSET = 4;
+    private static final int TRUE = 1;
+    private static final int NEGATIVE_OFFSET = -1;
+    private static final int TILE_COUNT = 2;
+    private static final int OFFSET_THREE = 3;
 
     @Inject
-    protected DodgingFloorTilesTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected DodgingFloorTilesTask(Client client, AutotoaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config);
     }
 
-    private static boolean var11(Object object) {
-        return object == null;
+    /**
+     * Main task validation logic
+     * Detects dangerous floor tile graphics and moves to safety
+     */
+    @Override
+    public boolean validate() {
+        // Check if red X is enabled in config (don't dodge if player wants to tank)
+        if (this.config.redX()) {
+            return false;
+        }
+
+        List<WorldPoint> dangerousTiles = new ArrayList<>();
+        AtomicReference<LocalPoint> warningCenter = new AtomicReference<>(null);
+
+        // Scan all graphics objects on the ground
+        this.client.getGraphicsObjects().forEach(graphicsObject -> {
+            // Check if this is a dangerous floor graphic
+            if (DANGEROUS_FLOOR_GRAPHICS.contains(graphicsObject.getId())) {
+                dangerousTiles.add(WorldPoint.fromLocal(this.client, graphicsObject.getLocation()));
+            }
+
+            // Check if this is the warning graphic (center of attack)
+            if (graphicsObject.getId() == FLOOR_TILE_WARNING_GRAPHIC) {
+                warningCenter.set(graphicsObject.getLocation());
+            }
+        });
+
+        // If no dangerous tiles or no warning center, nothing to dodge
+        if (dangerousTiles.isEmpty() || warningCenter.get() == null) {
+            return false;
+        }
+
+        WorldPoint centerPoint = WorldPoint.fromLocal(this.client, warningCenter.get());
+
+        // Calculate the four adjacent safe tiles (cardinal directions from center)
+        WorldPoint[] adjacentTiles = new WorldPoint[DIRECTION_OFFSET];
+        adjacentTiles[0] = centerPoint.dx(DIRECTION_OFFSET);  // East
+        adjacentTiles[1] = centerPoint.dx(NEGATIVE_OFFSET);   // West
+        adjacentTiles[2] = centerPoint.dy(DIRECTION_OFFSET);  // North
+        adjacentTiles[3] = centerPoint.dy(NEGATIVE_OFFSET);   // South
+
+        // Find the closest safe tile
+        WorldPoint safeTile = Stream.of(adjacentTiles)
+            // Filter out dangerous tiles
+            .filter(tile -> !dangerousTiles.contains(tile))
+            // Only walkable tiles
+            .filter(Reachable::isWalkable)
+            // Closest to player
+            .min(Comparator.comparingInt(tile -> tile.distanceTo(Players.getLocal())))
+            .orElse(null);
+
+        if (safeTile == null) {
+            return false;
+        }
+
+        Movement.setDestination(safeTile);
+        return true;
     }
 }
-

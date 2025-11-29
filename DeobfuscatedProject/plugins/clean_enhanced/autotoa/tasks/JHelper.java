@@ -5,17 +5,37 @@ package gg.squire.autotoa.tasks;
 
 import gg.squire.autotoa.tasks.FHelper;
 
-class JHelper {
-    final  F bC;
-    private  String bo;
+/**
+ * SimpleTaskHolder - Minimal data class holding a single string property.
+ *
+ * This class stores a single object name or identifier string.
+ * Immutable data holder with final fields.
+ */
+class SimpleTaskHolder {
 
-    JHelper(F f2, String string) {
-        this.bC = f2;
-        this.bo = string;
+    /** Reference to parent FHelper manager */
+    final FHelper manager;
+
+    /** The object name or identifier */
+    private final String objectName;
+
+    /**
+     * Creates a new simple task holder.
+     *
+     * @param manager The parent FHelper manager
+     * @param objectName The object name or identifier
+     */
+    SimpleTaskHolder(FHelper manager, String objectName) {
+        this.manager = manager;
+        this.objectName = objectName;
     }
 
-    String az() {
-        return this.bo;
+    /**
+     * Gets the object name or identifier.
+     *
+     * @return The object name
+     */
+    String getObjectName() {
+        return this.objectName;
     }
 }
-

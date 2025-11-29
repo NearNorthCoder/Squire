@@ -1,37 +1,10 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.Item
- *  net.runelite.api.Locatable
- *  net.runelite.api.NPC
- *  net.runelite.api.Point
- *  net.runelite.api.Skill
- *  net.runelite.api.coords.WorldArea
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.api.events.AnimationChanged
- *  net.runelite.api.events.StatChanged
- *  net.runelite.client.config.ConfigStorageBox
- *  net.runelite.client.eventbus.Subscribe
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.game.BoostingPotion
- *  net.unethicalite.api.game.Skills
- *  net.unethicalite.api.items.Equipment
- *  net.unethicalite.api.items.Inventory
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.client.Static
- */
 package gg.squire.autotoa.tasks;
 
 import com.google.inject.Inject;
 import gg.squire.autotoa.SquireAutoTOA;
 import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
+import java.awt.Point;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,7 +16,6 @@ import net.runelite.api.Client;
 import net.runelite.api.Item;
 import net.runelite.api.Locatable;
 import net.runelite.api.NPC;
-import net.runelite.api.Point;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
@@ -60,448 +32,321 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.client.Static;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+/**
+ * Handles the Boulder Dash combat challenge in Tombs of Amascut (Ba-Ba room).
+ *
+ * This challenge involves attacking boulders while dodging rolling boulders and
+ * managing prayer/potions. The bot tracks boulder positions, attacks safe targets,
+ * and avoids dangerous graphics overlays.
+ */
 @TaskDesc(name="Doing boulder dash", priority=100, blocking=true, register=true)
-public class DoingBoulderDashTask
-extends AutotoaManager {
-    private  int dZ;
-    
-    private static final  int dT;
-    private  NPC dW;
-    private final  Set<NPC> dU;
-    private  int dY;
-    private static final  Point[] dQ;
-    private final  Set<NPC> dV;
-    private static final  int dR;
-    private  int ea;
-    private static final  int[] dS;
-    private  boolean dX;
+public class DoingBoulderDashTask extends AutotoaManager {
 
-    private static boolean var3(Object object, Object object2) {
-        return object != object2;
-    }
+    // NPC IDs
+    private static final int NPC_BOULDER_SMALL = 28511; // 0x6F5F - Small attackable boulder
+    private static final int NPC_BOULDER_LARGE = 28479; // 0x6F3F - Large rolling boulder
+    private static final int NPC_BABA = 11789; // 0x2E0D - Ba-Ba boss (for initial phase)
 
-    @Override
-    public void r() {
-        this.dW = null;
-        this.dV.clear();
-        this.dU.clear();
-        this.dX = var2[0];
-        this.ea = var2[0];
-    }
+    // Animation and graphics IDs
+    private static final int BABA_SLAM_ANIMATION = 12119; // 0x2F57 - Ba-Ba slam attack
+    private static final int FALLING_DEBRIS_GRAPHIC = 245; // Falling debris warning
 
-    private static boolean var4(int n2, int n3) {
-        return n2 == n3;
-    }
+    // Scene coordinates for safe spots and movement
+    private static final Point[] MOVEMENT_POSITIONS = new Point[] {
+        new Point(20, 21),   // Starting safe position
+        new Point(28, 21),   // Fallback position
+        new Point(21, 26),   // Attack position top
+        new Point(21, 20),   // Attack position middle
+        new Point(21, 28),   // Attack position bottom
+        new Point(32, 13),   // Edge positions
+        new Point(32, 21)
+    };
 
-    private static boolean var5(int n2) {
-        return n2 > 0;
-    }
+    // Arrays of boulder NPC IDs for filtering
+    private static final int[] BOULDER_NPC_IDS = new int[] {28671, 28479};
 
-    private static  boolean a(NPC nPC, int n2, NPC nPC2) {
-        int n3;
-        if (aJ.var4(nPC2.getId(), nPC.getId()) && aJ.var6(nPC2.getWorldLocation().getX(), nPC.getWorldLocation().getX()) && aJ.var7(nPC2.getWorldArea().getX() + nPC2.getWorldArea().getWidth(), nPC.getWorldLocation().getX()) && aJ.var8(nPC2.getWorldArea().getX(), n2)) {
-            n3 = var2[1];
-            0;
-            if (2 <= 1) {
-                return ((0x28 ^ 0x6F) & ~(0x1F ^ 0x58)) != 0;
-            }
-        } else {
-            n3 = var2[0];
-        }
-        return n3 != 0;
-    }
-
-    private static boolean var9(int n2) {
-        return n2 == 0;
-    }
-
-    @Subscribe
-    public void b(StatChanged statChanged) {
-        if (aJ.var10(this.dW)) {
-            this.dU.add(this.dW);
-            0;
-        }
-    }
-
-    static {
-        aJ.var11();
-        aJ.var12();
-        dR = var2[14];
-        dT = var2[13];
-        Point[] pointArray = new Point[var2[15]];
-        pointArray[aJ.var2[0]] = new Point(var2[16], var2[17]);
-        pointArray[aJ.var2[1]] = new Point(var2[18], var2[17]);
-        pointArray[aJ.var2[3]] = new Point(var2[17], var2[19]);
-        pointArray[aJ.var2[4]] = new Point(var2[17], var2[17]);
-        pointArray[aJ.var2[2]] = new Point(var2[17], var2[18]);
-        pointArray[aJ.var2[10]] = new Point(var2[20], var2[7]);
-        pointArray[aJ.var2[11]] = new Point(var2[20], var2[8]);
-        dQ = pointArray;
-        int[] nArray = new int[var2[3]];
-        nArray[aJ.var2[0]] = var2[21];
-        nArray[aJ.var2[1]] = var2[14];
-        dS = nArray;
-    }
-
-        catch (Exception var18) {
-            var18.printStackTrace();
-            return null;
-        }
-    }
-
-    private void bE() {
-        Item item2 = Inventory.getFirst(item -> item.getName().toLowerCase().contains(var1[var2[3]]));
-        if (aJ.var19(item2)) {
-            return;
-        }
-        int var20 = BoostingPotion.RANGING_POTION.getBoostAmount(Skill.RANGED);
-        if (aJ.var21(Skills.getBoostedLevel((SkiSkill.RANGED), Skills.getLevel((SkiSkill.RANGED) + var20 - var2[4])) {
-            return;
-        }
-        item2.interact(var1[var2[1]]);
-    }
-
-    private static boolean var8(int n2, int n3) {
-        return n2 >= n3;
-    }
-
-    private static boolean var22(Object object, Object object2) {
-        return object == object2;
-    }
-
-    private static boolean var23(int n2, int n3) {
-        return n2 <= n3;
-    }
-
-    private static void var11() {
-        var2 = new int[22];
-        aJ.var2[0] = (0xD8 ^ 0xA1 ^ (8 ^ 0x7D)) & (0x40 ^ 0x33 ^ 69 + 11 - -11 + 36 ^ -1);
-        aJ.var2[1] = 1;
-        aJ.var2[2] = 0x55 ^ 0x51;
-        aJ.var2[3] = 2;
-        aJ.var2[4] = 3;
-        aJ.var2[5] = 0xFFFFBF56 & 0x6EAD;
-        aJ.var2[6] = 0x2D ^ 0x3B;
-        aJ.var2[7] = 0x62 ^ 0x55 ^ (0x4E ^ 0x64);
-        aJ.var2[8] = 0x3E ^ 0x1D;
-        aJ.var2[9] = 235 + 140 - 147 + 17;
-        aJ.var2[10] = 136 + 73 - 186 + 119 ^ 39 + 12 - -82 + 6;
-        aJ.var2[11] = 0xCB ^ 0x9E ^ (0xFD ^ 0xAE);
-        aJ.var2[12] = 0x17 ^ 0x1F;
-        aJ.var2[13] = 0xFFFFF69D & 0x2F77;
-        aJ.var2[14] = -(0xFFFFEDBF & 0x53C9) & (0xFFFFFFDF & 0x6FAF);
-        aJ.var2[15] = 0x70 ^ 0x77;
-        aJ.var2[16] = 0x3E ^ 0x22;
-        aJ.var2[17] = 0xC4 ^ 0x8B ^ (3 ^ 0x6C);
-        aJ.var2[18] = 137 + 54 - 43 + 2 ^ 101 + 40 - 108 + 103;
-        aJ.var2[19] = 0x2B ^ 0xF ^ (0x7D ^ 0x7B);
-        aJ.var2[20] = 0xB1 ^ 0x99;
-        aJ.var2[21] = 0xFFFFBE06 & 0x6FFF;
-    }
-
-    @Override
-    public boolean bq() {
-        return var2[1];
-    }
-
-    private static boolean var24(int n2) {
-        return n2 != 0;
-    }
-
-    private static boolean var21(int n2, int n3) {
-        return n2 > n3;
-    }
-
-    private static boolean var19(Object object) {
-        return object == null;
-    }
-
-    private static boolean var10(Object object) {
-        return object != null;
-    }
-
-    private static int var25(float f2, float f3) {
-        return f2 == f3 ? 0 : (f2 > f3 ? 1 : -1);
-    }
-
-        catch (Exception var31) {
-            var31.printStackTrace();
-            return null;
-        }
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    public boolean bC() {
-        void var8_12;
-        void var32;
-        aJ var33;
-        NPC nPC2 = this.bB();
-        if (aJ.var19(nPC2)) {
-            this.r();
-            return var2[0];
-        }
-        var33.bE();
-        if (aJ.var5(var33.ea)) {
-            var33.ea -= var2[1];
-            if (!aJ.var10(var33.dW) || aJ.var7(var33.dW.distanceTo((Locatable)Players.getLocal()), var2[2])) {
-                return var2[1];
-            }
-        }
-        if (aJ.var4(var33.dZ, var2[3]) && !aJ.var6(var33.bA(), var2[4]) || aJ.var4(var33.dZ, var2[1]) && aJ.var4(var33.bA(), var2[3])) {
-            var33.dX = var2[1];
-        }
-        WorldPoint var34 = Players.getLocal().getWorldLocation();
-        var33.dZ = var33.bA();
-        if (aJ.var24(var33.dX) && aJ.var6(var32.getId(), var2[5])) {
-            if (aJ.var9(Movement.isRunEnabled() ? 1 : 0)) {
-                Movement.toggleRun();
-            }
-            WorldPoint var35 = var33.a(new Point(var2[6], var2[7]));
-            WorldPoint var36 = var33.a(new Point(var2[6], var2[8]));
-            WorldPoint var37 = Players.getLocal().getWorldLocation();
-            if (aJ.var5(aJ.var25(var35.distanceTo2DHypotenuse(var37), var36.distanceTo2DHypotenuse(var37)))) {
-                var35 = var36;
-            }
-            Movement.setDestination((WorldPoint)var35);
-            return var2[1];
-        }
-        if (aJ.var4(Players.getLocal().getGraphic(), var2[9])) {
-            var33.dX = var2[1];
-        }
-        if (aJ.var9(var33.dX)) {
-            return var2[0];
-        }
-        if (aJ.var23(var32.getWorldArea().getX(), var34.getWorldX()) && aJ.var24(var33.cW.redX() ? 1 : 0)) {
-            if (aJ.var8(var33.a(dQ[var2[10]]).getWorldX(), var34.getWorldX())) {
-                Movement.setDestination((WorldPoint)var34.dx(var2[1]));
-                return var2[1];
-            }
-            var33.dX = var2[0];
-            return var2[0];
-        }
-        var33.bp();
-        if (aJ.var9(Movement.isRunEnabled() ? 1 : 0)) {
-            Movement.toggleRun();
-        }
-        List<NPC> var35 = var33.bD();
-        WorldPoint var36 = var33.a(dQ[var2[0]]);
-        if (aJ.var21(var36.getWorldX(), var34.getWorldX())) {
-            Movement.setDestination((WorldPoint)var36);
-            return var2[1];
-        }
-        List<WorldPoint> var37 = List.of(var33.a(dQ[var2[4]]), var33.a(dQ[var2[3]]), var33.a(dQ[var2[2]]));
-        List<WorldPoint> var38 = List.of(var33.a(dQ[var2[10]]), var33.a(dQ[var2[11]]));
-        int var39 = NPCs.getAll((int[])dS).size();
-        if (aJ.var24(var35.isEmpty() ? 1 : 0)) {
-            WorldPoint var40 = var33.a(dQ[var2[1]]);
-            if (!aJ.var6(var39, var2[12]) || aJ.var10(var33.dW) && aJ.var24(var33.dW.getWorldArea().contains(var34) ? 1 : 0) && aJ.var21(var39, var2[10])) {
-                var40 = var38.stream().min(Comparator.comparingDouble(worldPoint2 -> worldPoint2.distanceTo2DHypotenuse(var34))).orElse(null);
-            }
-            if (aJ.var21(var40.getWorldX(), var34.getWorldX())) {
-                Movement.setDestination((WorldPoint)var40);
-            }
-            return var2[1];
-        }
-        NPC var40 = var35.stream().filter(nPC -> {
-            int n2;
-            if (aJ.var4(nPC.getId(), var2[14]) && aJ.var9(nPC.isDead() ? 1 : 0)) {
-                n2 = var2[1];
-                0;
-                if (3 <= ((25 + 141 - 78 + 64 ^ 80 + 58 - 81 + 85) & (0x8E ^ 0x82 ^ (0xD9 ^ 0xC3) ^ -1))) {
-                    return ((0x9E ^ 0x91 ^ (0x47 ^ 0x1E)) & (132 + 46 - 26 + 64 ^ 4 + 16 - -29 + 93 ^ -1)) != 0;
-                }
-            } else {
-                n2 = var2[0];
-            }
-            return n2 != 0;
-        }).filter(nPC -> {
-            boolean bl2;
-            if (aJ.var9(this.dV.contains(nPC) ? 1 : 0)) {
-                bl2 = var2[1];
-                0;
-                if (((0xB ^ 0x54) & ~(0x7B ^ 0x24)) != 0) {
-                    return (1 & ~1) != 0;
-                }
-            } else {
-                bl2 = var2[0];
-            }
-            return bl2;
-        }).filter(nPC -> {
-            boolean bl2;
-            if (aJ.var3(nPC, this.dW)) {
-                bl2 = var2[1];
-                0;
-                if ((0x24 ^ 0x20) == 0) {
-                    return ((0xF3 ^ 0xBA) & ~(0x13 ^ 0x5A)) != 0;
-                }
-            } else {
-                bl2 = var2[0];
-            }
-            return bl2;
-        }).findFirst().orElse(null);
-        if (aJ.var19(var40)) {
-            WorldPoint var41 = var33.a(dQ[var2[4]]);
-            WorldPoint var42 = var33.a(dQ[var2[3]]);
-            WorldPoint var43 = var33.a(dQ[var2[2]]);
-            if (aJ.var19(var33.dW)) {
-                return var2[0];
-            }
-            WorldArea var44 = var33.dW.getWorldArea();
-            WorldPoint[] worldPointArray = new WorldPoint[var2[4]];
-            worldPointArray[aJ.var2[0]] = var41;
-            worldPointArray[aJ.var2[1]] = var42;
-            worldPointArray[aJ.var2[3]] = var43;
-            WorldPoint var45 = Stream.of(worldPointArray).min(Comparator.comparingDouble(worldPoint -> worldPoint.distanceTo2DHypotenuse(var44.getCenter()))).orElse(null);
-            if (aJ.var24(var37.stream().allMatch(worldPoint2 -> {
-                boolean bl2;
-                if (aJ.var23(worldPoint2.getWorldX(), var34.getWorldX())) {
-                    bl2 = var2[1];
-                    0;
-                    if (-1 > 1) {
-                        return ((0x7A ^ 0x12 ^ (0x87 ^ 0xB4)) & (101 + 183 - 250 + 206 ^ 140 + 97 - 110 + 44 ^ -1)) != 0;
-                    }
-                } else {
-                    bl2 = var2[0];
-                }
-                return bl2;
-            }) ? 1 : 0)) {
-                if (aJ.var24(var37.contains(var34) ? 1 : 0)) {
-                    var45 = var34.dx(var2[1]);
-                    0;
-                    if (-1 > -1) {
-                        return ((0x60 ^ 0x41) & ~(1 ^ 0x20)) != 0;
-                    }
-                } else if (aJ.var24(var44.contains(var34) ? 1 : 0) && aJ.var21(var39, var2[10])) {
-                    var45 = var38.stream().min(Comparator.comparingDouble(worldPoint2 -> worldPoint2.distanceTo2DHypotenuse(var34))).orElse(null);
-                    0;
-                    if ((123 + 116 - 104 + 30 ^ 145 + 104 - 148 + 60) <= 0) {
-                        return ((0x1F ^ 0x74 ^ (0xD5 ^ 0x97)) & (57 + 125 - 52 + 25 ^ 119 + 23 - -20 + 16 ^ -1)) != 0;
-                    }
-                } else if (aJ.var21(Math.abs(var44.getCenter().getWorldY() - var34.getWorldY()), var2[1])) {
-                    var45 = new WorldPoint(var34.getWorldX() + var2[3], var44.getCenter().getWorldY(), var33.cu.getPlane());
-                    0;
-                    if null != null {
-                        return ((76 + 111 - 108 + 49 ^ 60 + 85 - 47 + 59) & (81 + 49 - 100 + 110 ^ 140 + 49 - 45 + 1 ^ -1)) != 0;
-                    }
-                } else {
-                    if (aJ.var23(var39, var2[10])) {
-                        return var2[1];
-                    }
-                    var45 = var44.getCenter();
-                }
-            }
-            Movement.setDestination((WorldPoint)var45);
-            return var2[1];
-        }
-        var40.interact(var1[var2[0]]);
-        if (aJ.var24(Equipment.contains(item -> item.getName().contains(var1[var2[4]])) ? 1 : 0)) {
-            var33.ea = var2[1];
-        }
-        this.dW = var8_12;
-        return var2[1];
-    }
-
-    @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
-        return this.cW.babaBoulderAttackStyle();
-    }
-
-    private static void var12() {
-        var1 = new String[var2[2]];
-        aJ.var1[aJ.var2[0]] = "Attack";
-        aJ.var1[aJ.var2[1]] = "Drink";
-        aJ.var1[aJ.var2[3]] = "ranging";
-        aJ.var1[aJ.var2[4]] = "faerdhinen";
-    }
-
-    @Subscribe
-    public void a(AnimationChanged animationChanged) {
-        if (aJ.var22(animationChanged.getActor(), this.bB()) && aJ.var4(animationChanged.getActor().getAnimation(), var2[13])) {
-            this.dY = Static.getClient().getTickCount();
-        }
-    }
+    private final Set<NPC> damagedBoulders;    // Boulders we've already attacked
+    private final Set<NPC> completedBoulders;  // Boulders that are destroyed
+    private NPC currentTarget;                 // Currently targeted boulder
+    private boolean safeToDodge;               // Safe to move to dodge area
+    private int currentPhase;                  // Puzzle phase tracker
+    private int ticksSinceLastAction;          // Cooldown counter
+    private int lastBabaSlamTick;              // Tick when Ba-Ba slammed
 
     @Inject
-    protected DoingBoulderDashTask(Client client, z z2, TOAConfig tOAConfig, SquireAutoTOA squireAutoTOA) {
-        super(client, z2, tOAConfig);
-        this.dU = new HashSet<NPC>();
-        this.dV = new HashSet<NPC>();
-        this.dX = var2[0];
-        this.dZ = var2[0];
-        this.ea = var2[0];
-        this.aY = squireAutoTOA;
+    protected DoingBoulderDashTask(Client client, PuzzleStateManager stateManager, TOAConfig config, SquireAutoTOA plugin) {
+        super(client, stateManager, config);
+        this.damagedBoulders = new HashSet<>();
+        this.completedBoulders = new HashSet<>();
+        this.safeToDodge = false;
+        this.currentPhase = 0;
+        this.ticksSinceLastAction = 0;
+        this.autoTOA = plugin;
     }
 
-    private static boolean var6(int n2, int n3) {
-        return n2 != n3;
+    @Override
+    public void reset() {
+        this.currentTarget = null;
+        this.completedBoulders.clear();
+        this.damagedBoulders.clear();
+        this.safeToDodge = false;
+        this.ticksSinceLastAction = 0;
     }
 
-    /*
-     * WARNING - void declaration
+    @Override
+    public boolean alwaysActive() {
+        return true;
+    }
+
+    /**
+     * Returns the combat equipment setup for this challenge.
      */
-    private List<NPC> bD() {
-        int n2;
-        List list = NPCs.getAll((int[])dS);
-        int n3 = n2 = Players.getLocal().getWorldX();
-        Iterator var46 = list.iterator();
-        while (aJ.var24(var46.hasNext() ? 1 : 0)) {
-            void var47;
-            NPC var48 = (NPC)var46.next();
-            if (aJ.var8(var48.getWorldLocation().getX(), (int)var47) && aJ.var24(NPCs.getAll(arg_0 -> aJ.a(var48, (int)var47, arg_0)).isEmpty() ? 1 : 0)) {
-                int var49 = var48.getWorldLocation().getX();
-                0;
-                if (((0x15 ^ 0x4A ^ (0x1E ^ 0x70)) & (2 ^ 0x38 ^ (0x5D ^ 0x56) ^ -1)) == 0) break;
-                return null;
-            }
-            0;
-            if ((21 + 187 - 25 + 6 ^ 128 + 112 - 74 + 18) != 0) continue;
-            return null;
+    @Override
+    public ConfigStorageBox<EquipmentSetup> getEquipmentSetup() {
+        return this.config.babaBoulderAttackStyle();
+    }
+
+    /**
+     * Drinks ranging potion if boost is low.
+     */
+    private void maintainRangingBoost() {
+        Item rangingPotion = Inventory.getFirst(item -> item.getName().toLowerCase().contains("ranging"));
+        if (rangingPotion == null) {
+            return;
         }
-        int n4 = n3;
-        return list.stream().filter(nPC -> {
-            boolean bl2;
-            if (aJ.var4(nPC.getWorldLocation().getX(), n4)) {
-                bl2 = var2[1];
-                0;
-                if (-3 > 0) {
-                    return ((0xC2 ^ 0x94 ^ (0x14 ^ 0x7A)) & (0x17 ^ 0xE ^ (0x40 ^ 0x61) ^ -1)) != 0;
+
+        int maxBoost = BoostingPotion.RANGING_POTION.getBoostAmount(Skill.RANGED);
+        if (Skills.getBoostedLevel(Skill.RANGED) > Skills.getLevel(Skill.RANGED) + maxBoost - 3) {
+            return;
+        }
+
+        rangingPotion.interact("Drink");
+    }
+
+    /**
+     * Main execution logic for the boulder challenge.
+     */
+    @Override
+    public boolean executeChallenge() {
+        NPC baba = this.getBaBa();
+        if (baba == null) {
+            this.reset();
+            return false;
+        }
+
+        this.maintainRangingBoost();
+
+        // Cooldown management
+        if (this.ticksSinceLastAction > 0) {
+            this.ticksSinceLastAction--;
+            if (this.currentTarget == null || this.currentTarget.distanceTo(Players.getLocal()) < 4) {
+                return true;
+            }
+        }
+
+        // Track phase transitions
+        if (this.currentPhase == 2 && this.getCurrentPhase() != 3 ||
+            this.currentPhase == 1 && this.getCurrentPhase() == 2) {
+            this.safeToDodge = true;
+        }
+
+        WorldPoint playerPos = Players.getLocal().getWorldLocation();
+        this.currentPhase = this.getCurrentPhase();
+
+        // Special handling during Ba-Ba dodge phase
+        if (this.safeToDodge && baba.getId() == NPC_BABA) {
+            if (!Movement.isRunEnabled()) {
+                Movement.toggleRun();
+            }
+
+            WorldPoint safeSpot1 = this.sceneToWorld(new Point(6, 13));
+            WorldPoint safeSpot2 = this.sceneToWorld(new Point(6, 21));
+            WorldPoint playerLoc = Players.getLocal().getWorldLocation();
+
+            WorldPoint closestSafe = safeSpot1.distanceTo2DHypotenuse(playerLoc) >
+                                     safeSpot2.distanceTo2DHypotenuse(playerLoc) ?
+                                     safeSpot2 : safeSpot1;
+
+            Movement.setDestination(closestSafe);
+            return true;
+        }
+
+        // Check for falling debris graphics (danger zone)
+        if (Players.getLocal().getGraphic() == FALLING_DEBRIS_GRAPHIC) {
+            this.safeToDodge = true;
+        }
+
+        if (!this.safeToDodge) {
+            return false;
+        }
+
+        // Move east if Ba-Ba is blocking path
+        if (baba.getWorldArea().getX() <= playerPos.getWorldX() && this.config.redX()) {
+            if (this.sceneToWorld(MOVEMENT_POSITIONS[5]).getWorldX() >= playerPos.getWorldX()) {
+                Movement.setDestination(playerPos.dx(1));
+                return true;
+            }
+            this.safeToDodge = false;
+            return false;
+        }
+
+        this.prepareForBoulderAttack();
+
+        if (!Movement.isRunEnabled()) {
+            Movement.toggleRun();
+        }
+
+        List<NPC> safeColumnBoulders = this.getBouldersInSafeColumn();
+        WorldPoint startingPos = this.sceneToWorld(MOVEMENT_POSITIONS[0]);
+
+        // Move to starting position if too far east
+        if (startingPos.getWorldX() > playerPos.getWorldX()) {
+            Movement.setDestination(startingPos);
+            return true;
+        }
+
+        List<WorldPoint> attackPositions = List.of(
+            this.sceneToWorld(MOVEMENT_POSITIONS[3]),
+            this.sceneToWorld(MOVEMENT_POSITIONS[2]),
+            this.sceneToWorld(MOVEMENT_POSITIONS[4])
+        );
+
+        List<WorldPoint> safePositions = List.of(
+            this.sceneToWorld(MOVEMENT_POSITIONS[5]),
+            this.sceneToWorld(MOVEMENT_POSITIONS[6])
+        );
+
+        int totalBoulders = NPCs.getAll(BOULDER_NPC_IDS).size();
+
+        // No safe boulders - move to safe area or attack position
+        if (safeColumnBoulders.isEmpty()) {
+            WorldPoint targetPos = this.sceneToWorld(MOVEMENT_POSITIONS[1]);
+
+            if (totalBoulders != 8 ||
+                this.currentTarget != null && this.currentTarget.getWorldArea().contains(playerPos) && totalBoulders > 5) {
+                targetPos = safePositions.stream()
+                    .min(Comparator.comparingDouble(wp -> wp.distanceTo2DHypotenuse(playerPos)))
+                    .orElse(null);
+            }
+
+            if (targetPos.getWorldX() > playerPos.getWorldX()) {
+                Movement.setDestination(targetPos);
+            }
+            return true;
+        }
+
+        // Find next boulder to attack
+        NPC targetBoulder = safeColumnBoulders.stream()
+            .filter(npc -> npc.getId() == NPC_BOULDER_LARGE && !npc.isDead())
+            .filter(npc -> !this.completedBoulders.contains(npc))
+            .filter(npc -> npc != this.currentTarget)
+            .findFirst()
+            .orElse(null);
+
+        // All boulders in column cleared - move or reposition
+        if (targetBoulder == null) {
+            WorldPoint attackPos = this.sceneToWorld(MOVEMENT_POSITIONS[3]);
+            WorldPoint middlePos = this.sceneToWorld(MOVEMENT_POSITIONS[2]);
+            WorldPoint bottomPos = this.sceneToWorld(MOVEMENT_POSITIONS[4]);
+
+            if (this.currentTarget == null) {
+                return false;
+            }
+
+            WorldArea targetArea = this.currentTarget.getWorldArea();
+            WorldPoint bestPosition = Stream.of(attackPos, middlePos, bottomPos)
+                .min(Comparator.comparingDouble(wp -> wp.distanceTo2DHypotenuse(targetArea.getCenter())))
+                .orElse(null);
+
+            // All attack positions clear - move east
+            if (attackPositions.stream().allMatch(wp -> wp.getWorldX() <= playerPos.getWorldX())) {
+                if (attackPositions.contains(playerPos)) {
+                    bestPosition = playerPos.dx(1);
+                } else if (targetArea.contains(playerPos) && totalBoulders > 5) {
+                    bestPosition = safePositions.stream()
+                        .min(Comparator.comparingDouble(wp -> wp.distanceTo2DHypotenuse(playerPos)))
+                        .orElse(null);
+                } else if (Math.abs(targetArea.getCenter().getWorldY() - playerPos.getWorldY()) > 1) {
+                    bestPosition = new WorldPoint(
+                        playerPos.getWorldX() + 2,
+                        targetArea.getCenter().getWorldY(),
+                        this.client.getPlane()
+                    );
+                } else {
+                    if (totalBoulders <= 5) {
+                        return true;
+                    }
+                    bestPosition = targetArea.getCenter();
                 }
-            } else {
-                bl2 = var2[0];
             }
-            return bl2;
-        }).collect(Collectors.toList());
-    }
 
-    private static String var50(String var51, String var52) {
-        var51 = new String(Base64.getDecoder().decode(var51.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var53 = new StringBuilder();
-        char[] var54 = var52.toCharArray();
-        int var55 = var2[0];
-        char[] var56 = var51.toCharArray();
-        int var57 = var56.length;
-        int var58 = var2[0];
-        while (aJ.var7(var58, var57)) {
-            char var59 = var56[var58];
-            var53.append((char)(var59 ^ var54[var55 % var54.length]));
-            0;
-            ++var55;
-            ++var58;
-            0;
-            if ((0x3B ^ 0x3F) >= 1) continue;
-            return null;
+            Movement.setDestination(bestPosition);
+            return true;
         }
-        return String.valueOf(var53);
+
+        // Attack the target boulder
+        targetBoulder.interact("Attack");
+
+        // Add attack cooldown if using special weapon
+        if (Equipment.contains(item -> item.getName().contains("faerdhinen"))) {
+            this.ticksSinceLastAction = 1;
+        }
+
+        this.currentTarget = targetBoulder;
+        return true;
     }
 
-    private static boolean var7(int n2, int n3) {
-        return n2 < n3;
+    /**
+     * Gets boulders in the same column (X coordinate) as the player.
+     */
+    private List<NPC> getBouldersInSafeColumn() {
+        List<NPC> allBoulders = NPCs.getAll(BOULDER_NPC_IDS);
+        int playerX = Players.getLocal().getWorldX();
+        int targetX = playerX;
+
+        // Find the X coordinate with no blocking boulders
+        for (NPC boulder : allBoulders) {
+            if (boulder.getWorldLocation().getX() >= playerX &&
+                NPCs.getAll(npc -> isBlockingBoulder(boulder, playerX, npc)).isEmpty()) {
+                targetX = boulder.getWorldLocation().getX();
+            }
+        }
+
+        final int finalTargetX = targetX;
+        return allBoulders.stream()
+            .filter(npc -> npc.getWorldLocation().getX() == finalTargetX)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Checks if a boulder is blocking the path to another boulder.
+     */
+    private static boolean isBlockingBoulder(NPC boulder, int targetX, NPC otherBoulder) {
+        return otherBoulder.getId() == boulder.getId() &&
+               otherBoulder.getWorldLocation().getX() != boulder.getWorldLocation().getX() &&
+               otherBoulder.getWorldArea().getX() + otherBoulder.getWorldArea().getWidth() > boulder.getWorldLocation().getX() &&
+               otherBoulder.getWorldArea().getX() >= targetX;
+    }
+
+    /**
+     * Tracks when boulders take damage.
+     */
+    @Subscribe
+    public void onStatChanged(StatChanged event) {
+        if (this.currentTarget != null) {
+            this.damagedBoulders.add(this.currentTarget);
+        }
+    }
+
+    /**
+     * Tracks Ba-Ba's slam animation to predict boulder spawns.
+     */
+    @Subscribe
+    public void onAnimationChanged(AnimationChanged event) {
+        if (event.getActor() == this.getBaBa() &&
+            event.getActor().getAnimation() == BABA_SLAM_ANIMATION) {
+            this.lastBabaSlamTick = Static.getClient().getTickCount();
+        }
     }
 }
-

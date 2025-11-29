@@ -5,23 +5,54 @@ package gg.squire.autotoa.tasks;
 
 import gg.squire.autotoa.tasks.FHelper;
 
-class IHelper {
-    private  String bA;
-    final  F bB;
-    private  String bv;
+/**
+ * TaskDescriptor - Simple data class holding two string properties.
+ *
+ * This class appears to store descriptor information for tasks with:
+ * - A primary identifier/name
+ * - A value/description string
+ *
+ * Immutable data holder with final fields.
+ */
+class TaskDescriptor {
 
-    String aJ() {
-        return this.bA;
+    /** The primary identifier or name */
+    private final String identifier;
+
+    /** Reference to parent FHelper manager */
+    final FHelper manager;
+
+    /** The value or description */
+    private final String value;
+
+    /**
+     * Gets the primary identifier or name.
+     *
+     * @return The identifier
+     */
+    String getIdentifier() {
+        return this.identifier;
     }
 
-    String aG() {
-        return this.bv;
+    /**
+     * Gets the value or description.
+     *
+     * @return The value
+     */
+    String getValue() {
+        return this.value;
     }
 
-    IHelper(F f2, String string, String string2) {
-        this.bB = f2;
-        this.bA = string;
-        this.bv = string2;
+    /**
+     * Creates a new task descriptor.
+     *
+     * @param manager The parent FHelper manager
+     * @param identifier The primary identifier or name
+     * @param value The value or description
+     */
+    TaskDescriptor(FHelper manager, String identifier, String value) {
+        this.manager = manager;
+        this.identifier = identifier;
+        this.value = value;
     }
 }
-

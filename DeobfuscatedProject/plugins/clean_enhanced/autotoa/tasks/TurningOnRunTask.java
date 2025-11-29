@@ -1,11 +1,15 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.Task
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.unethicalite.api.movement.Movement
+ *
+ * Run Toggle Task
+ *
+ * This task handles automatically enabling run during TOA raids.
+ * It enables run when:
+ * - Not paused
+ * - Run energy is above threshold (30)
+ * - Run is currently disabled
+ *
+ * This ensures the player maintains movement speed during the raid.
  */
 package gg.squire.autotoa.tasks;
 
@@ -16,48 +20,31 @@ import gg.squire.client.plugins.fw.TaskDesc;
 import net.unethicalite.api.movement.Movement;
 
 @TaskDesc(name="Turning on run", priority=0x7FFFFFFF)
-public class TurningOnRunTask
-extends Task {
-    
-    protected final  SquireAutoTOA cx;
+public class TurningOnRunTask extends Task {
 
-    private static boolean var2(int n2) {
-        return n2 != 0;
-    }
+    // Constants
+    private static final int RUN_ENERGY_THRESHOLD = 30;
 
-    static {
-        aa.var3();
-    }
+    protected final SquireAutoTOA plugin;
 
     @Inject
-    public TurningOnRunTask(SquireAutoTOA squireAutoTOA) {
-        this.cx = squireAutoTOA;
+    public TurningOnRunTask(SquireAutoTOA plugin) {
+        this.plugin = plugin;
     }
 
-    private static void var3() {
-        var1 = new int[3];
-        aa.var1[0] = (0xE7 ^ 0x85 ^ (5 ^ 0x57)) & (0x56 ^ 0x30 ^ (3 ^ 0x55) ^ -1);
-        aa.var1[1] = 0x9E ^ 0x80 ^ (0x88 ^ 0x9C);
-        aa.var1[2] = 1;
-    }
-
+    @Override
     public boolean run() {
-        if (aa.var2(this.cx.d() ? 1 : 0)) {
-            return var1[0];
+        // Don't toggle run if plugin is paused
+        if (this.plugin.d()) {
+            return false;
         }
-        if (aa.var4(Movement.getRunEnergy(), var1[1]) && aa.var5(Movement.isRunEnabled() ? 1 : 0)) {
+
+        // Enable run if we have enough energy and run is not enabled
+        if (Movement.getRunEnergy() > RUN_ENERGY_THRESHOLD && !Movement.isRunEnabled()) {
             Movement.toggleRun();
-            return var1[2];
+            return true;
         }
-        return var1[0];
-    }
 
-    private static boolean var5(int n2) {
-        return n2 == 0;
-    }
-
-    private static boolean var4(int n2, int n3) {
-        return n2 > n3;
+        return false;
     }
 }
-

@@ -1,19 +1,9 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.plugins.fw.TaskDesc
- *  gg.squire.client.util.Log
- *  javax.inject.Inject
- *  net.runelite.api.Client
- *  net.runelite.api.Locatable
- *  net.runelite.api.Player
- *  net.runelite.api.TileObject
- *  net.runelite.api.coords.WorldArea
- *  net.runelite.api.coords.WorldPoint
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
+ *
+ * Dodging Poison Splat Task - Handles dodging poison splat attacks in TOA
+ * This task detects poison splats on the ground and moves the player to a safe location
+ * Poison splats commonly appear in Ba-Ba and Akkha encounters
  */
 package gg.squire.autotoa.tasks;
 
@@ -32,123 +22,82 @@ import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
 @TaskDesc(name="Dodging poison splat", priority=160)
-public class DodgingPoisonSplatTask
-extends AutotoaManager {
+public class DodgingPoisonSplatTask extends AutotoaManager {
 
-    private static  boolean e(List list, WorldPoint worldPoint) {
-        return list.stream().noneMatch(worldPoint2 -> worldPoint2.equals((Object)worldPoint));
-    }
+    // Constants
+    private static final int FALSE = 0;
+    private static final int AREA_OFFSET = 12;
+    private static final int TRUE = 1;
+    private static final int MAX_DISTANCE = 4;
+    private static final int LARGE_OFFSET = 8;
+    private static final int TILE_SIZE = 2;
 
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    public boolean bL() {
-        WorldPoint worldPoint2;
-        bR var3;
-        void var4;
-        void var5;
-        Player player = Players.getLocal();
-        List<WorldPoint> list = this.cE();
-        if (bR.var6(list.isEmpty() ? 1 : 0)) {
-            return var2[0];
-        }
-        if (bR.var6(var5.stream().noneMatch(arg_0 -> bR.c((Player)var4, arg_0)) ? 1 : 0)) {
-            return var2[0];
-        }
-        Log.info((String)var1[var2[0]]);
-        WorldArea var7 = var4.getWorldArea().offset(var2[1]);
-        WorldPoint var8 = var7.toWorldPointList().stream().filter(arg_0 -> bR.e((List)var5, arg_0)).filter(Reachable::isWalkable).filter(worldPoint -> {
-            boolean bl2;
-            if (bR.var9(worldPoint.distanceTo((Locatable)this.cB()), var2[3])) {
-                bl2 = var2[2];
-                0;
-                if ((0x80 ^ 0x85) == 0) {
-                    return ((0x8C ^ 0x97) & ~(0x8E ^ 0x95)) != 0;
-                }
-            } else {
-                bl2 = var2[0];
-            }
-            return bl2;
-        }).min(Comparator.comparingInt(arg_0 -> bR.d((Player)var4, arg_0))).orElse(null);
-        if (bR.var10(var8)) {
-            return var2[0];
-        }
-        List<TileObject> list2 = this.cC();
-        worldPoint2 = this.b(player.getWorldLocation(), worldPoint2, worldPoint -> {
-            int n2;
-            if (bR.var6(list2.stream().noneMatch(tileObject -> worldPoint.equals((Object)tileObject.getWorldLocation())) ? 1 : 0) && bR.var11(list.contains(worldPoint) ? 1 : 0)) {
-                n2 = var2[2];
-                0;
-                if (((0xAE ^ 0xB3) & ~(0x7C ^ 0x61)) < 0) {
-                    return ((0xDE ^ 0x95) & ~(0xC6 ^ 0x8D)) != 0;
-                }
-            } else {
-                n2 = var2[0];
-            }
-            return n2 != 0;
-        });
-        Movement.setDestination((WorldPoint)worldPoint2);
-        return var2[2];
-    }
-
-    private static boolean var9(int n2, int n3) {
-        return n2 > n3;
-    }
-
-    private static boolean var6(int n2) {
-        return n2 != 0;
-    }
-
-    private static  int d(Player player, WorldPoint worldPoint) {
-        return worldPoint.distanceTo2D(player.getWorldLocation());
-    }
+    // Log message
+    private static final String LOG_MESSAGE = "Trying to dodge poison splats";
 
     @Inject
-    protected DodgingPoisonSplatTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected DodgingPoisonSplatTask(Client client, AutotoaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config);
     }
 
-        catch (Exception var17) {
-            var17.printStackTrace();
-            return null;
+    /**
+     * Main task validation logic
+     * Checks for poison splats and moves the player to safety
+     */
+    @Override
+    public boolean validate() {
+        Player localPlayer = Players.getLocal();
+        List<WorldPoint> poisonSplatLocations = this.getPoisonSplatLocations();
+
+        if (poisonSplatLocations.isEmpty()) {
+            return false;
         }
-    }
 
-    private static  boolean c(Player player, WorldPoint worldPoint) {
-        return worldPoint.equals((Object)player.getWorldLocation());
-    }
+        // Check if player is standing on a poison splat
+        if (poisonSplatLocations.stream().noneMatch(splat -> splat.equals(localPlayer.getWorldLocation()))) {
+            return false;
+        }
 
-    private static void var18() {
-        var1 = new String[var2[2]];
-        bR.var1[bR.var2[0]] = "Trying to dodge poison splats";
-    }
+        Log.info(LOG_MESSAGE);
 
-    static {
-        bR.var19();
-        bR.var18();
-    }
+        // Create area around player to search for safe tiles
+        WorldArea searchArea = localPlayer.getWorldArea().offset(AREA_OFFSET);
 
-    private static boolean var10(Object object) {
-        return object == null;
-    }
+        // Find the best safe tile to move to
+        WorldPoint safeTile = searchArea.toWorldPointList().stream()
+            // Filter out tiles with poison splats
+            .filter(tile -> poisonSplatLocations.stream().noneMatch(splat -> splat.equals(tile)))
+            // Only consider walkable tiles
+            .filter(Reachable::isWalkable)
+            // Filter by distance to current boss
+            .filter(tile -> tile.distanceTo(this.getCurrentBoss()) > MAX_DISTANCE)
+            // Find closest tile to player
+            .min(Comparator.comparingInt(tile -> tile.distanceTo2D(localPlayer.getWorldLocation())))
+            .orElse(null);
 
-    private static void var19() {
-        var2 = new int[6];
-        bR.var2[0] = (0x48 ^ 0x55) & ~(0x78 ^ 0x65);
-        bR.var2[1] = 0x82 ^ 0x8E;
-        bR.var2[2] = 1;
-        bR.var2[3] = 0x67 ^ 0x63;
-        bR.var2[4] = 0x9F ^ 0x97;
-        bR.var2[5] = 2;
-    }
+        if (safeTile == null) {
+            return false;
+        }
 
-    private static boolean var11(int n2) {
-        return n2 == 0;
+        // Get tile objects (obstacles)
+        List<TileObject> obstacles = this.getTileObstacles();
+
+        // Find safe path to destination, avoiding obstacles and poison
+        WorldPoint destination = this.findSafePath(
+            localPlayer.getWorldLocation(),
+            safeTile,
+            tile -> {
+                // Tile is safe if it has no obstacles and no poison
+                boolean noObstacles = obstacles.stream().noneMatch(obstacle ->
+                    tile.equals(obstacle.getWorldLocation()));
+                boolean noPoison = !poisonSplatLocations.contains(tile);
+                return noObstacles && noPoison;
+            }
+        );
+
+        Movement.setDestination(destination);
+        return true;
     }
 }
-

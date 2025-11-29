@@ -1,34 +1,7 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.plugins.fw.TaskDesc
- *  javax.inject.Inject
- *  javax.inject.Singleton
- *  net.runelite.api.Actor
- *  net.runelite.api.Client
- *  net.runelite.api.Locatable
- *  net.runelite.api.NPC
- *  net.runelite.api.Projectile
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.api.events.NpcDespawned
- *  net.runelite.api.events.ProjectileSpawned
- *  net.runelite.client.config.ConfigStorageBox
- *  net.runelite.client.eventbus.Subscribe
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.movement.Movement
- */
 package gg.squire.autotoa.tasks;
 
 import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.Locatable;
@@ -43,163 +16,121 @@ import net.runelite.client.plugins.squire.equipment.EquipmentSetup;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum16;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Task for attacking Scarab Swarms during the Kephri boss fight in TOA.
+ *
+ * NPC Names:
+ * - Scarab Swarm (small adds that spawn from Kephri)
+ *
+ * Combat Logic:
+ * 1. Tracks swarms that are being attacked by projectiles
+ * 2. Prioritizes swarms near the boss (within 3 tiles)
+ * 3. Only attacks swarms in melee distance of the boss
+ * 4. Finds the swarm closest to the player's path
+ * 5. Moves to swarm if distance > 5 tiles
+ *
+ * Attack Priority:
+ * - Swarms near the boss (to prevent healing)
+ * - Swarms in melee range of boss
+ * - Swarms closest to player
+ *
+ * Priority: 15 (high)
+ * Blocking: Yes
+ */
 @TaskDesc(name="Attacking swarms", priority=15, blocking=true, register=true)
 @Singleton
-public class AttackingSwarmsTask
-extends AutotoaManager {
-    
-    private final  Set<NPC> eF;
+public class AttackingSwarmsTask extends AutotoaManager {
 
-    @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
-        return this.cW.kephriSwarm();
-    }
+    // NPC Names
+    private static final String NPC_SCARAB_SWARM = "Scarab Swarm";
+    private static final String INTERACTION_ATTACK = "Attack";
+
+    // Constants
+    private static final int MAX_DISTANCE_FROM_BOSS = 3; // Maximum distance swarm can be from boss
+    private static final int MOVEMENT_DISTANCE = 5;      // Distance at which to move closer
+
+    // State tracking
+    private final Set<NPC> targetedSwarms; // Swarms that have been hit by projectiles
 
     @Inject
-    protected AttackingSwarmsTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig, bi.SWARM);
-        this.eF = new HashSet<NPC>();
+    protected AttackingSwarmsTask(Client client, z z2, TOAConfig config) {
+        super(client, z2, config, bi.SWARM);
+        this.targetedSwarms = new HashSet<>();
     }
 
-    private static boolean var3(int n2, int n3) {
-        return n2 > n3;
-    }
-
-    private static boolean var4(Object object) {
-        return object != null;
-    }
-
-    private static void var5() {
-        var1 = new String[var2[4]];
-        bd.var1[bd.var2[0]] = "Attack";
-        bd.var1[bd.var2[2]] = "Scarab Swarm";
-        bd.var1[bd.var2[3]] = "Scarab Swarm";
-    }
-
-    private static void var6() {
-        var2 = new int[6];
-        bd.var2[0] = (0x83 ^ 0x8E) & ~(0x36 ^ 0x3B);
-        bd.var2[1] = 0x55 ^ 0x50;
-        bd.var2[2] = 1;
-        bd.var2[3] = 2;
-        bd.var2[4] = 3;
-        bd.var2[5] = 0x2F ^ 0x67 ^ (0xE1 ^ 0xA1);
-    }
-
-    private static boolean var7(int n2) {
-        return n2 != 0;
-    }
-
-    @Subscribe
-    public void a(NpcDespawned npcDespawned) {
-        this.eF.remove(npcDespawned.getNpc());
-        0;
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Returns the equipment setup for attacking swarms
      */
     @Override
-    protected boolean bL() {
-        void var8;
-        NPC nPC3 = this.bO();
-        NPC nPC4 = NPCs.getAll(nPC2 -> {
-            int n2;
-            if (bd.var7(nPC2.getName().equals(var1[var2[3]]) ? 1 : 0) && bd.var9(this.eF.contains(nPC2) ? 1 : 0) && bd.var9(nPC2.isDead() ? 1 : 0) && bd.var3(nPC2.distanceTo((Locatable)nPC3), var2[4])) {
-                n2 = var2[2];
-                0;
-                if ((0x53 ^ 0x56) <= 0) {
-                    return ((0x7A ^ 0x76) & ~(0x2B ^ 0x27)) != 0;
-                }
-            } else {
-                n2 = var2[0];
-            }
-            return n2 != 0;
-        }).stream().filter(nPC2 -> {
-            boolean bl2;
-            if (bd.var9(nPC3.getWorldArea().isInMeleeDistance(nPC2.getWorldLocation()) ? 1 : 0)) {
-                bl2 = var2[2];
-                0;
-                
-            } else {
-                bl2 = var2[0];
-            }
-            return bl2;
-        }).min(Comparator.comparingInt(nPC -> nPC.getWorldLocation().distanceToPath(this.cu, Players.getLocal().getWorldLocation()))).orElse(null);
-        if (bd.var10(nPC4)) {
-            return var2[0];
-        }
-        if (bd.var3(var8.distanceTo((Locatable)Players.getLocal()), var2[1])) {
-            Movement.setDestination((WorldPoint)var8.getWorldLocation());
-            return var2[2];
-        }
-        this.bp();
-        nPC4.interact(var1[var2[0]]);
-        return var2[0];
+    public ConfigStorageBox<EquipmentSetup> getEquipmentSetup() {
+        return this.config.kephriSwarm();
     }
 
-        catch (Exception var16) {
-            var16.printStackTrace();
-            return null;
-        }
-    }
-
-    static {
-        bd.var6();
-        bd.var5();
-    }
-
-    private static boolean var17(int n2, int n3) {
-        return n2 < n3;
-    }
-
-        catch (Exception var23) {
-            var23.printStackTrace();
-            return null;
-        }
-    }
-
+    /**
+     * Tracks when swarms are hit by projectiles (marking them as engaged)
+     */
     @Subscribe
-    public void a(ProjectileSpawned projectileSpawned) {
-        Projectile projectile = projectileSpawned.getProjectile();
-        Actor actor = projectile.getInteracting();
-        if (bd.var4(actor) && bd.var7(actor.getName().equals(var1[var2[2]]) ? 1 : 0)) {
-            this.eF.add((NPC)actor);
-            0;
+    public void onProjectileSpawned(ProjectileSpawned event) {
+        Projectile projectile = event.getProjectile();
+        Actor target = projectile.getInteracting();
+
+        if (target != null && target.getName().equals(NPC_SCARAB_SWARM)) {
+            targetedSwarms.add((NPC) target);
         }
     }
 
-    private static boolean var9(int n2) {
-        return n2 == 0;
+    /**
+     * Removes despawned swarms from tracking
+     */
+    @Subscribe
+    public void onNpcDespawned(NpcDespawned event) {
+        targetedSwarms.remove(event.getNpc());
     }
 
-    private static String var24(String var25, String var26) {
-        var25 = new String(Base64.getDecoder().decode(var25.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var27 = new StringBuilder();
-        char[] var28 = var26.toCharArray();
-        int var29 = var2[0];
-        char[] var30 = var25.toCharArray();
-        int var31 = var30.length;
-        int var32 = var2[0];
-        while (bd.var17(var32, var31)) {
-            char var33 = var30[var32];
-            var27.append((char)(var33 ^ var28[var29 % var28.length]));
-            0;
-            ++var29;
-            ++var32;
-            0;
-            if (3 <= 3) continue;
-            return null;
+    /**
+     * Main task execution
+     */
+    @Override
+    protected boolean execute() {
+        // Get the boss NPC (Kephri)
+        NPC boss = this.getBoss();
+
+        // Find swarms near the boss that need to be killed
+        NPC targetSwarm = NPCs.getAll(npc ->
+            npc.getName().equals(NPC_SCARAB_SWARM) &&
+            !targetedSwarms.contains(npc) &&
+            !npc.isDead() &&
+            npc.distanceTo((Locatable) boss) > MAX_DISTANCE_FROM_BOSS
+        )
+        .stream()
+        // Only target swarms in melee distance of the boss
+        .filter(npc -> !boss.getWorldArea().isInMeleeDistance(npc.getWorldLocation()))
+        // Find the swarm closest to our walking path
+        .min(Comparator.comparingInt(npc ->
+            npc.getWorldLocation().distanceToPath(this.client, Players.getLocal().getWorldLocation())
+        ))
+        .orElse(null);
+
+        if (targetSwarm == null) {
+            return false;
         }
-        return String.valueOf(var27);
-    }
 
-    private static boolean var10(Object object) {
-        return object == null;
+        // Move closer if needed
+        if (targetSwarm.distanceTo((Locatable) Players.getLocal()) > MOVEMENT_DISTANCE) {
+            Movement.setDestination(targetSwarm.getWorldLocation());
+            return true;
+        }
+
+        // Attack the swarm
+        this.prepareAttack();
+        targetSwarm.interact(INTERACTION_ATTACK);
+        return false; // Return false to allow other tasks to run
     }
 }
-

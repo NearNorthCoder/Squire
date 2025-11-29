@@ -1,13 +1,15 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.Squire
- *  gg.squire.client.plugins.fw.TaskDesc
- *  javax.inject.Inject
- *  net.runelite.api.Client
- *  net.runelite.api.events.ChatMessage
- *  net.runelite.client.eventbus.Subscribe
+ *
+ * Logout and Stop Task
+ *
+ * This task handles logging out and stopping the plugin when critical conditions are met.
+ * It monitors chat messages for equipment/item failures (e.g., "has no charges").
+ * When triggered:
+ * - Stops the Squire plugin
+ * - Forces the plugin to stop
+ *
+ * This prevents the plugin from continuing when equipment is unusable.
  */
 package gg.squire.autotoa.tasks;
 
@@ -20,62 +22,45 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.client.eventbus.Subscribe;
 
 @TaskDesc(name="Logging out and stopping", priority=0x7FFFFFFF, blocking=true)
-public class LoggingOutAndStoppingTask
-extends ck {
-    
-    private  boolean ia;
+public class LoggingOutAndStoppingTask extends ck {
 
-    private static boolean var3(int n2) {
-        return n2 == 0;
-    }
+    // Message to watch for in chat
+    private static final String OUT_OF_CHARGES_MESSAGE = "has no charges";
+
+    private boolean shouldStop;
 
     @Inject
-    protected LoggingOutAndStoppingTask(Client client, TOAConfig tOAConfig) {
-        super(client, tOAConfig);
+    protected LoggingOutAndStoppingTask(Client client, TOAConfig config) {
+        super(client, config);
+        this.shouldStop = false;
     }
 
     @Override
     public boolean bl() {
-        if (cm.var3(this.ia)) {
-            return var1[0];
+        // Don't stop if flag not set
+        if (!this.shouldStop) {
+            return false;
         }
+
+        // Stop the Squire plugin
         Squire.stop();
+
+        // Force stop the plugin
         this.aY.forceStop();
-        return var1[1];
+
+        return true;
     }
 
-    private static void var4() {
-        var1 = new int[3];
-        cm.var1[0] = (0xD7 ^ 0xB4 ^ 3) & (76 + 13 - -59 + 61 ^ 46 + 15 - 0 + 116 ^ -1);
-        cm.var1[1] = 1;
-        cm.var1[2] = 2;
-    }
-
-        catch (Exception var10) {
-            var10.printStackTrace();
-            return null;
-        }
-    }
-
-    private static boolean var11(int n2) {
-        return n2 != 0;
-    }
-
-    static {
-        cm.var4();
-        cm.var12();
-    }
-
-    private static void var12() {
-        var2 = new String[var1[1]];
-        cm.var2[cm.var1[0]] = "has no charges";
-    }
-
+    /**
+     * Listens for chat messages indicating equipment failure
+     * @param chatMessage the chat message event
+     */
     @Subscribe
     public void a(ChatMessage chatMessage) {
-        if (cm.var11(chatMessage.getMessage().contains(var2[var1[0]]) ? 1 : 0)) {
-            this.ia = var1[1];
+        // Check if message contains the out-of-charges warning
+        if (chatMessage.getMessage().contains(OUT_OF_CHARGES_MESSAGE)) {
+            // Set flag to trigger stop on next run
+            this.shouldStop = true;
         }
     }
 }
-

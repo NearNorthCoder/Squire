@@ -1,20 +1,10 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.Locatable
- *  net.runelite.api.coords.LocalPoint
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.api.events.GraphicsObjectCreated
- *  net.runelite.client.config.ConfigStorageBox
- *  net.runelite.client.eventbus.Subscribe
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
+ *
+ * Dodging Electric Skull Task - Handles dodging electric skull projectiles
+ * Electric skulls spawn at specific graphics locations and explode after a delay
+ * This task detects skull spawns and moves the player to a safe adjacent tile
+ * Appears in Akkha encounter
  */
 package gg.squire.autotoa.tasks;
 
@@ -34,178 +24,137 @@ import net.runelite.client.plugins.squire.equipment.EquipmentSetup;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
 @TaskDesc(name="Dodging electric skull", priority=30, blocking=true, register=true)
-public class DodgingElectricSkullTask
-extends AutotoaManager {
-    private static final  int fY;
-    private static final  int fX;
-    private  int ga;
-    
-    private  WorldPoint fZ;
+public class DodgingElectricSkullTask extends AutotoaManager {
 
-    /*
-     * WARNING - void declaration
+    // Graphics IDs for electric skull
+    private static final int ELECTRIC_SKULL_SPAWN_GRAPHIC = 29687;  // -(0xFFFF9EDB & 0x7B75) & (0xFFFF9FFF & 0x7FF7)
+    private static final int ELECTRIC_SKULL_IMPACT_GRAPHIC = 31422; // 0xFFFF8DD7 & 0x7ABE
+
+    // Constants
+    private static final int FALSE = 0;
+    private static final int TRUE = 1;
+    private static final int DANGER_RADIUS = 4;
+    private static final int SAFE_SEARCH_AREA = 3;
+    private static final int MOVE_OFFSET = -1;
+    private static final int TILE_COUNT = 2;
+    private static final int SKULL_LIFETIME_TICKS = 5;  // 0xA3 ^ 0xA5 ^ 3
+
+    private WorldPoint electricSkullLocation;
+    private int skullExpiryTick;
+
+    @Inject
+    protected DodgingElectricSkullTask(Client client, AutotoaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config);
+    }
+
+    /**
+     * Listen for electric skull graphics spawning
      */
-    @Override
-    public boolean bl() {
-        void var2_2;
-        bB var2;
-        if (!bB.var3(this.fZ) || bB.var4(this.cu.getTickCount(), this.ga)) {
-            var2.fZ = null;
-            return var1[0];
+    @Subscribe
+    public void onGraphicsObjectCreated(GraphicsObjectCreated event) {
+        WorldPoint graphicsLocation = WorldPoint.fromLocal(this.client, event.getGraphicsObject().getLocation());
+
+        // Skull spawn graphic - mark location and set expiry
+        if (event.getGraphicsObject().getId() == ELECTRIC_SKULL_SPAWN_GRAPHIC) {
+            if (graphicsLocation.distanceTo(Players.getLocal().getWorldLocation()) > DANGER_RADIUS) {
+                return;
+            }
+            this.electricSkullLocation = graphicsLocation;
+            this.skullExpiryTick = this.client.getTickCount() + SKULL_LIFETIME_TICKS;
+            return;
         }
-        int var5 = var2.fZ.distanceTo(Players.getLocal().getWorldLocation());
-        if (!bB.var6(var5, var1[1]) || bB.var4(var5, var1[2])) {
-            return var1[1];
+
+        // Impact graphic - skull has exploded, clear location
+        if (event.getGraphicsObject().getId() == ELECTRIC_SKULL_IMPACT_GRAPHIC &&
+            graphicsLocation.equals(this.electricSkullLocation)) {
+            this.electricSkullLocation = null;
         }
-        var2.aY.a(var1[3]);
-        WorldPoint var7 = var2.cn();
-        if (bB.var8(var7) && bB.var8(var7 = var2.cm())) {
-            return var1[0];
-        }
-        Movement.setDestination((WorldPoint)var2_2);
-        return var1[1];
-    }
-
-    private static boolean var9(int n2) {
-        return n2 == 0;
-    }
-
-    private static boolean var3(Object object) {
-        return object != null;
-    }
-
-    private static boolean var6(int n2, int n3) {
-        return n2 != n3;
-    }
-
-    private static boolean var10(int n2) {
-        return n2 != 0;
-    }
-
-    static {
-        bB.var11();
-        fX = var1[7];
-        fY = var1[9];
-    }
-
-    private static boolean var12(int n2, int n3) {
-        return n2 == n3;
     }
 
     @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
+    public void reset() {
+        super.reset();
+        this.electricSkullLocation = null;
+    }
+
+    @Override
+    public ConfigStorageBox<EquipmentSetup> getEquipmentSetup() {
         return null;
     }
 
-    private static boolean var4(int n2, int n3) {
-        return n2 > n3;
-    }
-
-    private WorldPoint cn() {
-        WorldPoint[] worldPointArray = new WorldPoint[var1[2]];
-        worldPointArray[bB.var1[0]] = this.fZ.dx(var1[5]);
-        worldPointArray[bB.var1[1]] = this.fZ.dx(var1[1]);
-        worldPointArray[bB.var1[6]] = this.fZ.dy(var1[5]);
-        worldPointArray[bB.var1[4]] = this.fZ.dy(var1[1]);
-        return Stream.of(worldPointArray).filter(worldPoint -> {
-            boolean bl2;
-            if (bB.var9(worldPoint.equals((Object)this.fZ) ? 1 : 0)) {
-                bl2 = var1[1];
-                0;
-                if null != null {
-                    return ((0x37 ^ 0x15 ^ (0xF1 ^ 0x88)) & (69 + 194 - 93 + 38 ^ 81 + 28 - 44 + 74 ^ -1)) != 0;
-                }
-            } else {
-                bl2 = var1[0];
-            }
-            return bl2;
-        }).filter(worldPoint -> {
-            boolean bl2;
-            if (bB.var9(this.co().getWorldArea().contains(worldPoint) ? 1 : 0)) {
-                bl2 = var1[1];
-                0;
-                if (3 < 1) {
-                    return ((0xA0 ^ 0x99) & ~(0xF8 ^ 0xC1)) != 0;
-                }
-            } else {
-                bl2 = var1[0];
-            }
-            return bl2;
-        }).filter(Reachable::isWalkable).min(Comparator.comparingDouble(worldPoint -> worldPoint.distanceToHypotenuse(Players.getLocal().getWorldLocation()))).orElse(null);
-    }
-
-    @Override
-    public void r() {
-        super.r();
-        this.fZ = null;
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Main task validation logic
+     * Moves player to adjacent safe tile when electric skull detected
      */
-    @Subscribe
-    public void b(GraphicsObjectCreated graphicsObjectCreated) {
-        void var13;
-        void var14;
-        bB var15;
-        void var16;
-        WorldPoint worldPoint = WorldPoint.fromLocal((Client)this.cu, (LocalPoint)graphicsObjectCreated.getGraphicsObject().getLocation());
-        if (bB.var12(graphicsObjectCreated.getGraphicsObject().getId(), var1[7])) {
-            if (bB.var4(worldPoint.distanceTo((Locatable)Players.getLocal()), var1[2])) {
-                return;
-            }
-            var15.fZ = var16;
-            var15.ga = var15.cu.getTickCount() + var1[8];
-            0;
-            if (3 < 0) {
-                return;
-            }
-        } else if (bB.var12(var14.getGraphicsObject().getId(), var1[9]) && bB.var10((var13 = var16).equals((Object)var15.fZ) ? 1 : 0)) {
-            var15.fZ = null;
+    @Override
+    public boolean validate() {
+        // No active skull or skull expired
+        if (this.electricSkullLocation == null || this.client.getTickCount() > this.skullExpiryTick) {
+            this.electricSkullLocation = null;
+            return false;
         }
+
+        int distanceToSkull = this.electricSkullLocation.distanceTo(Players.getLocal().getWorldLocation());
+
+        // Already safe distance from skull
+        if (distanceToSkull == TRUE || distanceToSkull > DANGER_RADIUS) {
+            return true;
+        }
+
+        // Trigger prayer switch delay
+        this.primarySleeper.sleep(59);  // 0x4D ^ 0x57 ^ (0xB ^ 0x32)
+
+        // First try: Find adjacent safe tile
+        WorldPoint adjacentSafeTile = this.findAdjacentSafeTile();
+
+        if (adjacentSafeTile == null) {
+            // Second try: Find any safe tile in nearby area
+            adjacentSafeTile = this.findNearbySafeTile();
+        }
+
+        if (adjacentSafeTile == null) {
+            return false;
+        }
+
+        Movement.setDestination(adjacentSafeTile);
+        return true;
     }
 
-    private WorldPoint cm() {
-        return Players.getLocal().getWorldLocation().createWorldArea(var1[4]).toWorldPointList().stream().filter(worldPoint -> {
-            boolean bl2;
-            if (bB.var4(worldPoint.distanceTo(this.fZ), var1[2])) {
-                bl2 = var1[1];
-                0;
-                if null != null {
-                    return ((0x60 ^ 0x4C) & ~(0x36 ^ 0x1A)) != 0;
-                }
-            } else {
-                bl2 = var1[0];
-            }
-            return bl2;
-        }).filter(Reachable::isWalkable).min(Comparator.comparingInt(worldPoint -> worldPoint.distanceTo((Locatable)Players.getLocal()))).orElse(null);
+    /**
+     * Find a safe tile adjacent to the skull location (cardinal directions)
+     */
+    private WorldPoint findAdjacentSafeTile() {
+        WorldPoint[] adjacentTiles = new WorldPoint[DANGER_RADIUS];
+        adjacentTiles[0] = this.electricSkullLocation.dx(SAFE_SEARCH_AREA);
+        adjacentTiles[1] = this.electricSkullLocation.dx(TRUE);
+        adjacentTiles[2] = this.electricSkullLocation.dy(SAFE_SEARCH_AREA);
+        adjacentTiles[3] = this.electricSkullLocation.dy(TRUE);
+
+        return Stream.of(adjacentTiles)
+            // Not the skull location itself
+            .filter(tile -> !tile.equals(this.electricSkullLocation))
+            // Not inside boss area
+            .filter(tile -> !this.getFinalWarden().getWorldArea().contains(tile))
+            // Walkable
+            .filter(Reachable::isWalkable)
+            // Closest to player
+            .min(Comparator.comparingDouble(tile -> tile.distanceToHypotenuse(Players.getLocal().getWorldLocation())))
+            .orElse(null);
     }
 
-    private static void var11() {
-        var1 = new int[10];
-        bB.var1[0] = (0x81 ^ 0xAE ^ (0x81 ^ 0x9B)) & (0xB2 ^ 0xBD ^ (0x7E ^ 0x44) ^ -1);
-        bB.var1[1] = 1;
-        bB.var1[2] = 0x89 ^ 0x8D;
-        bB.var1[3] = 0x4D ^ 0x57 ^ (0xB ^ 0x32);
-        bB.var1[4] = 3;
-        bB.var1[5] = -1;
-        bB.var1[6] = 2;
-        bB.var1[7] = -(0xFFFF9EDB & 0x7B75) & (0xFFFF9FFF & 0x7FF7);
-        bB.var1[8] = 0xA3 ^ 0xA5 ^ 3;
-        bB.var1[9] = 0xFFFF8DD7 & 0x7ABE;
-    }
-
-    @Inject
-    protected DodgingElectricSkullTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
-    }
-
-    private static boolean var8(Object object) {
-        return object == null;
+    /**
+     * Find any safe tile in nearby area (fallback if no adjacent tiles work)
+     */
+    private WorldPoint findNearbySafeTile() {
+        return Players.getLocal().getWorldLocation().createWorldArea(SAFE_SEARCH_AREA).toWorldPointList().stream()
+            // Must be farther from skull than current position
+            .filter(tile -> tile.distanceTo(this.electricSkullLocation) > DANGER_RADIUS)
+            // Walkable
+            .filter(Reachable::isWalkable)
+            // Closest to player
+            .min(Comparator.comparingInt(tile -> tile.distanceTo(Players.getLocal())))
+            .orElse(null);
     }
 }
-
