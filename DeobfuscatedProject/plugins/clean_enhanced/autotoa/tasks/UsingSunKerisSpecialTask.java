@@ -1,14 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.NPC
- *  net.unethicalite.api.game.Combat
- *  net.unethicalite.api.items.Inventory
- */
 package gg.squire.autotoa.tasks;
 
 import com.google.inject.Inject;
@@ -19,113 +8,80 @@ import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.items.Inventory;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum12;
 
-@TaskDesc(name="Using sun keris special", priority=1500)
-public class UsingSunKerisSpecialTask
-extends AutotoaManager {
-    @Inject
-    protected  TOAConfig d;
-    private final  C cT;
+/**
+ * Task for using the Keris partisan of the sun special attack.
+ *
+ * This task:
+ * - Uses special attack against appropriate targets
+ * - Checks spec energy requirements (minimum 65%)
+ * - Ensures health is sufficient (>33)
+ * - Avoids using on Obelisk
+ * - Only uses during dehydration invocation if configured
+ */
+@TaskDesc(name = "Using sun keris special", priority = 1500)
+public class UsingSunKerisSpecialTask extends AutotoaManager {
+    private static final int MIN_SPEC_ENERGY = 65;
+    private static final int MIN_HEALTH = 33;
+    private static final int WARDEN_ID = 11750; // Phase where spec is important
+    private static final int AMBROSIA_ID = 15326; // Used to restore spec energy
 
-    private final  SquireAutoTOA cS;
-
-    private static void var3() {
-        var1 = new String[var2[7]];
-        an.var1[an.var2[0]] = "Obelisk";
-    }
-
-    private static boolean var4(int n2, int n3) {
-        return n2 >= n3;
-    }
-
-    static {
-        an.var5();
-        an.var3();
-    }
-
-    private static boolean var6(int n2, int n3) {
-        return n2 < n3;
-    }
-
-    private static boolean var7(Object object) {
-        return object != null;
-    }
-
-    private static boolean var8(int n2) {
-        return n2 == 0;
-    }
-
-    private static boolean var9(int n2) {
-        return n2 != 0;
-    }
-
-    private static boolean var10(int n2, int n3) {
-        return n2 != n3;
-    }
+    private final SquireAutoTOA plugin;
+    private final PrayerManager prayerManager;
 
     @Inject
-    protected UsingSunKerisSpecialTask(Client client, SquireAutoTOA squireAutoTOA, C c2) {
+    protected UsingSunKerisSpecialTask(Client client, SquireAutoTOA plugin, PrayerManager prayerManager) {
         super(client);
-        this.cS = squireAutoTOA;
-        this.cT = c2;
+        this.plugin = plugin;
+        this.prayerManager = prayerManager;
     }
 
-    private static boolean var11(int n2, int n3) {
-        return n2 > n3;
-    }
-
-    private static boolean var12(int n2, int n3) {
-        return n2 == n3;
-    }
-
-    private static void var5() {
-        var2 = new int[9];
-        an.var2[0] = (0xA1 ^ 0x94) & ~(0x65 ^ 0x50);
-        an.var2[1] = -(0xFFFFC655 & 0x7BAF) & (0xFFFFEFEF & 0x7FFD);
-        an.var2[2] = 0x6D ^ 9;
-        an.var2[3] = 0xE3 ^ 0xC0;
-        an.var2[4] = -(0xFFFF9D7D & 0x72C7) & (0xFFFFFFEF & 0x3DFE);
-        an.var2[5] = 0x1E ^ 0x30;
-        an.var2[6] = 0x55 ^ 0x4E;
-        an.var2[7] = 1;
-        an.var2[8] = 2;
-    }
-
-        catch (Exception var18) {
-            var18.printStackTrace();
-            return null;
-        }
-    }
-
+    @Override
     public boolean run() {
-        an var19;
-        NPC nPC = this.cS.b();
-        if (an.var7(nPC) && an.var9(nPC.getName().contains(var1[var2[0]]) ? 1 : 0) && an.var9(this.d.dehydration() ? 1 : 0)) {
-            return var2[0];
+        NPC target = plugin.getCurrentTarget();
+
+        // Don't use special on Obelisk, or if dehydration is active
+        if (target != null && target.getName().contains("Obelisk") && config.dehydration()) {
+            return false;
         }
-        if (an.var9(var19.aq() ? 1 : 0) && an.var8(var19.be() ? 1 : 0)) {
-            if (an.var4(var19.aX(), var2[1]) && an.var6(Combat.getSpecEnergy(), var2[2]) && an.var11(Combat.getCurrentHealth(), var2[3])) {
-                return var2[0];
+
+        // Only use special in combat and when we have a target
+        if (isInCombat() && !isBossFight()) {
+            // Check various conditions for using special
+
+            // Already at high raid level AND low spec energy AND decent health
+            if (getCurrentRaidLevel() >= 14941 &&
+                Combat.getSpecEnergy() < MIN_SPEC_ENERGY &&
+                Combat.getCurrentHealth() > MIN_HEALTH) {
+                return false;
             }
-            if (an.var12(var19.aX(), var2[4])) {
-                return var2[0];
+
+            // At Warden phase, save spec
+            if (getCurrentRaidLevel() == 15326) {
+                return false;
             }
-            if (an.var10(var19.aX(), var2[4]) && an.var9(Inventory.contains(item -> e.AMBROSIA.d(item.getId())) ? 1 : 0)) {
-                return var2[0];
+
+            // Not at Warden and no ambrosia to restore spec
+            if (getCurrentRaidLevel() != 15326 &&
+                !Inventory.contains(item -> SupplyType.AMBROSIA.matchesId(item.getId()))) {
+                return false;
             }
-            var19.cS.a(var2[5]);
+
+            // Use special attack
+            plugin.useSpecialAttack(14);
         }
-        if (an.var9(var19.be() ? 1 : 0)) {
-            var19.cS.a(var2[6]);
+
+        // Boss fight - use special attack strategically
+        if (isBossFight()) {
+            plugin.useSpecialAttack(15);
         }
-        if (an.var11(Combat.getCurrentHealth(), var19.cS.f())) {
-            var19.cS.c();
-            return var2[0];
+
+        // Don't use if health too low
+        if (Combat.getCurrentHealth() > plugin.getMinSpecHealth()) {
+            plugin.disableSpecialAttack();
+            return false;
         }
-        return this.ba();
+
+        return enableSpecialAttack();
     }
 }
-
