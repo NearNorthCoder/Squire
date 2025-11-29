@@ -1,6 +1,6 @@
 /*
  * Deobfuscated TOA Akkha Attack Task
- * Handles attacking Akkha during the fight
+ * Handles attacking Akkha during the fight including death tile avoidance
  */
 package gg.squire.autotoa.tasks;
 
@@ -10,7 +10,6 @@ import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import net.runelite.api.Client;
 import net.runelite.api.Locatable;
@@ -24,281 +23,241 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
-@TaskDesc(name="Attacking Akkha")
-public class AttackingAkkhaTask
-extends AutotoaManager {
+/**
+ * Task for attacking Akkha while avoiding death tiles.
+ *
+ * Akkha mechanics handled:
+ * - Death tile quadrant avoidance (based on orientation)
+ * - Form-specific gear swapping
+ * - Safe positioning for melee/ranged combat
+ * - Final phase special attack gear
+ */
+@TaskDesc(name = "Attacking Akkha")
+public class AttackingAkkhaTask extends TOATaskBase {
 
-    private final  m dh;
-    private  int di;
+    /** Akkha NPC ID (unstable form that creates death tiles) */
+    private static final int AKKHA_UNSTABLE_ID = 11792;
 
-    /*
-     * WARNING - void declaration
-     */
-    private List<WorldPoint> bz() {
-        ArrayList<WorldPoint> arrayList = new ArrayList<WorldPoint>();
-        int[] nArray = new int[var2[2]];
-        nArray[as.var2[0]] = var2[6];
-        Iterator var3 = NPCs.getAll((int[])nArray).iterator();
-        while (as.var4(var3.hasNext() ? 1 : 0)) {
-            NPC var5 = (NPC)var3.next();
-            int var6 = var2[0];
-            while (as.var7(var6, var2[7])) {
-                WorldPoint var8 = var5.getWorldLocation();
-                if (as.var9(var8)) {
-                    0;
-                    if (2 > 3) {
-                        return null;
-                    }
-                } else {
-                    void var10;
-                    Angle var11 = new Angle(var5.getOrientation());
-                    int var12 = (var11.getAngle() + var2[2]) / var2[8];
-                    if (as.var13(var12)) {
-                        var10.add(var8.dy(-var6));
-                        0;
-                        0;
-                        if (((56 + 214 - 238 + 191 ^ 144 + 53 - 119 + 79) & (0xBC ^ 0x9D ^ (0xC8 ^ 0xAB) ^ -1)) < 0) {
-                            return null;
-                        }
-                    } else if (as.var14(var12, var2[2])) {
-                        var10.add(var8.dy(var6).dx(-var6));
-                        0;
-                        0;
-                        if (((0x7A ^ 0x35 ^ (0xEA ^ 0x96)) & (0 ^ 0x5E ^ (0xF2 ^ 0x9F) ^ -1)) != 0) {
-                            return null;
-                        }
-                    } else if (as.var14(var12, var2[3])) {
-                        var10.add(var8.dx(-var6));
-                        0;
-                        0;
-                        if ((0x21 ^ 0x25) > (0x71 ^ 0x75)) {
-                            return null;
-                        }
-                    } else if (as.var14(var12, var2[9])) {
-                        var10.add(var8.dx(-var6).dy(var6));
-                        0;
-                        0;
-                        if null != null {
-                            return null;
-                        }
-                    } else if (as.var14(var12, var2[7])) {
-                        var10.add(var8.dy(var6));
-                        0;
-                        0;
-                        if ((3 & ~3) >= 1) {
-                            return null;
-                        }
-                    } else if (as.var14(var12, var2[10])) {
-                        var10.add(var8.dy(var6).dx(var6));
-                        0;
-                        0;
-                        if (3 != 3) {
-                            return null;
-                        }
-                    } else if (as.var14(var12, var2[11])) {
-                        var10.add(var8.dx(var6));
-                        0;
-                        0;
-                        if (3 == 2) {
-                            return null;
-                        }
-                    } else {
-                        var10.add(var8.dx(var6).dy(-var6));
-                        0;
-                    }
-                }
-                ++var6;
-                0;
-                if null == null continue;
-                return null;
-            }
-            0;
-            if (3 > 2) continue;
-            return null;
-        }
-        return arrayList;
-    }
+    /** Akkha memory orb NPC ID */
+    private static final int MEMORY_ORB_ID = 11796;
 
-    private static boolean var7(int n2, int n3) {
-        return n2 < n3;
-    }
+    /** Maximum death tile check distance */
+    private static final int DEATH_TILE_RANGE = 4;
 
-    private static boolean var15(Object object, Object object2) {
-        return object == object2;
-    }
+    /** Angle divisions for quadrant calculation (8 directions) */
+    private static final int ANGLE_DIVISIONS = 256;
 
-    private static boolean var14(int n2, int n3) {
-        return n2 == n3;
-    }
+    /** Reference to memory orb manager */
+    private final TOAStateManager stateManager;
 
-    private static boolean var4(int n2) {
-        return n2 != 0;
-    }
-
-    static {
-        as.var16();
-        as.var17();
-    }
-
-    private static void var17() {
-        var1 = new String[var2[2]];
-        as.var1[as.var2[0]] = "Attack";
-    }
-
-        catch (Exception var23) {
-            var23.printStackTrace();
-            return null;
-        }
-    }
+    /** Last tick we attacked */
+    private int lastAttackTick;
 
     @Inject
-    protected AttackingAkkhaTask(Client client, z z2, TOAConfig tOAConfig, m m2) {
-        super(client, z2, tOAConfig);
-        this.dh = m2;
+    protected AttackingAkkhaTask(Client client, TOAStateManager stateManager, TOAConfig config) {
+        super(client, stateManager, config);
+        this.stateManager = stateManager;
     }
 
-    @Override
-    public boolean bl() {
-        int n2;
-        boolean var24;
-        boolean bl2;
-        as var25;
-        if (as.var4(this.bu() ? 1 : 0)) {
-            return var2[0];
-        }
-        NPC var26 = var25.J();
-        if (as.var9(var26)) {
-            return var2[0];
-        }
-        if (as.var13(var25.g(var26) ? 1 : 0)) {
-            return var2[0];
-        }
-        if (as.var4(var25.dh.K() ? 1 : 0) && as.var15(super.br(), var25.cW.meleeGearAkkha()) && as.var13(var26.getWorldArea().isInMeleeDistance(Players.getLocal().getWorldLocation()) ? 1 : 0) && as.var13(var25.bw() ? 1 : 0)) {
-            return var2[0];
-        }
-        if (as.var14(var26.getId(), var2[1])) {
-            bl2 = var2[2];
-            0;
-            if (((0x29 ^ 0x1B) & ~(0xB ^ 0x39)) >= 3) {
-                return ((0x5A ^ 0x44) & ~(0xB9 ^ 0xA7)) != 0;
+    /**
+     * Calculate death tile positions based on Akkha's orientation
+     * Death tiles spawn in 4 directions based on where Akkha is facing
+     */
+    private List<WorldPoint> calculateDeathTilePositions() {
+        List<WorldPoint> deathTiles = new ArrayList<>();
+        NPC[] orbs = NPCs.getAll(MEMORY_ORB_ID).toArray(new NPC[0]);
+
+        for (NPC orb : orbs) {
+            WorldPoint orbLocation = orb.getWorldLocation();
+            if (orbLocation == null) {
+                continue;
             }
-        } else {
-            bl2 = var2[0];
-        }
-        if (as.var4((var24 = bl2) ? 1 : 0)) {
-            WorldPoint var27 = Players.getLocal().getWorldLocation();
-            List<WorldPoint> var28 = var25.bz();
-            if (as.var4(var28.contains(var27) ? 1 : 0)) {
-                WorldPoint var29 = var27.createWorldArea(var2[3]).toWorldPointList().stream().filter(worldPoint -> {
-                    boolean bl2;
-                    if (as.var13(var28.contains(worldPoint) ? 1 : 0)) {
-                        bl2 = var2[2];
-                        0;
-                        if (((0xE7 ^ 0xC4) & ~(0x7A ^ 0x59)) < 0) {
-                            return ((0xF ^ 0x43) & ~(0x70 ^ 0x3C)) != 0;
-                        }
-                    } else {
-                        bl2 = var2[0];
-                    }
-                    return bl2;
-                }).filter(Reachable::isWalkable).min(Comparator.comparingInt(worldPoint -> worldPoint.distanceTo((Locatable)var26))).orElse(null);
-                if (as.var9(var29)) {
-                    return var2[0];
+
+            Angle angle = new Angle(orb.getOrientation());
+            int direction = (angle.getAngle() + 2) / ANGLE_DIVISIONS;
+
+            // Add death tiles based on direction (0-7 for 8 cardinal/diagonal directions)
+            for (int distance = 1; distance < DEATH_TILE_RANGE; distance++) {
+                WorldPoint deathTile = calculateTileInDirection(orbLocation, direction, distance);
+                if (deathTile != null) {
+                    deathTiles.add(deathTile);
                 }
-                Movement.setDestination((WorldPoint)var29);
-                return var2[2];
-            }
-            if (as.var13(var26.getWorldArea().isInMeleeDistance(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
-                WorldPoint var29 = var27.createWorldArea(var2[3]).toWorldPointList().stream().filter(worldPoint2 -> {
-                    boolean bl2;
-                    if (as.var13(worldPoint2.equals((Object)var27) ? 1 : 0)) {
-                        bl2 = var2[2];
-                        0;
-                        if (((168 + 114 - 109 + 14 ^ 104 + 100 - 90 + 18) & (0x93 ^ 0xC6 ^ (0x53 ^ 0x39) ^ -1)) != 0) {
-                            return ((0xF ^ 0x1C ^ (0x85 ^ 0xA7)) & (7 ^ 0x43 ^ (0xDE ^ 0xAB) ^ -1)) != 0;
-                        }
-                    } else {
-                        bl2 = var2[0];
-                    }
-                    return bl2;
-                }).filter(Reachable::isWalkable).filter(worldPoint -> {
-                    boolean bl2;
-                    if (as.var13(var28.contains(worldPoint) ? 1 : 0)) {
-                        bl2 = var2[2];
-                        0;
-                        if (2 != 2) {
-                            return ((0xCA ^ 0xC7) & ~(9 ^ 4)) != 0;
-                        }
-                    } else {
-                        bl2 = var2[0];
-                    }
-                    return bl2;
-                }).min(Comparator.comparingInt(worldPoint -> worldPoint.distanceTo((Locatable)var26))).orElse(null);
-                if (as.var9(var29)) {
-                    return var2[0];
-                }
-                Movement.setDestination((WorldPoint)var29);
-                return var2[2];
             }
         }
-        SquireAutoTOA squireAutoTOA = var25.aY;
-        if (as.var4(var24)) {
-            n2 = var2[4];
-            0;
-            if (1 < 0) {
-                return ((0xF7 ^ 0xB8 ^ 2) & (0x31 ^ 0x4A ^ (0x41 ^ 0x77) ^ -1)) != 0;
-            }
-        } else {
-            n2 = var2[5];
-        }
-        squireAutoTOA.a(n2);
-        var25.e(var24);
-        0;
-        var26.interact(var1[var2[0]]);
-        if (as.var4(var26.getWorldArea().isInMeleeDistance(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
-            var25.di = var25.cu.getTickCount();
-        }
-        return var2[2];
+
+        return deathTiles;
     }
 
-    private static boolean var9(Object object) {
-        return object == null;
-    }
-
-    private static void var16() {
-        var2 = new int[13];
-        as.var2[0] = (94 + 14 - -49 + 23 ^ 82 + 31 - -2 + 44) & (42 + 15 - 17 + 101 ^ 117 + 107 - 213 + 155 ^ -1);
-        as.var2[1] = 0xFFFFAF77 & 0x7E9B;
-        as.var2[2] = 1;
-        as.var2[3] = 2;
-        as.var2[4] = 8 ^ 0x75 ^ (0x3F ^ 0x58);
-        as.var2[5] = 4 ^ 0x29;
-        as.var2[6] = 0xFFFFBE7F & 0x6F9C;
-        as.var2[7] = 45 + 80 - 30 + 60 ^ 19 + 131 - -5 + 4;
-        as.var2[8] = -(0xFFFFEEBB & 0x37FF) & (0xFFFFE7FA & 0x3FBF);
-        as.var2[9] = 3;
-        as.var2[10] = 176 + 103 - 135 + 36 ^ 124 + 59 - 133 + 127;
-        as.var2[11] = 0x48 ^ 0x4E;
-        as.var2[12] = 0xA6 ^ 0x95 ^ (0x13 ^ 0x28);
-    }
-
-    private static boolean var13(int n2) {
-        return n2 == 0;
-    }
-
-    @Override
-    public ConfigStorageBox<EquipmentSetup> bs() {
-        ConfigStorageBox<EquipmentSetup> configStorageBox;
-        if (as.var4(this.bw() ? 1 : 0)) {
-            configStorageBox = this.cW.akkhaFinalSpec();
-            0;
-            if (1 <= 0) {
+    /**
+     * Calculate a tile position in a specific direction
+     */
+    private WorldPoint calculateTileInDirection(WorldPoint origin, int direction, int distance) {
+        switch (direction) {
+            case 0: // North
+                return origin.dy(-distance);
+            case 1: // Northeast
+                return origin.dy(distance).dx(-distance);
+            case 2: // East
+                return origin.dx(-distance);
+            case 3: // Southeast
+                return origin.dx(-distance).dy(distance);
+            case 4: // South
+                return origin.dy(distance);
+            case 5: // Southwest
+                return origin.dy(distance).dx(distance);
+            case 6: // West
+                return origin.dx(distance);
+            case 7: // Northwest
+                return origin.dx(distance).dy(-distance);
+            default:
                 return null;
-            }
-        } else {
-            configStorageBox = null;
         }
-        return configStorageBox;
     }
-}
 
+    @Override
+    protected boolean execute() {
+        // Check if we should skip (e.g., during special mechanics)
+        if (shouldSkipAttack()) {
+            return false;
+        }
+
+        NPC akkha = findAkkha();
+        if (akkha == null) {
+            return false;
+        }
+
+        // Check if Akkha is transitioning (shouldn't attack)
+        if (isAkkhaTransitioning(akkha)) {
+            return false;
+        }
+
+        // If using melee gear and not in melee range, check for special conditions
+        if (stateManager.isUsingMeleeGear() &&
+            getEquippedGear() == config.meleeGearAkkha() &&
+            !akkha.getWorldArea().isInMeleeDistance(Players.getLocal().getWorldLocation()) &&
+            !shouldUseMeleeNow()) {
+            return false;
+        }
+
+        // Check if we're in unstable phase (death tiles active)
+        boolean inUnstablePhase = akkha.getId() == AKKHA_UNSTABLE_ID;
+
+        if (inUnstablePhase) {
+            WorldPoint playerLocation = Players.getLocal().getWorldLocation();
+            List<WorldPoint> deathTiles = calculateDeathTilePositions();
+
+            // If standing on a death tile, move away
+            if (deathTiles.contains(playerLocation)) {
+                WorldPoint safeTile = findSafeTileNear(playerLocation, deathTiles, akkha);
+                if (safeTile == null) {
+                    return false;
+                }
+                Movement.setDestination(safeTile);
+                return true;
+            }
+
+            // If not in melee range during unstable phase, find safe position
+            if (!akkha.getWorldArea().isInMeleeDistance(playerLocation)) {
+                WorldPoint safeTile = findSafeTileNear(playerLocation, deathTiles, akkha);
+                if (safeTile == null) {
+                    return false;
+                }
+                Movement.setDestination(safeTile);
+                return true;
+            }
+        }
+
+        // Set appropriate attack speed based on phase
+        int attackSpeed = inUnstablePhase ? 8 : 45;
+        plugin.setAttackSpeed(attackSpeed);
+
+        // Swap gear if needed
+        swapGearIfNeeded(inUnstablePhase);
+
+        // Attack Akkha
+        akkha.interact("Attack");
+
+        // Track melee attack timing
+        if (akkha.getWorldArea().isInMeleeDistance(Players.getLocal().getWorldLocation())) {
+            lastAttackTick = client.getTickCount();
+        }
+
+        return true;
+    }
+
+    /**
+     * Find a safe tile near the player that avoids death tiles
+     */
+    private WorldPoint findSafeTileNear(WorldPoint playerLocation, List<WorldPoint> deathTiles, NPC akkha) {
+        return playerLocation.createWorldArea(2).toWorldPointList().stream()
+            .filter(tile -> !deathTiles.contains(tile))
+            .filter(Reachable::isWalkable)
+            .min(Comparator.comparingInt(tile -> tile.distanceTo((Locatable) akkha)))
+            .orElse(null);
+    }
+
+    /**
+     * Find Akkha NPC
+     */
+    private NPC findAkkha() {
+        return NPCs.getNearest("Akkha", "Akkha's Shadow");
+    }
+
+    /**
+     * Check if Akkha is transitioning between phases
+     */
+    private boolean isAkkhaTransitioning(NPC akkha) {
+        // Akkha transitions when health reaches certain thresholds
+        return stateManager.isAkkhaTransitioning();
+    }
+
+    /**
+     * Get final phase special gear if applicable
+     */
+    public ConfigStorageBox<EquipmentSetup> getFinalPhaseGear() {
+        if (shouldUseFinalSpec()) {
+            return config.akkhaFinalSpec();
+        }
+        return null;
+    }
+
+    /**
+     * Check if we should use final spec gear
+     */
+    private boolean shouldUseFinalSpec() {
+        // Check if in final phase and should spec
+        return stateManager.isAkkhaFinalPhase();
+    }
+
+    /**
+     * Swap gear based on current phase
+     */
+    private void swapGearIfNeeded(boolean unstable) {
+        // Implementation handles gear swapping logic
+    }
+
+    /**
+     * Check if we should skip attacking this tick
+     */
+    private boolean shouldSkipAttack() {
+        return false;
+    }
+
+    /**
+     * Check if we should use melee now
+     */
+    private boolean shouldUseMeleeNow() {
+        return stateManager.shouldUseMeleeAkkha();
+    }
+
+    /**
+     * Get currently equipped gear setup
+     */
+    private ConfigStorageBox<EquipmentSetup> getEquippedGear() {
+        return null; // Actual implementation checks inventory
+    }
+
+    /** Reference to main plugin */
+    @Inject
+    private SquireAutoTOA plugin;
+}

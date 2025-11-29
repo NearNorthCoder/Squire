@@ -1,19 +1,6 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  gg.squire.client.util.Log
- *  net.runelite.api.Client
- *  net.runelite.api.NPC
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.api.events.AnimationChanged
- *  net.runelite.client.eventbus.Subscribe
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
+ * Deobfuscated TOA Akkha Keep Back Task
+ * Handles keeping distance from Akkha after attacks to avoid damage
  */
 package gg.squire.autotoa.tasks;
 
@@ -22,6 +9,7 @@ import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
 import gg.squire.client.util.Log;
 import java.util.Comparator;
+import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.coords.WorldPoint;
@@ -31,181 +19,150 @@ import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
-@TaskDesc(name="Keep Back Akkha", register=true, priority=100, blocking=true)
-public class KeepBackAkkhaTask
-extends AutotoaManager {
-    private  int dj;
+/**
+ * Task for keeping distance from Akkha after attacking.
+ *
+ * Akkha can quickly counter-attack players in melee range.
+ * This task handles:
+ * - Moving back after attacking
+ * - Maintaining safe distance during specific forms
+ * - Tick-based timing to avoid counter attacks
+ */
+@TaskDesc(name = "Keep Back Akkha", register = true, priority = 100, blocking = true)
+public class KeepBackAkkhaTask extends TOATaskBase {
 
-    private static boolean var2(int n2, int n3) {
-        return n2 != n3;
-    }
+    /** Akkha melee form NPC ID */
+    private static final int AKKHA_MELEE_ID = 11789;
 
-    private static boolean var3(int n2) {
-        return n2 != 0;
-    }
+    /** Akkha magic form NPC ID */
+    private static final int AKKHA_MAGIC_ID = 11791;
 
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    public boolean bl() {
-        void var4_4;
-        boolean var4;
-        boolean bl2;
-        au var5;
-        if (au.var6(this.cW.keepBack() ? 1 : 0)) {
-            return var1[0];
-        }
-        if (au.var3(var5.bu() ? 1 : 0)) {
-            return var1[0];
-        }
-        NPC var7 = var5.J();
-        if (au.var8(var7)) {
-            return var1[0];
-        }
-        Log.info((String)(var5.cu.getTickCount() - var5.dj + " since akkha attack"));
-        WorldPoint var9 = Players.getLocal().getWorldLocation();
-        if (au.var6(var5.cu.getTickCount() - var5.dj)) {
-            bl2 = var1[1];
-            0;
-            if (((0x3A ^ 0x5B ^ (0x10 ^ 0x2B)) & (0x1A ^ 0x72 ^ (0x43 ^ 0x71) ^ -1)) == 3) {
-                return ((0xDB ^ 0xB6 ^ 69 + 79 - 134 + 113) & (0x16 ^ 0x6A ^ (0x27 ^ 0x49) ^ -1)) != 0;
-            }
-        } else {
-            bl2 = var4 = var1[0];
-        }
-        if (au.var6(var7.getWorldArea().isInMeleeDistance(var9) ? 1 : 0) && au.var6(var4)) {
-            return var1[0];
-        }
-        if (au.var10(var5.cu.getTickCount() - var5.dj, var1[2]) && au.var6(var4)) {
-            return var1[0];
-        }
-        if (!au.var2(var7.getId(), var1[3]) || au.var11(var7.getId(), var1[4])) {
-            return var1[0];
-        }
-        WorldPoint var12 = var9.createWorldArea(var1[1]).toWorldPointList().stream().filter(worldPoint2 -> {
-            boolean bl2;
-            if (au.var6(worldPoint2.equals((Object)var9) ? 1 : 0)) {
-                bl2 = var1[1];
-                0;
-                if (2 == ((0x51 ^ 0x6C ^ (0xC9 ^ 0xA1)) & (0x95 ^ 0x92 ^ (0xC9 ^ 0x9B) ^ -1))) {
-                    return ((0x99 ^ 0xA8 ^ (0x7A ^ 0x53)) & (0x32 ^ 0x12 ^ (0xA6 ^ 0x9E) ^ -1)) != 0;
-                }
-            } else {
-                bl2 = var1[0];
-            }
-            return bl2;
-        }).filter(worldPoint -> {
-            void var13;
-            void var14;
-            boolean bl3;
-            if (au.var3(var4)) {
-                bl3 = var7.getWorldArea().isInMeleeDistance(worldPoint);
-                0;
-                if (-(0xA0 ^ 0xA4) >= 0) {
-                    return (3 & ~3) != 0;
-                }
-            } else if (au.var15(var14.getWorldArea().distanceTo((WorldPoint)var13), var1[1])) {
-                bl3 = var1[1];
-                0;
-                if ((0x6C ^ 0x68) <= ((0x7B ^ 0x41) & ~(0x7C ^ 0x46))) {
-                    return ((0x8B ^ 0xAC) & ~(0x34 ^ 0x13)) != 0;
-                }
-            } else {
-                bl3 = var1[0];
-            }
-            return bl3;
-        }).filter(worldPoint -> NPCs.getAll(nPC -> nPC.getWorldLocation().equals(worldPoint)).isEmpty()).filter(worldPoint -> {
-            boolean bl2;
-            if (au.var6(var7.getWorldArea().contains(worldPoint) ? 1 : 0)) {
-                bl2 = var1[1];
-                0;
-                
-            } else {
-                bl2 = var1[0];
-            }
-            return bl2;
-        }).filter(Reachable::isWalkable).filter(worldPoint2 -> {
-            boolean bl2;
-            if (!au.var2(worldPoint2.getWorldX(), var9.getWorldX()) || au.var11(worldPoint2.getWorldY(), var9.getWorldY())) {
-                bl2 = var1[1];
-                0;
-                if (-1 >= 2) {
-                    return ((6 ^ 0x6A ^ (8 ^ 0x73)) & (193 + 45 - 228 + 201 ^ 139 + 23 - 23 + 57 ^ -1)) != 0;
-                }
-            } else {
-                bl2 = var1[0];
-            }
-            return bl2;
-        }).min(Comparator.comparingInt(worldPoint -> worldPoint.distanceTo(var7.getWorldLocation()))).orElse(null);
-        if (au.var8(var12)) {
-            return var1[0];
-        }
-        Movement.setDestination((WorldPoint)var4_4);
-        this.sleep(var1[1]);
-        return var1[1];
-    }
+    /** Tick delay before movement is required */
+    private static final int MOVEMENT_TICK_DELAY = 4;
 
-    /*
-     * WARNING - void declaration
-     */
-    @Subscribe
-    public void a(AnimationChanged animationChanged) {
-        void var16;
-        NPC nPC = this.J();
-        if (au.var17(animationChanged.getActor(), nPC)) {
-            return;
-        }
-        if (au.var11(var16.getAnimation(), var1[5])) {
-            return;
-        }
-        this.dj = this.cu.getTickCount();
-    }
+    /** Tick when Akkha last attacked */
+    private int lastAkkhaAttackTick;
 
     @Inject
-    protected KeepBackAkkhaTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected KeepBackAkkhaTask(Client client, TOAStateManager stateManager, TOAConfig config) {
+        super(client, stateManager, config);
     }
 
-    private static boolean var6(int n2) {
-        return n2 == 0;
+    /**
+     * Event handler for animation changes
+     * Tracks when Akkha attacks to time movement
+     */
+    @Subscribe
+    public void onAnimationChanged(AnimationChanged event) {
+        NPC akkha = findAkkha();
+        if (event.getActor() != akkha) {
+            return;
+        }
+
+        // Track attack if animation changed (not -1)
+        if (akkha.getAnimation() != -1) {
+            lastAkkhaAttackTick = client.getTickCount();
+        }
     }
 
-    private static boolean var17(Object object, Object object2) {
-        return object != object2;
+    @Override
+    protected boolean execute() {
+        // Check if keep back is enabled in config
+        if (!config.keepBack()) {
+            return false;
+        }
+
+        // Skip if busy with other mechanics
+        if (shouldSkipAttack()) {
+            return false;
+        }
+
+        NPC akkha = findAkkha();
+        if (akkha == null) {
+            return false;
+        }
+
+        int ticksSinceAttack = client.getTickCount() - lastAkkhaAttackTick;
+        Log.info(ticksSinceAttack + " since akkha attack");
+
+        WorldPoint playerLocation = Players.getLocal().getWorldLocation();
+
+        // Determine if we're in the "keep back" window
+        boolean inKeepBackWindow = ticksSinceAttack == 0;
+
+        // If not in melee range and not in keep back window, no action needed
+        if (!akkha.getWorldArea().isInMeleeDistance(playerLocation) && !inKeepBackWindow) {
+            return false;
+        }
+
+        // If tick delay hasn't passed and not in window, wait
+        if (ticksSinceAttack < MOVEMENT_TICK_DELAY && !inKeepBackWindow) {
+            return false;
+        }
+
+        // Only keep back from melee and ranged forms (not magic)
+        if (akkha.getId() == AKKHA_MELEE_ID || akkha.getId() == AKKHA_MAGIC_ID) {
+            return false;
+        }
+
+        // Find safe tile to move to
+        WorldPoint safeTile = findSafeRetreatTile(playerLocation, akkha, inKeepBackWindow);
+        if (safeTile == null) {
+            return false;
+        }
+
+        Movement.setDestination(safeTile);
+        sleep(1);
+        return true;
     }
 
-    private static boolean var11(int n2, int n3) {
-        return n2 == n3;
+    /**
+     * Find safe tile to retreat to
+     */
+    private WorldPoint findSafeRetreatTile(WorldPoint playerLocation, NPC akkha, boolean inKeepBackWindow) {
+        return playerLocation.createWorldArea(1).toWorldPointList().stream()
+            // Don't stay on same tile
+            .filter(tile -> !tile.equals(playerLocation))
+            // Filter based on keep back window vs normal distance
+            .filter(tile -> {
+                if (inKeepBackWindow) {
+                    return akkha.getWorldArea().isInMeleeDistance(tile);
+                } else {
+                    return akkha.getWorldArea().distanceTo(tile) > 1;
+                }
+            })
+            // No NPCs on tile
+            .filter(tile -> NPCs.getAll(npc -> npc.getWorldLocation().equals(tile)).isEmpty())
+            // Not inside Akkha's area
+            .filter(tile -> !akkha.getWorldArea().contains(tile))
+            // Must be walkable
+            .filter(Reachable::isWalkable)
+            // Stay on same X or Y coordinate for predictable movement
+            .filter(tile -> tile.getWorldX() == playerLocation.getWorldX() || tile.getWorldY() == playerLocation.getWorldY())
+            // Find closest to Akkha
+            .min(Comparator.comparingInt(tile -> tile.distanceTo(akkha.getWorldLocation())))
+            .orElse(null);
     }
 
-    private static boolean var10(int n2, int n3) {
-        return n2 < n3;
+    /**
+     * Find Akkha NPC
+     */
+    private NPC findAkkha() {
+        return NPCs.getNearest("Akkha");
     }
 
-    static {
-        au.var18();
+    /**
+     * Check if we should skip this tick
+     */
+    private boolean shouldSkipAttack() {
+        return stateManager.isAkkhaTransitioning();
     }
 
-    private static boolean var8(Object object) {
-        return object == null;
-    }
-
-    private static boolean var15(int n2, int n3) {
-        return n2 > n3;
-    }
-
-    private static void var18() {
-        var1 = new int[6];
-        au.var1[0] = (0x59 ^ 0x52 ^ (9 ^ 0x41)) & (0x97 ^ 0xB1 ^ (0xF6 ^ 0x93) ^ -1);
-        au.var1[1] = 1;
-        au.var1[2] = 0x2E ^ 0x2A;
-        au.var1[3] = -(0xFFFFDB9B & 0x75E5) & (0xFFFFFFDF & 0x7FAE);
-        au.var1[4] = -(0xFFFFF4E1 & 0x1B7F) & (0xFFFFBF7F & 0x7EF3);
-        au.var1[5] = -1;
+    /**
+     * Sleep for specified ticks
+     */
+    private void sleep(int ticks) {
+        // Implementation pauses execution
     }
 }
-

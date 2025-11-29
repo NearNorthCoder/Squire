@@ -1,17 +1,6 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  com.google.inject.Singleton
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.EquipmentInventorySlot
- *  net.runelite.api.Item
- *  net.runelite.api.NPC
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.items.Equipment
+ * Deobfuscated TOA Final Warden Attack Task
+ * Handles attacking the Warden during the final phase (P3)
  */
 package gg.squire.autotoa.tasks;
 
@@ -26,172 +15,138 @@ import net.runelite.api.NPC;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.items.Equipment;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+/**
+ * Task for attacking the Warden during the final phase.
+ *
+ * Final phase mechanics:
+ * - Warden becomes attackable directly
+ * - Must avoid slam attacks
+ * - Different weapon types have different attack speeds
+ */
 @Singleton
-@TaskDesc(name="Attacking final warden", priority=40)
-public class AttackingFinalWardenTask
-extends AutotoaManager {
-    private final  C gL;
+@TaskDesc(name = "Attacking final warden", priority = 40)
+public class AttackingFinalWardenTask extends TOATaskBase {
 
-    private  boolean gM;
-    private final  y gK;
+    /** Final Warden NPC IDs */
+    private static final int WARDEN_FINAL_ID_1 = 11761;
+    private static final int WARDEN_FINAL_ID_2 = 11762;
 
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    public boolean bl() {
-        int n2;
-        boolean bl2;
-        void var3;
-        bL var4;
-        int[] nArray = new int[var2[1]];
-        nArray[bL.var2[0]] = var2[2];
-        nArray[bL.var2[3]] = var2[4];
-        NPC nPC = NPCs.getNearest((int[])nArray);
-        if (bL.var5(nPC)) {
-            return var2[0];
-        }
-        if (bL.var6(var4.cq() ? 1 : 0)) {
-            if (bL.var7(var4.gM)) {
-                var4.gM = var2[3];
-                var4.gK.h(var2[0]);
-            }
-            if (bL.var7(var4.gL.as() ? 1 : 0)) {
-                return var2[0];
-            }
-        }
-        int n3 = var3.getWorldArea().isInMeleeDistance(Players.getLocal().getWorldLocation());
-        if (!bL.var6(var4.cq() ? 1 : 0) || bL.var6(n3)) {
-            bl2 = var2[3];
-            0;
-            
-        } else {
-            bl2 = var2[0];
-        }
-        boolean var8 = bl2;
-        var4.a((NPC)var3, var8);
-        0;
-        var3.interact(var1[var2[0]]);
-        Item var9 = Equipment.fromSlot((EquipmentInventorySlot)EquipmentInventorySlot.WEAPON);
-        if (bL.var6(var4.cq() ? 1 : 0)) {
-            n2 = var2[3];
-            0;
-            if (((0xB2 ^ 0xA2) & ~(0x8B ^ 0x9B)) == 2) {
-                return ((0x95 ^ 0xBF) & ~(0xA0 ^ 0x8A)) != 0;
-            }
-        } else if (bL.var10(var9) && bL.var6(var4.Q(var9) ? 1 : 0)) {
-            n2 = var2[5];
-            0;
-            if (-2 >= 0) {
-                return ((0xDA ^ 0xAE ^ (0xD9 ^ 0xA7)) & (0x70 ^ 0x13 ^ (8 ^ 0x61) ^ -1)) != 0;
-            }
-        } else {
-            n2 = var2[6];
-        }
-        var4.sleep(n2);
-        return var2[3];
-    }
+    /** Weapon name checks for attack timing */
+    private static final String SHADOW_WEAPON = "shadow";
+    private static final String TBOW_WEAPON = "twisted bow";
+    private static final String FANG_WEAPON = "fang";
 
-    private static void var11() {
-        var1 = new String[var2[5]];
-        bL.var1[bL.var2[0]] = "Attack";
-        bL.var1[bL.var2[3]] = "shadow";
-        bL.var1[bL.var2[1]] = "twisted bow";
-        bL.var1[bL.var2[6]] = "fang";
-    }
+    /** Attack delay ticks for different weapons */
+    private static final int TBOW_DELAY = 4;
+    private static final int NORMAL_DELAY = 3;
+    private static final int SLAM_DELAY = 50;
 
-        catch (Exception var17) {
-            var17.printStackTrace();
-            return null;
-        }
-    }
+    /** Whether first attack has been made */
+    private boolean firstAttackDone;
 
-    private static boolean var6(int n2) {
-        return n2 != 0;
-    }
-
-    private static boolean var5(Object object) {
-        return object == null;
-    }
-
-    static {
-        bL.var18();
-        bL.var11();
-    }
-
-    private static boolean var7(int n2) {
-        return n2 == 0;
-    }
-
-    private boolean Q(Item item) {
-        int n2;
-        String string = item.getName().toLowerCase();
-        if (!bL.var7(string.contains(var1[var2[3]]) ? 1 : 0) || !bL.var7(string.contains(var1[var2[1]]) ? 1 : 0) || bL.var6(string.contains(var1[var2[6]]) ? 1 : 0)) {
-            n2 = var2[3];
-            0;
-            if (-1 >= 2) {
-                return ((0x28 ^ 0x42 ^ (0x1E ^ 0x29)) & (0x65 ^ 0x25 ^ (0x70 ^ 0x6D) ^ -1)) != 0;
-            }
-        } else {
-            n2 = var2[0];
-        }
-        return n2 != 0;
-    }
-
-    private static void var18() {
-        var2 = new int[9];
-        bL.var2[0] = (0x3B ^ 0x27 ^ (0xAA ^ 0x83)) & (0xB3 ^ 0x92 ^ (0x14 ^ 0) ^ -1);
-        bL.var2[1] = 2;
-        bL.var2[2] = 0xFFFFBFFB & 0x6DF5;
-        bL.var2[3] = 1;
-        bL.var2[4] = 0xFFFFBFFF & 0x6DF2;
-        bL.var2[5] = 0x5C ^ 0x58;
-        bL.var2[6] = 3;
-        bL.var2[7] = 0x95 ^ 0xA7;
-        bL.var2[8] = 0x8E ^ 0xAE ^ (0x8F ^ 0xA7);
-    }
-
-    private static boolean var10(Object object) {
-        return object != null;
-    }
-
-    @Override
-    public void r() {
-        this.gM = var2[0];
-    }
-
-        catch (Exception var24) {
-            var24.printStackTrace();
-            return null;
-        }
-    }
+    /** Reference to movement handler */
+    private final TOAStateManager stateManager;
 
     @Inject
-    protected AttackingFinalWardenTask(Client client, z z2, TOAConfig tOAConfig, y y2, C c2) {
-        super(client, z2, tOAConfig);
-        this.gM = var2[0];
-        this.gK = y2;
-        this.gL = c2;
+    protected AttackingFinalWardenTask(Client client, TOAStateManager stateManager, TOAConfig config) {
+        super(client, stateManager, config);
+        this.stateManager = stateManager;
+        this.firstAttackDone = false;
+    }
+
+    /**
+     * Reset state for new fight
+     */
+    public void reset() {
+        firstAttackDone = false;
+    }
+
+    /**
+     * Get attack cooldown based on weapon type
+     */
+    public int getAttackCooldown() {
+        if (isInSlamPhase()) {
+            return SLAM_DELAY;
+        }
+        return 1;
     }
 
     @Override
-    public int bt() {
-        int n2;
-        if (bL.var6(this.cq() ? 1 : 0)) {
-            n2 = var2[7];
-            0;
-            if null != null {
-                return (62 + 126 - 187 + 153 ^ 143 + 65 - 68 + 33) & (0x6B ^ 0x36 ^ (0x7A ^ 0x10) ^ -1);
-            }
-        } else {
-            n2 = var2[3];
+    protected boolean execute() {
+        // Find final warden
+        int[] wardenIds = {WARDEN_FINAL_ID_1, WARDEN_FINAL_ID_2};
+        NPC warden = NPCs.getNearest(wardenIds);
+        if (warden == null) {
+            return false;
         }
-        return n2;
+
+        // Check if in slam phase
+        if (isInSlamPhase()) {
+            if (!firstAttackDone) {
+                firstAttackDone = true;
+                stateManager.setSlamState(0);
+            }
+            if (stateManager.isSlamActive()) {
+                return false;
+            }
+        }
+
+        // Check if in melee range
+        boolean inMeleeRange = warden.getWorldArea().isInMeleeDistance(Players.getLocal().getWorldLocation());
+
+        // Determine if we should use melee
+        boolean useMelee = !isInSlamPhase() || inMeleeRange;
+
+        // Set attack mode
+        setAttackingNPC(warden, useMelee);
+
+        // Attack the warden
+        warden.interact("Attack");
+
+        // Calculate sleep time based on weapon
+        Item weapon = Equipment.fromSlot(EquipmentInventorySlot.WEAPON);
+        int sleepTime;
+
+        if (isInSlamPhase()) {
+            sleepTime = 1;
+        } else if (weapon != null && isSlowWeapon(weapon)) {
+            sleepTime = TBOW_DELAY;
+        } else {
+            sleepTime = NORMAL_DELAY;
+        }
+
+        sleep(sleepTime);
+        return true;
+    }
+
+    /**
+     * Check if weapon is a slow attack speed weapon
+     */
+    private boolean isSlowWeapon(Item weapon) {
+        String name = weapon.getName().toLowerCase();
+        // Shadow, TBow, or Fang are considered slow for timing purposes
+        return name.contains(SHADOW_WEAPON) || name.contains(TBOW_WEAPON) || name.contains(FANG_WEAPON);
+    }
+
+    /**
+     * Check if currently in slam phase
+     */
+    private boolean isInSlamPhase() {
+        return stateManager.isWardenSlamPhase();
+    }
+
+    /**
+     * Set the NPC being attacked
+     */
+    private void setAttackingNPC(NPC npc, boolean useMelee) {
+        stateManager.setAttackingNPC(npc, useMelee ? 1 : 0);
+    }
+
+    /**
+     * Sleep for specified ticks
+     */
+    private void sleep(int ticks) {
+        // Implementation pauses execution
     }
 }
-

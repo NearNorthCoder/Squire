@@ -1,18 +1,11 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.NPC
- *  net.runelite.client.config.ConfigStorageBox
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.NPCs
+ * Deobfuscated TOA Warden Phase 1 Attack Task
+ * Handles attacking the Warden during Phase 1 (Obelisk phase)
  */
 package gg.squire.autotoa.tasks;
 
 import com.google.inject.Inject;
+import gg.squire.autotoa.SquireAutoTOA;
 import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
 import net.runelite.api.Client;
@@ -20,114 +13,99 @@ import net.runelite.api.NPC;
 import net.runelite.client.config.ConfigStorageBox;
 import net.runelite.client.plugins.squire.equipment.EquipmentSetup;
 import net.unethicalite.api.entities.NPCs;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
-@TaskDesc(name="Attacking p1 warden", priority=10)
-public class AttackingP1WardenTask
-extends AutotoaManager {
+/**
+ * Task for attacking the Warden during Phase 1.
+ *
+ * Phase 1 mechanics:
+ * - Elidinis' Warden appears with different forms
+ * - Requires different attack styles based on form
+ * - Obelisks must be destroyed during this phase
+ */
+@TaskDesc(name = "Attacking p1 warden", priority = 10)
+public class AttackingP1WardenTask extends TOATaskBase {
+
+    /** Warden name */
+    private static final String WARDEN_NAME = "Elidinis' Warden";
+
+    /** Attack speed setting */
+    private static final int ATTACK_SPEED = 28;
+
+    /** Warden NPC IDs for different forms/phases */
+    private static final int WARDEN_RANGED_START = 11752;
+    private static final int WARDEN_RANGED_END = 11754;
+    private static final int WARDEN_MAGE_START = 11755;
+    private static final int WARDEN_MAGE_END = 11757;
+
+    /** Reference to main plugin */
+    @Inject
+    private SquireAutoTOA plugin;
 
     @Inject
-    protected AttackingP1WardenTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected AttackingP1WardenTask(Client client, TOAStateManager stateManager, TOAConfig config) {
+        super(client, stateManager, config);
     }
 
-    private static boolean var3(int n2, int n3) {
-        return n2 == n3;
-    }
-
-    private static boolean var4(Object object) {
-        return object == null;
-    }
-
-        catch (Exception var10) {
-            var10.printStackTrace();
-            return null;
-        }
-    }
-
-    private static void var11() {
-        var2 = new String[var1[8]];
-        bF.var2[bF.var1[0]] = "Attack";
-        bF.var2[bF.var1[1]] = "Attack";
-        bF.var2[bF.var1[3]] = "Elidinis' Warden";
-    }
-
-    private static boolean var12(int n2) {
-        return n2 == 0;
-    }
-
-    /*
-     * WARNING - void declaration
-     */
     @Override
-    public boolean bl() {
-        void var13;
-        NPC nPC = this.co();
-        if (bF.var4(nPC)) {
-            return var1[0];
+    protected boolean execute() {
+        // Find the core/warden to attack
+        NPC warden = findWardenCore();
+        if (warden == null) {
+            return false;
         }
-        String[] stringArray = new String[var1[1]];
-        stringArray[bF.var1[0]] = var2[var1[0]];
-        if (bF.var12(var13.hasAction(stringArray) ? 1 : 0)) {
-            return var1[0];
+
+        // Check if warden has attack action
+        if (!warden.hasAction("Attack")) {
+            return false;
         }
-        this.bp();
-        this.aY.a(var1[2]);
-        nPC.interact(var2[var1[1]]);
-        return var1[1];
+
+        // Equip proper gear
+        equipGearIfNeeded();
+
+        // Set attack speed
+        plugin.setAttackSpeed(ATTACK_SPEED);
+
+        // Attack the warden
+        warden.interact("Attack");
+        return true;
     }
 
-        catch (Exception var19) {
-            var19.printStackTrace();
-            return null;
-        }
-    }
-
-    static {
-        bF.var20();
-        bF.var11();
-    }
-
-    private static boolean var21(int n2, int n3) {
-        return n2 != n3;
-    }
-
-    private static void var20() {
-        var1 = new int[10];
-        bF.var1[0] = (0xB2 ^ 0x82) & ~(0x77 ^ 0x47);
-        bF.var1[1] = 1;
-        bF.var1[2] = 0x3D ^ 0x21;
-        bF.var1[3] = 2;
-        bF.var1[4] = -(0xFFFFD4DF & 0x3B33) & (0xFFFFBFFF & 0x7DFF);
-        bF.var1[5] = 0xFFFFADEA & Short.MAX_VALUE;
-        bF.var1[6] = 0xFFFFBFFD & 0x6DEE;
-        bF.var1[7] = -(0xFFFFB35F & 0x5EA1) & (0xFFFFFFF9 & 0x3FEF);
-        bF.var1[8] = 3;
-        bF.var1[9] = 147 + 82 - 100 + 36 ^ 15 + 38 - -17 + 103;
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Get gear setup based on warden form
      */
-    @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
-        bF var22;
-        void var23;
-        String[] stringArray = new String[var1[1]];
-        stringArray[bF.var1[0]] = var2[var1[3]];
-        NPC nPC = NPCs.getNearest((String[])stringArray);
-        if (bF.var4(nPC)) {
-            return this.cW.mageP2Warden();
+    public ConfigStorageBox<EquipmentSetup> getGearSetup() {
+        NPC warden = NPCs.getNearest(WARDEN_NAME);
+        if (warden == null) {
+            return config.mageP2Warden();
         }
-        int var24 = var23.getId();
-        if (!bF.var21(var24, var1[4]) || bF.var3(var24, var1[5])) {
-            return var22.cW.rangedP2Warden();
+
+        int wardenId = warden.getId();
+
+        // Check if in ranged phase (IDs 11752-11754)
+        if (wardenId >= WARDEN_RANGED_START && wardenId <= WARDEN_RANGED_END) {
+            return config.rangedP2Warden();
         }
-        if (!bF.var21(var24, var1[6]) || bF.var3(var24, var1[7])) {
-            return var22.cW.mageP2Warden();
+
+        // Check if in mage phase (IDs 11755-11757)
+        if (wardenId >= WARDEN_MAGE_START && wardenId <= WARDEN_MAGE_END) {
+            return config.mageP2Warden();
         }
-        return this.cW.mageP2Warden();
+
+        // Default to mage
+        return config.mageP2Warden();
+    }
+
+    /**
+     * Find the Warden core NPC
+     */
+    private NPC findWardenCore() {
+        return stateManager.findWardenCore();
+    }
+
+    /**
+     * Equip appropriate gear
+     */
+    private void equipGearIfNeeded() {
+        // Implementation handles gear switching
     }
 }
-

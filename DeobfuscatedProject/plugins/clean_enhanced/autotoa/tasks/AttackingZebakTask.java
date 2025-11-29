@@ -1,114 +1,99 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.plugins.fw.TaskDesc
- *  javax.inject.Inject
- *  net.runelite.api.Client
- *  net.runelite.api.NPC
- *  net.runelite.api.Player
- *  net.runelite.api.Point
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.game.Gear
+ * Deobfuscated TOA Zebak Attack Task
+ * Handles attacking Zebak during the crocodile boss fight
  */
 package gg.squire.autotoa.tasks;
 
+import javax.inject.Inject;
 import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
-import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.Player;
 import net.runelite.api.Point;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.game.Gear;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum6;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
-@TaskDesc(name="Attacking Zebak", priority=10)
-public class AttackingZebakTask
-extends AutotoaManager {
-    private static final  Point gR;
+/**
+ * Task for attacking Zebak, the crocodile boss in Path of Crondis.
+ *
+ * Zebak mechanics handled:
+ * - Safe spot positioning (21, 32 relative to instance)
+ * - Gear swap checking
+ * - Phase-based attack timing
+ * - Distance management from safe position
+ */
+@TaskDesc(name = "Attacking Zebak", priority = 10)
+public class AttackingZebakTask extends TOATaskBase {
+
+    /** Safe spot position relative to instance base */
+    private static final Point SAFE_SPOT = new Point(21, 32);
+
+    /** Zebak NPC ID */
+    private static final int ZEBAK_NPC_ID = 11730;
 
     @Inject
-    protected AttackingZebakTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected AttackingZebakTask(Client client, TOAStateManager stateManager, TOAConfig config) {
+        super(client, stateManager, config);
     }
 
-    private static boolean var3(Object object, Object object2) {
-        return object != object2;
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Execute the Zebak attack logic
+     *
+     * @return true if action was taken, false otherwise
      */
     @Override
-    public boolean bL() {
-        void var4;
-        bN var5;
-        NPC nPC = this.cB();
-        if (bN.var6(nPC)) {
-            return var1[0];
+    protected boolean execute() {
+        // Find Zebak NPC
+        NPC zebak = findZebakNPC();
+        if (zebak == null) {
+            return false;
         }
-        Player var7 = Players.getLocal();
-        int n2 = Gear.isEquipped((int[])Gear.matching(var5.cW.gearSwapZebak()));
-        if (bN.var8(var7.getInteracting()) && bN.var9(n2)) {
-            return var1[0];
+
+        Player player = Players.getLocal();
+
+        // Check if we have the right gear equipped for Zebak
+        boolean hasGearEquipped = Gear.isEquipped(Gear.matching(config.gearSwapZebak()));
+
+        // If already interacting and gear is equipped, don't re-attack
+        if (player.getInteracting() != null && hasGearEquipped) {
+            return false;
         }
-        int var10 = var7.distanceTo(var5.a(gR));
-        int var11 = var5.a((NPC)var4, var1[1]) ? 1 : 0;
-        if (bN.var12(var11) && bN.var13(var10, var5.bg()) && bN.var3((Object)var5.cF(), (Object)bY.ATTACK)) {
-            return var1[0];
+
+        // Calculate distance to safe position
+        int distanceToSafe = player.distanceTo(getSafeSpotWorldPoint(SAFE_SPOT));
+
+        // Check if we're in melee range
+        boolean inMeleeRange = isInMeleeRange(zebak, 1);
+
+        // If not in melee range, far from safe spot, and not in ATTACK phase, wait
+        if (!inMeleeRange && distanceToSafe > getMaxSafeDistance() && getCurrentPhase() != ZebakPhase.ATTACK) {
+            return false;
         }
-        nPC.interact(var2[var1[0]]);
-        return var1[1];
+
+        // Attack Zebak
+        zebak.interact("Attack");
+        return true;
     }
 
-    private static void var14() {
-        var2 = new String[var1[1]];
-        bN.var2[bN.var1[0]] = "Attack";
+    /**
+     * Find the Zebak NPC
+     */
+    private NPC findZebakNPC() {
+        return findNPCById(ZEBAK_NPC_ID);
     }
 
-    private static boolean var9(int n2) {
-        return n2 != 0;
+    /**
+     * Get the current Zebak fight phase
+     */
+    private ZebakPhase getCurrentPhase() {
+        return stateManager.getZebakPhase();
     }
 
-        catch (Exception var20) {
-            var20.printStackTrace();
-            return null;
-        }
-    }
-
-    private static boolean var12(int n2) {
-        return n2 == 0;
-    }
-
-    private static boolean var8(Object object) {
-        return object != null;
-    }
-
-    private static boolean var13(int n2, int n3) {
-        return n2 > n3;
-    }
-
-    private static boolean var6(Object object) {
-        return object == null;
-    }
-
-    static {
-        bN.var21();
-        bN.var14();
-        gR = new Point(var1[2], var1[3]);
-    }
-
-    private static void var21() {
-        var1 = new int[5];
-        bN.var1[0] = (0x30 ^ 0x29) & ~(0xBD ^ 0xA4);
-        bN.var1[1] = 1;
-        bN.var1[2] = 0x7B ^ 0x6E;
-        bN.var1[3] = 0xB5 ^ 0x95;
-        bN.var1[4] = 2;
+    /**
+     * Get maximum allowed distance from safe spot
+     */
+    private int getMaxSafeDistance() {
+        return config.zebakSafeDistance();
     }
 }
-
