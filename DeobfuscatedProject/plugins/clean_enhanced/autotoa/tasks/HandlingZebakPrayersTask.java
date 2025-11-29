@@ -24,7 +24,7 @@ import net.runelite.api.events.GraphicsObjectCreated;
 import net.runelite.api.events.ProjectileSpawned;
 import net.runelite.client.eventbus.Subscribe;
 import net.unethicalite.client.Static;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.FHelper;
 import gg.squire.autotoa.tasks.GameEnum10;
 
@@ -41,7 +41,7 @@ import gg.squire.autotoa.tasks.GameEnum10;
  */
 @TaskDesc(name="Handling zebak prayers", priority=0x7FFFFFFF, register=true)
 public class HandlingZebakPrayersTask
-extends AutotoaManager {
+extends KephriManager {
     // NPC IDs
     private static final int ZEBAK_NPC_ID = 11730;
     private static final int ZEBAK_VARIANT_NPC_ID = 11732;

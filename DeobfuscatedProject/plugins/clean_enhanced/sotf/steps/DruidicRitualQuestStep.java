@@ -28,7 +28,7 @@ import java.util.List;
  * 5. Talk to Sanfew again to turn in enchanted meats
  * 6. Talk to Kaqemeex to complete the quest
  */
-public class DruidicRitualQuestStep implements ac {
+public class DruidicRitualQuestStep implements QuestStep {
 
     private static final String QUEST_NAME = "Druidic ritual quest";
 
@@ -83,17 +83,17 @@ public class DruidicRitualQuestStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return QUEST_NAME;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             executeQuestStep();
         } catch (Exception ex) {
@@ -103,8 +103,8 @@ public class DruidicRitualQuestStep implements ac {
     }
 
     @Override
-    public boolean ah() {
-        return e.j(QUEST_VARBIT) >= STEP_COMPLETE;
+    public boolean isComplete() {
+        return GameStateUtil.getVarbit(QUEST_VARBIT) >= STEP_COMPLETE;
     }
 
     /**
@@ -179,7 +179,7 @@ public class DruidicRitualQuestStep implements ac {
             }
 
             // Consume food if health is low
-            if (e.w() < 70.0) {
+            if (GameStateUtil.getHealthPercentage() < 70.0) {
                 if (Inventory.contains(ITEM_SPADE)) {
                     Inventory.getFirst(ITEM_SPADE).interact("Eat");
                 }
@@ -191,7 +191,7 @@ public class DruidicRitualQuestStep implements ac {
             }
 
             // Handle banking for quest items
-            if (!hasRawMeats() && !Inventory.getCount(11440) > 0 && e.j(QUEST_VARBIT) < 1) {
+            if (!hasRawMeats() && !Inventory.getCount(11440) > 0 && GameStateUtil.getVarbit(QUEST_VARBIT) < 1) {
                 BankLocation nearestBank = BankLocation.getNearest();
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Nav to bank";
@@ -220,7 +220,7 @@ public class DruidicRitualQuestStep implements ac {
 
                         // Check if we need to buy items
                         int[] requiredItems = {ITEM_RAW_BEEF, ITEM_RAW_CHICKEN, ITEM_RAW_BEAR_MEAT, ITEM_RAW_RAT_MEAT, ITEM_SPADE};
-                        if (!e.c(requiredItems)) {
+                        if (!GameStateUtil.randomRange(requiredItems)) {
                             buildShoppingList();
                             System.out.println("We are missing quest supplies, switching to BUYING");
                             buyingItems = true;
@@ -228,7 +228,7 @@ public class DruidicRitualQuestStep implements ac {
                         }
 
                         // Withdraw quest items
-                        if (e.c(requiredItems)) {
+                        if (GameStateUtil.randomRange(requiredItems)) {
                             Bank.withdraw(ITEM_RAW_BEEF, 1, Bank.WithdrawMode.DEFAULT);
                             Time.sleepTicks(1);
                             Bank.withdraw(ITEM_RAW_CHICKEN, 1, Bank.WithdrawMode.DEFAULT);
@@ -247,7 +247,7 @@ public class DruidicRitualQuestStep implements ac {
             }
 
             // Step 1: Talk to Kaqemeex to start quest
-            if (hasRawMeats() && e.j(QUEST_VARBIT) < 1) {
+            if (hasRawMeats() && GameStateUtil.getVarbit(QUEST_VARBIT) < 1) {
                 if (Players.getLocal().getWorldLocation().distanceTo(KAQEMEEX_LOCATION) > 3) {
                     AccBuilderSotf.c = "Nav to start";
                     if (questStepCounter < 1) {
@@ -264,7 +264,7 @@ public class DruidicRitualQuestStep implements ac {
             }
 
             // Step 2: Talk to Sanfew to get the task
-            if (e.j(QUEST_VARBIT) == 1) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 1) {
                 questInitialized = false;
                 if (Players.getLocal().getWorldLocation().distanceTo(SANFEW_LOCATION) > 3) {
                     AccBuilderSotf.c = "Nav to sanfew";
@@ -278,7 +278,7 @@ public class DruidicRitualQuestStep implements ac {
             }
 
             // Step 3: Enchant meats at cauldron
-            if (e.j(QUEST_VARBIT) == 2 && !hasEnchantedMeats()) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 2 && !hasEnchantedMeats()) {
                 if (Players.getLocal().getWorldLocation().distanceTo(CAULDRON_LOCATION) > 3) {
                     AccBuilderSotf.c = "Nav to couldren";
                     Movement.walkTo(CAULDRON_LOCATION);
@@ -314,7 +314,7 @@ public class DruidicRitualQuestStep implements ac {
             }
 
             // Step 4: Return enchanted meats to Sanfew
-            if (e.j(QUEST_VARBIT) == 2 && hasEnchantedMeats()) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 2 && hasEnchantedMeats()) {
                 if (Players.getLocal().getWorldLocation().distanceTo(SANFEW_LOCATION) > 3) {
                     AccBuilderSotf.c = "Nav to sanfew";
                     Movement.walkTo(SANFEW_LOCATION);
@@ -327,7 +327,7 @@ public class DruidicRitualQuestStep implements ac {
             }
 
             // Step 5: Complete quest with Kaqemeex
-            if (e.j(QUEST_VARBIT) == 3) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 3) {
                 if (Players.getLocal().getWorldLocation().distanceTo(KAQEMEEX_LOCATION) > 3) {
                     AccBuilderSotf.c = "Nav to start";
                     Movement.walkTo(KAQEMEEX_LOCATION);

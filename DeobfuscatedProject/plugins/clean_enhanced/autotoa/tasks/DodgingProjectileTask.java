@@ -24,7 +24,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Dodging projectile", priority=100, register=true, blocking=true)
-public class DodgingProjectileTask extends AutotoaManager {
+public class DodgingProjectileTask extends KephriManager {
 
     // Sleeper/delay utilities
     @Inject

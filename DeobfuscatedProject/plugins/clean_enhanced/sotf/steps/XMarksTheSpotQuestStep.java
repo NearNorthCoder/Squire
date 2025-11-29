@@ -20,7 +20,7 @@ import net.unethicalite.api.widgets.Prayers;
  * Handles the "X Marks the Spot" tutorial quest.
  * This is typically one of the first quests completed on a new account.
  */
-public class XMarksTheSpotQuestStep implements ac {
+public class XMarksTheSpotQuestStep implements QuestStep {
 
     // Item IDs for quest supplies
     private static final int SPADE_ID = 8007;
@@ -85,7 +85,7 @@ public class XMarksTheSpotQuestStep implements ac {
 
         if (!isBuying) {
             // Handle banking if we're missing supplies
-            if (hasRequiredItems() && e.j(questVarbitValue) < TICK_DELAY_SHORT) {
+            if (hasRequiredItems() && GameStateUtil.getVarbit(questVarbitValue) < TICK_DELAY_SHORT) {
                 handleBanking();
             }
 
@@ -101,7 +101,7 @@ public class XMarksTheSpotQuestStep implements ac {
             }
 
             // Eat food if health is low
-            if (e.w() < 60.0) {
+            if (GameStateUtil.getHealthPercentage() < 60.0) {
                 if (Inventory.contains(ITEM_NAME_SHARK)) {
                     Inventory.getFirst(ITEM_NAME_SHARK).interact(MSG_EAT);
                     Time.sleepTicks(TICK_DELAY_MEDIUM);
@@ -109,7 +109,7 @@ public class XMarksTheSpotQuestStep implements ac {
             }
 
             // Navigate to quest start and complete quest
-            if (hasRequiredItems() && e.j(questVarbitValue) != 0) {
+            if (hasRequiredItems() && GameStateUtil.getVarbit(questVarbitValue) != 0) {
                 navigateToQuestStart();
                 completeQuestDialog();
             }
@@ -148,7 +148,7 @@ public class XMarksTheSpotQuestStep implements ac {
                 }
 
                 // Check if we're missing quest items
-                if (!e.c(new int[]{0, SPADE_ID, CASKET_ID})) {
+                if (!GameStateUtil.randomRange(new int[]{0, SPADE_ID, CASKET_ID})) {
                     populateShoppingList();
                     System.out.println(MSG_MISSING_SUPPLIES);
                     isBuying = true;
@@ -156,7 +156,7 @@ public class XMarksTheSpotQuestStep implements ac {
                 }
 
                 // Withdraw quest supplies
-                if (e.c(new int[]{0, SPADE_ID, CASKET_ID})) {
+                if (GameStateUtil.randomRange(new int[]{0, SPADE_ID, CASKET_ID})) {
                     a.a(SPADE_ID, QUANTITY_TO_BUY);
                     a.a(CLUE_SCROLL_ID, TICK_DELAY_SHORT);
                 }
@@ -212,7 +212,7 @@ public class XMarksTheSpotQuestStep implements ac {
     private static void populateShoppingList() {
         // Casket
         if (!Bank.contains(CASKET_ID) || Bank.getFirst(CASKET_ID).getQuantity() < QUANTITY_TO_BUY) {
-            itemsToBuy.add(new d(CASKET_ID, QUANTITY_TO_BUY, e.c(12344, 26482)));
+            itemsToBuy.add(new d(CASKET_ID, QUANTITY_TO_BUY, GameStateUtil.randomRange(12344, 26482)));
         }
 
         // Beer (example consumable)
@@ -247,23 +247,23 @@ public class XMarksTheSpotQuestStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return "";  // Quest step name
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         // Check if quest is complete
         return Vars.getBit(QuestVarbits.QUEST_X_MARKS_THE_SPOT.getId()) != QUEST_DISTANCE;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;  // Not enabled/disabled
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             execute();
         } catch (Exception e) {

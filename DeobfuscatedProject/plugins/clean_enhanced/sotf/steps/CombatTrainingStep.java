@@ -30,7 +30,7 @@ import net.unethicalite.api.widgets.Dialog;
  * Handles combat training by fighting NPCs.
  * Supports equipment, food, potions, prayer, and loot management.
  */
-public class CombatTrainingStep implements ac {
+public class CombatTrainingStep implements QuestStep {
 
     // World points for combat locations
     static final WorldPoint COMBAT_LOCATION_1 = new WorldPoint(30571, 28415, 0);
@@ -182,7 +182,7 @@ public class CombatTrainingStep implements ac {
         }
 
         if (!isBuying) {
-            if (!hasRequiredSupplies() && e.j(536) < 1) {
+            if (!hasRequiredSupplies() && GameStateUtil.getVarbit(536) < 1) {
                 handleBanking();
             }
 
@@ -198,7 +198,7 @@ public class CombatTrainingStep implements ac {
             lootNearbyItems();
 
             // Fight NPCs
-            if (hasRequiredSupplies() && e.j(536) != 0) {
+            if (hasRequiredSupplies() && GameStateUtil.getVarbit(536) != 0) {
                 handleCombat();
             }
         }
@@ -341,7 +341,7 @@ public class CombatTrainingStep implements ac {
      * @return true if HP is low
      */
     private static boolean needsFood() {
-        return e.w() < 60.0 || Skills.getBoostedLevel(Skill.HITPOINTS) <= MIN_HP_THRESHOLD;
+        return GameStateUtil.getHealthPercentage() < 60.0 || Skills.getBoostedLevel(Skill.HITPOINTS) <= MIN_HP_THRESHOLD;
     }
 
     /**
@@ -423,22 +423,22 @@ public class CombatTrainingStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return SKILL_NAME;
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.ATTACK) >= TARGET_COMBAT_LEVEL;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         train();
         return 12;  // Priority
     }

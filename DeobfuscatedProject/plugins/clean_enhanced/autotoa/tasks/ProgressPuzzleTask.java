@@ -16,7 +16,7 @@ import net.unethicalite.api.entities.TileObjects;
  * position relative to obstacles and determines the correct action.
  */
 @TaskDesc(name="Progress Puzzle")
-public class ProgressPuzzleTask extends AutotoaManager {
+public class ProgressPuzzleTask extends KephriManager {
 
     @Inject
     protected ProgressPuzzleTask(Client client, PuzzleStateManager stateManager, TOAConfig config, PuzzlePathfinder pathfinder) {

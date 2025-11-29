@@ -75,7 +75,7 @@ public class EnteringToaTask extends TOAConfigurableTask {
         // Verify player has Ancient spellbook active (required for TOA)
         if (Magic.getCurrentSpellBook() != SpellBook.ANCIENT) {
             Log.info(WRONG_SPELLBOOK_ERROR);
-            this.aY.forceStop();
+            this.plugin.forceStop();
             return false;
         }
 

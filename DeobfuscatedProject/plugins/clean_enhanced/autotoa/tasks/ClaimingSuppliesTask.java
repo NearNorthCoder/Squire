@@ -22,7 +22,7 @@ import net.unethicalite.api.widgets.Widgets;
  * - Handles dehydration invocation
  */
 @TaskDesc(name = "Claiming supplies", priority = 50, blocking = true)
-public class ClaimingSuppliesTask extends AutotoaManager {
+public class ClaimingSuppliesTask extends KephriManager {
     private static final int SUPPLY_INTERFACE_GROUP = 4883;
     private static final int[] SUPPLY_WIDGET_IDS = {28, 9, 12}; // Widget child IDs for supplies
 

@@ -41,7 +41,7 @@ import net.unethicalite.client.Static;
  * and avoids dangerous graphics overlays.
  */
 @TaskDesc(name="Doing boulder dash", priority=100, blocking=true, register=true)
-public class DoingBoulderDashTask extends AutotoaManager {
+public class DoingBoulderDashTask extends KephriManager {
 
     // NPC IDs
     private static final int NPC_BOULDER_SMALL = 28511; // 0x6F5F - Small attackable boulder

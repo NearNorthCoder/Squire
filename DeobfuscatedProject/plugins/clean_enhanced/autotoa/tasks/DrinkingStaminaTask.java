@@ -20,7 +20,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 
 @TaskDesc(name="Drinking stamina", priority=100)
-public class DrinkingStaminaTask extends AutotoaManager {
+public class DrinkingStaminaTask extends KephriManager {
 
     // Constants
     private static final int STAMINA_COOLDOWN_VARBIT = 31708; // 0x7BDC

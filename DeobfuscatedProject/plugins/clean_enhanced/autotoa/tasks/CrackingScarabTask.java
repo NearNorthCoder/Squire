@@ -22,7 +22,7 @@ import net.unethicalite.api.items.Inventory;
  * - A blessed crystal scarab is available in inventory
  */
 @TaskDesc(name="Cracking scarab", priority=50)
-public class CrackingScarabTask extends AutotoaManager {
+public class CrackingScarabTask extends KephriManager {
     // Constants
     private static final int TICK_COOLDOWN = 28;
     private static final int MIN_PRAYER_DRAINED = 10;
@@ -45,7 +45,7 @@ public class CrackingScarabTask extends AutotoaManager {
     @Override
     public boolean run() {
         // Check if enough ticks have passed since last crack
-        int ticksSinceLastCrack = this.cu.getTickCount() - this.lastCrackTick;
+        int ticksSinceLastCrack = this.client.getTickCount() - this.lastCrackTick;
         if (ticksSinceLastCrack < TICK_COOLDOWN) {
             return false;
         }
@@ -67,7 +67,7 @@ public class CrackingScarabTask extends AutotoaManager {
 
         // Crack the scarab
         scarab.interact(CRACK_ACTION);
-        this.lastCrackTick = this.cu.getTickCount();
+        this.lastCrackTick = this.client.getTickCount();
         return true;
     }
 }

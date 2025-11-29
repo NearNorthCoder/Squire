@@ -23,7 +23,7 @@ import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.items.Inventory;
 
 @TaskDesc(name="Curing Poison/Venom")
-public class CuringPoisonvenomTask extends AutotoaManager {
+public class CuringPoisonvenomTask extends KephriManager {
 
     private final SquireAutoTOA plugin;
     private final C consumableManager;

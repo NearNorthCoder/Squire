@@ -24,11 +24,11 @@ import net.unethicalite.api.entities.TileItems;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.WardenPhaseManager;
 
 @TaskDesc(name="Running water", priority=50, register=true)
-public class RunningWaterTask extends AutotoaManager {
+public class RunningWaterTask extends KephriManager {
 
     private static final Point START_POSITION = new Point(40, 45);
     private static final int WATER_CONTAINER_ID = 26815; // TOA water container

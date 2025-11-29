@@ -17,7 +17,7 @@ import net.runelite.api.Prayer;
  * The prayer is flickered to conserve prayer points while maintaining protection.
  */
 @TaskDesc(name="Puzzle Prayer Handler", priority=100)
-public class PuzzlePrayerHandlerTask extends AutotoaManager {
+public class PuzzlePrayerHandlerTask extends KephriManager {
 
     private static final int PRAYER_OVERHEAD_PRIORITY = 28591; // 0x6FAF - Prayer priority value
 

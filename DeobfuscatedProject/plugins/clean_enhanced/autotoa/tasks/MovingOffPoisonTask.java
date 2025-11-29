@@ -25,7 +25,7 @@ import net.unethicalite.api.movement.Movement;
  * - Moves to closest safe tile
  */
 @TaskDesc(name = "Moving off poison", priority = 30)
-public class MovingOffPoisonTask extends AutotoaManager {
+public class MovingOffPoisonTask extends KephriManager {
     private static final int AREA_OFFSET = 2; // Search 2 tiles around player
     private static final int MAX_HEALTH_TO_DODGE = 189; // Only dodge if health below this
 

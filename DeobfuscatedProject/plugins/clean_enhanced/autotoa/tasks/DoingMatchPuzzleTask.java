@@ -21,7 +21,7 @@ import net.unethicalite.api.movement.Reachable;
  * (matching symbols have the same ID) and then by distance.
  */
 @TaskDesc(name="Doing match puzzle", priority=50, blocking=true)
-public class DoingMatchPuzzleTask extends AutotoaManager {
+public class DoingMatchPuzzleTask extends KephriManager {
 
     @Inject
     protected DoingMatchPuzzleTask(Client client, PuzzleStateManager stateManager, TOAConfig config, PuzzlePathfinder pathfinder) {

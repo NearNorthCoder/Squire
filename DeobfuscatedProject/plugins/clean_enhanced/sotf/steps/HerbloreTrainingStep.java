@@ -17,7 +17,7 @@ import net.unethicalite.api.widgets.Widgets;
  * Trains Herblore by making potions and cutting gems.
  * Supports multiple potion types based on the current Herblore level.
  */
-public class HerbloreTrainingStep implements ac {
+public class HerbloreTrainingStep implements QuestStep {
 
     // Item IDs
     private static final int VIAL_OF_WATER_ID = 221;
@@ -312,22 +312,22 @@ public class HerbloreTrainingStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return SKILL_NAME;
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.HERBLORE) >= TARGET_HERBLORE_LEVEL;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         train();
         return 9;  // Priority
     }

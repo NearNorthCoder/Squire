@@ -25,7 +25,7 @@ import net.unethicalite.api.movement.Reachable;
  * avoiding deadly floor tiles while moving.
  */
 @TaskDesc(name="Doing pressure order", priority=5, blocking=true)
-public class DoingPressureOrderTask extends AutotoaManager {
+public class DoingPressureOrderTask extends KephriManager {
 
     // Object IDs
     private static final int OBJECT_ANCIENT_BUTTON = 63807; // 0xF93F - Button to push

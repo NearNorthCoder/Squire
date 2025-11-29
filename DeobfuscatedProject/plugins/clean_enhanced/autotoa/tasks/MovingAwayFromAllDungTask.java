@@ -31,7 +31,7 @@ import net.unethicalite.api.movement.Reachable;
  * and calculates optimal movement paths to avoid overlapping danger zones.
  */
 @TaskDesc(name="Moving away from all dung", priority=40, blocking=true, register=true)
-public class MovingAwayFromAllDungTask extends AutotoaManager {
+public class MovingAwayFromAllDungTask extends KephriManager {
 
     // Boss animation ID when performing dung attack
     private static final int DUNG_ATTACK_ANIMATION = 10090;
@@ -51,19 +51,19 @@ public class MovingAwayFromAllDungTask extends AutotoaManager {
     private int lastDungAttackTick;
 
     @Inject
-    protected MovingAwayFromAllDungTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig, bi.ATTACK);
+    protected MovingAwayFromAllDungTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig, bi.ATTACK);
         this.moveAwayCounter = 0;
     }
 
     @Override
-    public void r() {
+    public void reset() {
         this.moveAwayCounter = 0;
     }
 
     @Override
     protected boolean bL() {
-        Player localPlayer = this.cu.getLocalPlayer();
+        Player localPlayer = this.client.getLocalPlayer();
         if (localPlayer == null) {
             return false;
         }
@@ -72,7 +72,7 @@ public class MovingAwayFromAllDungTask extends AutotoaManager {
 
         // Track when the boss performs dung attack animation
         if (targetNPC.getAnimation() == DUNG_ATTACK_ANIMATION) {
-            this.lastDungAttackTick = this.cu.getTickCount();
+            this.lastDungAttackTick = this.client.getTickCount();
         }
 
         // Check if player has the dung spot animation (standing in dung)
@@ -82,7 +82,7 @@ public class MovingAwayFromAllDungTask extends AutotoaManager {
         }
 
         // Don't move if attack was too recent (still in attack animation)
-        if (this.cu.getTickCount() - this.lastDungAttackTick <= 1) {
+        if (this.client.getTickCount() - this.lastDungAttackTick <= 1) {
             return false;
         }
 

@@ -24,18 +24,7 @@ import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Prayers;
 import net.unethicalite.api.widgets.Widgets;
 import net.unethicalite.client.Static;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.G;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aD;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aN;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.av;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.g;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
+import gg.squire.sotf.framework.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +39,7 @@ import java.util.List;
  * - Boss fight mechanics
  * - Quest progression tracking
  */
-public class InSearchOfMyrequeQuestStep implements ac {
+public class InSearchOfMyrequeQuestStep implements QuestStep {
 
     // Quest Configuration
     private static final int QUEST_VARBIT = 6359;
@@ -140,7 +129,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
      * Gets the quest name displayed to the user.
      */
     @Override
-    public String ag() {
+    public String getName() {
         return "In search of Myreque " + questName;
     }
 
@@ -148,7 +137,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
      * Indicates this quest step should run continuously.
      */
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
@@ -156,15 +145,15 @@ public class InSearchOfMyrequeQuestStep implements ac {
      * Checks if the quest is complete.
      */
     @Override
-    public boolean ah() {
-        return e.j(QUEST_VARBIT) == 26 && Players.getLocal().getWorldLocation().distanceTo(CANIFIS_BANK) <= 4;
+    public boolean isComplete() {
+        return GameStateUtil.getVarbit(QUEST_VARBIT) == 26 && Players.getLocal().getWorldLocation().distanceTo(CANIFIS_BANK) <= 4;
     }
 
     /**
      * Main execution loop for the quest step.
      */
     @Override
-    public int af() {
+    public int execute() {
         try {
             runQuestLogic();
         } catch (Exception exception) {
@@ -201,7 +190,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Check prerequisite quests
-            if (e.j(9253) < 26 && Skills.getLevel(Skill.AGILITY) >= 26 && Skills.getLevel(Skill.PRAYER) >= 183) {
+            if (GameStateUtil.getVarbit(9253) < 26 && Skills.getLevel(Skill.AGILITY) >= 26 && Skills.getLevel(Skill.PRAYER) >= 183) {
                 if (Inventory.contains(f.bf)) {
                     Inventory.getFirst(f.bf).interact("Drop");
                 }
@@ -212,8 +201,8 @@ public class InSearchOfMyrequeQuestStep implements ac {
 
             // Bank if missing required items
             if (!hasRequiredItems() && Skills.getLevel(Skill.AGILITY) >= 26 &&
-                Skills.getLevel(Skill.PRAYER) >= 183 && e.j(QUEST_VARBIT) < 1 &&
-                e.j(9253) >= 26) {
+                Skills.getLevel(Skill.PRAYER) >= 183 && GameStateUtil.getVarbit(QUEST_VARBIT) < 1 &&
+                GameStateUtil.getVarbit(9253) >= 26) {
 
                 BankLocation nearestBank = BankLocation.getNearest();
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
@@ -248,7 +237,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
                             SNAIL_SHELL, CHITIN, SWAMP_TAR, FOOD_MONKFISH, PLANK, BUCKET
                         };
 
-                        if (!e.c(requiredItems)) {
+                        if (!GameStateUtil.randomRange(requiredItems)) {
                             buildShoppingList();
                             System.out.println("We are missing quest supplies, switching to BUYING");
                             shouldBuyItems = true;
@@ -256,7 +245,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
                         }
 
                         // Withdraw items if we have them
-                        if (e.c(requiredItems)) {
+                        if (GameStateUtil.randomRange(requiredItems)) {
                             // Equip silver sickle if not equipped
                             if (!Equipment.contains(SILVER_SICKLE_B)) {
                                 a.a(SILVER_SICKLE_B, 1);
@@ -303,7 +292,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Eat food if health is low
-            if (e.w() < 50.0) {
+            if (GameStateUtil.getHealthPercentage() < 50.0) {
                 if (Inventory.contains(FOOD_MONKFISH)) {
                     Inventory.getFirst(FOOD_MONKFISH).interact("Eat");
                     Time.sleepTicks(2);
@@ -311,7 +300,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Start the quest
-            if (hasRequiredItems() && e.j(QUEST_VARBIT) == 0) {
+            if (hasRequiredItems() && GameStateUtil.getVarbit(QUEST_VARBIT) == 0) {
                 questName = "";
 
                 if (Players.getLocal().getWorldLocation().distanceTo(CANIFIS_BANK) > 4) {
@@ -348,7 +337,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Handle druid pouch filling
-            if ((e.j(QUEST_VARBIT) != 5 && e.j(QUEST_VARBIT) != 10) || e.j(QUEST_VARBIT) == 15) {
+            if ((GameStateUtil.getVarbit(QUEST_VARBIT) != 5 && GameStateUtil.getVarbit(QUEST_VARBIT) != 10) || GameStateUtil.getVarbit(QUEST_VARBIT) == 15) {
                 if (Inventory.contains(SNAIL_SHELL)) {
                     AccBuilderSotf.c = "Filling pouch";
                     Inventory.getFirst("Druid pouch").interact("Fill");
@@ -414,7 +403,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Handle bridge crossing
-            if (e.j(QUEST_VARBIT) == 20) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 20) {
                 if (Players.getLocal().getWorldLocation().distanceTo(BOAT_LOCATION) <= 10) {
                     if (!Dialog.isOpen()) {
                         TileObjects.getNearest("Swamp Boaty").interact("Board");
@@ -438,7 +427,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Handle bridge repair
-            if (e.j(QUEST_VARBIT) == 9 && HIDEOUT_AREA.contains(Players.getLocal().getWorldLocation())) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 9 && HIDEOUT_AREA.contains(Players.getLocal().getWorldLocation())) {
                 bridgeState = 0;
 
                 WorldPoint bridgeTile1 = new WorldPoint(24031, 32721, 0);
@@ -509,7 +498,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Handle hideout dialogue
-            if (e.j(QUEST_VARBIT) == 31) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 31) {
                 if (!Dialog.isOpen()) {
                     List<NPC> npcs = NPCs.getAll("Curpile Fyod");
                     if (npcs.size() > 0) {
@@ -533,7 +522,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Enter hideout
-            if (e.j(QUEST_VARBIT) == 35) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 35) {
                 AccBuilderSotf.c = "Entering doors";
                 TileObjects.getNearest("Wooden doors").interact("Open");
                 Time.sleepTicks(4);
@@ -541,7 +530,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Navigate to cave
-            if (e.j(QUEST_VARBIT) == 61) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 61) {
                 if (!CAVE_AREA.contains(Players.getLocal().getWorldLocation())) {
                     if (Players.getLocal().getWorldLocation().distanceTo(CAVE_ENTRANCE) > 5) {
                         AccBuilderSotf.c = "Nav to cave";
@@ -564,7 +553,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Handle member conversations
-            if (e.j(QUEST_VARBIT) == 70) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 70) {
                 AccBuilderSotf.c = "Talking";
 
                 int memberProgress = Vars.getBit(MYREQUE_MEMBER_VARBIT);
@@ -614,19 +603,19 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Talk to Veliaf
-            if (e.j(QUEST_VARBIT) == 72) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 72) {
                 AccBuilderSotf.c = "Talking";
                 g.a("Veliaf Hurtz", DIALOGUE_OPTIONS);
             }
 
             // Handle quest dialogue
-            if (e.j(QUEST_VARBIT) == 66) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 66) {
                 AccBuilderSotf.c = "Handling chat";
                 g.a(DIALOGUE_OPTIONS);
             }
 
             // Boss fight
-            if (e.j(QUEST_VARBIT) == 78) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 78) {
                 AccBuilderSotf.c = "BOSS FIGHT";
 
                 // Restore prayer
@@ -658,7 +647,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // After boss fight
-            if (e.j(QUEST_VARBIT) == 83) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 83) {
                 AccBuilderSotf.c = "Talking";
 
                 if (Prayers.isEnabled(Prayer.PROTECT_FROM_MELEE)) {
@@ -669,8 +658,8 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Exit cave and finish quest
-            if ((e.j(QUEST_VARBIT) != 105 && e.j(QUEST_VARBIT) != 97 && e.j(QUEST_VARBIT) != 101) ||
-                e.j(QUEST_VARBIT) == 800) {
+            if ((GameStateUtil.getVarbit(QUEST_VARBIT) != 105 && GameStateUtil.getVarbit(QUEST_VARBIT) != 97 && GameStateUtil.getVarbit(QUEST_VARBIT) != 101) ||
+                GameStateUtil.getVarbit(QUEST_VARBIT) == 800) {
 
                 if (CAVE_AREA.contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Exiting cave";
@@ -709,7 +698,7 @@ public class InSearchOfMyrequeQuestStep implements ac {
             }
 
             // Use bucket of snails when needed
-            if (e.j(QUEST_VARBIT) == 26) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 26) {
                 if (Inventory.contains(BUCKET) && Players.getLocal().getAnimation() == -1) {
                     Inventory.getFirst(BUCKET).interact("Break");
                     Time.sleepTicks(2);
@@ -787,11 +776,11 @@ public class InSearchOfMyrequeQuestStep implements ac {
         }
 
         if (Bank.contains(BUCKET) && Bank.getFirst(BUCKET).getQuantity() < 10) {
-            shoppingList.add(new d(BUCKET, 10, e.c(7820, 7918)));
+            shoppingList.add(new d(BUCKET, 10, GameStateUtil.randomRange(7820, 7918)));
         }
 
         if (Bank.contains(PLANK) && Bank.getFirst(PLANK).getQuantity() < 5) {
-            shoppingList.add(new d(PLANK, 5, e.c(10214, 10046)));
+            shoppingList.add(new d(PLANK, 5, GameStateUtil.randomRange(10214, 10046)));
         }
 
         if (!Bank.contains(STEEL_SWORD)) {

@@ -18,7 +18,7 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 
 @TaskDesc(name="Dodging tiles", priority=50, blocking=true)
-public class DodgingTilesTask extends AutotoaManager {
+public class DodgingTilesTask extends KephriManager {
 
     // Animation IDs for different Warden tile attacks
     private static final int WARDEN_ANIMATION_LEFT_TILES = 9677;   // -(0x62 ^ 0x53) & (0xFFFFB5FF & 0x6FFB)

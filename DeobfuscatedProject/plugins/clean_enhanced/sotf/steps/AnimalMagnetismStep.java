@@ -27,26 +27,7 @@ import net.unethicalite.api.quests.QuestVarbits;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Prayers;
 import net.unethicalite.api.widgets.Widgets;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.H;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.J;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.N;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.O;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.V;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aF;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aN;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ay;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.g;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.n;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.o;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.u;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.x;
+import gg.squire.sotf.framework.*;
 
 /**
  * Animal Magnetism quest step handler for SOTF (Secrets of the North).
@@ -61,7 +42,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.x;
  *   <li>Specific quest tasks (ectofuntus worship, item creation, NPC interactions)</li>
  * </ul>
  */
-public class AnimalMagnetismStep implements ac {
+public class AnimalMagnetismStep implements QuestStep {
 
     // Location constants
     static WorldPoint AVA_LOCATION;
@@ -169,7 +150,7 @@ public class AnimalMagnetismStep implements ac {
         // Ecto-tokens (5 needed)
         if (Bank.contains(ECTO_TOKENS_ID)) {
             if (Bank.contains(ECTO_TOKENS_ID) && Bank.getFirst(ECTO_TOKENS_ID).getQuantity() < 5) {
-                itemsToBuy.add(new d(ECTO_TOKENS_ID, 5, e.c(13690, 5412)));
+                itemsToBuy.add(new d(ECTO_TOKENS_ID, 5, GameStateUtil.randomRange(13690, 5412)));
             }
         }
 
@@ -246,12 +227,12 @@ public class AnimalMagnetismStep implements ac {
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             executeQuestStep();
         } catch (Exception exception) {
@@ -261,7 +242,7 @@ public class AnimalMagnetismStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         if (questStepDescription.isEmpty()) {
             return "Animal Magnetism";
         }
@@ -269,7 +250,7 @@ public class AnimalMagnetismStep implements ac {
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) >= QUEST_COMPLETE_VARBIT;
     }
 
@@ -320,35 +301,35 @@ public class AnimalMagnetismStep implements ac {
 
         if (needsToBuyItems || Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) < QUEST_COMPLETE_VARBIT) {
             // Check prerequisite quests and skills
-            if (e.j(65) < 5) {
+            if (GameStateUtil.getVarbit(65) < 5) {
                 questStepDescription = "Waterfall";
                 O.db();
             }
 
-            if (e.j(65) >= 5 && (e.j(4289) < 70 || e.j(4455) < 3)) {
+            if (GameStateUtil.getVarbit(65) >= 5 && (GameStateUtil.getVarbit(4289) < 70 || GameStateUtil.getVarbit(4455) < 3)) {
                 questStepDescription = "Priest in Peril";
                 H.cf();
             }
 
-            if (e.j(65) >= 5 && e.j(4289) >= 70 && e.j(4455) >= 3 && e.j(32) < 3) {
+            if (GameStateUtil.getVarbit(65) >= 5 && GameStateUtil.getVarbit(4289) >= 70 && GameStateUtil.getVarbit(4455) >= 3 && GameStateUtil.getVarbit(32) < 3) {
                 questStepDescription = "Ernest the Chicken";
                 V.dL();
             }
 
-            if (e.j(65) >= 5 && e.j(4289) >= 70 && e.j(4455) >= 3 && e.j(32) >= 3
+            if (GameStateUtil.getVarbit(65) >= 5 && GameStateUtil.getVarbit(4289) >= 70 && GameStateUtil.getVarbit(4455) >= 3 && GameStateUtil.getVarbit(32) >= 3
                     && Skills.getLevel(Skill.CRAFTING) < CRAFTING_LEVEL_REQUIRED) {
                 questStepDescription = "Crafting";
                 ay.fi();
             }
 
-            if (e.j(65) >= 5 && e.j(4289) >= 70 && e.j(4455) >= 3 && e.j(32) >= 3
+            if (GameStateUtil.getVarbit(65) >= 5 && GameStateUtil.getVarbit(4289) >= 70 && GameStateUtil.getVarbit(4455) >= 3 && GameStateUtil.getVarbit(32) >= 3
                     && Skills.getLevel(Skill.CRAFTING) >= CRAFTING_LEVEL_REQUIRED
                     && Skills.getLevel(Skill.WOODCUTTING) < WOODCUTTING_LEVEL_REQUIRED) {
                 questStepDescription = "Woodcutting";
                 aF.gs();
             }
 
-            if (e.j(65) >= 5 && e.j(4289) >= 70 && e.j(4455) >= 3 && e.j(32) >= 3
+            if (GameStateUtil.getVarbit(65) >= 5 && GameStateUtil.getVarbit(4289) >= 70 && GameStateUtil.getVarbit(4455) >= 3 && GameStateUtil.getVarbit(32) >= 3
                     && Skills.getLevel(Skill.CRAFTING) >= CRAFTING_LEVEL_REQUIRED
                     && Skills.getLevel(Skill.WOODCUTTING) >= WOODCUTTING_LEVEL_REQUIRED
                     && Skills.getLevel(Skill.RANGED) < RANGED_LEVEL_REQUIRED) {
@@ -361,26 +342,26 @@ public class AnimalMagnetismStep implements ac {
             }
 
             // Additional quest prerequisites
-            if (e.j(65) >= 5 && e.j(4289) >= 70 && e.j(4455) >= 3 && e.j(32) >= 3
+            if (GameStateUtil.getVarbit(65) >= 5 && GameStateUtil.getVarbit(4289) >= 70 && GameStateUtil.getVarbit(4455) >= 3 && GameStateUtil.getVarbit(32) >= 3
                     && Skills.getLevel(Skill.CRAFTING) >= CRAFTING_LEVEL_REQUIRED
                     && Skills.getLevel(Skill.WOODCUTTING) >= WOODCUTTING_LEVEL_REQUIRED
                     && Skills.getLevel(Skill.RANGED) >= RANGED_LEVEL_REQUIRED) {
 
                 // Varrock Quiz
-                if (e.j(5535) != 18715 || Skills.getLevel(Skill.HUNTER) < HUNTER_LEVEL_REQUIRED) {
+                if (GameStateUtil.getVarbit(5535) != 18715 || Skills.getLevel(Skill.HUNTER) < HUNTER_LEVEL_REQUIRED) {
                     questStepDescription = "Varrock Quiz";
                     N.cY();
                 }
 
                 // RFD Dwarf
-                if (e.j(5535) == 18715 && Skills.getLevel(Skill.HUNTER) >= HUNTER_LEVEL_REQUIRED
+                if (GameStateUtil.getVarbit(5535) == 18715 && Skills.getLevel(Skill.HUNTER) >= HUNTER_LEVEL_REQUIRED
                         && Vars.getBit(QuestVarbits.QUEST_RECIPE_FOR_DISASTER_DWARF.getId()) < 70) {
                     questStepDescription = "RFD Dwarf";
                     J.cw();
                 }
 
                 // A Porcine of Interest
-                if (e.j(5535) == 18715 && Skills.getLevel(Skill.HUNTER) >= HUNTER_LEVEL_REQUIRED
+                if (GameStateUtil.getVarbit(5535) == 18715 && Skills.getLevel(Skill.HUNTER) >= HUNTER_LEVEL_REQUIRED
                         && Vars.getBit(QuestVarbits.QUEST_RECIPE_FOR_DISASTER_DWARF.getId()) >= 70
                         && Vars.getBit(QuestVarbits.QUEST_A_PORCINE_OF_INTEREST.getId()) < 40) {
                     questStepDescription = "A Porcine";
@@ -388,7 +369,7 @@ public class AnimalMagnetismStep implements ac {
                 }
 
                 // Client of Kourend
-                if (e.j(5535) == 18715 && Skills.getLevel(Skill.HUNTER) >= HUNTER_LEVEL_REQUIRED
+                if (GameStateUtil.getVarbit(5535) == 18715 && Skills.getLevel(Skill.HUNTER) >= HUNTER_LEVEL_REQUIRED
                         && Vars.getBit(QuestVarbits.QUEST_RECIPE_FOR_DISASTER_DWARF.getId()) >= 70
                         && Vars.getBit(QuestVarbits.QUEST_A_PORCINE_OF_INTEREST.getId()) >= 40
                         && Vars.getBit(QuestVarbits.QUEST_CLIENT_OF_KOUREND.getId()) < 9) {
@@ -403,7 +384,7 @@ public class AnimalMagnetismStep implements ac {
 
             // Check if we need to buy items
             if (!hasAllRequiredItems() && Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == 0
-                    && e.j(5535) == 18715 && Skills.getLevel(Skill.HUNTER) >= HUNTER_LEVEL_REQUIRED
+                    && GameStateUtil.getVarbit(5535) == 18715 && Skills.getLevel(Skill.HUNTER) >= HUNTER_LEVEL_REQUIRED
                     && Skills.getLevel(Skill.RANGED) >= RANGED_LEVEL_REQUIRED
                     && Vars.getBit(QuestVarbits.QUEST_RECIPE_FOR_DISASTER_DWARF.getId()) >= 70
                     && Vars.getBit(QuestVarbits.QUEST_A_PORCINE_OF_INTEREST.getId()) >= 40
@@ -476,14 +457,14 @@ public class AnimalMagnetismStep implements ac {
                                 COWHIDE_ID, SOFT_LEATHER_ID
                             };
 
-                            if (!e.c(allRequiredItemIds)) {
+                            if (!GameStateUtil.randomRange(allRequiredItemIds)) {
                                 populateShoppingList();
                                 System.out.println("We are missing quest supplies, switching to BUYING");
                                 needsToBuyItems = true;
                                 return;
                             }
 
-                            if (e.c(allRequiredItemIds)) {
+                            if (GameStateUtil.randomRange(allRequiredItemIds)) {
                                 // Withdraw items
                                 a.a(POLISHED_BUTTONS_ID, 127);
                                 a.a(CHISEL_ID, 1);
@@ -513,7 +494,7 @@ public class AnimalMagnetismStep implements ac {
                 Inventory.getFirst(f.aX).interact("Drink");
             }
 
-            if (e.w() < 60.0) {
+            if (GameStateUtil.getHealthPercentage() < 60.0) {
                 if (Inventory.contains("Shark")) {
                     Inventory.getFirst("Shark").interact("Eat");
                     Time.sleepTicks(2);
@@ -612,7 +593,7 @@ public class AnimalMagnetismStep implements ac {
                                 if (TileObjects.getNearest("Loader") != null) {
                                     if (Inventory.contains("Bones")) {
                                         Inventory.getFirst("Bones").useOn(TileObjects.getNearest("Loader"));
-                                        Time.sleep(e.c(62195, 63332));
+                                        Time.sleep(GameStateUtil.randomRange(62195, 63332));
                                     }
                                 }
                             }
@@ -728,7 +709,7 @@ public class AnimalMagnetismStep implements ac {
                         smithingMap.put(THREAD_ID, 1);
                         smithingMap.put(HARD_LEATHER_ID, 1);
                         smithingMap.put(POLISHED_BUTTONS_ID, 1);
-                        e.a(smithingMap, 0, 0);
+                        GameStateUtil.handleBanking(smithingMap, 0, 0);
                     }
 
                     if (Inventory.contains("Iron bar")) {

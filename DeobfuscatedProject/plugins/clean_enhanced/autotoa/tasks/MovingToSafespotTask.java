@@ -27,7 +27,7 @@ import net.unethicalite.api.movement.Movement;
  */
 @Singleton
 @TaskDesc(name="Moving to safespot", priority=25, blocking=true, register=true)
-public class MovingToSafespotTask extends AutotoaManager {
+public class MovingToSafespotTask extends KephriManager {
 
     // Graphics object IDs for different boss attacks
     private static final int GRAPHICS_ATTACK_TYPE_1 = 26812;
@@ -48,13 +48,13 @@ public class MovingToSafespotTask extends AutotoaManager {
     private int cooldownTicksRemaining;
 
     @Inject
-    protected MovingToSafespotTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected MovingToSafespotTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig);
         this.cooldownTicksRemaining = 0;
     }
 
     @Override
-    public boolean bl() {
+    protected boolean shouldExecute() {
         // Calculate the world location from the primary safe spot point
         WorldPoint primarySafespotWorld = this.a(SAFESPOT_PRIMARY);
         WorldPoint destinationWorld;
@@ -76,7 +76,7 @@ public class MovingToSafespotTask extends AutotoaManager {
         }
 
         // Already at the destination
-        if (this.cu.getLocalPlayer().getWorldLocation().equals(destinationWorld)) {
+        if (this.client.getLocalPlayer().getWorldLocation().equals(destinationWorld)) {
             return false;
         }
 
@@ -106,7 +106,7 @@ public class MovingToSafespotTask extends AutotoaManager {
     @Subscribe
     public void b(GraphicsObjectCreated graphicsObjectCreated) {
         // Ignore if we're already on cooldown
-        if (this.cooldownTicksRemaining > this.cu.getTickCount()) {
+        if (this.cooldownTicksRemaining > this.client.getTickCount()) {
             return;
         }
 
@@ -137,7 +137,7 @@ public class MovingToSafespotTask extends AutotoaManager {
     }
 
     @Override
-    public void r() {
+    public void reset() {
         super.r();
         this.currentSafespotTarget = null;
         this.cooldownTicksRemaining = 0;

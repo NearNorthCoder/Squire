@@ -36,7 +36,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Prayers;
 
 @TaskDesc(name="Withdrawing supplies", priority=5000, blocking=true)
-public class WithdrawingSuppliesTask extends AutotoaManager {
+public class WithdrawingSuppliesTask extends KephriManager {
 
     // String constants
     private static final String SUPPLIES_CONTAINER_NAME = "Supplies";

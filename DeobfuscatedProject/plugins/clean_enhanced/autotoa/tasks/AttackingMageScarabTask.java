@@ -35,15 +35,15 @@ import net.unethicalite.api.entities.Players;
  * Blocking: Yes
  */
 @TaskDesc(name="Attacking mage scarab", priority=25, blocking=true)
-public class AttackingMageScarabTask extends AutotoaManager {
+public class AttackingMageScarabTask extends KephriManager {
 
     // NPC Names
     private static final String NPC_ARCANE_SCARAB = "Arcane Scarab";
     private static final String INTERACTION_ATTACK = "Attack";
 
     @Inject
-    protected AttackingMageScarabTask(Client client, z z2, TOAConfig config) {
-        super(client, z2, config);
+    protected AttackingMageScarabTask(Client client, ToaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config);
     }
 
     /**

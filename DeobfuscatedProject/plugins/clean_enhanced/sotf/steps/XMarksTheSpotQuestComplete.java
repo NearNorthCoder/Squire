@@ -45,7 +45,7 @@ import java.util.List;
  *   <li>8+: Quest complete</li>
  * </ul>
  */
-public class XMarksTheSpotQuestComplete implements ac {
+public class XMarksTheSpotQuestComplete implements QuestStep {
 
     // ==================== ITEM IDS ====================
 
@@ -199,7 +199,7 @@ public class XMarksTheSpotQuestComplete implements ac {
      * @return false - always disabled (controlled by other logic)
      */
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
@@ -209,7 +209,7 @@ public class XMarksTheSpotQuestComplete implements ac {
      * @return "X marks the spot quest"
      */
     @Override
-    public String ag() {
+    public String getName() {
         return "X marks the spot quest";
     }
 
@@ -220,7 +220,7 @@ public class XMarksTheSpotQuestComplete implements ac {
      * @return execution priority (100)
      */
     @Override
-    public int af() {
+    public int execute() {
         try {
             performQuestActions();
         } catch (Exception e) {
@@ -236,7 +236,7 @@ public class XMarksTheSpotQuestComplete implements ac {
      * @return true if should execute, false otherwise
      */
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         if (Vars.getBit(QuestVarbits.QUEST_X_MARKS_THE_SPOT.getId()) >= 8) {
             return Inventory.contains(ANTIQUE_LAMP_ID);
         }

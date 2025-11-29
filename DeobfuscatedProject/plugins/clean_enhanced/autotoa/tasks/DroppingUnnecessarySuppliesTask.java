@@ -28,7 +28,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Prayers;
 
 @TaskDesc(name="Dropping unnecessary supplies", priority=10)
-public class DroppingUnnecessarySuppliesTask extends AutotoaManager {
+public class DroppingUnnecessarySuppliesTask extends KephriManager {
 
     // Constants
     private static final int MIN_FREE_SLOTS = 2;

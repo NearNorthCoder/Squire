@@ -22,16 +22,7 @@ import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Widgets;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.Y;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aN;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.g;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
+import gg.squire.sotf.framework.*;
 
 /**
  * Quest step handler for Priest In Peril quest.
@@ -49,7 +40,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
  * - Stage 5: Purify the temple with blessed water
  * - Stage 6: Complete essence delivery
  */
-public class PriestInPerilQuestStep implements ac {
+public class PriestInPerilQuestStep implements QuestStep {
     // Item IDs
     private static final int ITEM_MITHRIL_AXE = 8007;
     private static final int ITEM_BRONZE_AXE = 1925;
@@ -124,7 +115,7 @@ public class PriestInPerilQuestStep implements ac {
      * Returns the quest name.
      */
     @Override
-    public String ag() {
+    public String getName() {
         return "Priest In Peril";
     }
 
@@ -132,15 +123,15 @@ public class PriestInPerilQuestStep implements ac {
      * Checks if the quest step is complete.
      */
     @Override
-    public boolean ah() {
-        return e.j(QUEST_PROGRESS_VARBIT) >= 60 && e.j(SECONDARY_PROGRESS_VARBIT) >= 5;
+    public boolean isComplete() {
+        return GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) >= 60 && GameStateUtil.getVarbit(SECONDARY_PROGRESS_VARBIT) >= 5;
     }
 
     /**
      * Returns whether this is a combat quest step.
      */
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
@@ -148,7 +139,7 @@ public class PriestInPerilQuestStep implements ac {
      * Executes the main quest logic.
      */
     @Override
-    public int af() {
+    public int execute() {
         try {
             executeQuestLogic();
         } catch (Exception exception) {
@@ -172,12 +163,12 @@ public class PriestInPerilQuestStep implements ac {
 
         if (!hasCheckedBank) {
             // Handle quest varbit 107 - tutorial island check
-            if (e.j(107) < 5) {
+            if (GameStateUtil.getVarbit(107) < 5) {
                 Y.eq();
             }
 
             // Stage 0: Get quest supplies from bank
-            if (!hasRequiredGearBanked() && e.j(QUEST_PROGRESS_VARBIT) < 1 && e.j(107) == 5) {
+            if (!hasRequiredGearBanked() && GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) < 1 && GameStateUtil.getVarbit(107) == 5) {
                 BankLocation bank = BankLocation.getNearest();
                 if (bank != null && !bank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Nav to bank";
@@ -201,13 +192,13 @@ public class PriestInPerilQuestStep implements ac {
 
                         // Check if we have required items
                         int[] requiredItems = new int[] {ITEM_MITHRIL_AXE, ITEM_BRONZE_AXE, ITEM_STAMINA_POTION, ITEM_RUNE_SCIMITAR, ITEM_FOOD};
-                        if (!e.c(requiredItems)) {
+                        if (!GameStateUtil.randomRange(requiredItems)) {
                             checkAndAddMissingItems();
                             System.out.println("We are missing quest supplies, switching to BUYING");
                             hasCheckedBank = true;
                             return;
                         }
-                        if (e.c(requiredItems)) {
+                        if (GameStateUtil.randomRange(requiredItems)) {
                             a.a(ITEM_MITHRIL_AXE, 10);
                             a.a(ITEM_GOLDEN_KEY, 1);
                             a.a(ITEM_BRONZE_AXE, 1);
@@ -225,13 +216,13 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Eat food if health is low
-            if (Inventory.contains(ITEM_FOOD) && e.w() < 60.0) {
+            if (Inventory.contains(ITEM_FOOD) && GameStateUtil.getHealthPercentage() < 60.0) {
                 Inventory.getFirst(ITEM_FOOD).interact("Eat");
                 Time.sleepTicks(1);
             }
 
             // Stage 0-1: Talk to King Roald to start quest
-            if (e.j(QUEST_PROGRESS_VARBIT) < 1 && hasRequiredGearBanked()) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) < 1 && hasRequiredGearBanked()) {
                 if (Players.getLocal().getWorldLocation().distanceTo(KING_ROALD_LOCATION) > 3) {
                     AccBuilderSotf.c = "Nav to start";
                     if (Dialog.isOpen()) {
@@ -247,7 +238,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Stage 1: Navigate to temple door
-            if (e.j(QUEST_PROGRESS_VARBIT) == 1) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) == 1) {
                 if (Players.getLocal().getWorldLocation().distanceTo(TEMPLE_DOOR_LOCATION) > 2) {
                     AccBuilderSotf.c = "Nav to temple door";
                     Movement.walkTo(TEMPLE_DOOR_LOCATION);
@@ -263,7 +254,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Stage 2: Enter temple and navigate to Temple Guardian
-            if (e.j(QUEST_PROGRESS_VARBIT) == 2) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) == 2) {
                 if (NPCs.getNearest("Temple Guardian") == null) {
                     AccBuilderSotf.c = "Nav to doggo";
                     TileObject trapdoor = TileObjects.getNearest("Trapdoor");
@@ -306,7 +297,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Stage 3: Break monument or talk to King
-            if (e.j(QUEST_PROGRESS_VARBIT) == 3) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) == 3) {
                 if (!talkedToDrezelAboutBlessingWater) {
                     if (Players.getLocal().getWorldLocation().distanceTo(TEMPLE_DOOR_LOCATION) > 2) {
                         if (TileObjects.getNearest("Monument") != null) {
@@ -344,7 +335,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Stage 4: Free Drezel with keys
-            if (e.j(QUEST_PROGRESS_VARBIT) == 4) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) == 4) {
                 hasInitializedEssenceCounter = false;
                 if (!hasKeysInInventory()) {
                     bankForKeys();
@@ -369,7 +360,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Stage 5: Get golden key from temple guardians
-            if (e.j(QUEST_PROGRESS_VARBIT) == 5) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) == 5) {
                 if (!Inventory.contains("Golden key") && !Inventory.contains("Iron key")) {
                     if (Players.getLocal().getWorldLocation().distanceTo(GOLD_KEY_SPAWN_LOCATION) > 7 || Players.getLocal().getWorldLocation().getPlane() != 0) {
                         AccBuilderSotf.c = "Nav to gold key tile";
@@ -430,7 +421,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Stage 6: Bless water with Drezel
-            if (e.j(QUEST_PROGRESS_VARBIT) == 6) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) == 6) {
                 TileObject drezel = NPCs.getNearest("Drezel");
                 if (!Inventory.contains("Blessed water") && drezel != null) {
                     if (Reachable.isInteractable(drezel)) {
@@ -461,7 +452,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Stage 7: Complete final dialogue with Drezel
-            if (e.j(QUEST_PROGRESS_VARBIT) == 7) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) == 7) {
                 TileObject drezel = NPCs.getNearest("Drezel");
                 if (drezel != null) {
                     if (Reachable.isInteractable(drezel)) {
@@ -477,7 +468,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Stage 8: Navigate to final location
-            if (e.j(QUEST_PROGRESS_VARBIT) == 8) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) == 8) {
                 if (Players.getLocal().getWorldLocation().distanceTo(DREZEL_FINAL_LOCATION) > 5) {
                     AccBuilderSotf.c = "Nav to final tile";
                     WorldArea templeArea = new WorldArea(3399, 9879, 48, 32, 0);
@@ -519,7 +510,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Stages 10-60: Deliver essence to Drezel
-            if (e.j(QUEST_PROGRESS_VARBIT) >= 10 && e.j(QUEST_PROGRESS_VARBIT) < 60) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) >= 10 && GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) < 60) {
                 if (Players.getLocal().getWorldLocation().distanceTo(DREZEL_FINAL_LOCATION) <= 5) {
                     if (Inventory.contains("Pure essence")) {
                         AccBuilderSotf.c = "Turning in ess";
@@ -533,7 +524,7 @@ public class PriestInPerilQuestStep implements ac {
                         g.a("Drezel", questDialogOptions);
                     }
                 }
-                if (!Inventory.contains("Pure essence") && e.j(QUEST_PROGRESS_VARBIT) < 60) {
+                if (!Inventory.contains("Pure essence") && GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) < 60) {
                     AccBuilderSotf.c = "Grabbing more ess";
                     bankForEssence();
                 }
@@ -574,7 +565,7 @@ public class PriestInPerilQuestStep implements ac {
             }
 
             // Final stage: Complete quest
-            if (e.j(QUEST_PROGRESS_VARBIT) >= 60 && e.j(SECONDARY_PROGRESS_VARBIT) < 5) {
+            if (GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) >= 60 && GameStateUtil.getVarbit(SECONDARY_PROGRESS_VARBIT) < 5) {
                 AccBuilderSotf.c = "Finish & Unlock morty/start nature";
                 if (Players.getLocal().getWorldLocation().distanceTo(DREZEL_FINAL_LOCATION) > 5) {
                     navigateToFinalLocation();

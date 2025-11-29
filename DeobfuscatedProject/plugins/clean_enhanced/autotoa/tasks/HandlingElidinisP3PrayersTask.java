@@ -26,7 +26,7 @@ import net.runelite.api.Prayer;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.eventbus.Subscribe;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.GameEnum10;
 
 /**
@@ -40,7 +40,7 @@ import gg.squire.autotoa.tasks.GameEnum10;
  */
 @TaskDesc(name="Handling Elidinis P3 Prayers", priority=0x7FFFFFFF, register=true)
 public class HandlingElidinisP3PrayersTask
-extends AutotoaManager {
+extends KephriManager {
     // NPC and Animation IDs
     private static final int ELIDINIS_WARDEN_NPC_ID = 11777;
     private static final int ALTERNATE_ATTACK_ANIMATION_ID = 9777;

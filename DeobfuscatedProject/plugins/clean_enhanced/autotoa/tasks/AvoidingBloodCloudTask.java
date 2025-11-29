@@ -23,7 +23,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Avoiding Blood Cloud", priority=15, blocking=true)
-public class AvoidingBloodCloudTask extends AutotoaManager {
+public class AvoidingBloodCloudTask extends KephriManager {
 
     // Constants
     private static final int FALSE = 0;

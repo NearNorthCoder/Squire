@@ -26,7 +26,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Dodging electric skull", priority=30, blocking=true, register=true)
-public class DodgingElectricSkullTask extends AutotoaManager {
+public class DodgingElectricSkullTask extends KephriManager {
 
     // Graphics IDs for electric skull
     private static final int ELECTRIC_SKULL_SPAWN_GRAPHIC = 29687;  // -(0xFFFF9EDB & 0x7B75) & (0xFFFF9FFF & 0x7FF7)

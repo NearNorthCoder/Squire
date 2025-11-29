@@ -44,7 +44,7 @@ import java.util.List;
  */
 @Singleton
 @TaskDesc(name="Attacking melee scarab", priority=16, blocking=true)
-public class AttackingMeleeScarabTask extends AutotoaManager {
+public class AttackingMeleeScarabTask extends KephriManager {
 
     // NPC Names
     private static final String NPC_SOLDIER_SCARAB = "Soldier Scarab";
@@ -55,8 +55,8 @@ public class AttackingMeleeScarabTask extends AutotoaManager {
     private boolean isSoldierScarab; // True if targeting Soldier Scarab, false if Spitting Scarab
 
     @Inject
-    protected AttackingMeleeScarabTask(Client client, z z2, TOAConfig config) {
-        super(client, z2, config, null);
+    protected AttackingMeleeScarabTask(Client client, ToaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config, null);
     }
 
     /**

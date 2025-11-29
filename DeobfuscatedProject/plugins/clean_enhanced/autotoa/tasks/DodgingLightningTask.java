@@ -29,7 +29,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Dodging lightning", priority=50, blocking=true, register=true)
-public class DodgingLightningTask extends AutotoaManager {
+public class DodgingLightningTask extends KephriManager {
 
     // Graphics IDs for lightning strikes
     private static final int LIGHTNING_STRIKE_GRAPHIC = 15019;   // -(0xFFFFCB4D & 0x77B3) & (0xFFFFCBFF & 0x7FCB)

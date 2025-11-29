@@ -47,7 +47,7 @@ import java.util.Set;
  * Blocking: Yes
  */
 @TaskDesc(name="Attacking kephri swarm (medic)", priority=12, register=true, blocking=true)
-public class AttackingKephriSwarmMedicTask extends AutotoaManager {
+public class AttackingKephriSwarmMedicTask extends KephriManager {
 
     // NPC Names
     private static final String NPC_SCARAB_SWARM = "Scarab Swarm";
@@ -64,8 +64,8 @@ public class AttackingKephriSwarmMedicTask extends AutotoaManager {
     private NPC currentTarget;              // Current swarm being attacked
 
     @Inject
-    protected AttackingKephriSwarmMedicTask(Client client, z z2, TOAConfig config) {
-        super(client, z2, config, bi.ATTACK);
+    protected AttackingKephriSwarmMedicTask(Client client, ToaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config, bi.ATTACK);
         this.healedSwarms = new HashSet<>();
     }
 

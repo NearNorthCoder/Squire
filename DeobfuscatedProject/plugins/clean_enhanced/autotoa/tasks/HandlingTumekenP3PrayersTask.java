@@ -24,7 +24,7 @@ import net.runelite.api.Projectile;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.events.ProjectileSpawned;
 import net.runelite.client.eventbus.Subscribe;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.FHelper;
 import gg.squire.autotoa.tasks.GameEnum10;
 
@@ -39,7 +39,7 @@ import gg.squire.autotoa.tasks.GameEnum10;
  */
 @TaskDesc(name="Handling Tumeken P3 Prayers", priority=0x7FFFFFFF, register=true)
 public class HandlingTumekenP3PrayersTask
-extends AutotoaManager {
+extends KephriManager {
     // NPC IDs and Graphics
     private static final int TUMEKEN_WARDEN_NPC_ID = 11680;
     private static final int MAGIC_GRAPHIC_ID = 2250;

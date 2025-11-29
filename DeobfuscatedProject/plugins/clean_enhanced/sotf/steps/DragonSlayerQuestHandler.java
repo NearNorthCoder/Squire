@@ -27,15 +27,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Import obfuscated classes that still need to be referenced
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a; // BankingUtil
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aN;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac; // QuestStep interface
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b; // ShopUtil
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d; // ShopItem
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e; // QuestUtil
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f; // ItemIds
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.g; // DialogUtil
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j; // ItemIds2
+import gg.squire.sotf.framework.*; // BankingUtil
+import gg.squire.sotf.framework.*;
+import gg.squire.sotf.framework.*; // QuestStep interface
+import gg.squire.sotf.framework.*; // ShopUtil
+import gg.squire.sotf.framework.*; // ShopItem
+import gg.squire.sotf.framework.*; // QuestUtil
+import gg.squire.sotf.framework.*; // ItemIds
+import gg.squire.sotf.framework.*; // DialogUtil
+import gg.squire.sotf.framework.*; // ItemIds2
 
 /**
  * Dragon Slayer quest handler for the SOTF plugin.
@@ -48,7 +48,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j; // ItemIds2
  *
  * The quest is a prerequisite for completing the SOTF (Secrets of the North) quest line.
  */
-public class DragonSlayerQuestHandler implements ac {
+public class DragonSlayerQuestHandler implements QuestStep {
 
     // Quest varbit IDs
     private static final int QUEST_VARBIT = 176;
@@ -115,23 +115,23 @@ public class DragonSlayerQuestHandler implements ac {
     };
 
     @Override
-    public String ag() {
+    public String getName() {
         return "Dragon slayer 1 quest";
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         // Check if quest is complete
-        return e.j(QUEST_VARBIT) >= 10 && !Dialog.isOpen();
+        return GameStateUtil.getVarbit(QUEST_VARBIT) >= 10 && !Dialog.isOpen();
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             executeQuestLogic();
         } catch (Exception e) {
@@ -185,7 +185,7 @@ public class DragonSlayerQuestHandler implements ac {
             }
 
             // Eat food if low health
-            if (Combat.getMissingHealth() >= 20 || e.w() < 51.0) {
+            if (Combat.getMissingHealth() >= 20 || GameStateUtil.getHealthPercentage() < 51.0) {
                 if (Inventory.contains("Shark")) {
                     Inventory.getFirst("Shark").interact("Eat");
                 }
@@ -197,7 +197,7 @@ public class DragonSlayerQuestHandler implements ac {
             }
 
             // Handle different quest stages
-            int questProgress = e.j(QUEST_VARBIT);
+            int questProgress = GameStateUtil.getVarbit(QUEST_VARBIT);
 
             // Stage 0: Not started - need to bank
             if (!hasAllRequiredItems() && questProgress <= 2 && e.J() >= 32) {
@@ -256,7 +256,7 @@ public class DragonSlayerQuestHandler implements ac {
                 // Get map pieces if needed
                 if ((!Vars.getBit(MAZE_KEY_VARBIT) && !Vars.getBit(THALZAR_MAP_PIECE_VARBIT) &&
                      Vars.getBit(ANTI_DRAGON_SHIELD_VARBIT)) ||
-                    (e.j(14) == 15 && !Vars.getBit(LOZAR_MAP_PIECE_VARBIT))) {
+                    (GameStateUtil.getVarbit(14) == 15 && !Vars.getBit(LOZAR_MAP_PIECE_VARBIT))) {
 
                     if (Inventory.contains("Maze key")) {
                         handleOracleMapPiece();
@@ -676,7 +676,7 @@ public class DragonSlayerQuestHandler implements ac {
 
             if (!Players.getLocal().getWorldLocation().equals(redDoorLocation)) {
                 AccBuilderSotf.c = "Nav to red door";
-                e.c(redDoorLocation);
+                GameStateUtil.randomRange(redDoorLocation);
                 Time.sleepTicks(2);
             }
 
@@ -711,7 +711,7 @@ public class DragonSlayerQuestHandler implements ac {
 
             if (!Players.getLocal().getWorldLocation().equals(orangeDoorLocation)) {
                 AccBuilderSotf.c = "Nav to orange door";
-                e.c(orangeDoorLocation);
+                GameStateUtil.randomRange(orangeDoorLocation);
                 Time.sleepTicks(2);
             }
 
@@ -746,7 +746,7 @@ public class DragonSlayerQuestHandler implements ac {
 
             if (!Players.getLocal().getWorldLocation().equals(yellowDoorLocation)) {
                 AccBuilderSotf.c = "Nav to yellow door";
-                e.c(yellowDoorLocation);
+                GameStateUtil.randomRange(yellowDoorLocation);
                 Time.sleepTicks(2);
             }
 
@@ -845,7 +845,7 @@ public class DragonSlayerQuestHandler implements ac {
      * Handle final dialog with Oziach after defeating Elvarg
      */
     private static void handleFinalOziachDialog() {
-        if (e.j(QUEST_VARBIT) >= 9) {
+        if (GameStateUtil.getVarbit(QUEST_VARBIT) >= 9) {
             if (Players.getLocal().getWorldLocation().distanceTo(OZIACH_LOCATION) > 8) {
                 AccBuilderSotf.c = "Nav to oziach";
                 Movement.walkTo(OZIACH_LOCATION);

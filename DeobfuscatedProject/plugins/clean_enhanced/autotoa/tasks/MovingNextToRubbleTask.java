@@ -30,7 +30,7 @@ import net.unethicalite.api.movement.Movement;
  * - Resets state when rubble despawns
  */
 @TaskDesc(name="Moving next to rubble", priority=100, blocking=true, register=true)
-public class MovingNextToRubbleTask extends AutotoaManager {
+public class MovingNextToRubbleTask extends KephriManager {
     // Constants
     private static final String RUBBLE_NPC_NAME = "Rubble";
     private static final String BOULDER_THROWN_MESSAGE = "Ba-Ba throws a large boulder at you";
@@ -40,8 +40,8 @@ public class MovingNextToRubbleTask extends AutotoaManager {
     private boolean boulderThrown;
 
     @Inject
-    protected MovingNextToRubbleTask(Client client, z z2, TOAConfig config) {
-        super(client, z2, config);
+    protected MovingNextToRubbleTask(Client client, ToaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config);
     }
 
     /**

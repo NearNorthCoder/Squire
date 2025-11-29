@@ -34,7 +34,7 @@ import net.unethicalite.api.movement.Movement;
  * to complete the light paths. Fire damage from the puzzle requires food management.
  */
 @TaskDesc(name="Solving Light Puzzle", register=true)
-public class SolvingLightPuzzleTask extends AutotoaManager {
+public class SolvingLightPuzzleTask extends KephriManager {
 
     // NPC IDs
     private static final int NPC_OBELISK_INACTIVE = 11700; // 0x2DB4 based light reflection crystal

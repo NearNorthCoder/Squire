@@ -51,7 +51,7 @@ public class RechargingTridentTask extends TOAConfigurableTask {
     @Subscribe
     public void a(GameStateChanged gameStateChanged) {
         // Reset recharged flag when leaving instance
-        if (!this.cu.isInInstancedRegion()) {
+        if (!this.client.isInInstancedRegion()) {
             this.recharged = false;
         }
     }

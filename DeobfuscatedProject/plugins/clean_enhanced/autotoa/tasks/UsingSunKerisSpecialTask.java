@@ -20,7 +20,7 @@ import net.unethicalite.api.items.Inventory;
  * - Only uses during dehydration invocation if configured
  */
 @TaskDesc(name = "Using sun keris special", priority = 1500)
-public class UsingSunKerisSpecialTask extends AutotoaManager {
+public class UsingSunKerisSpecialTask extends KephriManager {
     private static final int MIN_SPEC_ENERGY = 65;
     private static final int MIN_HEALTH = 33;
     private static final int WARDEN_ID = 11750; // Phase where spec is important

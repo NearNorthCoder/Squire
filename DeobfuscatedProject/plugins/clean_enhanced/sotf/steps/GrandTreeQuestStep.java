@@ -20,19 +20,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Prayers;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.I;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aN;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.av;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.g;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.h;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.m;
+import gg.squire.sotf.framework.*;
 
 /**
  * Grand Tree quest step handler.
@@ -45,7 +33,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.m;
  * - Combat (Black demon fight)
  * - Item collection (Daconia rock roots)
  */
-public class GrandTreeQuestStep implements ac {
+public class GrandTreeQuestStep implements QuestStep {
 
     // Constants - Item IDs
     private static final int COINS = 995;
@@ -389,7 +377,7 @@ public class GrandTreeQuestStep implements ac {
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
@@ -400,10 +388,10 @@ public class GrandTreeQuestStep implements ac {
         // Check for Lobsters
         if (Bank.contains(LOBSTER)) {
             if (Bank.contains(LOBSTER) && Bank.getFirst(LOBSTER).getQuantity() < 10) {
-                itemsToBuy.add(new d(LOBSTER, 10, e.c(400, 500)));
+                itemsToBuy.add(new d(LOBSTER, 10, GameStateUtil.randomRange(400, 500)));
             }
         } else {
-            itemsToBuy.add(new d(LOBSTER, 10, e.c(400, 500)));
+            itemsToBuy.add(new d(LOBSTER, 10, GameStateUtil.randomRange(400, 500)));
         }
 
         // Check for Fire Runes
@@ -503,7 +491,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Navigate to bank if needed
-            if (!hasRequiredQuestItems() && e.j(questVarbit) > 1 && Skills.getLevel(Skill.AGILITY) >= 25) {
+            if (!hasRequiredQuestItems() && GameStateUtil.getVarbit(questVarbit) > 1 && Skills.getLevel(Skill.AGILITY) >= 25) {
                 currentStatus = "";
                 nearestBank = BankLocation.getNearest();
 
@@ -579,7 +567,7 @@ public class GrandTreeQuestStep implements ac {
 
                         // Check special items
                         int[] specialItems = new int[]{AMULET_OF_GLORY, 556, NECKLACE_OF_PASSAGE, COINS};
-                        if (e.c(specialItems)) {
+                        if (GameStateUtil.randomRange(specialItems)) {
                             prepareShoppingList();
                             System.out.println("We are missing quest supplies, switching to BUYING");
                             hasFinishedBuying = true;
@@ -593,7 +581,7 @@ public class GrandTreeQuestStep implements ac {
                         }
 
                         // Withdraw items
-                        if (e.c(specialItems)) {
+                        if (GameStateUtil.randomRange(specialItems)) {
                             a.a(AMULET_OF_GLORY, 10);
                             a.a(NECKLACE_OF_PASSAGE, 3);
                             Bank.withdraw(COINS, 5000, Bank.WithdrawMode.ITEM);
@@ -638,7 +626,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Handle quest progression - Start quest
-            if (hasRequiredQuestItems() && !e.j(questVarbit)) {
+            if (hasRequiredQuestItems() && !GameStateUtil.getVarbit(questVarbit)) {
                 h.X();
 
                 if (Players.getLocal().getWorldLocation().distanceTo(GRAND_TREE_LOCATION) > 3
@@ -658,7 +646,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 10 or 20 - Get Hazelmere's scroll
-            if (e.j(questVarbit) != 10 && e.j(questVarbit) <= 20) {
+            if (GameStateUtil.getVarbit(questVarbit) != 10 && GameStateUtil.getVarbit(questVarbit) <= 20) {
                 if (!Inventory.contains("Hazelmere's scroll")) {
                     if (Players.getLocal().getWorldLocation().distanceTo(HAZELMERE_LOCATION) >= 3
                         || Players.getLocal().getWorldLocation().getPlane() != 1
@@ -707,7 +695,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 30 - Talk to Glough
-            if (e.j(questVarbit) == 30) {
+            if (GameStateUtil.getVarbit(questVarbit) == 30) {
                 if (Players.getLocal().getWorldLocation().distanceTo(GLOUGH_HOUSE_LOCATION) > 7
                     && Players.getLocal().getWorldLocation().getPlane() != 1) {
                     AccBuilderSotf.c = "Nav to glough";
@@ -721,7 +709,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 40 - Return to King
-            if (e.j(questVarbit) == 40) {
+            if (GameStateUtil.getVarbit(questVarbit) == 40) {
                 if (Players.getLocal().getWorldLocation().distanceTo(GRAND_TREE_LOCATION) > 3
                     && Players.getLocal().getWorldLocation().distanceTo(KING_START) > 15) {
                     AccBuilderSotf.c = "Nav to start";
@@ -736,7 +724,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 50 - Talk to Charlie
-            if (e.j(questVarbit) == 50) {
+            if (GameStateUtil.getVarbit(questVarbit) == 50) {
                 if (Players.getLocal().getWorldLocation().distanceTo(CHARLIE_LOCATION) > 3
                     && Players.getLocal().getWorldLocation().getPlane() != 3) {
                     AccBuilderSotf.c = "Nav to charlie";
@@ -751,7 +739,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 60 - Search Glough's cupboard
-            if (e.j(questVarbit) == 60) {
+            if (GameStateUtil.getVarbit(questVarbit) == 60) {
                 if (Players.getLocal().getWorldLocation().distanceTo(GLOUGH_HOUSE_LOCATION) > 7
                     && Players.getLocal().getWorldLocation().getPlane() != 1) {
                     AccBuilderSotf.c = "Nav to glough";
@@ -783,7 +771,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 70 - Talk to Glough and Charlie
-            if (e.j(questVarbit) == 70) {
+            if (GameStateUtil.getVarbit(questVarbit) == 70) {
                 AccBuilderSotf.c = "Talk";
                 g.a("Glough", dialogOptions);
 
@@ -794,7 +782,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 80 - Shipyard sequence
-            if (e.j(questVarbit) == 80) {
+            if (GameStateUtil.getVarbit(questVarbit) == 80) {
                 if (Players.getLocal().getWorldLocation().distanceTo(CHARLIE_LOCATION) < 20) {
                     AccBuilderSotf.c = "Talk to pilot";
                     g.a("Captain Errdo", dialogOptions);
@@ -839,7 +827,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 90 - Pick up lumber order
-            if (e.j(questVarbit) == 90) {
+            if (GameStateUtil.getVarbit(questVarbit) == 90) {
                 if (!Inventory.contains("Lumber order")) {
                     TileItems.getNearest("Lumber order").interact("Take");
                     Time.sleepTicks(4);
@@ -886,7 +874,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 100 - Get Glough's key from Anita
-            if (e.j(questVarbit) == 100) {
+            if (GameStateUtil.getVarbit(questVarbit) == 100) {
                 if (!Inventory.contains("Glough's key")) {
                     if (Players.getLocal().getWorldLocation().distanceTo(ANITA_LOCATION) > 5) {
                         AccBuilderSotf.c = "Nav to anita";
@@ -932,7 +920,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 110 - Use key on chest
-            if (e.j(questVarbit) == 110) {
+            if (GameStateUtil.getVarbit(questVarbit) == 110) {
                 if (Players.getLocal().getWorldLocation().distanceTo(GLOUGH_HOUSE_LOCATION) > 7
                     && Players.getLocal().getWorldLocation().getPlane() != 1) {
                     AccBuilderSotf.c = "Nav to glough";
@@ -948,7 +936,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 120 - Return to King
-            if (e.j(questVarbit) == 120) {
+            if (GameStateUtil.getVarbit(questVarbit) == 120) {
                 if (Players.getLocal().getWorldLocation().distanceTo(GRAND_TREE_LOCATION) > 3
                     && Players.getLocal().getWorldLocation().distanceTo(KING_START) > 15) {
                     AccBuilderSotf.c = "Nav to start";
@@ -963,7 +951,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 130 - Solve twigs puzzle and go down trapdoor
-            if (e.j(questVarbit) == 130) {
+            if (GameStateUtil.getVarbit(questVarbit) == 130) {
                 AccBuilderSotf.c = "Nav to twigs tile";
                 AccBuilderSotf.c = "Solving puzzle";
                 aN.aM();
@@ -974,7 +962,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 140 - Find Daconia rock and fight Black demon
-            if (e.j(questVarbit) == 140) {
+            if (GameStateUtil.getVarbit(questVarbit) == 140) {
                 if (Players.getLocal().getWorldLocation().distanceTo(CHARLIE_LOCATION) < 20) {
                     AccBuilderSotf.c = "Nav to king underground";
                     g.a("King Narnode Shareen", dialogOptions);
@@ -992,7 +980,7 @@ public class GrandTreeQuestStep implements ac {
             }
 
             // Quest step 150 - Collect Daconia roots
-            if (e.j(questVarbit) == 150) {
+            if (GameStateUtil.getVarbit(questVarbit) == 150) {
                 AccBuilderSotf.c = "Nav to king underground";
                 g.a("King Narnode Shareen", dialogOptions);
                 collectDaconiaRoots();
@@ -1001,17 +989,17 @@ public class GrandTreeQuestStep implements ac {
     }
 
     @Override
-    public boolean ah() {
-        return e.j(questVarbit) <= 160;
+    public boolean isComplete() {
+        return GameStateUtil.getVarbit(questVarbit) <= 160;
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return questName;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             handleBankingAndQuest();
         } catch (Exception e) {

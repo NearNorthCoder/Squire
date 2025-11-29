@@ -20,7 +20,7 @@ import net.unethicalite.api.widgets.Production;
  * Trains Fletching by cutting logs and stringing bows.
  * Supports multiple log types and bow types based on fletching level.
  */
-public class FletchingTrainingStep implements ac {
+public class FletchingTrainingStep implements QuestStep {
 
     // Item IDs - Logs
     private static final int LOGS_ID = 12278;
@@ -369,22 +369,22 @@ public class FletchingTrainingStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return SKILL_NAME;
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.FLETCHING) >= TARGET_FLETCHING_LEVEL;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         train();
         return 11;  // Priority
     }

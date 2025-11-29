@@ -27,7 +27,7 @@ import net.unethicalite.api.widgets.Widgets;
  * 4. Exits via Osmumten NPC or sarcophagus
  */
 @TaskDesc(name="Looting chest room", priority=1000, blocking=true)
-public class LootingChestRoomTask extends AutotoaManager {
+public class LootingChestRoomTask extends KephriManager {
 
     // TOA Object IDs
     private static final int REWARD_CHEST_ID = 45750;          // Main reward chest
@@ -45,8 +45,8 @@ public class LootingChestRoomTask extends AutotoaManager {
     private boolean hasInteractedWithRewardInterface = false;
 
     @Inject
-    protected LootingChestRoomTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected LootingChestRoomTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig);
     }
 
     @Override
@@ -66,12 +66,12 @@ public class LootingChestRoomTask extends AutotoaManager {
     }
 
     @Override
-    public boolean bl() {
+    protected boolean shouldExecute() {
         // Main task execution logic
 
         // Check if reward interface is open
         Widget rewardWidget = Widgets.get(REWARD_WIDGET_PARENT, REWARD_WIDGET_CHILD);
-        ItemContainer rewardContainer = this.cu.getItemContainer(InventoryID.TOA_REWARD_CHEST);
+        ItemContainer rewardContainer = this.client.getItemContainer(InventoryID.TOA_REWARD_CHEST);
 
         if (Widgets.isVisible(rewardWidget) && rewardContainer != null) {
             // Reward interface is open - check if there are items to take
@@ -165,7 +165,7 @@ public class LootingChestRoomTask extends AutotoaManager {
     }
 
     @Override
-    public void r() {
+    public void reset() {
         // Reset task state
         this.hasInteractedWithRewardInterface = false;
     }

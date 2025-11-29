@@ -44,7 +44,7 @@ import net.unethicalite.api.movement.Reachable;
  * 4. Avoid dangerous ground tiles
  */
 @TaskDesc(name="Solving obelisk puzzle", register=true, priority=5, blocking=true)
-public class SolvingObeliskPuzzleTask extends AutotoaManager {
+public class SolvingObeliskPuzzleTask extends KephriManager {
 
     // NPC IDs
     private static final int INACTIVE_OBELISK_ID = 11570;  // Obelisk before being hit
@@ -57,8 +57,8 @@ public class SolvingObeliskPuzzleTask extends AutotoaManager {
     private int cycleCounter;                                     // Counter for cycling through obelisks
 
     @Inject
-    protected SolvingObeliskPuzzleTask(Client client, z z2, TOAConfig tOAConfig, p p2) {
-        super(client, z2, tOAConfig, p2);
+    protected SolvingObeliskPuzzleTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig, p p2) {
+        super(client, plugin, tOAConfig, p2);
         this.successfulObeliskLocations = new ArrayList<>(10);
         this.dangerousTiles = new HashSet<>();
         this.obeliskSequenceIndex = 0;
@@ -256,7 +256,7 @@ public class SolvingObeliskPuzzleTask extends AutotoaManager {
     }
 
     @Override
-    public void r() {
+    public void reset() {
         // Reset task state
         this.obeliskSequenceIndex = 0;
         this.successfulObeliskLocations.clear();

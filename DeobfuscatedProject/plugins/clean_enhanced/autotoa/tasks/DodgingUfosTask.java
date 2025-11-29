@@ -21,7 +21,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Dodging ufos", priority=100)
-public class DodgingUfosTask extends AutotoaManager {
+public class DodgingUfosTask extends KephriManager {
 
     // Constants
     private static final int FALSE = 0;

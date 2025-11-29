@@ -20,11 +20,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
+import gg.squire.sotf.framework.*;
 
 /**
  * Trains Fishing skill from level 1 to 20+.
@@ -50,7 +46,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
  * Fly fishing requires a fly fishing rod and feathers.
  * Fishing spots are represented as NPCs that can be interacted with.
  */
-public class FishingTrainingStep implements ac {
+public class FishingTrainingStep implements QuestStep {
 
     // ========== Item IDs ==========
 
@@ -796,23 +792,23 @@ public class FishingTrainingStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return SKILL_NAME;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         trainFishing();
         return STEP_RETURN_VALUE;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.FISHING) >= TARGET_FISHING_LEVEL;
     }
 }

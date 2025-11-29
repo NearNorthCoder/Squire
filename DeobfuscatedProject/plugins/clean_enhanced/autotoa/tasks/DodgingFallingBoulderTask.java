@@ -21,7 +21,7 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 
 @TaskDesc(name="Dodging falling boulder", priority=5)
-public class DodgingFallingBoulderTask extends AutotoaManager {
+public class DodgingFallingBoulderTask extends KephriManager {
 
     // Graphics ID for falling boulder warning
     private static final int BOULDER_GRAPHIC_ID = 30407;  // -(0xFFFFCBB7 & 0x7779) & (0xFFFFCBFF & 0x7FFB)

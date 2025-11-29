@@ -13,11 +13,11 @@ import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Item;
 import net.unethicalite.api.items.Inventory;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.GameEnum12;
 
 @TaskDesc(name="Decanting potions", priority=1000, blocking=true)
-public class DecantingPotionsTask extends AutotoaManager {
+public class DecantingPotionsTask extends KephriManager {
 
     private static final String VIAL_NAME = "Vial";
     private static final String DROP_ACTION = "Drop";

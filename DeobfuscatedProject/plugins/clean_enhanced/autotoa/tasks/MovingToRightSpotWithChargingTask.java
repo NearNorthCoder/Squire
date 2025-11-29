@@ -26,7 +26,7 @@ import net.unethicalite.api.movement.Movement;
  * obelisk as soon as it becomes available.
  */
 @TaskDesc(name="Moving to right spot with charging", priority=100, register=true)
-public class MovingToRightSpotWithChargingTask extends AutotoaManager {
+public class MovingToRightSpotWithChargingTask extends KephriManager {
 
     // Game object ID for the charging obelisk
     // Calculated from: -(0xFFFFBC2E & 0x4FDB) & (0xFFFFBEBF & 0xFFFF)
@@ -40,13 +40,13 @@ public class MovingToRightSpotWithChargingTask extends AutotoaManager {
     private boolean obeliskHasSpawned;
 
     @Inject
-    protected MovingToRightSpotWithChargingTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected MovingToRightSpotWithChargingTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig);
         this.obeliskHasSpawned = false;
     }
 
     @Override
-    public boolean bl() {
+    protected boolean shouldExecute() {
         WorldPoint rightPositionWorld = this.a(RIGHT_POSITION);
 
         // If obelisk has spawned and we're already at the right position, no need to move
@@ -102,7 +102,7 @@ public class MovingToRightSpotWithChargingTask extends AutotoaManager {
     }
 
     @Override
-    public void r() {
+    public void reset() {
         // Reset state when task is reset
         this.obeliskHasSpawned = false;
     }

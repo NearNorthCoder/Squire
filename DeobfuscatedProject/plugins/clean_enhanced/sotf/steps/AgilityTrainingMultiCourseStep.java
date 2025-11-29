@@ -27,7 +27,7 @@ import java.util.List;
  * Handles agility training across multiple courses (Gnome, Varrock, Canifis)
  * with automatic banking, equipment management, and mark of grace collection.
  */
-public class AgilityTrainingStep implements ac {
+public class AgilityTrainingMultiCourseStep implements QuestStep {
 
     // Static fields
     public static int STAMINA_POTION_ID;
@@ -154,12 +154,12 @@ public class AgilityTrainingStep implements ac {
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             performAgilityTraining();
         } catch (Exception e) {
@@ -169,12 +169,12 @@ public class AgilityTrainingStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return QUEST_NAME;
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.AGILITY) >= 99;
     }
 
@@ -247,7 +247,7 @@ public class AgilityTrainingStep implements ac {
                         SUMMER_PIE_ID, GRACEFUL_LEGS_ID, STAMINA_POTION_ID
                     };
 
-                    if (!e.c(requiredItems)) {
+                    if (!GameStateUtil.randomRange(requiredItems)) {
                         prepareBuyList();
                         System.out.println(STATUS_MISSING_SUPPLIES);
                         hasStartedTraining = true;
@@ -255,7 +255,7 @@ public class AgilityTrainingStep implements ac {
                     }
 
                     // Withdraw items based on agility level
-                    if (e.c(requiredItems)) {
+                    if (GameStateUtil.randomRange(requiredItems)) {
                         // Withdraw graceful pieces
                         a.a(GRACEFUL_HOOD_ID, 1);
                         a.a(GRACEFUL_TOP_ID, 1);
@@ -349,13 +349,13 @@ public class AgilityTrainingStep implements ac {
                     runGnomeCourse();
                 }
 
-                if ((e.j(11849) < 74 || e.j(21061) < 5) &&
+                if ((GameStateUtil.getVarbit(11849) < 74 || GameStateUtil.getVarbit(21061) < 5) &&
                     Skills.getLevel(Skill.AGILITY) >= 16 &&
                     Skills.getLevel(Skill.AGILITY) < 74) {
                     runVarrockCourse();
                 }
 
-                if (e.j(11849) >= 74 && e.j(21061) >= 5) {
+                if (GameStateUtil.getVarbit(11849) >= 74 && GameStateUtil.getVarbit(21061) >= 5) {
                     if (Skills.getLevel(Skill.AGILITY) >= 16 && Skills.getLevel(Skill.AGILITY) < AGILITY_LEVEL_VARROCK) {
                         runVarrockCourse();
                     }
@@ -558,7 +558,7 @@ public class AgilityTrainingStep implements ac {
                 AccBuilderSotf.c = STATUS_STARTING_COURSE;
                 int currentXp = Skills.getExperience(Skill.AGILITY);
                 TileObjects.getNearest(OBJECT_TALL_TREE).interact(ACTION_CLIMB);
-                Time.sleepTicks(e.c(1, 2));
+                Time.sleepTicks(GameStateUtil.randomRange(1, 2));
                 Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
                 Time.sleepTicks(1);
             }
@@ -592,7 +592,7 @@ public class AgilityTrainingStep implements ac {
             int currentXp = Skills.getExperience(Skill.AGILITY);
             AccBuilderSotf.c = STATUS_JUMPING_GAP_1;
             gap1.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -611,7 +611,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_JUMPING_GAP_2;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             gap2.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -638,7 +638,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_JUMPING_GAP_3;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             gap3.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -657,7 +657,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_JUMPING_GAP_4;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             gap4.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -684,7 +684,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_VAULTING;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             pole.interact(ACTION_VAULT);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -703,7 +703,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_JUMPING_GAP_5;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             gap5.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -722,7 +722,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_JUMPING_EDGE;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             gap6.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -768,7 +768,7 @@ public class AgilityTrainingStep implements ac {
                 AccBuilderSotf.c = STATUS_STARTING_COURSE;
                 int currentXp = Skills.getExperience(Skill.AGILITY);
                 TileObjects.getNearest(OBJECT_WALL).interact(ACTION_CLIMB_UP);
-                Time.sleepTicks(e.c(1, 2));
+                Time.sleepTicks(GameStateUtil.randomRange(1, 2));
                 Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
                 Time.sleepTicks(1);
             }
@@ -801,7 +801,7 @@ public class AgilityTrainingStep implements ac {
                 int currentXp = Skills.getExperience(Skill.AGILITY);
                 AccBuilderSotf.c = STATUS_JUMPING_GAP_1;
                 obj1.interact(ACTION_JUMP);
-                Time.sleepTicks(e.c(1, 2));
+                Time.sleepTicks(GameStateUtil.randomRange(1, 2));
                 Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
                 Time.sleepTicks(1);
             }
@@ -850,7 +850,7 @@ public class AgilityTrainingStep implements ac {
                 AccBuilderSotf.c = STATUS_STARTING_COURSE;
                 int currentXp = Skills.getExperience(Skill.AGILITY);
                 TileObjects.getNearest(OBJECT_WALL).interact(ACTION_CLIMB_UP);
-                Time.sleepTicks(e.c(1, 2));
+                Time.sleepTicks(GameStateUtil.randomRange(1, 2));
                 Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
                 Time.sleepTicks(1);
             }
@@ -884,7 +884,7 @@ public class AgilityTrainingStep implements ac {
             int currentXp = Skills.getExperience(Skill.AGILITY);
             AccBuilderSotf.c = STATUS_JUMPING_GAP_1;
             obj1.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -903,7 +903,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_CROSS_ROPE;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             rope.interact(ACTION_CROSS);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -930,7 +930,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_JUMPING_GAP_3;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             obj3.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -949,7 +949,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_JUMPING_GAP_4;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             obj4.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }
@@ -968,7 +968,7 @@ public class AgilityTrainingStep implements ac {
             AccBuilderSotf.c = STATUS_JUMPING_EDGE;
             int currentXp = Skills.getExperience(Skill.AGILITY);
             edge.interact(ACTION_JUMP);
-            Time.sleepTicks(e.c(1, 2));
+            Time.sleepTicks(GameStateUtil.randomRange(1, 2));
             Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > currentXp, TIMEOUT_TICKS);
             Time.sleepTicks(1);
         }

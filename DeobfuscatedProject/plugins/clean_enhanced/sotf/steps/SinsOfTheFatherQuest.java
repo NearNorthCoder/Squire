@@ -27,7 +27,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.Walker;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.*;
+import gg.squire.sotf.framework.*;
 
 /**
  * Main quest step handler for the Waterfall Quest.
@@ -39,7 +39,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.*;
  * locations including Castle Wars, Glarial's Tomb, and the Waterfall dungeon, and
  * ultimately completing the quest by placing runes on pillars.
  */
-public class SinsOfTheFatherQuest implements ac {
+public class SinsOfTheFatherQuest implements QuestStep {
 
     // Quest progress tracking
     private static final int QUEST_VARBIT = 65;
@@ -204,7 +204,7 @@ public class SinsOfTheFatherQuest implements ac {
             }
         }
 
-        int currentQuestStep = e.j(QUEST_VARBIT);
+        int currentQuestStep = GameStateUtil.getVarbit(QUEST_VARBIT);
 
         // Handle quest completion
         if (currentQuestStep == QUEST_COMPLETE - 1) {
@@ -212,7 +212,7 @@ public class SinsOfTheFatherQuest implements ac {
         }
 
         // Step 0: Start quest by talking to Almera
-        if (e.j(QUEST_VARBIT) == QUEST_NOT_STARTED && currentQuestStep >= QUEST_COMPLETE - 1) {
+        if (GameStateUtil.getVarbit(QUEST_VARBIT) == QUEST_NOT_STARTED && currentQuestStep >= QUEST_COMPLETE - 1) {
             if (needsBankingForQuest()) {
                 nearestBank = BankLocation.getNearest();
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
@@ -278,7 +278,7 @@ public class SinsOfTheFatherQuest implements ac {
         }
 
         // Step 1: Talk to the boy (Hudon)
-        if (e.j(QUEST_VARBIT) == QUEST_STEP_1) {
+        if (GameStateUtil.getVarbit(QUEST_VARBIT) == QUEST_STEP_1) {
             if (Players.getLocal().getWorldLocation().distanceTo(ALMERA_LOCATION) > 3) {
                 AccBuilderSotf.c = "Nav to boy";
                 Movement.walkTo(ALMERA_LOCATION);
@@ -291,7 +291,7 @@ public class SinsOfTheFatherQuest implements ac {
         }
 
         // Step 2: Get the Book on Baxtorian
-        if (e.j(QUEST_VARBIT) == QUEST_STEP_2) {
+        if (GameStateUtil.getVarbit(QUEST_VARBIT) == QUEST_STEP_2) {
             if (Players.getLocal().getWorldLocation().distanceTo(BOOKCASE_LOCATION) > 4) {
                 AccBuilderSotf.c = "Nav to bookcase";
                 Movement.walkTo(BOOKCASE_LOCATION);
@@ -314,7 +314,7 @@ public class SinsOfTheFatherQuest implements ac {
         if (Players.getLocal().getWorldLocation().distanceTo(BOOKCASE_LOCATION) <= 19) {
             if (!Inventory.contains("Book on baxtorian") &&
                 Players.getLocal().getAnimation() != -1 &&
-                e.j(QUEST_VARBIT) != 3) {
+                GameStateUtil.getVarbit(QUEST_VARBIT) != 3) {
                 item = Inventory.getFirst("Book on baxtorian");
                 if (item != null) {
                     AccBuilderSotf.c = "Reading";
@@ -325,27 +325,27 @@ public class SinsOfTheFatherQuest implements ac {
         }
 
         // Step 3: Navigate to Castle Wars and enter maze
-        if (e.j(QUEST_VARBIT) == QUEST_STEP_3) {
+        if (GameStateUtil.getVarbit(QUEST_VARBIT) == QUEST_STEP_3) {
             handleMazeNavigation();
         }
 
         // Step 4: Get Glarial's amulet and urn from tomb
-        if (e.j(QUEST_VARBIT) == QUEST_STEP_4) {
+        if (GameStateUtil.getVarbit(QUEST_VARBIT) == QUEST_STEP_4) {
             handleTombRetrieval();
         }
 
         // Step 5: Enter waterfall dungeon
-        if (e.j(QUEST_VARBIT) == QUEST_STEP_5) {
+        if (GameStateUtil.getVarbit(QUEST_VARBIT) == QUEST_STEP_5) {
             handleWaterfallEntry();
         }
 
         // Step 6: Navigate through waterfall dungeon
-        if (e.j(QUEST_VARBIT) == QUEST_STEP_6) {
+        if (GameStateUtil.getVarbit(QUEST_VARBIT) == QUEST_STEP_6) {
             handleWaterfallDungeon();
         }
 
         // Step 7: Place runes on pillars and complete quest
-        if (e.j(QUEST_VARBIT) == QUEST_STEP_7) {
+        if (GameStateUtil.getVarbit(QUEST_VARBIT) == QUEST_STEP_7) {
             handleFinalStep();
         }
     }
@@ -814,13 +814,13 @@ public class SinsOfTheFatherQuest implements ac {
 
     // Quest completion check
     @Override
-    public boolean ah() {
-        return e.j(QUEST_VARBIT) >= QUEST_COMPLETE;
+    public boolean isComplete() {
+        return GameStateUtil.getVarbit(QUEST_VARBIT) >= QUEST_COMPLETE;
     }
 
     // Quest requirements check
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false; // No specific requirements to start
     }
 }

@@ -37,7 +37,7 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import gg.squire.autotoa.tasks.AutotoaTaskBase;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 
 /**
  * PathOverlay - Renders paths, waypoints, and ground objects with visual indicators.

@@ -30,7 +30,7 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GraphicsObjectCreated;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.client.Static;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.GameEnum10;
 
 /**
@@ -45,7 +45,7 @@ import gg.squire.autotoa.tasks.GameEnum10;
  */
 @TaskDesc(name="Handling baba prayers", priority=0x7FFFFFFF, register=true)
 public class HandlingBabaPrayersTask
-extends AutotoaManager {
+extends KephriManager {
     // NPC IDs
     private static final int BABA_NPC_ID = 11780;
     private static final String BABA_NAME = "Ba-Ba";

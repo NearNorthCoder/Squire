@@ -23,7 +23,7 @@ import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.items.Inventory;
 
 @TaskDesc(name="Drinking Ambrosia", priority=105)
-public class DrinkingAmbrosiaTask extends AutotoaManager {
+public class DrinkingAmbrosiaTask extends KephriManager {
 
     // Constants
     private static final int HP_THRESHOLD_DEFAULT = 37;
