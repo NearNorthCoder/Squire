@@ -21,7 +21,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.Walker;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.*;
+import gg.squire.sotf.framework.*;
 
 /**
  * Main quest step handler for the Waterfall Quest.
@@ -30,7 +30,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.*;
  * locations including Castle Wars, Glarial's Tomb, and the Waterfall dungeon, and
  * ultimately completing the quest by placing runes on pillars.
  */
-public class WaterfallQuestMain implements ac {
+public class WaterfallQuestMain implements QuestStep {
 
     // Quest progress tracking
     private static final int QUEST_VARBIT = 65;

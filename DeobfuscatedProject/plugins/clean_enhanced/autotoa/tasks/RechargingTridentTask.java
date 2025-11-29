@@ -49,7 +49,7 @@ public class RechargingTridentTask extends TOAConfigurableTask {
     }
 
     @Subscribe
-    public void a(GameStateChanged gameStateChanged) {
+    public void onGameStateChanged(GameStateChanged gameStateChanged) {
         // Reset recharged flag when leaving instance
         if (!this.client.isInInstancedRegion()) {
             this.recharged = false;

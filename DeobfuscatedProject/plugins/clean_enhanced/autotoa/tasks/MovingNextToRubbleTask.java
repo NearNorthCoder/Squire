@@ -49,7 +49,7 @@ public class MovingNextToRubbleTask extends KephriManager {
      */
     @Subscribe
     @Override
-    public void a(ChatMessage chatMessage) {
+    public void onChatMessage(ChatMessage chatMessage) {
         if (chatMessage.getMessage().contains(BOULDER_THROWN_MESSAGE)) {
             this.boulderThrown = true;
         }
@@ -59,14 +59,14 @@ public class MovingNextToRubbleTask extends KephriManager {
      * Reset boulder thrown flag when rubble despawns
      */
     @Subscribe
-    public void a(NpcDespawned npcDespawned) {
+    public void onNpcDespawned(NpcDespawned npcDespawned) {
         if (npcDespawned.getNpc().getName().contains(RUBBLE_NPC_NAME)) {
             this.boulderThrown = false;
         }
     }
 
     @Override
-    public boolean bC() {
+    public boolean executeTask() {
         // Find nearest rubble NPC
         NPC rubble = NPCs.getNearest(npc -> npc.getName().contains(RUBBLE_NPC_NAME));
 

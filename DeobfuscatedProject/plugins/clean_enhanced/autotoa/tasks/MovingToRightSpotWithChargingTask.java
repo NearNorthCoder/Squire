@@ -112,7 +112,7 @@ public class MovingToRightSpotWithChargingTask extends KephriManager {
      * When it spawns, update the state to trigger movement to charge position.
      */
     @Subscribe
-    public void a(GameObjectSpawned gameObjectSpawned) {
+    public void onGameObjectSpawned(GameObjectSpawned gameObjectSpawned) {
         if (gameObjectSpawned.getGameObject().getId() == CHARGING_OBELISK_ID) {
             this.obeliskHasSpawned = true;
         }
@@ -123,7 +123,7 @@ public class MovingToRightSpotWithChargingTask extends KephriManager {
      * If the player dies, reset back to the initial state.
      */
     @Subscribe
-    public void a(ActorDeath actorDeath) {
+    public void onActorDeath(ActorDeath actorDeath) {
         if (actorDeath.getActor().equals(Players.getLocal())) {
             this.obeliskHasSpawned = false;
         }

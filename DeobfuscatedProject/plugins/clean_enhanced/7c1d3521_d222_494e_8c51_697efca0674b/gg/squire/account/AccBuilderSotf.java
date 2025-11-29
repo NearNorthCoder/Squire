@@ -43,6 +43,8 @@
 package gg.squire.account;
 
 import com.google.inject.Provides;
+import gg.squire.sotf.framework.GameStateUtil;
+import gg.squire.sotf.framework.Constants;
 import gg.squire.account.BuilderConfig;
 import gg.squire.account.GodsApi.overlay.BuilderInfoBox;
 import gg.squire.client.plugins.SquirePlugin;
@@ -133,7 +135,7 @@ extends Script {
         block28: {
             AccBuilderSotf var3;
             block29: {
-                o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.y();
+                GameStateUtil.closeEnterAmountWidget();
                 int n3 = Game.getWildyLevel();
                 Player player = Players.getLocal();
                 int n4 = player.getCombatLevel();
@@ -205,7 +207,7 @@ extends Script {
                         var11 = new WorldPoint(var14.getX() + var1[5], var14.getY(), var14.getPlane());
                         WorldPoint var15 = new WorldPoint(var14.getX() - var1[5], var14.getY(), var14.getPlane());
                         if (AccBuilderSotf.var9(i.containsKey(var13) ? 1 : 0)) {
-                            o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.c(var13);
+                            GameStateUtil.clickTile(var13);
                             Time.sleepTicks((int)var1[5]);
                             0;
                             if (AccBuilderSotf.var16(Players.getLocal().getInteracting())) {
@@ -216,7 +218,7 @@ extends Script {
                             return;
                         }
                         if (AccBuilderSotf.var5(i.containsKey(var13) ? 1 : 0) && AccBuilderSotf.var9(i.containsKey(var12) ? 1 : 0)) {
-                            o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.c(var12);
+                            GameStateUtil.clickTile(var12);
                             Time.sleepTicks((int)var1[5]);
                             0;
                             if (AccBuilderSotf.var16(Players.getLocal().getInteracting())) {
@@ -227,7 +229,7 @@ extends Script {
                             return;
                         }
                         if (AccBuilderSotf.var5(i.containsKey(var13) ? 1 : 0) && AccBuilderSotf.var5(i.containsKey(var12) ? 1 : 0) && AccBuilderSotf.var9(i.containsKey(var11) ? 1 : 0)) {
-                            o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.c(var11);
+                            GameStateUtil.clickTile(var11);
                             Time.sleepTicks((int)var1[5]);
                             0;
                             if (AccBuilderSotf.var16(Players.getLocal().getInteracting())) {
@@ -238,7 +240,7 @@ extends Script {
                             return;
                         }
                         if (AccBuilderSotf.var5(i.containsKey(var13) ? 1 : 0) && AccBuilderSotf.var5(i.containsKey(var12) ? 1 : 0) && AccBuilderSotf.var5(i.containsKey(var11) ? 1 : 0) && AccBuilderSotf.var9(i.containsKey(var15) ? 1 : 0)) {
-                            o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.c(var15);
+                            GameStateUtil.clickTile(var15);
                             Time.sleepTicks((int)var1[5]);
                             0;
                             if (AccBuilderSotf.var16(Players.getLocal().getInteracting())) {
@@ -302,7 +304,7 @@ extends Script {
             return bl;
         });
         0;
-        o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.I();
+        GameStateUtil.clickInterfaceButton();
     }
 
     private static boolean var10(int n2, int n3) {
@@ -423,9 +425,9 @@ extends Script {
                     return var1[6];
                 }
                 if (!AccBuilderSotf.var30(Game.getState(), GameState.LOGGED_IN)) break block11;
-                while (AccBuilderSotf.var5(o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.z() ? 1 : 0) && AccBuilderSotf.var9(d) && AccBuilderSotf.var10(o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.j(var1[7]), var1[8]) && AccBuilderSotf.var9(Dialog.isOpen() ? 1 : 0)) {
+                while (AccBuilderSotf.var5(GameStateUtil.isGrandExchangeWarningEnabled() ? 1 : 0) && AccBuilderSotf.var9(d) && AccBuilderSotf.var10(GameStateUtil.getVarbit(var1[7]), var1[8]) && AccBuilderSotf.var9(Dialog.isOpen() ? 1 : 0)) {
                     c = var2[var1[9]];
-                    o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.A();
+                    GameStateUtil.disableGrandExchangeWarning();
                     Time.sleepTicks((int)var1[5]);
                     0;
                     0;
@@ -620,9 +622,9 @@ extends Script {
             }
         }
         if (AccBuilderSotf.var5(var39.getMessage().contains(var2[var1[62]]) ? 1 : 0) && AccBuilderSotf.var8(Players.getLocal().getWorldLocation().distanceTo(z.eb), var1[22])) {
-            o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.x();
+            GameStateUtil.closeBankAndHopWorld();
         }
-        if (!(!AccBuilderSotf.var5(var39.getMessage().contains(var2[var1[63]]) ? 1 : 0) || AccBuilderSotf.var33(Players.getLocal().getWorldLocation().distanceTo(o.c.k.i.-.l.o.f.-.n.c.t.e.s.u.df), var1[22]) && AccBuilderSotf.var33(Players.getLocal().getWorldLocation().distanceTo(o.c.k.i.-.l.o.f.-.n.c.t.e.s.u.dh), var1[22]) && AccBuilderSotf.var33(Players.getLocal().getWorldLocation().distanceTo(new WorldPoint(var1[64], var1[65], var1[4])), var1[15]) && !AccBuilderSotf.var8(Players.getLocal().getWorldLocation().distanceTo(V.mh), var1[22]))) {
+        if (!(!AccBuilderSotf.var5(var39.getMessage().contains(var2[var1[63]]) ? 1 : 0) || AccBuilderSotf.var33(Players.getLocal().getWorldLocation().distanceTo(Constants.df), var1[22]) && AccBuilderSotf.var33(Players.getLocal().getWorldLocation().distanceTo(Constants.dh), var1[22]) && AccBuilderSotf.var33(Players.getLocal().getWorldLocation().distanceTo(new WorldPoint(var1[64], var1[65], var1[4])), var1[15]) && !AccBuilderSotf.var8(Players.getLocal().getWorldLocation().distanceTo(V.mh), var1[22]))) {
             var38 = new WorldPoint(var1[64], var1[65], var1[4]);
             var37 = TileObjects.getNearest(tileObject -> {
                 int n2;
@@ -754,7 +756,7 @@ extends Script {
         }
         if (AccBuilderSotf.var9(n)) {
             AccBuilderSotf var42;
-            o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.a(var42.r, "rsn: " + k + " account has been banned? - Acc builder SOTF");
+            GameStateUtil.sendWebhook(var42.r, "rsn: " + k + " account has been banned? - Acc builder SOTF");
             n += var1[5];
         }
     }
