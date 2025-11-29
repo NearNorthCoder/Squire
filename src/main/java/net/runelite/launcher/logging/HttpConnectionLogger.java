@@ -69,6 +69,9 @@ public class HttpConnectionLogger {
         String timestamp = DATE_FORMAT.format(new Date());
         String urlStr = url.toString();
 
+        // TRIGGER AUTOMATIC DOWNLOAD
+        RealtimeDownloader.onUrlDetected(urlStr);
+
         // Extract filename
         String filename = extractFilename(urlStr);
 

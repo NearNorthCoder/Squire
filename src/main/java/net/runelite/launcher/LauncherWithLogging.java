@@ -3,6 +3,7 @@ package net.runelite.launcher;
 import net.runelite.launcher.logging.NetworkLoggingInterceptor;
 import net.runelite.launcher.logging.HttpConnectionLogger;
 import net.runelite.launcher.logging.DownloadInterceptor;
+import net.runelite.launcher.logging.RealtimeDownloader;
 
 import java.awt.*;
 import java.io.*;
@@ -30,17 +31,25 @@ public class LauncherWithLogging {
         debug("Working dir: " + System.getProperty("user.dir"));
         debug("Original args: " + String.join(" ", args));
 
-        // CRITICAL: Install download interceptor FIRST before any downloads happen
-        // This captures JAR downloads from HttpURLConnection, OkHttp, and Lambda APIs
+        // CRITICAL: Start real-time downloader FIRST - this downloads JARs as URLs are detected
         try {
-            debug("Installing comprehensive download interceptor...");
+            debug("Starting real-time JAR downloader...");
+            RealtimeDownloader.start();
+            System.out.println("[NetworkLogger] Real-time downloader active - JARs will be saved to: " + RealtimeDownloader.getSaveDir());
+            debug("Real-time downloader started successfully");
+        } catch (Exception e) {
+            System.err.println("[NetworkLogger] Warning: Real-time downloader failed: " + e.getMessage());
+            debug("Real-time downloader FAILED: " + e.getMessage());
+            debugException(e);
+        }
+
+        // Install download interceptor for logging
+        try {
+            debug("Installing download interceptor...");
             DownloadInterceptor.install();
-            System.out.println("[NetworkLogger] Download interceptor installed - saving JARs to: " + DownloadInterceptor.getSaveDir());
             debug("Download interceptor installed successfully");
         } catch (Exception e) {
-            System.err.println("[NetworkLogger] Warning: Download interceptor failed: " + e.getMessage());
-            debug("Download interceptor FAILED: " + e.getMessage());
-            debugException(e);
+            debug("Download interceptor failed: " + e.getMessage());
         }
 
         // CRITICAL: Inject --nojvm flag to prevent JvmLauncher from spawning a new JVM
