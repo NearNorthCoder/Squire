@@ -47,7 +47,7 @@ import java.util.*;
  * Priority: MAX (2147483647) - highest possible priority
  */
 @TaskDesc(name="Handling babboon prayers", priority=0x7FFFFFFF, register=true)
-public class HandlingBabboonPrayersTask extends AutotoaManager {
+public class HandlingBabboonPrayersTask extends KephriManager {
 
     // NPC Names
     private static final String NPC_BABOON_MAGE = "Baboon Mage";

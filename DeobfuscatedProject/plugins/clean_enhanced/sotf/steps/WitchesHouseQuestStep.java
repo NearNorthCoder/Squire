@@ -28,17 +28,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Widgets;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.I;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.X;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aN;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.g;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
+import gg.squire.sotf.framework.*;
 
 /**
  * Witches' House quest step implementation.
@@ -53,7 +43,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
  * - Killing the experiment with magic
  * - Collecting the ball and completing the quest
  */
-public class P_QuestStep implements ac {
+public class WitchesHouseQuestStep implements QuestStep {
 
     // Item IDs
     private static final int WATER_RUNE_ID = 555;
@@ -161,7 +151,7 @@ public class P_QuestStep implements ac {
      * Returns false to indicate this is not a continuous step.
      */
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
@@ -171,8 +161,8 @@ public class P_QuestStep implements ac {
      * @return true if quest can be started, false otherwise
      */
     @Override
-    public boolean ah() {
-        return e.j(QUEST_VARP_ID) >= 7;
+    public boolean isComplete() {
+        return GameStateUtil.getVarbit(QUEST_VARP_ID) >= 7;
     }
 
     /**
@@ -181,7 +171,7 @@ public class P_QuestStep implements ac {
      * @return "Witches House quest"
      */
     @Override
-    public String ag() {
+    public String getName() {
         return "Witches House quest";
     }
 
@@ -191,7 +181,7 @@ public class P_QuestStep implements ac {
      * @return sleep time in milliseconds
      */
     @Override
-    public int af() {
+    public int execute() {
         executeQuestStep();
         return 100;
     }
@@ -201,7 +191,7 @@ public class P_QuestStep implements ac {
      */
     public static void executeQuestStep() {
         // Handle special case for quest state
-        if (e.j(QUEST_VARP_ID) == 2) {
+        if (GameStateUtil.getVarbit(QUEST_VARP_ID) == 2) {
             try {
                 X.dR();
             } catch (Exception e) {
@@ -211,7 +201,7 @@ public class P_QuestStep implements ac {
         }
 
         // Banking and item preparation phase
-        if (e.j(QUEST_VARP_ID) != 2 && e.j(QUEST_STATE_VARP) == 1) {
+        if (GameStateUtil.getVarbit(QUEST_VARP_ID) != 2 && GameStateUtil.getVarbit(QUEST_STATE_VARP) == 1) {
             // Create shopping list if needed
             if (!hasShoppingList) {
                 AccBuilderSotf.c = "Buying items";
@@ -271,32 +261,32 @@ public class P_QuestStep implements ac {
         }
 
         // Quest progression - stealing key phase
-        if (e.j(QUEST_VARP_ID) != 2 && e.j(QUEST_STATE_VARP) != 1) {
+        if (GameStateUtil.getVarbit(QUEST_VARP_ID) != 2 && GameStateUtil.getVarbit(QUEST_STATE_VARP) != 1) {
             handleKeyStealingPhase();
         }
 
         // Magnet acquisition phase
-        if (e.j(QUEST_VARP_ID) != 2 && e.j(QUEST_STATE_VARP) != 2) {
+        if (GameStateUtil.getVarbit(QUEST_VARP_ID) != 2 && GameStateUtil.getVarbit(QUEST_STATE_VARP) != 2) {
             handleMagnetPhase();
         }
 
         // Maze navigation and mouse handling
-        if (HOUSE_INTERIOR.contains(Players.getLocal().getWorldLocation()) && e.j(QUEST_STATE_VARP) >= 3) {
+        if (HOUSE_INTERIOR.contains(Players.getLocal().getWorldLocation()) && GameStateUtil.getVarbit(QUEST_STATE_VARP) >= 3) {
             handleMazeEntry();
         }
 
         // Combat phase - killing the experiment
-        if (!HOUSE_INTERIOR.contains(Players.getLocal().getWorldLocation()) && e.j(QUEST_STATE_VARP) >= 3) {
+        if (!HOUSE_INTERIOR.contains(Players.getLocal().getWorldLocation()) && GameStateUtil.getVarbit(QUEST_STATE_VARP) >= 3) {
             handleCombatPhase();
         }
 
         // Ball collection phase
-        if (e.j(QUEST_STATE_VARP) >= 6) {
+        if (GameStateUtil.getVarbit(QUEST_STATE_VARP) >= 6) {
             handleBallCollection();
         }
 
         // Quest completion phase
-        if (e.j(QUEST_STATE_VARP) >= 6) {
+        if (GameStateUtil.getVarbit(QUEST_STATE_VARP) >= 6) {
             handleQuestCompletion();
         }
     }
@@ -473,7 +463,7 @@ public class P_QuestStep implements ac {
      * Handles the combat phase - killing the experiment.
      */
     private static void handleCombatPhase() {
-        if (!HOUSE_INTERIOR.contains(Players.getLocal().getWorldLocation()) && e.j(QUEST_STATE_VARP) >= 3) {
+        if (!HOUSE_INTERIOR.contains(Players.getLocal().getWorldLocation()) && GameStateUtil.getVarbit(QUEST_STATE_VARP) >= 3) {
             if (Inventory.contains(KEY_ID)) {
                 if (Inventory.contains(KEY_ID) &&
                     Players.getLocal().getWorldLocation().distanceTo(SHED_ENTRANCE) > 3) {
@@ -563,7 +553,7 @@ public class P_QuestStep implements ac {
      * Handles collecting the ball after killing the experiment.
      */
     private static void handleBallCollection() {
-        if (e.j(QUEST_STATE_VARP) >= 6) {
+        if (GameStateUtil.getVarbit(QUEST_STATE_VARP) >= 6) {
             if (!Inventory.contains("Ball")) {
                 TileObject ball = TileItems.getNearest("Ball");
 
@@ -580,7 +570,7 @@ public class P_QuestStep implements ac {
      * Handles completing the quest.
      */
     private static void handleQuestCompletion() {
-        if (e.j(QUEST_STATE_VARP) >= 6) {
+        if (GameStateUtil.getVarbit(QUEST_STATE_VARP) >= 6) {
             if (Inventory.contains("Ball")) {
                 // Break teleport if in shed
                 if (SHED_AREA.contains(Players.getLocal().getWorldLocation())) {
@@ -854,7 +844,7 @@ public class P_QuestStep implements ac {
         int[] requiredItems = {8007, TELEPORT_TABLET_ID, LEATHER_GLOVES_ID, LOBSTER_ID,
                                FIRE_RUNE_ID, WATER_RUNE_ID, EARTH_RUNE_ID};
 
-        if (!e.c(requiredItems)) {
+        if (!GameStateUtil.randomRange(requiredItems)) {
             return false;
         }
 

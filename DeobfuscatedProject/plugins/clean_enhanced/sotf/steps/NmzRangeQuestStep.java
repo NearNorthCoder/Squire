@@ -17,7 +17,7 @@ import java.util.List;
  *
  * Once all quests are complete, enables NMZ range mode.
  */
-public class NmzRangeQuestStep implements ac {
+public class NmzRangeQuestStep implements QuestStep {
 
     // Quest indices for quest state tracking
     private static final int VAMPIRE_SLAYER_VARBIT = 178;
@@ -62,21 +62,21 @@ public class NmzRangeQuestStep implements ac {
         itemRequirements = new ArrayList<>();
         currentStepDescription = STEP_COMPLETE;
         questName = QUEST_NAME;
-        questState = e.c(1, 2);
+        questState = GameStateUtil.randomRange(1, 2);
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return questName;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             updateQuestProgress();
         } catch (Exception ex) {
@@ -91,63 +91,63 @@ public class NmzRangeQuestStep implements ac {
      */
     public static void updateQuestProgress() {
         // Check Vampire Slayer completion
-        if (e.j(VAMPIRE_SLAYER_VARBIT) < VAMPIRE_SLAYER_COMPLETE_VALUE) {
+        if (GameStateUtil.getVarbit(VAMPIRE_SLAYER_VARBIT) < VAMPIRE_SLAYER_COMPLETE_VALUE) {
             currentStepDescription = STEP_VAMPIRE_SLAYER;
             aa.ev();
             return;
         }
 
         // Check Lost City completion
-        if (e.j(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
-                && e.j(LOST_CITY_VARBIT) < LOST_CITY_COMPLETE_VALUE) {
+        if (GameStateUtil.getVarbit(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(LOST_CITY_VARBIT) < LOST_CITY_COMPLETE_VALUE) {
             currentStepDescription = STEP_LOST_CITY;
             F.bY();
             return;
         }
 
         // Check Fight Arena completion
-        if (e.j(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
-                && e.j(LOST_CITY_VARBIT) >= LOST_CITY_COMPLETE_VALUE
-                && e.j(FIGHT_ARENA_VARBIT) < FIGHT_ARENA_COMPLETE_VALUE) {
+        if (GameStateUtil.getVarbit(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(LOST_CITY_VARBIT) >= LOST_CITY_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(FIGHT_ARENA_VARBIT) < FIGHT_ARENA_COMPLETE_VALUE) {
             currentStepDescription = STEP_FIGHT_ARENA;
             A.bw();
             return;
         }
 
         // Check Tree Gnome Village completion
-        if (e.j(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
-                && e.j(LOST_CITY_VARBIT) >= LOST_CITY_COMPLETE_VALUE
-                && e.j(FIGHT_ARENA_VARBIT) >= FIGHT_ARENA_COMPLETE_VALUE
-                && e.j(TREE_GNOME_VILLAGE_VARBIT) < TREE_GNOME_VILLAGE_COMPLETE_VALUE) {
+        if (GameStateUtil.getVarbit(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(LOST_CITY_VARBIT) >= LOST_CITY_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(FIGHT_ARENA_VARBIT) >= FIGHT_ARENA_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(TREE_GNOME_VILLAGE_VARBIT) < TREE_GNOME_VILLAGE_COMPLETE_VALUE) {
             currentStepDescription = STEP_TREE_GNOME_VILLAGE;
             M.cT();
             return;
         }
 
         // Check Grand Tree completion
-        if (e.j(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
-                && e.j(LOST_CITY_VARBIT) >= LOST_CITY_COMPLETE_VALUE
-                && e.j(FIGHT_ARENA_VARBIT) >= FIGHT_ARENA_COMPLETE_VALUE
-                && e.j(TREE_GNOME_VILLAGE_VARBIT) >= TREE_GNOME_VILLAGE_COMPLETE_VALUE
-                && e.j(GRAND_TREE_VARBIT) < GRAND_TREE_COMPLETE_VALUE) {
+        if (GameStateUtil.getVarbit(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(LOST_CITY_VARBIT) >= LOST_CITY_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(FIGHT_ARENA_VARBIT) >= FIGHT_ARENA_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(TREE_GNOME_VILLAGE_VARBIT) >= TREE_GNOME_VILLAGE_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(GRAND_TREE_VARBIT) < GRAND_TREE_COMPLETE_VALUE) {
             currentStepDescription = STEP_GRAND_TREE;
             C.bA();
             return;
         }
 
         // All quests complete - enable NMZ range mode
-        if (e.j(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
-                && e.j(LOST_CITY_VARBIT) >= LOST_CITY_COMPLETE_VALUE
-                && e.j(FIGHT_ARENA_VARBIT) >= FIGHT_ARENA_COMPLETE_VALUE
-                && e.j(TREE_GNOME_VILLAGE_VARBIT) >= TREE_GNOME_VILLAGE_COMPLETE_VALUE
-                && e.j(GRAND_TREE_VARBIT) >= GRAND_TREE_COMPLETE_VALUE) {
+        if (GameStateUtil.getVarbit(VAMPIRE_SLAYER_VARBIT) >= VAMPIRE_SLAYER_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(LOST_CITY_VARBIT) >= LOST_CITY_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(FIGHT_ARENA_VARBIT) >= FIGHT_ARENA_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(TREE_GNOME_VILLAGE_VARBIT) >= TREE_GNOME_VILLAGE_COMPLETE_VALUE
+                && GameStateUtil.getVarbit(GRAND_TREE_VARBIT) >= GRAND_TREE_COMPLETE_VALUE) {
             currentStepDescription = STEP_COMPLETE;
             q.e(COMBAT_STYLE);
         }
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return false;
     }
 }

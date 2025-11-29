@@ -24,7 +24,7 @@ import net.unethicalite.api.movement.Reachable;
  * - Climbs the steps to escape the water if not attacking
  */
 @TaskDesc(name="Escaping water", priority=50, blocking=true)
-public class EscapingWaterTask extends AutotoaManager {
+public class EscapingWaterTask extends KephriManager {
 
     // Position to stand when escaping water (dry land)
     private static final Point DRY_LAND_POSITION = new Point(30, 30);
@@ -36,8 +36,8 @@ public class EscapingWaterTask extends AutotoaManager {
     private static final String CLIMB_UP_ACTION = "Climb-up";
 
     @Inject
-    protected EscapingWaterTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected EscapingWaterTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig);
     }
 
     @Override

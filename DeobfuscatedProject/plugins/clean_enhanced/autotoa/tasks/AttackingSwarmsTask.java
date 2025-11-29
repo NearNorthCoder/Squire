@@ -46,7 +46,7 @@ import java.util.Set;
  */
 @TaskDesc(name="Attacking swarms", priority=15, blocking=true, register=true)
 @Singleton
-public class AttackingSwarmsTask extends AutotoaManager {
+public class AttackingSwarmsTask extends KephriManager {
 
     // NPC Names
     private static final String NPC_SCARAB_SWARM = "Scarab Swarm";
@@ -60,8 +60,8 @@ public class AttackingSwarmsTask extends AutotoaManager {
     private final Set<NPC> targetedSwarms; // Swarms that have been hit by projectiles
 
     @Inject
-    protected AttackingSwarmsTask(Client client, z z2, TOAConfig config) {
-        super(client, z2, config, bi.SWARM);
+    protected AttackingSwarmsTask(Client client, ToaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config, bi.SWARM);
         this.targetedSwarms = new HashSet<>();
     }
 

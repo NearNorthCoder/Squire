@@ -26,7 +26,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Dodging wave", priority=150, blocking=true)
-public class DodgingWaveTask extends AutotoaManager {
+public class DodgingWaveTask extends KephriManager {
 
     // Constants
     private static final int SAFE_DISTANCE = 7;

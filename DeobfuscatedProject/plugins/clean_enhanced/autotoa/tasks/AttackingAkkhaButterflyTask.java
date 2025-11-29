@@ -30,7 +30,7 @@ import net.runelite.client.plugins.squire.equipment.EquipmentSetup;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.GameEnum4;
 
 /**
@@ -49,7 +49,7 @@ import gg.squire.autotoa.tasks.GameEnum4;
  * 4. Maintain distance from shadow (not more than 2 tiles away)
  */
 @TaskDesc(name="Attacking Akkha (Butterfly)")
-public class AttackingAkkhaButterflyTask extends AutotoaManager {
+public class AttackingAkkhaButterflyTask extends KephriManager {
 
     // NPC names and actions
     private static final String AKKHA_SHADOW_NAME = "Akkha's Shadow";
@@ -59,13 +59,13 @@ public class AttackingAkkhaButterflyTask extends AutotoaManager {
     private int tickCounter;
 
     @Inject
-    protected AttackingAkkhaButterflyTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected AttackingAkkhaButterflyTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig);
         this.tickCounter = 0;
     }
 
     @Override
-    public boolean bl() {
+    protected boolean shouldExecute() {
         // Check if we should be doing this task
         if (!this.bu()) {
             return false;
@@ -140,7 +140,7 @@ public class AttackingAkkhaButterflyTask extends AutotoaManager {
     public ConfigStorageBox<EquipmentSetup> br() {
         // Use shadow attack style when attacking Akkha's Shadow
         if (!g(J())) {
-            return this.cW.shadowAttackStyle();
+            return this.config.shadowAttackStyle();
         }
         return super.br();
     }

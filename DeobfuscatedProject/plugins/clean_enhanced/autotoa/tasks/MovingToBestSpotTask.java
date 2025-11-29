@@ -24,7 +24,7 @@ import net.unethicalite.api.movement.Reachable;
  * - Avoids dangerous ground markers
  */
 @TaskDesc(name="Moving to best spot", priority=20)
-public class MovingToBestSpotTask extends AutotoaManager {
+public class MovingToBestSpotTask extends KephriManager {
 
     // Region coordinates for predefined safe spots
     // Region point at coordinates (34, 47, plane 0, region 14164)
@@ -40,8 +40,8 @@ public class MovingToBestSpotTask extends AutotoaManager {
     private static final int NPC_AREA_OFFSET = 1;
 
     @Inject
-    protected MovingToBestSpotTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig, bi.ATTACK);
+    protected MovingToBestSpotTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig, bi.ATTACK);
     }
 
     @Override

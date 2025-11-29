@@ -41,7 +41,7 @@ import net.unethicalite.api.movement.Reachable;
  * to each tile while avoiding spike traps.
  */
 @TaskDesc(name="Doing pressure plates puzzle", register=true, priority=5, blocking=true)
-public class DoingPressurePlatesPuzzleTask extends AutotoaManager {
+public class DoingPressurePlatesPuzzleTask extends KephriManager {
 
     // Object IDs for puzzle elements
     private static final int OBJECT_ANCIENT_TABLET = 45599; // 0xB23F - Shows puzzle number

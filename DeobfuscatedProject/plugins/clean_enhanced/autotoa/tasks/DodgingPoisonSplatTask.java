@@ -24,7 +24,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Dodging poison splat", priority=160)
-public class DodgingPoisonSplatTask extends AutotoaManager {
+public class DodgingPoisonSplatTask extends KephriManager {
 
     // Constants
     private static final int FALSE = 0;

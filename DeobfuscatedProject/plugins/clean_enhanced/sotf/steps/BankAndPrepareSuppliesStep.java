@@ -15,14 +15,7 @@ import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.quests.QuestVarbits;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Prayers;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.g;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
+import gg.squire.sotf.framework.*;
 
 /**
  * Handles banking and supply preparation for the SOTF (Sins of the Father) quest.
@@ -38,7 +31,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
  * 1. Shopping phase: If required items are missing from bank, create a shopping list
  * 2. Preparation phase: Bank items, withdraw supplies, and navigate to start location
  */
-public class BankAndPrepareSuppliesStep implements ac {
+public class BankAndPrepareSuppliesStep implements QuestStep {
 
     // Quest item IDs
     private static final int ROPE_ID = 954;                    // Rope item
@@ -126,7 +119,7 @@ public class BankAndPrepareSuppliesStep implements ac {
         // Phase 2: Handle banking and supply preparation
         if (isPrepared) {
             // Check if we have required items in inventory
-            if (hasRequiredItems() && e.j(currentQuestStep) == 0) {
+            if (hasRequiredItems() && GameStateUtil.getVarbit(currentQuestStep) == 0) {
                 BankLocation nearestBank = BankLocation.getNearest();
 
                 // Navigate to bank if not already there
@@ -164,7 +157,7 @@ public class BankAndPrepareSuppliesStep implements ac {
                         requiredItems[0] = STAMINA_POTION_ID;
                         requiredItems[1] = SILVER_BAR_ID;
 
-                        if (!e.c(requiredItems)) {
+                        if (!GameStateUtil.randomRange(requiredItems)) {
                             buildShoppingList();
                             System.out.println(MSG_MISSING_SUPPLIES);
                             isPrepared = false;
@@ -172,7 +165,7 @@ public class BankAndPrepareSuppliesStep implements ac {
                         }
 
                         // Withdraw required items if we have them
-                        if (e.c(requiredItems)) {
+                        if (GameStateUtil.randomRange(requiredItems)) {
                             a.a(STAMINA_POTION_ID, 2);         // Withdraw 2 stamina potions
                             a.a(VARROCK_TELEPORT_ID, 1);       // Withdraw 1 teleport
                         }
@@ -192,7 +185,7 @@ public class BankAndPrepareSuppliesStep implements ac {
             }
 
             // Eat food if health is low (below 60%)
-            if (e.w() < 60.0) {
+            if (GameStateUtil.getHealthPercentage() < 60.0) {
                 String[] foodNames = new String[1];
                 foodNames[0] = FOOD_NAME;
 
@@ -205,7 +198,7 @@ public class BankAndPrepareSuppliesStep implements ac {
             }
 
             // Navigate to quest start location
-            if (hasRequiredItems() && !e.j(currentQuestStep)) {
+            if (hasRequiredItems() && !GameStateUtil.getVarbit(currentQuestStep)) {
                 if (Players.getLocal().getWorldLocation().distanceTo(startLocation) > NAVIGATION_DISTANCE) {
                     AccBuilderSotf.c = MSG_NAV_TO_START;
 
@@ -273,14 +266,14 @@ public class BankAndPrepareSuppliesStep implements ac {
         int[] crossbowCheck = new int[1];
         crossbowCheck[0] = CROSSBOW_ID;
         if (!Bank.contains(crossbowCheck)) {
-            d crossbowItem = new d(CROSSBOW_ID, 2, e.c(7932, 6258));
+            d crossbowItem = new d(CROSSBOW_ID, 2, GameStateUtil.randomRange(7932, 6258));
             shoppingList.add(crossbowItem);
         }
         if (Bank.contains(crossbowCheck)) {
             int[] crossbowQuantityCheck = new int[1];
             crossbowQuantityCheck[0] = CROSSBOW_ID;
             if (Bank.getFirst(crossbowQuantityCheck).getQuantity() < 2) {
-                d crossbowItem = new d(CROSSBOW_ID, 2, e.c(7932, 6258));
+                d crossbowItem = new d(CROSSBOW_ID, 2, GameStateUtil.randomRange(7932, 6258));
                 shoppingList.add(crossbowItem);
             }
         }
@@ -363,7 +356,7 @@ public class BankAndPrepareSuppliesStep implements ac {
      * @return tick delay (72 ticks)
      */
     @Override
-    public int af() {
+    public int execute() {
         try {
             executeBankingAndPreparation();
         } catch (Exception e) {
@@ -378,7 +371,7 @@ public class BankAndPrepareSuppliesStep implements ac {
      * @return empty string (step name not displayed)
      */
     @Override
-    public String ag() {
+    public String getName() {
         return MSG_EMPTY_STRING;
     }
 
@@ -393,7 +386,7 @@ public class BankAndPrepareSuppliesStep implements ac {
      * @return true if X Marks the Spot is complete, false otherwise
      */
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Vars.getBit(QuestVarbits.QUEST_X_MARKS_THE_SPOT.getId()) == X_MARKS_SPOT_COMPLETE;
     }
 
@@ -403,7 +396,7 @@ public class BankAndPrepareSuppliesStep implements ac {
      * @return false - this step is never marked as complete, it's a recurring preparation step
      */
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 }

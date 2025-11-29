@@ -39,7 +39,7 @@ import java.util.function.Predicate;
  * - Defeating ghasts
  * - Completing the quest
  */
-public class G_QuestStep implements ac {
+public class NatureSpiritQuestStep implements QuestStep {
 
     // Quest-related item IDs
     public static final int ITEM_MIRROR = 25427;
@@ -117,7 +117,7 @@ public class G_QuestStep implements ac {
      * @return priority value (64)
      */
     @Override
-    public int af() {
+    public int execute() {
         try {
             executeQuestStep();
         } catch (Exception exception) {
@@ -132,7 +132,7 @@ public class G_QuestStep implements ac {
      * @return false (never skip)
      */
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
@@ -142,7 +142,7 @@ public class G_QuestStep implements ac {
      * @return "Nature spirit"
      */
     @Override
-    public String ag() {
+    public String getName() {
         return "Nature spirit";
     }
 
@@ -152,8 +152,8 @@ public class G_QuestStep implements ac {
      * @return true if quest stage is 90 (complete), false otherwise
      */
     @Override
-    public boolean ah() {
-        return e.j(VARBIT_NATURE_SPIRIT) >= STAGE_COMPLETE;
+    public boolean isComplete() {
+        return GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) >= STAGE_COMPLETE;
     }
 
     /**
@@ -217,7 +217,7 @@ public class G_QuestStep implements ac {
 
         // Add silver sickle if missing
         if (!Bank.contains(ITEM_SILVER_SICKLE)) {
-            d silverSickle = new d(ITEM_SILVER_SICKLE, 165, e.c(32445, 15399));
+            d silverSickle = new d(ITEM_SILVER_SICKLE, 165, GameStateUtil.randomRange(32445, 15399));
             itemsToBuy.add(silverSickle);
         }
 
@@ -280,14 +280,14 @@ public class G_QuestStep implements ac {
             BankLocation bankLocation;
 
             // Check prerequisite quests
-            if (!(e.j(VARBIT_PRIEST_IN_PERIL) >= 100) || e.j(VARBIT_NATURE_SPIRIT) < 5) {
+            if (!(GameStateUtil.getVarbit(VARBIT_PRIEST_IN_PERIL) >= 100) || GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) < 5) {
                 H.cf();
             }
 
             // Handle banking if we don't have required items
             if (!hasRequiredQuestItems() &&
-                e.j(VARBIT_NATURE_SPIRIT) == 5 &&
-                e.j(VARBIT_PRIEST_IN_PERIL) >= 100) {
+                GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 5 &&
+                GameStateUtil.getVarbit(VARBIT_PRIEST_IN_PERIL) >= 100) {
 
                 bankLocation = BankLocation.getNearest();
 
@@ -339,7 +339,7 @@ public class G_QuestStep implements ac {
                             ITEM_RUNE_ESSENCE
                         };
 
-                        if (!e.c(requiredItems)) {
+                        if (!GameStateUtil.randomRange(requiredItems)) {
                             addMissingItemsToShoppingList();
                             System.out.println("We are missing quest supplies, switching to BUYING");
                             hasGatheredSupplies = true;
@@ -347,7 +347,7 @@ public class G_QuestStep implements ac {
                         }
 
                         // Withdraw quest items
-                        if (e.c(requiredItems)) {
+                        if (GameStateUtil.randomRange(requiredItems)) {
                             a.a(12625, 2);
                             a.a(ITEM_DRUID_POUCH, 1);
                             a.a(ITEM_SALVE_GRAVEYARD_TELEPORT, 1);
@@ -369,7 +369,7 @@ public class G_QuestStep implements ac {
             }
 
             // Use prayer restore if needed
-            if (Inventory.contains(ITEM_MORT_MYRE_FUNGUS) && e.w() < 60.0) {
+            if (Inventory.contains(ITEM_MORT_MYRE_FUNGUS) && GameStateUtil.getHealthPercentage() < 60.0) {
                 Inventory.getFirst(ITEM_MORT_MYRE_FUNGUS).interact("Eat");
                 Time.sleepTicks(1);
             }
@@ -390,8 +390,8 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 5-138: Initial quest stages
-            if (e.j(VARBIT_NATURE_SPIRIT) >= 5 &&
-                e.j(VARBIT_NATURE_SPIRIT) < 138 &&
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) >= 5 &&
+                GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) < 138 &&
                 hasRequiredQuestItems()) {
 
                 // Stage 5: Navigate to grotto and break teleport tab
@@ -417,7 +417,7 @@ public class G_QuestStep implements ac {
                         // Handle specific navigation points
                         if (!(Players.getLocal().getWorldLocation().equals(new WorldPoint(28636, 19851, 0))) ||
                             Players.getLocal().getWorldLocation().equals(new WorldPoint(11128, 19851, 0))) {
-                            e.c(new WorldPoint(32639, 32637, 0));
+                            GameStateUtil.randomRange(new WorldPoint(32639, 32637, 0));
                             Time.sleepTicks(4);
                         }
 
@@ -437,8 +437,8 @@ public class G_QuestStep implements ac {
                         // Navigate to specific point in grotto
                         WorldPoint grottoPoint = new WorldPoint(32519, 28027, 0);
                         if (Players.getLocal().getWorldLocation().equals(grottoPoint)) {
-                            e.c(new WorldPoint(12031, 32509, 0));
-                            Time.sleepTicks(e.c(5, 6));
+                            GameStateUtil.randomRange(new WorldPoint(12031, 32509, 0));
+                            Time.sleepTicks(GameStateUtil.randomRange(5, 6));
                         }
 
                         // Walk to grotto if not at specific locations
@@ -496,7 +496,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 138: Equip items and talk to Filliman
-            if (e.j(VARBIT_NATURE_SPIRIT) == 138) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 138) {
                 questStageTracker = 0;
 
                 if (Inventory.contains("Mirror") && Inventory.contains("Journal")) {
@@ -531,7 +531,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 7: Continue dialog with Filliman
-            if (e.j(VARBIT_NATURE_SPIRIT) == 7) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 7) {
                 if (NPCs.getNearest("Filliman Tarlock") == null) {
                     TileObjects.getNearest("Grotto").interact("Enter");
                     Time.sleepTicks(4);
@@ -545,7 +545,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 191: More dialog
-            if (e.j(VARBIT_NATURE_SPIRIT) == 191) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 191) {
                 if (NPCs.getNearest("Filliman Tarlock") == null) {
                     TileObjects.getNearest("Grotto").interact("Enter");
                     Time.sleepTicks(4);
@@ -557,7 +557,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 33: Navigate to priest and break tab
-            if (e.j(VARBIT_NATURE_SPIRIT) == 33) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 33) {
                 if (Players.getLocal().getWorldLocation().distanceTo(LOCATION_GROTTO_INSIDE) < 12) {
                     AccBuilderSotf.c = "Breaking tab";
 
@@ -590,7 +590,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 48: Navigate back and break tab
-            if (e.j(VARBIT_NATURE_SPIRIT) == 48) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 48) {
                 if (Players.getLocal().getWorldLocation().distanceTo(LOCATION_GROTTO_LOG) < 12) {
                     AccBuilderSotf.c = "Breaking tab";
 
@@ -631,7 +631,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 19: Pick fungi
-            if (e.j(VARBIT_NATURE_SPIRIT) == 19) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 19) {
                 TileObjects fungiLog = TileObjects.getNearest("Fungi on log");
                 if (fungiLog != null) {
                     fungiLog.interact("Pick");
@@ -646,7 +646,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 181: Navigate back to grotto
-            if (e.j(VARBIT_NATURE_SPIRIT) == 181) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 181) {
                 if (Players.getLocal().getWorldLocation().distanceTo(LOCATION_GROTTO_INSIDE) > 4) {
                     AccBuilderSotf.c = "Nav to grotto";
                     Movement.walkTo(LOCATION_GROTTO_INSIDE);
@@ -654,12 +654,12 @@ public class G_QuestStep implements ac {
 
                     WorldPoint grottoPoint = new WorldPoint(32519, 28027, 0);
                     if (Players.getLocal().getWorldLocation().equals(grottoPoint)) {
-                        e.c(new WorldPoint(12031, 32509, 0));
-                        Time.sleepTicks(e.c(5, 6));
+                        GameStateUtil.randomRange(new WorldPoint(12031, 32509, 0));
+                        Time.sleepTicks(GameStateUtil.randomRange(5, 6));
                     }
 
                     if (Players.getLocal().getWorldLocation().equals(new WorldPoint(28636, 19851, 0))) {
-                        e.c(new WorldPoint(32639, 32637, 0));
+                        GameStateUtil.randomRange(new WorldPoint(32639, 32637, 0));
                         Time.sleepTicks(4);
                     }
 
@@ -690,7 +690,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 68: Solve puzzle with fungi
-            if (e.j(VARBIT_NATURE_SPIRIT) == 68) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 68) {
                 if (Inventory.contains("Mort myre fungus")) {
                     if (Inventory.getAll("Mort myre fungus").size() > 3) {
                         AccBuilderSotf.c = "Solving puzzle";
@@ -723,14 +723,14 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 100: Enter grotto
-            if (e.j(VARBIT_NATURE_SPIRIT) == 100 &&
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 100 &&
                 Players.getLocal().getWorldLocation().distanceTo(LOCATION_FUNGUS_AREA) > 165) {
                 TileObjects.getNearest("Grotto").interact("Enter");
                 Time.sleepTicks(4);
             }
 
             // Quest stage 51: Search for Filliman/Nature Spirit
-            if (e.j(VARBIT_NATURE_SPIRIT) == 51) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 51) {
                 if (NPCs.getNearest("Filliman Tarlock") == null) {
                     TileObjects.getNearest(OBJECT_GROTTO_TREE).interact("Search");
                     Time.sleepTicks(4);
@@ -742,7 +742,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 66: Continue searching
-            if (e.j(VARBIT_NATURE_SPIRIT) == 66) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 66) {
                 if (NPCs.getNearest("Filliman Tarlock") == null) {
                     if (NPCs.getNearest("Nature Spirit") == null) {
                         TileObjects.getNearest(OBJECT_GROTTO_TREE).interact("Search");
@@ -760,7 +760,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stages 69-75: Dialog and druid pouch handling
-            if (e.j(VARBIT_NATURE_SPIRIT) >= 69 && e.j(VARBIT_NATURE_SPIRIT) <= 75) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) >= 69 && GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) <= 75) {
                 if (Dialog.isOpen()) {
                     g.a(DIALOG_OPTIONS);
                 }
@@ -831,7 +831,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stages 90-93: Ghast combat
-            if (e.j(VARBIT_NATURE_SPIRIT) >= 90 && e.j(VARBIT_NATURE_SPIRIT) < 93) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) >= 90 && GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) < 93) {
                 // Equip silver sickle
                 if (!Equipment.contains(ITEM_SALVE_GRAVEYARD_TELEPORT)) {
                     if (Inventory.contains(ITEM_SALVE_GRAVEYARD_TELEPORT)) {
@@ -882,7 +882,7 @@ public class G_QuestStep implements ac {
             }
 
             // Quest stage 93: Final stage
-            if (e.j(VARBIT_NATURE_SPIRIT) == 93) {
+            if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) == 93) {
                 // Disable prayer
                 if (Prayers.isEnabled(Prayer.PROTECT_FROM_MELEE)) {
                     Prayers.toggle(Prayer.PROTECT_FROM_MELEE);
@@ -940,12 +940,12 @@ public class G_QuestStep implements ac {
 
         WorldPoint grottoPoint = new WorldPoint(32519, 28027, 0);
         if (Players.getLocal().getWorldLocation().equals(grottoPoint)) {
-            e.c(new WorldPoint(12031, 32509, 0));
-            Time.sleepTicks(e.c(5, 6));
+            GameStateUtil.randomRange(new WorldPoint(12031, 32509, 0));
+            Time.sleepTicks(GameStateUtil.randomRange(5, 6));
         }
 
         if (Players.getLocal().getWorldLocation().equals(new WorldPoint(28636, 19851, 0))) {
-            e.c(new WorldPoint(32639, 32637, 0));
+            GameStateUtil.randomRange(new WorldPoint(32639, 32637, 0));
             Time.sleepTicks(4);
         }
 

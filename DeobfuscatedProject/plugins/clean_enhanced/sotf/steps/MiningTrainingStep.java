@@ -21,7 +21,7 @@ import net.unethicalite.api.movement.pathfinder.model.BankLocation;
  * Trains Mining by mining various ore types.
  * Supports different pickaxe types and mining locations based on level.
  */
-public class MiningTrainingStep implements ac {
+public class MiningTrainingStep implements QuestStep {
 
     // Pickaxe IDs (from best to worst)
     public static final int RUNE_PICKAXE_ID = 1275;
@@ -243,7 +243,7 @@ public class MiningTrainingStep implements ac {
         }
 
         // Check for pickaxes
-        if (!e.c(PICKAXE_LIST_1)) {
+        if (!GameStateUtil.randomRange(PICKAXE_LIST_1)) {
             populateShoppingList();
             System.out.println(MSG_MISSING_SUPPLIES);
             isBuying = true;
@@ -251,7 +251,7 @@ public class MiningTrainingStep implements ac {
         }
 
         // Withdraw pickaxes
-        if (e.c(PICKAXE_LIST_2)) {
+        if (GameStateUtil.randomRange(PICKAXE_LIST_2)) {
             withdrawPickaxes();
         }
     }
@@ -376,22 +376,22 @@ public class MiningTrainingStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return SKILL_NAME;
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.MINING) >= TARGET_MINING_LEVEL;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         train();
         return 16;  // Priority
     }

@@ -33,7 +33,7 @@ import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 
 /**
  * Task: Kill Akkha's Annoying Egg
@@ -59,7 +59,7 @@ import gg.squire.autotoa.tasks.AutotoaManager;
  * - Must be in melee distance (offset 1) to attack
  */
 @TaskDesc(name="Killing annoying egg", priority=20, register=true, blocking=true)
-public class KillingAnnoyingEggTask extends AutotoaManager {
+public class KillingAnnoyingEggTask extends KephriManager {
 
     // NPC ID for the egg
     private static final int EGG_NPC_ID = 28096; // 0x6DC0 - Akkha's egg
@@ -81,8 +81,8 @@ public class KillingAnnoyingEggTask extends AutotoaManager {
     private static final String NPC_NAME_EGG = "egg";
 
     @Inject
-    public KillingAnnoyingEggTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    public KillingAnnoyingEggTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig);
     }
 
     @Override

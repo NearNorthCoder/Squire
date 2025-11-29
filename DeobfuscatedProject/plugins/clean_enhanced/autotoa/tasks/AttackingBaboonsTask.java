@@ -29,7 +29,7 @@ import net.unethicalite.api.entities.NPCs;
  * Blocking: Yes
  */
 @TaskDesc(name="Attacking Baboons", priority=10, blocking=true, register=true)
-public class AttackingBaboonsTask extends AutotoaManager {
+public class AttackingBaboonsTask extends KephriManager {
 
     // Constants
     private static final String NPC_BABOON = "Baboon";
@@ -40,8 +40,8 @@ public class AttackingBaboonsTask extends AutotoaManager {
     private static final int BOULDER_SLEEP_TICKS = 5;
 
     @Inject
-    protected AttackingBaboonsTask(Client client, z z2, TOAConfig config) {
-        super(client, z2, config);
+    protected AttackingBaboonsTask(Client client, ToaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config);
     }
 
     /**

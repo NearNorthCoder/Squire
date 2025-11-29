@@ -25,7 +25,7 @@ import net.unethicalite.api.game.Vars;
 import net.unethicalite.api.items.Inventory;
 
 @TaskDesc(name="Smelling salts", priority=100)
-public class SmellingSaltsTask extends AutotoaManager {
+public class SmellingSaltsTask extends KephriManager {
 
     // Constants
     private static final int TOA_VARBIT = 14469; // 0x3885

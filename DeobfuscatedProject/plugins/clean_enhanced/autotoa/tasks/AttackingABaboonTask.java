@@ -52,7 +52,7 @@ import java.util.Set;
  * Priority: 10 (medium)
  */
 @TaskDesc(name="Attacking a baboon", priority=10)
-public class AttackingABaboonTask extends AutotoaManager {
+public class AttackingABaboonTask extends KephriManager {
 
     // NPC Names
     private static final String NPC_BABOON_THRALL = "Baboon Thrall";
@@ -77,8 +77,8 @@ public class AttackingABaboonTask extends AutotoaManager {
     private String currentTargetName;
 
     @Inject
-    protected AttackingABaboonTask(Client client, z z2, TOAConfig config) {
-        super(client, z2, config);
+    protected AttackingABaboonTask(Client client, ToaPlugin plugin, TOAConfig config) {
+        super(client, plugin, config);
         this.dyingBaboons = new HashSet<>();
         this.currentTargetName = "";
     }

@@ -32,7 +32,7 @@ import net.unethicalite.api.movement.Reachable;
  * 5. Don't pick up items if health is critically low
  */
 @TaskDesc(name="Going to final phase", priority=1000, blocking=true)
-public class GoingToFinalPhaseTask extends AutotoaManager {
+public class GoingToFinalPhaseTask extends KephriManager {
 
     // Warden animation IDs
     private static final int WARDEN_PHASE_ANIMATION_1 = 9662;   // First transition animation
@@ -45,12 +45,12 @@ public class GoingToFinalPhaseTask extends AutotoaManager {
     private static final int DEFAULT_ITEM_PRICE = -1;  // Price for non-tradeable items
 
     @Inject
-    protected GoingToFinalPhaseTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected GoingToFinalPhaseTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig);
     }
 
     @Override
-    public boolean bl() {
+    protected boolean shouldExecute() {
         // Main task execution logic
 
         // Check if Warden is performing phase transition animation

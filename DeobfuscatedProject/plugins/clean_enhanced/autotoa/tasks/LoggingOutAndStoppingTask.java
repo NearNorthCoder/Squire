@@ -46,7 +46,7 @@ public class LoggingOutAndStoppingTask extends TOAConfigurableTask {
         Squire.stop();
 
         // Force stop the plugin
-        this.aY.forceStop();
+        this.plugin.forceStop();
 
         return true;
     }

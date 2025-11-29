@@ -53,7 +53,7 @@ import net.unethicalite.client.Static;
  * - 15 Mining
  * - Ability to defeat level 75 vampyres
  */
-public class DarknessOfHallowvale implements ac {
+public class DarknessOfHallowvale implements QuestStep {
 
     // ==================== ITEM IDS ====================
     private static final int RUNE_SCIMITAR = 1333;
@@ -186,7 +186,7 @@ public class DarknessOfHallowvale implements ac {
         }
 
         // Check prerequisite quest: In Search of the Myreque
-        if (e.j(387) == 110 && Skills.getLevel(Skill.CRAFTING) >= 25 && Skills.getLevel(Skill.MINING) >= 15) {
+        if (GameStateUtil.getVarbit(387) == 110 && Skills.getLevel(Skill.CRAFTING) >= 25 && Skills.getLevel(Skill.MINING) >= 15) {
             currentAction = "- In Search of the Myreque";
             E.bV();  // Complete prerequisite quest
             return;
@@ -197,7 +197,7 @@ public class DarknessOfHallowvale implements ac {
             !Skills.getLevel(Skill.CRAFTING) >= 25 ||
             !Skills.getLevel(Skill.MINING) >= 15 ||
             !Vars.getBit(QuestVarbits.QUEST_IN_AID_OF_THE_MYREQUE.getId()) > 0 ||
-            !e.j(387) >= 110) {
+            !GameStateUtil.getVarbit(387) >= 110) {
 
             currentAction = "Banking and getting supplies";
             handleBanking();
@@ -307,7 +307,7 @@ public class DarknessOfHallowvale implements ac {
             BRONZE_AXE, SWAMP_PASTE, STAMINA_POTION_4, EFARITAYS_AID
         };
 
-        if (!e.c(questSupplies)) {
+        if (!GameStateUtil.randomRange(questSupplies)) {
             switchToBuyingMode();
             System.out.println("We are missing quest supplies, switching to BUYING");
             questComplete = false;
@@ -411,7 +411,7 @@ public class DarknessOfHallowvale implements ac {
 
         // Quest not started - talk to Veliaf at cave entrance (varbit 0)
         if (hasRequiredItems() && hasRequiredGear() && Vars.getBit(QuestVarbits.QUEST_IN_AID_OF_THE_MYREQUE.getId()) > 0 &&
-            e.j(387) >= 110) {
+            GameStateUtil.getVarbit(387) >= 110) {
             currentAction = "Starting quest";
             startQuest();
         }
@@ -1227,7 +1227,7 @@ public class DarknessOfHallowvale implements ac {
             BRONZE_AXE, SWAMP_PASTE, STAMINA_POTION_4, EFARITAYS_AID
         };
 
-        return e.c(requiredItems);
+        return GameStateUtil.randomRange(requiredItems);
     }
 
     /**
@@ -1270,12 +1270,12 @@ public class DarknessOfHallowvale implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return questName;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             execute();
         } catch (Exception e) {
@@ -1285,7 +1285,7 @@ public class DarknessOfHallowvale implements ac {
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Vars.getBit(QuestVarbits.QUEST_IN_AID_OF_THE_MYREQUE.getId()) >= 180 && !Dialog.isOpen();
     }
 }

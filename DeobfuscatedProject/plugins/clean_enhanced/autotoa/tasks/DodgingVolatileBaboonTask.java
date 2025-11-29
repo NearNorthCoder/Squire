@@ -23,7 +23,7 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Dodging volatile baboon", priority=100, blocking=true)
-public class DodgingVolatileBaboonTask extends AutotoaManager {
+public class DodgingVolatileBaboonTask extends KephriManager {
 
     // NPC name for volatile baboons
     private static final String BABOON_NAME = "Volatile Baboon";

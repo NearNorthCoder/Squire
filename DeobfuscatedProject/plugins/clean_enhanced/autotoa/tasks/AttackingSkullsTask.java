@@ -33,7 +33,7 @@ import net.unethicalite.api.movement.Movement;
  * - Handles Akkha's special attack mechanics
  */
 @TaskDesc(name = "Attacking skulls", priority = 100, blocking = true, register = true)
-public class AttackingSkullsTask extends AutotoaManager {
+public class AttackingSkullsTask extends KephriManager {
     private static final int ENERGY_SIPHON_ID = 11714; // Energy siphon NPC ID
     private static final int RAID_LEVEL_1 = 14065; // Raid level check 1
     private static final int RAID_LEVEL_2 = 14068; // Raid level check 2

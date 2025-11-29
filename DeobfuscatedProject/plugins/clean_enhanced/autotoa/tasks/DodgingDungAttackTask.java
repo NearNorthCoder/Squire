@@ -17,7 +17,7 @@ import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.movement.Movement;
 
 @TaskDesc(name="Dodging dung attack", priority=8, blocking=true)
-public class DodgingDungAttackTask extends AutotoaManager {
+public class DodgingDungAttackTask extends KephriManager {
 
     // Tile object ID for dung
     private static final int DUNG_OBJECT_ID = 63944;  // 0xFFFFB7F7 & 0xF9C8

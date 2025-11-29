@@ -28,7 +28,7 @@ import net.unethicalite.api.items.Inventory;
  * - Uses appropriate prayers
  */
 @TaskDesc(name = "Attacking core", priority = 50, blocking = true, register = true)
-public class AttackingCoreTask extends AutotoaManager {
+public class AttackingCoreTask extends KephriManager {
     private static final int CORE_NPC_ID = 11751;
     private static final int WARDEN_ANIMATION_1 = 9674; // Safe to equip weapon
     private static final int WARDEN_ANIMATION_2 = 9678; // Safe to equip weapon

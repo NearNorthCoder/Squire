@@ -17,15 +17,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.client.Static;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.l;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.p;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.r;
+import gg.squire.sotf.framework.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +28,7 @@ import java.util.stream.Collectors;
  * This step handles equipment management, banking, purchasing supplies, and combat training at cows.
  * The training strategy involves progressive equipment upgrades and attack style rotation based on skill levels.
  */
-public class MeleeTraining75Attack75Strength60DefenceQuestStep implements ac {
+public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestStep {
 
     // Item IDs
     private static final int BRONZE_SCIMITAR = 1321;
@@ -125,7 +117,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements ac {
      * @return The quest step name
      */
     @Override
-    public String ag() {
+    public String getName() {
         return "75/75/60 Melee";
     }
 
@@ -135,7 +127,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements ac {
      * @return false as this step is never auto-complete
      */
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
@@ -146,7 +138,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements ac {
      * @return true if the skill requirements are met
      */
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.ATTACK) >= TARGET_ATTACK_LEVEL
             && Skills.getLevel(Skill.STRENGTH) >= TARGET_ATTACK_LEVEL
             && Skills.getLevel(Skill.DEFENCE) >= TARGET_DEFENCE_LEVEL;
@@ -159,7 +151,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements ac {
      * @return 0 on successful execution
      */
     @Override
-    public int af() {
+    public int execute() {
         try {
             executeTrainingLoop();
         } catch (Exception e) {
@@ -267,7 +259,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements ac {
                 }
 
                 // Handle eating
-                if (e.w() < 45.0) {
+                if (GameStateUtil.getHealthPercentage() < 45.0) {
                     if (Inventory.contains(COOKED_MEAT)) {
                         Inventory.getFirst(COOKED_MEAT).interact("Eat");
                         Time.sleepTicks(1);
@@ -516,7 +508,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements ac {
     private static void equipStoredItems() {
         setAttackStyle();
 
-        if (e.w() < 45.0) {
+        if (GameStateUtil.getHealthPercentage() < 45.0) {
             if (Inventory.contains(COOKED_MEAT)) {
                 Inventory.getFirst(COOKED_MEAT).interact("Eat");
                 Time.sleepTicks(1);
@@ -792,28 +784,28 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements ac {
             && Skills.getLevel(Skill.STRENGTH) >= TARGET_DEFENCE_LEVEL) {
 
             if (!Bank.contains(RUNE_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(RUNE_SCIMITAR, 1, e.c(61420, 637433)));
+                ITEMS_TO_BUY.add(new d(RUNE_SCIMITAR, 1, GameStateUtil.randomRange(61420, 637433)));
             }
             if (!Bank.contains(IRON_PLATEBODY)) {
-                ITEMS_TO_BUY.add(new d(IRON_PLATEBODY, 1, e.c(174008, 187386)));
+                ITEMS_TO_BUY.add(new d(IRON_PLATEBODY, 1, GameStateUtil.randomRange(174008, 187386)));
             }
             if (!Bank.contains(STEEL_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(STEEL_SCIMITAR, 1, e.c(515992, 950239)));
+                ITEMS_TO_BUY.add(new d(STEEL_SCIMITAR, 1, GameStateUtil.randomRange(515992, 950239)));
             }
             if (!Bank.contains(AMULET_OF_STRENGTH)) {
-                ITEMS_TO_BUY.add(new d(AMULET_OF_STRENGTH, 1, e.c(515992, 950239)));
+                ITEMS_TO_BUY.add(new d(AMULET_OF_STRENGTH, 1, GameStateUtil.randomRange(515992, 950239)));
             }
             if (!Bank.contains(ADAMANT_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(ADAMANT_SCIMITAR, 1, e.c(1490880, 1503231)));
+                ITEMS_TO_BUY.add(new d(ADAMANT_SCIMITAR, 1, GameStateUtil.randomRange(1490880, 1503231)));
             }
             if (!Bank.contains(MITHRIL_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(MITHRIL_SCIMITAR, 1, e.c(1118192, 1259221)));
+                ITEMS_TO_BUY.add(new d(MITHRIL_SCIMITAR, 1, GameStateUtil.randomRange(1118192, 1259221)));
             }
             if (!Bank.contains(IRON_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(IRON_SCIMITAR, 1, e.c(700340, 719860)));
+                ITEMS_TO_BUY.add(new d(IRON_SCIMITAR, 1, GameStateUtil.randomRange(700340, 719860)));
             }
             if (!Bank.contains(AMULET_OF_POWER)) {
-                ITEMS_TO_BUY.add(new d(AMULET_OF_POWER, 1, e.c(3047410, 3063794)));
+                ITEMS_TO_BUY.add(new d(AMULET_OF_POWER, 1, GameStateUtil.randomRange(3047410, 3063794)));
             }
         }
 

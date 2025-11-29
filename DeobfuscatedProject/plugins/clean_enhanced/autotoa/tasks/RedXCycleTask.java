@@ -38,7 +38,7 @@ import net.unethicalite.api.movement.Reachable;
  * to dodge and when to attack, ensuring optimal DPS while staying safe.
  */
 @TaskDesc(name="Red X Cycle", priority=50, register=true)
-public class RedXCycleTask extends AutotoaManager {
+public class RedXCycleTask extends KephriManager {
 
     // Boss animation ID for the attack that triggers red X
     private static final int BOSS_RED_X_ANIMATION = 8717;
@@ -76,15 +76,15 @@ public class RedXCycleTask extends AutotoaManager {
     private int tickCounter;
 
     @Inject
-    protected RedXCycleTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected RedXCycleTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig);
         this.graphicsCooldownTick = -1;
         this.tickCounter = 0;
         this.lastAttackTick = -1;
     }
 
     @Override
-    public void r() {
+    public void reset() {
         this.graphicsCooldownTick = -1;
         this.tickCounter = -1;
     }
@@ -92,14 +92,14 @@ public class RedXCycleTask extends AutotoaManager {
     @Override
     public boolean bm() {
         // Reset state when boss dies/mechanic ends
-        this.r();
+        this.reset();
         return super.bm();
     }
 
     @Override
     public boolean bC() {
         // Check if red X mechanic is active via config
-        if (!this.cW.redX()) {
+        if (!this.config.redX()) {
             return false;
         }
 
@@ -112,7 +112,7 @@ public class RedXCycleTask extends AutotoaManager {
         Player localPlayer = Players.getLocal();
 
         // Check if we're in cooldown period after graphics spawn
-        boolean inGraphicsCooldown = (this.cu.getTickCount() == this.graphicsCooldownTick);
+        boolean inGraphicsCooldown = (this.client.getTickCount() == this.graphicsCooldownTick);
 
         if (inGraphicsCooldown) {
             // Graphics just spawned - need to dodge immediately
@@ -142,18 +142,18 @@ public class RedXCycleTask extends AutotoaManager {
 
         // Handle boss attack animation
         if (targetNPC.getAnimation() == BOSS_RED_X_ANIMATION &&
-            this.graphicsCooldownTick < this.cu.getTickCount() &&
+            this.graphicsCooldownTick < this.client.getTickCount() &&
             !targetNPC.getWorldArea().contains(localPlayer)) {
 
-            this.lastAttackTick = this.cu.getTickCount();
+            this.lastAttackTick = this.client.getTickCount();
 
             // Determine delay based on raid level
             int attackDelay = (this.bA() == RAID_LEVEL_EXPERT) ? SHORT_ATTACK_DELAY : LONG_ATTACK_DELAY;
-            this.graphicsCooldownTick = this.cu.getTickCount() + attackDelay;
+            this.graphicsCooldownTick = this.client.getTickCount() + attackDelay;
         }
 
         // Use cycle positions when not in immediate danger
-        if (this.cu.getTickCount() - this.tickCounter == 0 && this.bA() != RAID_LEVEL_EXPERT) {
+        if (this.client.getTickCount() - this.tickCounter == 0 && this.bA() != RAID_LEVEL_EXPERT) {
             // Ensure run is enabled
             if (!Movement.isRunEnabled()) {
                 Movement.toggleRun();
@@ -190,12 +190,12 @@ public class RedXCycleTask extends AutotoaManager {
             targetNPC.getId() != SPECIAL_NPC_THRESHOLD) {
             // Toggle run off to avoid misclicks
             Movement.toggleRun();
-            this.tickCounter = this.cu.getTickCount() + RAID_LEVEL_EXPERT;
+            this.tickCounter = this.client.getTickCount() + RAID_LEVEL_EXPERT;
             targetNPC.interact(ATTACK_ACTION);
         }
 
         // Force attack if we've been waiting too long
-        if (this.cu.getTickCount() - this.tickCounter > ATTACK_TIMEOUT) {
+        if (this.client.getTickCount() - this.tickCounter > ATTACK_TIMEOUT) {
             targetNPC.interact(ATTACK_ACTION);
         }
 
@@ -211,7 +211,7 @@ public class RedXCycleTask extends AutotoaManager {
     private Set<WorldPoint> bF() {
         HashSet<WorldPoint> dangerZones = new HashSet<>();
 
-        Iterator<GraphicsObject> iterator = this.cu.getGraphicsObjects().iterator();
+        Iterator<GraphicsObject> iterator = this.client.getGraphicsObjects().iterator();
         while (iterator.hasNext()) {
             GraphicsObject graphicsObject = iterator.next();
 
@@ -235,7 +235,7 @@ public class RedXCycleTask extends AutotoaManager {
     @Subscribe
     public void a(GraphicsObjectCreated graphicsObjectCreated) {
         // Ignore if already in cooldown
-        if (this.graphicsCooldownTick > this.cu.getTickCount()) {
+        if (this.graphicsCooldownTick > this.client.getTickCount()) {
             return;
         }
 
@@ -247,13 +247,13 @@ public class RedXCycleTask extends AutotoaManager {
 
         // Check if attack indicator spawned
         if (graphicsId == GRAPHICS_ATTACK_INDICATOR_1) {
-            this.graphicsCooldownTick = this.cu.getTickCount() + COOLDOWN_AFTER_GRAPHICS;
+            this.graphicsCooldownTick = this.client.getTickCount() + COOLDOWN_AFTER_GRAPHICS;
         }
 
         // Check if danger graphics spawned at player location
         if (graphicsId == GRAPHICS_ATTACK_INDICATOR_2 &&
             graphicsLocation.equals(Players.getLocal().getWorldLocation())) {
-            this.graphicsCooldownTick = this.cu.getTickCount() + COOLDOWN_AFTER_GRAPHICS;
+            this.graphicsCooldownTick = this.client.getTickCount() + COOLDOWN_AFTER_GRAPHICS;
         }
     }
 
@@ -263,7 +263,7 @@ public class RedXCycleTask extends AutotoaManager {
     @Subscribe
     public void a(ActorDeath actorDeath) {
         if (actorDeath.getActor() == Players.getLocal()) {
-            this.r();
+            this.reset();
         }
     }
 
@@ -275,7 +275,7 @@ public class RedXCycleTask extends AutotoaManager {
     public void a(ChatMessage chatMessage) {
         String message = chatMessage.getMessage();
         if (message.contains(DEATH_MESSAGE)) {
-            this.r();
+            this.reset();
         }
     }
 }

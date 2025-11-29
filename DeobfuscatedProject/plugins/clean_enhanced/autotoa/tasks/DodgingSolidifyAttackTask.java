@@ -22,7 +22,7 @@ import net.unethicalite.api.entities.Projectiles;
 import net.unethicalite.api.movement.Movement;
 
 @TaskDesc(name="Dodging Solidify Attack", priority=30, blocking=true, register=true)
-public class DodgingSolidifyAttackTask extends AutotoaManager {
+public class DodgingSolidifyAttackTask extends KephriManager {
 
     // Projectile ID for the Solidify attack
     private static final int SOLIDIFY_PROJECTILE_ID = 24486;  // -(0xFFFFFFF7 & 0x570D) & (0xFFFFFFFF & 0x5FA6)

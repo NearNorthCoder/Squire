@@ -16,11 +16,11 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.items.Equipment;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.WardenPhaseManager;
 
 @TaskDesc(name="Attacking Obelisk", priority=50)
-public class AttackingObeliskTask extends AutotoaManager {
+public class AttackingObeliskTask extends KephriManager {
 
     private static final String OBELISK_NAME = "Obelisk";
     private static final String ATTACK_ACTION = "Attack";

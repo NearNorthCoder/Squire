@@ -25,7 +25,7 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import gg.squire.autotoa.tasks.AutotoaTaskBase;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 
 /**
  * ProjectileOverlay - Renders projectile target locations with colored tiles.

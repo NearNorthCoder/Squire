@@ -18,15 +18,7 @@ import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aN;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.g;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
+import gg.squire.sotf.framework.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +31,7 @@ import java.util.List;
  * by Professor Oddenstein's machine. The quest requires navigating through a mansion,
  * solving lever puzzles, and collecting various items to fix the machine.
  */
-public class V_QuestStep implements ac {
+public class ErnestTheChickenQuestStep implements QuestStep {
 
     // Item IDs
     private static final int FISH_FOOD = 272;
@@ -121,17 +113,17 @@ public class V_QuestStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return "Ernest the Chicken";
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             executeQuestStep();
         } catch (Exception e) {
@@ -141,8 +133,8 @@ public class V_QuestStep implements ac {
     }
 
     @Override
-    public boolean ah() {
-        return e.j(ERNEST_QUEST_VARBIT) >= 3;
+    public boolean isComplete() {
+        return GameStateUtil.getVarbit(ERNEST_QUEST_VARBIT) >= 3;
     }
 
     /**
@@ -161,7 +153,7 @@ public class V_QuestStep implements ac {
 
         if (!shouldBuyItems) {
             // Handle banking if we don't have required items and quest hasn't started
-            if (!hasRequiredQuestItems() && e.j(questVarbit) <= 1) {
+            if (!hasRequiredQuestItems() && GameStateUtil.getVarbit(questVarbit) <= 1) {
                 BankLocation nearestBank = BankLocation.getNearest();
 
                 // Navigate to bank if not in bank area
@@ -193,7 +185,7 @@ public class V_QuestStep implements ac {
 
                         // Check if we're missing quest supplies
                         int[] requiredItems = {STAMINA_POTION_4, RING_OF_WEALTH_5, SPADE, POISON};
-                        if (!e.c(requiredItems)) {
+                        if (!GameStateUtil.randomRange(requiredItems)) {
                             prepareShoppingList();
                             System.out.println("We are missing quest supplies, switching to BUYING");
                             shouldBuyItems = true;
@@ -201,7 +193,7 @@ public class V_QuestStep implements ac {
                         }
 
                         // Withdraw quest items
-                        if (e.c(requiredItems)) {
+                        if (GameStateUtil.randomRange(requiredItems)) {
                             a.a(STAMINA_POTION_4, 10);
                             a.a(RING_OF_WEALTH_5, 10);
                             a.a(SPADE, 1);
@@ -221,13 +213,13 @@ public class V_QuestStep implements ac {
             }
 
             // Eat food if health is low
-            if (Inventory.contains(CAKE) && e.w() < 50.0) {
+            if (Inventory.contains(CAKE) && GameStateUtil.getHealthPercentage() < 50.0) {
                 Inventory.getFirst(CAKE).interact("Eat");
                 Time.sleepTicks(2);
             }
 
             // Quest hasn't started yet - talk to Veronica
-            if (!hasRequiredQuestItems() && e.j(questVarbit) == 0) {
+            if (!hasRequiredQuestItems() && GameStateUtil.getVarbit(questVarbit) == 0) {
                 if (Players.getLocal().getWorldLocation().distanceTo(QUEST_START_LOCATION) > 8) {
                     AccBuilderSotf.c = "Nav to start";
                     Movement.walkTo(QUEST_START_LOCATION);
@@ -244,7 +236,7 @@ public class V_QuestStep implements ac {
             }
 
             // Quest stage 1 - Collect fish food and poison
-            if (e.j(questVarbit) == 1) {
+            if (GameStateUtil.getVarbit(questVarbit) == 1) {
                 retryAttempts = 0;
 
                 // Get fish food if we don't have it
@@ -436,7 +428,7 @@ public class V_QuestStep implements ac {
             }
 
             // Quest stage 2 - Final dialog with professor
-            if (e.j(questVarbit) == 2) {
+            if (GameStateUtil.getVarbit(questVarbit) == 2) {
                 if (Players.getLocal().getWorldLocation().distanceTo(PROFESSOR_LOCATION) > 10) {
                     AccBuilderSotf.c = "Nav to professor";
                     Movement.walkTo(PROFESSOR_LOCATION);

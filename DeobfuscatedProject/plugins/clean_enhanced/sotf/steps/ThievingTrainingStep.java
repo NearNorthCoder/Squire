@@ -23,7 +23,7 @@ import net.unethicalite.api.widgets.Dialog;
  * Trains Thieving by pickpocketing NPCs and stealing from stalls.
  * Supports multiple training methods based on thieving level.
  */
-public class ThievingTrainingStep implements ac {
+public class ThievingTrainingStep implements QuestStep {
 
     // Item IDs
     private static final int DODGY_NECKLACE_ID = 21143;
@@ -186,7 +186,7 @@ public class ThievingTrainingStep implements ac {
         }
 
         if (!isBuying) {
-            if (!hasRequiredSupplies() && e.j(failCount) < 1) {
+            if (!hasRequiredSupplies() && GameStateUtil.getVarbit(failCount) < 1) {
                 handleBanking();
             }
 
@@ -206,7 +206,7 @@ public class ThievingTrainingStep implements ac {
             }
 
             // Train based on level
-            if (hasRequiredSupplies() && e.j(failCount) != 0) {
+            if (hasRequiredSupplies() && GameStateUtil.getVarbit(failCount) != 0) {
                 int thievingLevel = Skills.getLevel(Skill.THIEVING);
 
                 if (thievingLevel >= LEVEL_MASTER_FARMER) {
@@ -351,7 +351,7 @@ public class ThievingTrainingStep implements ac {
                 AccBuilderSotf.c = MSG_STUNNED;
 
                 // Drink wine if HP is low
-                if (e.w() < MIN_HP_PERCENTAGE || Skills.getBoostedLevel(Skill.HITPOINTS) <= MIN_HP_THRESHOLD) {
+                if (GameStateUtil.getHealthPercentage() < MIN_HP_PERCENTAGE || Skills.getBoostedLevel(Skill.HITPOINTS) <= MIN_HP_THRESHOLD) {
                     if (Inventory.contains(JUG_OF_WINE_ID)) {
                         Inventory.getFirst(JUG_OF_WINE_ID).interact(MSG_DRINK);
                         Time.sleepTicks(TICK_DELAY_SHORT);
@@ -450,7 +450,7 @@ public class ThievingTrainingStep implements ac {
                 AccBuilderSotf.c = MSG_STUNNED;
 
                 // Eat food if HP is low
-                if (e.w() < 30.0 || Skills.getBoostedLevel(Skill.HITPOINTS) <= MIN_HP_THRESHOLD) {
+                if (GameStateUtil.getHealthPercentage() < 30.0 || Skills.getBoostedLevel(Skill.HITPOINTS) <= MIN_HP_THRESHOLD) {
                     if (Inventory.contains(CABBAGE_SEED_ID)) {
                         Inventory.getFirst(CABBAGE_SEED_ID).interact(MSG_EAT);
                         Time.sleepTicks(TICK_DELAY_SHORT);
@@ -461,22 +461,22 @@ public class ThievingTrainingStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return SKILL_NAME;
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.THIEVING) >= TARGET_THIEVING_LEVEL;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         train();
         return 9;  // Priority
     }

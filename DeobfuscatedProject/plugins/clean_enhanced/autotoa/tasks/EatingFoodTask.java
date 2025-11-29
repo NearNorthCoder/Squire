@@ -17,7 +17,7 @@ import net.unethicalite.api.items.Inventory;
  * - Coordinates with health manager for timing
  */
 @TaskDesc(name = "Eating Food", priority = 250)
-public class EatingFoodTask extends AutotoaManager {
+public class EatingFoodTask extends KephriManager {
     private final HealthManager healthManager;
     private final SquireAutoTOA plugin;
 

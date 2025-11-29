@@ -22,7 +22,7 @@ import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.items.Inventory;
 
 @TaskDesc(name="Drinking brew", priority=100)
-public class DrinkingBrewTask extends AutotoaManager {
+public class DrinkingBrewTask extends KephriManager {
 
     // Constants
     private static final int DRAGON_WARHAMMER_ID = 30398; // 0x76BE

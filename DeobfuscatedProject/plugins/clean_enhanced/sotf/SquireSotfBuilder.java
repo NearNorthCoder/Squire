@@ -287,9 +287,9 @@ public class SquireSotfBuilder extends Script {
             // Execute task loop
             if (Game.getState() == GameState.LOGGED_IN) {
                 // Disable GE warning
-                while (o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.z() &&
+                while (o.c.k.i.-.l.o.f.-.n.c.t.e.s.GameStateUtil.isGrandExchangeWarningEnabled() &&
                        !shouldStop &&
-                       o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.j(281) == 1000 &&
+                       o.c.k.i.-.l.o.f.-.n.c.t.e.s.GameStateUtil.getVarbit(281) == 1000 &&
                        !Dialog.isOpen()) {
                     currentStatus = "Disabling GE warning";
                     o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.A();
@@ -454,7 +454,7 @@ public class SquireSotfBuilder extends Script {
 
             // Try each direction in priority order
             if (!lightningTiles.containsKey(north)) {
-                o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.c(north);
+                o.c.k.i.-.l.o.f.-.n.c.t.e.s.GameStateUtil.randomRange(north);
                 Time.sleepTicks(1);
                 if (Players.getLocal().getInteracting() == null) {
                     NPCs.getNearest("Vanstrom Klause").interact("Attack");
@@ -463,7 +463,7 @@ public class SquireSotfBuilder extends Script {
             }
 
             if (lightningTiles.containsKey(north) && !lightningTiles.containsKey(south)) {
-                o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.c(south);
+                o.c.k.i.-.l.o.f.-.n.c.t.e.s.GameStateUtil.randomRange(south);
                 Time.sleepTicks(1);
                 if (Players.getLocal().getInteracting() == null) {
                     NPCs.getNearest("Vanstrom Klause").interact("Attack");
@@ -474,7 +474,7 @@ public class SquireSotfBuilder extends Script {
             if (lightningTiles.containsKey(north) &&
                 lightningTiles.containsKey(south) &&
                 !lightningTiles.containsKey(east)) {
-                o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.c(east);
+                o.c.k.i.-.l.o.f.-.n.c.t.e.s.GameStateUtil.randomRange(east);
                 Time.sleepTicks(1);
                 if (Players.getLocal().getInteracting() == null) {
                     NPCs.getNearest("Vanstrom Klause").interact("Attack");
@@ -486,7 +486,7 @@ public class SquireSotfBuilder extends Script {
                 lightningTiles.containsKey(south) &&
                 lightningTiles.containsKey(east) &&
                 !lightningTiles.containsKey(west)) {
-                o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.c(west);
+                o.c.k.i.-.l.o.f.-.n.c.t.e.s.GameStateUtil.randomRange(west);
                 Time.sleepTicks(1);
                 if (Players.getLocal().getInteracting() == null) {
                     NPCs.getNearest("Vanstrom Klause").interact("Attack");
@@ -765,7 +765,7 @@ public class SquireSotfBuilder extends Script {
         }
 
         if (banCounter == 0) {
-            o.c.k.i.-.l.o.f.-.n.c.t.e.s.e.a(webhookUrl,
+            o.c.k.i.-.l.o.f.-.n.c.t.e.s.GameStateUtil.handleBanking(webhookUrl,
                 "rsn: " + playerName + " account has been banned? - Acc builder SOTF");
             banCounter++;
         }

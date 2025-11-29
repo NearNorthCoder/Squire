@@ -23,7 +23,7 @@ import net.unethicalite.api.game.Vars;
 import net.unethicalite.api.items.Inventory;
 
 @TaskDesc(name="Drinking restore", priority=85)
-public class DrinkingRestoreTask extends AutotoaManager {
+public class DrinkingRestoreTask extends KephriManager {
 
     // Constants
     private static final int PRAYER_THRESHOLD = 60;

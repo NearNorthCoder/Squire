@@ -19,7 +19,7 @@ import net.unethicalite.api.movement.Movement;
  * shown by glowing orbs. This task navigates to each orb location in order.
  */
 @TaskDesc(name="Solving memory puzzle", priority=200, blocking=true)
-public class SolvingMemoryPuzzleTask extends AutotoaManager {
+public class SolvingMemoryPuzzleTask extends KephriManager {
 
     private final MemoryPuzzleSolver puzzleSolver;
 

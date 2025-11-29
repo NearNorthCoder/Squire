@@ -194,7 +194,7 @@ public final class GameStateUtil {
 
     /**
      * Get the value of a varbit.
-     * Original obfuscated method: e.j(int)
+     * Original obfuscated method: GameStateUtil.getVarbit(int)
      *
      * @param varbitId The varbit ID to query
      * @return The varbit value
@@ -254,7 +254,7 @@ public final class GameStateUtil {
 
     /**
      * Get the player's current health as a percentage.
-     * Original obfuscated method: e.w()
+     * Original obfuscated method: GameStateUtil.getHealthPercentage()
      *
      * @return Health percentage (0-100)
      */
@@ -310,7 +310,7 @@ public final class GameStateUtil {
 
     /**
      * Generate a random integer between min and max (inclusive).
-     * Original obfuscated method: e.c(int, int)
+     * Original obfuscated method: GameStateUtil.randomRange(int, int)
      *
      * @param min Minimum value
      * @param max Maximum value
@@ -363,7 +363,7 @@ public final class GameStateUtil {
 
     /**
      * Get elapsed time since a start timestamp.
-     * Original obfuscated method: e.a(long)
+     * Original obfuscated method: GameStateUtil.handleBanking(long)
      *
      * @param startTime The start timestamp
      * @return Elapsed time in milliseconds
@@ -406,7 +406,7 @@ public final class GameStateUtil {
 
     /**
      * Format time in HH:MM:SS format.
-     * Original obfuscated method: e.b(long)
+     * Original obfuscated method: GameStateUtil.formatTime(long)
      *
      * @param millis Time in milliseconds
      * @return Formatted time string
@@ -492,7 +492,7 @@ public final class GameStateUtil {
 
     /**
      * Check if Grand Exchange warning is enabled.
-     * Original obfuscated method: e.z()
+     * Original obfuscated method: GameStateUtil.isGrandExchangeWarningEnabled()
      *
      * @return true if GE warning is enabled
      */
@@ -783,7 +783,7 @@ public final class GameStateUtil {
 
     /**
      * Check if bank contains all specified items.
-     * Original obfuscated method: e.c(int[])
+     * Original obfuscated method: GameStateUtil.randomRange(int[])
      *
      * @param itemIds Array of item IDs to check
      * @return true if all items are in the bank
@@ -846,7 +846,7 @@ public final class GameStateUtil {
 
     /**
      * Equip multiple items from inventory.
-     * Original obfuscated method: e.b(int[])
+     * Original obfuscated method: GameStateUtil.formatTime(int[])
      *
      * @param itemIds Array of item IDs to equip
      */
@@ -1017,7 +1017,7 @@ public final class GameStateUtil {
 
     /**
      * Handle banking operations - deposit and withdraw items.
-     * Original obfuscated method: e.a(HashMap, boolean, boolean)
+     * Original obfuscated method: GameStateUtil.handleBanking(HashMap, boolean, boolean)
      *
      * @param items Map of item IDs to quantities to withdraw
      * @param depositInventory Whether to deposit inventory
@@ -1086,7 +1086,7 @@ public final class GameStateUtil {
 
     /**
      * Click on a specific tile in the game world.
-     * Original obfuscated method: e.c(WorldPoint)
+     * Original obfuscated method: GameStateUtil.randomRange(WorldPoint)
      *
      * @param tile The world point to click
      */
@@ -1123,7 +1123,7 @@ public final class GameStateUtil {
 
     /**
      * Write content to the mule file.
-     * Original obfuscated method: e.c(String)
+     * Original obfuscated method: GameStateUtil.randomRange(String)
      *
      * @param content The content to write
      */
@@ -1139,7 +1139,7 @@ public final class GameStateUtil {
 
     /**
      * Send a webhook message to a Discord webhook URL.
-     * Original obfuscated method: e.a(String, String)
+     * Original obfuscated method: GameStateUtil.handleBanking(String, String)
      *
      * @param webhookUrl The webhook URL
      * @param message The message to send

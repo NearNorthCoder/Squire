@@ -21,7 +21,7 @@ import net.unethicalite.api.movement.pathfinder.model.BankLocation;
  * Trains Woodcutting by chopping trees.
  * Supports different tree types based on woodcutting level.
  */
-public class WoodcuttingTrainingStep implements ac {
+public class WoodcuttingTrainingStep implements QuestStep {
 
     // Axe IDs (from best to worst)
     public static final int RUNE_AXE_ID = 1359;
@@ -347,22 +347,22 @@ public class WoodcuttingTrainingStep implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return SKILL_NAME;
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.WOODCUTTING) >= TARGET_WOODCUTTING_LEVEL;
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         train();
         return 16;  // Priority
     }

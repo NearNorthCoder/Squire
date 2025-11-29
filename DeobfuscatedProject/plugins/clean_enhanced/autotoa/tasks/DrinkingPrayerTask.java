@@ -18,7 +18,7 @@ import net.unethicalite.api.widgets.Prayers;
  * - Coordinates with prayer manager for timing
  */
 @TaskDesc(name = "Drinking prayer", priority = 85)
-public class DrinkingPrayerTask extends AutotoaManager {
+public class DrinkingPrayerTask extends KephriManager {
     private static final int PRAYER_THRESHOLD = 35; // Drink when prayer below this
 
     private final PrayerManager prayerManager;

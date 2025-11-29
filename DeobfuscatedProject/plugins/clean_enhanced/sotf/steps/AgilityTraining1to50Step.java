@@ -20,13 +20,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
+import gg.squire.sotf.framework.*;
 
 /**
  * Agility Training Quest Step for SOTF Plugin
@@ -42,7 +36,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
  * - Manages food and stamina potions during training
  * - Handles banking and item purchasing
  */
-public class AgilityTrainingStep implements ac {
+public class AgilityTraining1to50Step implements QuestStep {
 
     // Item IDs
     private static final int SUMMER_PIE_ID = 7218;
@@ -100,12 +94,12 @@ public class AgilityTrainingStep implements ac {
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             execute();
         } catch (Exception e) {
@@ -115,12 +109,12 @@ public class AgilityTrainingStep implements ac {
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.AGILITY) >= MIN_AGILITY_LEVEL;
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return "Agility";
     }
 
@@ -186,14 +180,14 @@ public class AgilityTrainingStep implements ac {
                         IRON_CROSSBOW_ID
                     };
 
-                    if (!e.c(requiredItems)) {
+                    if (!GameStateUtil.randomRange(requiredItems)) {
                         buildShoppingList();
                         System.out.println("We are missing quest supplies, switching to BUYING");
                         hasBoughtItems = true;
                         return;
                     }
 
-                    if (e.c(requiredItems)) {
+                    if (GameStateUtil.randomRange(requiredItems)) {
                         // Withdraw required items
                         a.a(IRON_CROSSBOW_ID, 1);
                         a.a(TEAM_CAPE_ID, 1);
@@ -291,13 +285,13 @@ public class AgilityTrainingStep implements ac {
                 }
 
                 // Handle course routing based on quest progress
-                if ((e.j(7203) != 60 || e.j(6061) >= 5) &&
+                if ((GameStateUtil.getVarbit(7203) != 60 || GameStateUtil.getVarbit(6061) >= 5) &&
                     Skills.getLevel(Skill.AGILITY) >= MIN_AGILITY_LEVEL &&
                     Skills.getLevel(Skill.AGILITY) < CANIFIS_LEVEL) {
                     executeGnomeCourse();
                 }
 
-                if (e.j(7203) == 60 && e.j(6061) == 5) {
+                if (GameStateUtil.getVarbit(7203) == 60 && GameStateUtil.getVarbit(6061) == 5) {
                     if (Skills.getLevel(Skill.AGILITY) >= MIN_AGILITY_LEVEL &&
                         Skills.getLevel(Skill.AGILITY) < CANIFIS_LEVEL) {
                         executeGnomeCourse();
@@ -493,7 +487,7 @@ public class AgilityTrainingStep implements ac {
                 AccBuilderSotf.c = "Starting course";
                 int startXp = Skills.getExperience(Skill.AGILITY);
                 TileObjects.getNearest("Tall tree").interact("Climb");
-                Time.sleepTicks(e.c(1, 2));
+                Time.sleepTicks(GameStateUtil.randomRange(1, 2));
                 Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > startXp, 10000);
                 Time.sleepTicks(1);
             }
@@ -531,7 +525,7 @@ public class AgilityTrainingStep implements ac {
                 int startXp = Skills.getExperience(Skill.AGILITY);
                 AccBuilderSotf.c = "Jumping gap 1";
                 obstacle.interact("Jump");
-                Time.sleepTicks(e.c(1, 2));
+                Time.sleepTicks(GameStateUtil.randomRange(1, 2));
                 Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > startXp, 10000);
                 Time.sleepTicks(1);
             }
@@ -578,7 +572,7 @@ public class AgilityTrainingStep implements ac {
                 AccBuilderSotf.c = "Starting course";
                 int startXp = Skills.getExperience(Skill.AGILITY);
                 TileObjects.getNearest("Wall").interact("Climb-up");
-                Time.sleepTicks(e.c(1, 2));
+                Time.sleepTicks(GameStateUtil.randomRange(1, 2));
                 Time.sleepUntil(() -> Skills.getExperience(Skill.AGILITY) > startXp, 10000);
                 Time.sleepTicks(1);
             }

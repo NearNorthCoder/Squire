@@ -41,11 +41,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Production;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
+import gg.squire.sotf.framework.*;
 
 /**
  * Handles cooking skill training for the SOTF (Sins of the Father) account build.
@@ -64,7 +60,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.f;
  * - Ring of dueling is used for quick teleportation during training
  * </p>
  */
-public class CookingTrainingStep implements ac {
+public class CookingTrainingStep implements QuestStep {
     // Item IDs for OSRS
     private static final int RAW_SHRIMP_ID = 317;           // Used for cooking level 1-14
     private static final int RAW_TROUT_ID = 8527;           // Used for cooking level 15-29 (possibly custom ID)
@@ -341,23 +337,23 @@ public class CookingTrainingStep implements ac {
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public int af() {
+    public int execute() {
         execute();
         return 100;
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return Skills.getLevel(Skill.COOKING) >= MAX_TRAINING_LEVEL;
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return MSG_COOKING;
     }
 }

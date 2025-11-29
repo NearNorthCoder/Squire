@@ -12,15 +12,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.I;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.a;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aN;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.b;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.d;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.g;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.j;
+import gg.squire.sotf.framework.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +23,7 @@ import java.util.function.Predicate;
  * This quest requires collecting four colored beads (red, yellow, black, white)
  * and delivering them to Wizard Mizgog in the Wizards' Tower.
  */
-public class ImpCatcherQuestStep implements ac {
+public class ImpCatcherQuestStep implements QuestStep {
 
     // Item IDs
     private static final int RED_BEAD_ID = 1470;
@@ -169,7 +161,7 @@ public class ImpCatcherQuestStep implements ac {
                     AIR_RUNE_ID, WATER_RUNE_ID, EARTH_RUNE_ID
                 };
 
-                if (!e.c(requiredItems)) {
+                if (!GameStateUtil.randomRange(requiredItems)) {
                     addMissingItemsToBuyList();
                     System.out.println("We are missing supplies, switching to BUYING");
                     needsToBuyItems = true;
@@ -425,7 +417,7 @@ public class ImpCatcherQuestStep implements ac {
 
         if (!needsToBuyItems) {
             // Quest not started yet
-            if (e.j(QUEST_VARBIT) == 0) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) == 0) {
                 BankLocation nearestBank;
 
                 // Check if we need to bank for supplies
@@ -515,7 +507,7 @@ public class ImpCatcherQuestStep implements ac {
                                 AIR_RUNE_ID, WATER_RUNE_ID, EARTH_RUNE_ID
                             };
 
-                            if (!e.c(requiredItems)) {
+                            if (!GameStateUtil.randomRange(requiredItems)) {
                                 addMissingItemsToBuyList();
                                 System.out.println("We are missing supplies, switching to BUYING");
                                 needsToBuyItems = true;
@@ -634,7 +626,7 @@ public class ImpCatcherQuestStep implements ac {
 
                         if (MAGIC_PORTAL_AREA.contains(Players.getLocal().getWorldLocation())) {
                             TileObjects.getNearest("Magic Portal").interact("Enter");
-                            Time.sleepTicks(e.c(6, 8));
+                            Time.sleepTicks(GameStateUtil.randomRange(6, 8));
                         }
 
                         Movement.walkTo(WIZARD_LOCATION);
@@ -655,7 +647,7 @@ public class ImpCatcherQuestStep implements ac {
             }
 
             // Quest in progress
-            if (e.j(QUEST_VARBIT) > 0 && e.j(QUEST_VARBIT) < 2) {
+            if (GameStateUtil.getVarbit(QUEST_VARBIT) > 0 && GameStateUtil.getVarbit(QUEST_VARBIT) < 2) {
                 if (!hasAllRequiredItems()) {
                     handleBanking();
                 }
@@ -692,13 +684,13 @@ public class ImpCatcherQuestStep implements ac {
                 }
             }
 
-            System.out.println("Setting: " + e.j(QUEST_VARBIT));
+            System.out.println("Setting: " + GameStateUtil.getVarbit(QUEST_VARBIT));
             g.a(new String[0]);
         }
     }
 
     @Override
-    public int af() {
+    public int execute() {
         try {
             executeQuest();
         } catch (Exception e) {
@@ -708,17 +700,17 @@ public class ImpCatcherQuestStep implements ac {
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return "Imp Catcher quest";
     }
 
     @Override
-    public boolean ah() {
-        return e.j(QUEST_VARBIT) >= 2;
+    public boolean isComplete() {
+        return GameStateUtil.getVarbit(QUEST_VARBIT) >= 2;
     }
 }

@@ -30,7 +30,7 @@ import net.unethicalite.api.items.Inventory;
  * - Select appropriate potion based on equipped weapon style
  */
 @TaskDesc(name="Drinking potion", priority=200)
-public class DrinkingPotionTask extends AutotoaManager {
+public class DrinkingPotionTask extends KephriManager {
 
     // Varbit for potion drinking cooldown (prevents spam-drinking)
     private static final int POTION_COOLDOWN_VARBIT = 14376;

@@ -20,11 +20,11 @@ import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.WardenPhaseManager;
 
 @TaskDesc(name="Clearing boulder", priority=150, blocking=true)
-public class ClearingBoulderTask extends AutotoaManager {
+public class ClearingBoulderTask extends KephriManager {
 
     private static final int BOULDER_NPC_ID = 11711;
     private static final int ZEBAK_NPC_ID = 11735;

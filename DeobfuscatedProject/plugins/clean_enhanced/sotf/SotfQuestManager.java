@@ -109,7 +109,7 @@ public class SotfQuestManager implements QuestStep {
      * @return true if requirements are met, false otherwise
      */
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;
     }
 
@@ -120,7 +120,7 @@ public class SotfQuestManager implements QuestStep {
      * @return sleep duration in milliseconds before next execution
      */
     @Override
-    public int af() {
+    public int execute() {
         try {
             initializeQuestTasks();
         } catch (Exception exception) {
@@ -135,7 +135,7 @@ public class SotfQuestManager implements QuestStep {
      * @return the name of the current quest/task
      */
     @Override
-    public String ag() {
+    public String getName() {
         return questName;
     }
 
@@ -148,7 +148,7 @@ public class SotfQuestManager implements QuestStep {
      * @return true if the quest can be started, false otherwise
      */
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         // Check skill requirements
         if (!checkSkillRequirements()) {
             return false;

@@ -23,7 +23,7 @@ import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.items.Inventory;
 
 @TaskDesc(name="Applying Silk", priority=100)
-public class ApplyingSilkTask extends AutotoaManager {
+public class ApplyingSilkTask extends KephriManager {
 
     // Constants
     private static final int MISSING_HEALTH_THRESHOLD = 30;
@@ -60,7 +60,7 @@ public class ApplyingSilkTask extends AutotoaManager {
         }
 
         // Check tick cooldown to prevent spamming
-        int currentTick = this.cu.getTickCount();
+        int currentTick = this.client.getTickCount();
         if (currentTick - this.lastUseTick < TICK_COOLDOWN) {
             return false;
         }

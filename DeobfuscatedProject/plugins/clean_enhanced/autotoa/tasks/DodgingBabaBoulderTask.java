@@ -19,7 +19,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Dodging ba-ba boulder", priority=101)
-public class DodgingBabaBoulderTask extends AutotoaManager {
+public class DodgingBabaBoulderTask extends KephriManager {
 
     // Constants
     private static final int FALSE = 0;

@@ -24,7 +24,7 @@ import net.unethicalite.api.game.Combat;
  * - The center position is safe and accessible
  */
 @TaskDesc(name="Moving to center", priority=30)
-public class MovingToCenterTask extends AutotoaManager {
+public class MovingToCenterTask extends KephriManager {
 
     // Center position of the arena at region coordinates (29, 47, plane 0, region 15809)
     private static final RegionPoint CENTER_POSITION = new RegionPoint(29, 47, 0, 15809);
@@ -33,8 +33,8 @@ public class MovingToCenterTask extends AutotoaManager {
     private static final int CENTER_PROXIMITY_THRESHOLD = 2;
 
     @Inject
-    protected MovingToCenterTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig, bY.ATTACK);
+    protected MovingToCenterTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig, bY.ATTACK);
     }
 
     @Override

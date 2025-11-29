@@ -24,7 +24,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 
 @TaskDesc(name="Dodging floor tiles", priority=105, blocking=true)
-public class DodgingFloorTilesTask extends AutotoaManager {
+public class DodgingFloorTilesTask extends KephriManager {
 
     // Graphics IDs for floor tile warnings
     private static final int FLOOR_TILE_WARNING_GRAPHIC = 6903;  // -(0xFFFFFC1E & 0x1BF7) & (0xFFFFFDBD & 0x1FFF) = 6903

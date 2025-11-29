@@ -17,7 +17,7 @@ import net.unethicalite.api.entities.TileObjects;
  * - Falls back to general "Entry" objects
  */
 @TaskDesc(name = "Entering next path", priority = 20, blocking = true)
-public class EnteringNextPathTask extends AutotoaManager {
+public class EnteringNextPathTask extends KephriManager {
     private static final int BARRIER_OBJECT_ID = 45685;
 
     private final TOAConfig config;

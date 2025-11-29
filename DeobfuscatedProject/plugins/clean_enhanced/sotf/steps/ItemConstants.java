@@ -10,7 +10,7 @@ import net.runelite.api.coords.WorldPoint;
  * Contains item ID constants and utility methods for the SOTF plugin.
  * This class serves as a central repository for all item IDs used throughout the plugin.
  */
-public class ItemConstants implements ac {
+public class ItemConstants implements QuestStep {
 
     // Common consumables
     public static int LOBSTER_ID;
@@ -344,22 +344,22 @@ public class ItemConstants implements ac {
     }
 
     @Override
-    public String ag() {
+    public String getName() {
         return "";  // No display name for constants class
     }
 
     @Override
-    public boolean ah() {
+    public boolean isComplete() {
         return true;  // Always complete
     }
 
     @Override
-    public boolean ae() {
+    public boolean arePrerequisitesMet() {
         return false;  // Not a toggleable step
     }
 
     @Override
-    public int af() {
+    public int execute() {
         // No execution needed for constants class
         return 0;
     }

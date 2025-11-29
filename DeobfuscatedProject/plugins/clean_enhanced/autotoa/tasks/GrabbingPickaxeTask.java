@@ -24,7 +24,7 @@ import net.unethicalite.api.movement.Reachable;
  * - Manages inventory efficiently
  */
 @TaskDesc(name = "Grabbing Pickaxe", priority = 100, blocking = true)
-public class GrabbingPickaxeTask extends AutotoaManager {
+public class GrabbingPickaxeTask extends KephriManager {
     private static final int PICKAXE_VARBIT = 14383; // Varbit tracking if pickaxe is grabbed
     private static final int PICKAXE_PEDESTAL_ID = 45732; // Object ID for pickaxe pedestal
     private static final int MAX_ITEMS_TO_DROP = 3; // Maximum items to drop at once

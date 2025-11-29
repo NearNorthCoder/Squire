@@ -28,7 +28,7 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import gg.squire.autotoa.tasks.AutotoaTaskBase;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 
 /**
  * NPCOverlay - Renders NPC convex hulls as blue outlines.

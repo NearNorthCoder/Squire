@@ -33,7 +33,7 @@ import net.unethicalite.api.game.Vars;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Prayers;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.GameEnum12;
 
 /**
@@ -63,7 +63,7 @@ import gg.squire.autotoa.tasks.GameEnum12;
  * - Tick eat threshold: 45 HP
  */
 @TaskDesc(name="Sun Keris (OBELISK)", priority=2500, blocking=true)
-public class SunKerisObeliskTask extends AutotoaManager {
+public class SunKerisObeliskTask extends KephriManager {
 
     // Projectile IDs for obelisk attacks
     private static final int OBELISK_PROJECTILE_1 = 18590; // 0x489E - First projectile variant
@@ -102,15 +102,15 @@ public class SunKerisObeliskTask extends AutotoaManager {
     private static final String ITEM_NAME_SANFEW = "Sanfew";
 
     @Inject
-    protected SunKerisObeliskTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+    protected SunKerisObeliskTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
+        super(client, plugin, tOAConfig);
     }
 
     @Override
-    public boolean bl() {
+    protected boolean shouldExecute() {
         // Check if we don't have keris or in inventory
         if (cl()) {
-            this.aY.c(false);
+            this.plugin.c(false);
             return false;
         }
 
@@ -193,7 +193,7 @@ public class SunKerisObeliskTask extends AutotoaManager {
 
         // Activate special attack
         Combat.toggleSpec();
-        this.aY.c(false);
+        this.plugin.c(false);
         return false;
     }
 
