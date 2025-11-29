@@ -21,3 +21,4 @@ Thumbs.db
 # Compiled class files in root
 net/
 build/
+decompiled/
