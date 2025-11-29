@@ -1,0 +1,767 @@
+2025-11-28 18:09:55:190 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 18:09:57:761 [Squire] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: --account=Aloof kill
+2025-11-28 18:09:57:820 [Squire] INFO  net.runelite.client.RuneLite - Java VM arguments: -XX:+DisableAttachMechanism -Xmx4G -Xss2m -XX:CompileThreshold=1500 -Drunelite.launcher.nojvm=true
+2025-11-28 18:09:59:829 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 18:10:00:222 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 18:10:00:675 [pool-4-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 18:10:00:709 [pool-4-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 18:10:00:865 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 18:10:00:875 [Squire] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 18:10:00:883 [Squire] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 18:10:00:905 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 18:10:00:912 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 18:10:00:912 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 18:10:00:915 [Squire] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 18:10:10:672 [Squire] INFO  org.jgroups.JChannel - local_addr: 2b052ff0-02a1-464f-8572-c9364304c6eb, name: 4785e27c-e011-4536-9e5c-aa8f384c9e93
+2025-11-28 18:10:13:394 [Squire] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.65296
+2025-11-28 18:10:16:693 [Squire] INFO  org.jgroups.protocols.pbcast.GMS - 4785e27c-e011-4536-9e5c-aa8f384c9e93: no members discovered after 3003 ms: creating cluster as coordinator
+2025-11-28 18:10:16:707 [Squire] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 18:10:16:962 [Squire] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 18:10:16:978 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(Unknown Source)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Unknown Source)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(Unknown Source)
+	at java.desktop/java.awt.image.BufferedImage.<init>(Unknown Source)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2025-11-28 18:10:17:399 [Squire] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 2ms
+2025-11-28 18:10:17:504 [Squire] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 18:10:18:241 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2025-11-28 18:10:18:679 [Squire] INFO  net.runelite.client.RuneLite - Client initialization took 20859ms. Uptime: 43913ms
+2025-11-28 18:13:24:852 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 18:13:27:557 [main] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 18:13:27:574 [main] INFO  net.runelite.client.RuneLite - Java VM arguments: -Xverify:none -XX:+DisableAttachMechanism -Xmx1g -Xss2m -XX:CompileThreshold=1500 -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.d3d=true -Dsun.java2d.opengl=false -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true -Dlauncher.version=2.7.8 -Djavax.net.ssl.trustStoreType=Windows-ROOT -XX:ErrorFile=C:\Users\mikeh\.squire\logs\jvm_crash_pid_%p.log
+2025-11-28 18:13:29:780 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 18:13:30:091 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 18:13:30:335 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 18:13:30:371 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 18:13:30:373 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 18:13:30:374 [main] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 18:13:30:378 [main] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 18:13:30:389 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 18:13:30:394 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 18:13:30:394 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 18:13:30:396 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 18:13:41:481 [main] INFO  org.jgroups.JChannel - local_addr: 4010e393-0922-4455-9103-6248a58e5c43, name: 361ff9d2-f9e4-429a-8857-113a7014a06a
+2025-11-28 18:13:43:031 [main] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.56553
+2025-11-28 18:13:46:160 [main] INFO  org.jgroups.protocols.pbcast.GMS - 361ff9d2-f9e4-429a-8857-113a7014a06a: no members discovered after 3002 ms: creating cluster as coordinator
+2025-11-28 18:13:46:171 [main] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 18:13:46:375 [main] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 18:13:46:436 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:75)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:467)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:333)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 18:13:46:710 [main] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 1ms
+2025-11-28 18:13:46:790 [main] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 18:13:47:568 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 18:13:48:001 [main] INFO  net.runelite.client.RuneLite - Client initialization took 20427ms. Uptime: 31998ms
+2025-11-28 18:24:30:100 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 18:24:33:251 [main] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: --account=Aloof kill
+2025-11-28 18:24:33:264 [main] INFO  net.runelite.client.RuneLite - Java VM arguments: -Xverify:none -XX:+DisableAttachMechanism -Xmx1g -Xss2m -XX:CompileThreshold=1500 -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.d3d=true -Dsun.java2d.opengl=false -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true -Dlauncher.version=2.7.8 -Djavax.net.ssl.trustStoreType=Windows-ROOT -XX:ErrorFile=C:\Users\mikeh\.squire\logs\jvm_crash_pid_%p.log
+2025-11-28 18:24:35:332 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 18:24:35:653 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 18:24:35:892 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 18:24:35:931 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 18:24:35:946 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 18:24:35:949 [main] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 18:24:35:952 [main] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 18:24:35:963 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 18:24:35:968 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 18:24:35:968 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 18:24:35:970 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 18:24:47:206 [main] INFO  org.jgroups.JChannel - local_addr: a637e5dd-606d-45e8-9ebd-977b01a74f34, name: b3b685a4-f6d0-4208-abd2-60b9f8021323
+2025-11-28 18:24:48:767 [main] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.51321
+2025-11-28 18:24:51:892 [main] INFO  org.jgroups.protocols.pbcast.GMS - b3b685a4-f6d0-4208-abd2-60b9f8021323: no members discovered after 3002 ms: creating cluster as coordinator
+2025-11-28 18:24:51:903 [main] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 18:24:52:239 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:75)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:467)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:333)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 18:24:52:318 [main] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 18:24:52:450 [main] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 0ms
+2025-11-28 18:24:52:526 [main] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 18:24:53:262 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 18:24:53:694 [main] INFO  net.runelite.client.RuneLite - Client initialization took 20430ms. Uptime: 395889ms
+2025-11-28 19:21:38:501 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 19:21:41:188 [main] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 19:21:41:201 [main] INFO  net.runelite.client.RuneLite - Java VM arguments: -Xverify:none -XX:+DisableAttachMechanism -Xmx1g -Xss2m -XX:CompileThreshold=1500 -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.d3d=true -Dsun.java2d.opengl=false -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true -Dlauncher.version=2.7.8 -Djavax.net.ssl.trustStoreType=Windows-ROOT -XX:ErrorFile=C:\Users\mikeh\.squire\logs\jvm_crash_pid_%p.log
+2025-11-28 19:21:42:921 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 19:21:43:234 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 19:21:43:518 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 19:21:43:522 [main] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 19:21:43:525 [main] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 19:21:43:537 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 19:21:43:542 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 19:21:43:543 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 19:21:43:544 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 19:21:43:604 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 19:21:43:638 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 19:21:54:667 [main] INFO  org.jgroups.JChannel - local_addr: 8455cf85-8545-4015-9ebb-0582baf440cd, name: 5475f386-5a84-416b-86a7-c1b82b729844
+2025-11-28 19:21:56:194 [main] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.65427
+2025-11-28 19:21:59:319 [main] INFO  org.jgroups.protocols.pbcast.GMS - 5475f386-5a84-416b-86a7-c1b82b729844: no members discovered after 3002 ms: creating cluster as coordinator
+2025-11-28 19:21:59:330 [main] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 19:21:59:641 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:75)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:467)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:333)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 19:21:59:685 [main] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 19:21:59:861 [main] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 0ms
+2025-11-28 19:21:59:942 [main] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 19:22:00:627 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 19:22:01:123 [main] INFO  net.runelite.client.RuneLite - Client initialization took 19922ms. Uptime: 28360ms
+2025-11-28 19:22:05:526 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 1242c893-c960-46c9-b833-9f028c156ac6
+2025-11-28 19:22:06:997 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 57051692-5fea-40a8-a012-903ac1ab23ac
+2025-11-28 19:22:08:273 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 99cb6034-aaf0-4ea3-9488-bd66257fa44c
+2025-11-28 19:22:14:855 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 37ff9308-5bb6-4332-83e0-8ab13e118f7a
+2025-11-28 19:22:18:920 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: d1f9e3af-c0a5-49dd-86b2-8e857984fef3
+2025-11-28 19:22:25:307 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: e2a56d76-bd9d-40c9-839c-e5b25fb4c3a0
+2025-11-28 19:22:28:876 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: fdd2f9b9-6584-4a70-afa7-d1946c214094
+2025-11-28 19:22:30:050 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 51c4371d-854c-4c1b-8841-207ed7d6bdc3
+2025-11-28 19:22:31:656 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: d3ba43e2-4966-4faf-8fcb-fba83fc95121
+2025-11-28 19:22:36:176 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 146c6f65-5ac8-4fe6-9d9c-0b402720538d
+2025-11-28 19:22:37:917 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: f9dee1ad-dcbf-4af9-9fb8-47dc91e2d43e
+2025-11-28 19:22:42:048 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 75784950-1a80-40ed-8300-cd0507c03978
+2025-11-28 19:22:42:958 [pool-9-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 7bb63fa7-229b-499f-b77f-e1768cbbcc1e
+2025-11-28 19:23:32:975 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 19:23:35:262 [main] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 19:23:35:275 [main] INFO  net.runelite.client.RuneLite - Java VM arguments: -Xverify:none -XX:+DisableAttachMechanism -Xmx1g -Xss2m -XX:CompileThreshold=1500 -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.d3d=true -Dsun.java2d.opengl=false -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true -Dlauncher.version=2.7.8 -Djavax.net.ssl.trustStoreType=Windows-ROOT -XX:ErrorFile=C:\Users\mikeh\.squire\logs\jvm_crash_pid_%p.log
+2025-11-28 19:23:37:319 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 19:23:37:616 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 19:23:37:878 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 19:23:37:925 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 19:23:37:943 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 19:23:37:948 [main] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 19:23:37:950 [main] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 19:23:37:961 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 19:23:37:964 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 19:23:37:965 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 19:23:37:966 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 19:23:38:147 [main] INFO  org.jgroups.JChannel - local_addr: 520d61fe-b7ab-4d8f-94c8-419ab98abe72, name: 2343e110-469b-4775-80d9-4d58895a551d
+2025-11-28 19:23:38:184 [main] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.53645
+2025-11-28 19:23:41:188 [main] INFO  org.jgroups.protocols.pbcast.GMS - 2343e110-469b-4775-80d9-4d58895a551d: no members discovered after 3002 ms: creating cluster as coordinator
+2025-11-28 19:23:41:198 [main] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 19:23:41:473 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 19:23:41:674 [main] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 19:23:41:736 [main] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 0ms
+2025-11-28 19:23:41:817 [main] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 19:23:42:727 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 19:23:42:996 [main] INFO  net.runelite.client.RuneLite - Client initialization took 7721ms. Uptime: 41780ms
+2025-11-28 19:23:48:918 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 29f97a50-4c1f-4047-b5b1-e3e7ab557a1b
+2025-11-28 19:23:49:683 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 1a91e21b-fcbe-4432-8f0e-1258958a8366
+2025-11-28 19:23:51:082 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 9740bba2-b19d-4983-898f-2f8083c87d94
+2025-11-28 19:23:53:999 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 3b638005-922a-492f-9405-93e6a5194477
+2025-11-28 19:23:55:508 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 3047f210-3107-4c67-939d-3c9e588029ae
+2025-11-28 19:23:56:941 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 778e0a57-7760-4510-94d3-2c1213879e48
+2025-11-28 19:23:58:335 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: fdd2f9b9-6584-4a70-afa7-d1946c214094
+2025-11-28 19:24:05:152 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: d1f9e3af-c0a5-49dd-86b2-8e857984fef3
+2025-11-28 19:24:06:461 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 7bb63fa7-229b-499f-b77f-e1768cbbcc1e
+2025-11-28 19:24:08:393 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: d1b70a7e-d534-4fe7-a2d5-7f0423b04edb
+2025-11-28 19:24:15:882 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: afc9cf98-0627-4d2a-8a9e-4e9657a2fb2d
+2025-11-28 19:24:23:514 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 5d6a9183-7b7a-42a1-8cad-f88f0a9fad3c
+2025-11-28 19:24:27:204 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 9bb83689-ff7d-471d-9a08-411d7484ad87
+2025-11-28 19:24:29:245 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 2266a50d-0893-46c4-a132-50718fc51d1a
+2025-11-28 19:24:36:247 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 99cb6034-aaf0-4ea3-9488-bd66257fa44c
+2025-11-28 19:24:37:149 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 7c1d3521-d222-494e-8c51-697efca0674b
+2025-11-28 19:24:40:708 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 1242c893-c960-46c9-b833-9f028c156ac6
+2025-11-28 19:24:44:116 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 581bf999-de0d-4fc5-a3b6-1ebe3d93b748
+2025-11-28 19:24:46:176 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: a295c4aa-95d9-42ec-b8cf-442736b096bd
+2025-11-28 19:24:47:384 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 06deb524-30dc-422a-b422-0bec548b1d10
+2025-11-28 19:24:48:917 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: f13c63fa-3e76-4035-9dfa-e833a382cd4c
+2025-11-28 19:24:49:972 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: a162439f-48e7-4aeb-adb7-778d42249168
+2025-11-28 19:24:58:491 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: df6d2a51-cc28-47f1-b346-c5a30f777aad
+2025-11-28 19:24:59:399 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 57051692-5fea-40a8-a012-903ac1ab23ac
+2025-11-28 19:25:00:976 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: a79d2820-2b30-4bed-9aed-0ccb18befd76
+2025-11-28 19:25:02:449 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 3f45ab50-7de6-493f-a8bc-b432dabdf252
+2025-11-28 19:25:03:601 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 2fcaa9ca-dfa8-475d-992d-ba368c0c843d
+2025-11-28 19:25:05:124 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: e2a56d76-bd9d-40c9-839c-e5b25fb4c3a0
+2025-11-28 19:25:06:865 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: fabe4829-ed55-47a3-b654-ca361772d01e
+2025-11-28 19:25:08:254 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 29a54919-2e79-4bd5-923c-285f5cdb7f9a
+2025-11-28 19:25:09:814 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: f9dee1ad-dcbf-4af9-9fb8-47dc91e2d43e
+2025-11-28 19:25:11:616 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 3be19261-31a6-42fb-a6f1-3e9f39e6a450
+2025-11-28 19:25:12:619 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 36afa564-21f3-409d-8955-c6e80fe75d70
+2025-11-28 19:25:17:189 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 9cc2ff9a-834c-471c-85e9-f55eb9ce18c7
+2025-11-28 19:25:22:971 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 9e609a1b-c462-421a-8c76-4c9774ea7671
+2025-11-28 19:25:24:535 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 146c6f65-5ac8-4fe6-9d9c-0b402720538d
+2025-11-28 19:25:25:538 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 51c4371d-854c-4c1b-8841-207ed7d6bdc3
+2025-11-28 19:25:26:841 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 7ff08cb7-2eac-4b0f-b288-ca118289a708
+2025-11-28 19:25:28:012 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 75784950-1a80-40ed-8300-cd0507c03978
+2025-11-28 19:25:30:429 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 37ff9308-5bb6-4332-83e0-8ab13e118f7a
+2025-11-28 19:25:31:431 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: 5c667a01-93f1-4288-83c1-de3f0a449bc2
+2025-11-28 19:25:34:741 [pool-8-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - Unable to load jar for plugin: d3ba43e2-4966-4faf-8fcb-fba83fc95121
+2025-11-28 19:48:06:365 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 19:48:08:828 [main] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 19:48:08:843 [main] INFO  net.runelite.client.RuneLite - Java VM arguments: -Xverify:none -XX:+DisableAttachMechanism -Xmx1g -Xss2m -XX:CompileThreshold=1500 -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.d3d=true -Dsun.java2d.opengl=false -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true -Dlauncher.version=2.7.8 -Djavax.net.ssl.trustStoreType=Windows-ROOT -XX:ErrorFile=C:\Users\mikeh\.squire\logs\jvm_crash_pid_%p.log
+2025-11-28 19:48:10:506 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 19:48:10:812 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 19:48:11:049 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 19:48:11:085 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 19:48:11:106 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 19:48:11:110 [main] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 19:48:11:113 [main] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 19:48:11:124 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 19:48:11:128 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 19:48:11:128 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 19:48:11:130 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 19:48:22:427 [main] INFO  org.jgroups.JChannel - local_addr: f1dba27e-5e7e-4afd-aa77-bee5573bff13, name: e8b19c9b-b027-4530-98c5-79a9453eed6f
+2025-11-28 19:48:24:010 [main] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.61864
+2025-11-28 19:48:27:139 [main] INFO  org.jgroups.protocols.pbcast.GMS - e8b19c9b-b027-4530-98c5-79a9453eed6f: no members discovered after 3003 ms: creating cluster as coordinator
+2025-11-28 19:48:27:150 [main] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 19:48:27:469 [main] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 19:48:27:493 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:75)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:467)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:333)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 19:48:27:701 [main] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 1ms
+2025-11-28 19:48:27:776 [main] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 19:48:28:138 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 19:48:29:000 [main] INFO  net.runelite.client.RuneLite - Client initialization took 20156ms. Uptime: 26928ms
+2025-11-28 20:02:01:909 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 20:02:04:277 [main] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 20:02:04:285 [main] INFO  net.runelite.client.RuneLite - Java VM arguments: -Xverify:none -XX:+DisableAttachMechanism -Xmx1g -Xss2m -XX:CompileThreshold=1500 -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.d3d=true -Dsun.java2d.opengl=false -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true -Dlauncher.version=2.7.8 -Djavax.net.ssl.trustStoreType=Windows-ROOT -XX:ErrorFile=C:\Users\mikeh\.squire\logs\jvm_crash_pid_%p.log
+2025-11-28 20:02:07:123 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 20:02:07:402 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 20:02:07:705 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 20:02:07:710 [main] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 20:02:07:713 [main] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 20:02:07:722 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 20:02:07:725 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 20:02:07:726 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 20:02:07:727 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 20:02:07:791 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 20:02:07:835 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 20:02:07:890 [main] INFO  org.jgroups.JChannel - local_addr: 4fec26cc-e788-44f9-8b0d-38f768f120c9, name: 7614a01c-80a6-47c0-a36e-0ba7768460ea
+2025-11-28 20:02:07:912 [main] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.53663
+2025-11-28 20:02:10:914 [main] INFO  org.jgroups.protocols.pbcast.GMS - 7614a01c-80a6-47c0-a36e-0ba7768460ea: no members discovered after 3001 ms: creating cluster as coordinator
+2025-11-28 20:02:10:923 [main] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 20:02:11:129 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 20:02:11:170 [main] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 20:02:11:422 [main] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 2ms
+2025-11-28 20:02:11:495 [main] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 20:02:12:634 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 20:02:12:645 [main] INFO  net.runelite.client.RuneLite - Client initialization took 8360ms. Uptime: 49206ms
+2025-11-28 20:05:04:983 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 20:05:06:661 [main] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 20:05:06:678 [main] INFO  net.runelite.client.RuneLite - Java VM arguments: -Xverify:none -XX:+DisableAttachMechanism -Xmx1g -Xss2m -XX:CompileThreshold=1500 -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.d3d=true -Dsun.java2d.opengl=false -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true -Dlauncher.version=2.7.8 -Djavax.net.ssl.trustStoreType=Windows-ROOT -XX:ErrorFile=C:\Users\mikeh\.squire\logs\jvm_crash_pid_%p.log
+2025-11-28 20:05:08:829 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 20:05:09:149 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 20:05:09:394 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 20:05:09:431 [pool-2-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 20:05:09:452 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 20:05:09:456 [main] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 20:05:09:459 [main] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 20:05:09:470 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 20:05:09:475 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 20:05:09:475 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 20:05:09:476 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 20:05:20:676 [main] INFO  org.jgroups.JChannel - local_addr: bc379de2-56a3-489b-84d5-bdd1d32cc6a6, name: 94652ae1-4a8a-417b-9f76-0891d54fa101
+2025-11-28 20:05:22:297 [main] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.63303
+2025-11-28 20:05:22:472 [main] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 20:05:22:472 [main] INFO  n.r.c.p.OPRSExternalPluginManager - Not updating external plugins since there is more than 1 client open
+2025-11-28 20:05:22:689 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:75)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:467)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:333)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 20:05:22:782 [main] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 20:05:23:044 [main] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 1ms
+2025-11-28 20:05:23:127 [main] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 20:05:23:931 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-11-28 20:05:24:332 [main] INFO  net.runelite.client.RuneLite - Client initialization took 17653ms. Uptime: 22987ms
+2025-11-28 20:43:20:262 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 20:43:23:575 [Squire] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 20:43:23:582 [Squire] INFO  net.runelite.client.RuneLite - Java VM arguments: 
+2025-11-28 20:43:25:684 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 20:43:26:010 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 20:43:26:364 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 20:43:26:369 [Squire] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 20:43:26:371 [Squire] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 20:43:26:383 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 20:43:26:389 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 20:43:26:389 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 20:43:26:392 [Squire] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 20:43:26:399 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 20:43:26:444 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 20:43:26:564 [Squire] INFO  org.jgroups.JChannel - local_addr: 0277052a-ae6a-45e9-be37-83534092fd92, name: d3fa03cd-0fe5-4755-83f4-c5b0782f15e3
+2025-11-28 20:43:26:571 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 20:43:26:572 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 20:43:26:588 [Squire] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.58636
+2025-11-28 20:43:29:591 [Squire] INFO  org.jgroups.protocols.pbcast.GMS - d3fa03cd-0fe5-4755-83f4-c5b0782f15e3: no members discovered after 3002 ms: creating cluster as coordinator
+2025-11-28 20:43:29:600 [Squire] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 20:43:29:900 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 20:43:29:952 [Squire] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 20:43:30:132 [Squire] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 0ms
+2025-11-28 20:43:30:209 [Squire] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 20:43:30:327 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 20:43:31:330 [Squire] INFO  net.runelite.client.RuneLite - Client initialization took 7747ms. Uptime: 24521ms
+2025-11-28 21:13:56:618 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 21:13:59:498 [Squire] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 21:13:59:505 [Squire] INFO  net.runelite.client.RuneLite - Java VM arguments: 
+2025-11-28 21:14:01:745 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 21:14:02:072 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 21:14:02:436 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 21:14:02:441 [Squire] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 21:14:02:443 [Squire] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 21:14:02:458 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 21:14:02:472 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 21:14:02:480 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 21:14:02:480 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 21:14:02:484 [Squire] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 21:14:02:515 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 21:14:02:687 [Squire] INFO  org.jgroups.JChannel - local_addr: 7668c5dc-b01e-4fa9-9320-db2534565c96, name: 270ed15a-6c90-4ae0-9a83-6f3f3fbafddd
+2025-11-28 21:14:02:694 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 21:14:02:695 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 21:14:02:711 [Squire] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.65518
+2025-11-28 21:14:05:722 [Squire] INFO  org.jgroups.protocols.pbcast.GMS - 270ed15a-6c90-4ae0-9a83-6f3f3fbafddd: no members discovered after 3009 ms: creating cluster as coordinator
+2025-11-28 21:14:05:733 [Squire] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 21:14:06:050 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 21:14:06:102 [Squire] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 21:14:06:290 [Squire] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 0ms
+2025-11-28 21:14:06:379 [Squire] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 21:14:06:591 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 21:14:07:478 [Squire] INFO  net.runelite.client.RuneLite - Client initialization took 7973ms. Uptime: 23058ms
+2025-11-28 21:25:40:469 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 21:25:43:703 [Squire] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 21:25:43:709 [Squire] INFO  net.runelite.client.RuneLite - Java VM arguments: 
+2025-11-28 21:25:45:904 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 21:25:46:231 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 21:25:46:496 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 21:25:46:541 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 21:25:46:566 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 21:25:46:572 [Squire] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 21:25:46:574 [Squire] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 21:25:46:585 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 21:25:46:589 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 21:25:46:590 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 21:25:46:593 [Squire] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 21:25:46:754 [Squire] INFO  org.jgroups.JChannel - local_addr: 56e52988-ed5b-4804-85b8-34f2e96a76c7, name: ca35b465-f616-4966-8bb6-839ee21ffdb2
+2025-11-28 21:25:46:761 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 21:25:46:763 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 21:25:46:779 [Squire] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.52874
+2025-11-28 21:25:49:783 [Squire] INFO  org.jgroups.protocols.pbcast.GMS - ca35b465-f616-4966-8bb6-839ee21ffdb2: no members discovered after 3002 ms: creating cluster as coordinator
+2025-11-28 21:25:49:792 [Squire] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 21:25:50:083 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 21:25:50:149 [Squire] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 21:25:50:341 [Squire] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 0ms
+2025-11-28 21:25:50:422 [Squire] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 21:25:50:744 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 21:25:51:587 [Squire] INFO  net.runelite.client.RuneLite - Client initialization took 7878ms. Uptime: 22345ms
+2025-11-28 21:49:03:715 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 21:49:06:676 [Squire] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 21:49:06:686 [Squire] INFO  net.runelite.client.RuneLite - Java VM arguments: 
+2025-11-28 21:49:08:382 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 21:49:08:732 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 21:49:09:129 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 21:49:09:134 [Squire] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 21:49:09:137 [Squire] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 21:49:09:152 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 21:49:09:159 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 21:49:09:159 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 21:49:09:162 [Squire] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 21:49:09:165 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 21:49:09:220 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 21:49:09:350 [Squire] INFO  org.jgroups.JChannel - local_addr: be4c3312-01c6-437e-89e3-2f100a6caf9a, name: abd2d5db-d401-4ab9-a9ae-a7732bfb2e81
+2025-11-28 21:49:09:357 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 21:49:09:358 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 21:49:09:375 [Squire] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.56609
+2025-11-28 21:49:12:378 [Squire] INFO  org.jgroups.protocols.pbcast.GMS - abd2d5db-d401-4ab9-a9ae-a7732bfb2e81: no members discovered after 3002 ms: creating cluster as coordinator
+2025-11-28 21:49:12:388 [Squire] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 21:49:12:653 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 21:49:12:664 [Squire] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 21:49:12:936 [Squire] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 0ms
+2025-11-28 21:49:13:020 [Squire] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 21:49:13:074 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 21:49:14:098 [Squire] INFO  net.runelite.client.RuneLite - Client initialization took 7411ms. Uptime: 21481ms
+2025-11-28 23:13:55:450 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 23:13:58:475 [Squire] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 23:13:58:482 [Squire] INFO  net.runelite.client.RuneLite - Java VM arguments: 
+2025-11-28 23:14:00:309 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 23:14:00:644 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 23:14:00:991 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 23:14:00:996 [Squire] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 23:14:00:998 [Squire] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 23:14:01:008 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 23:14:01:014 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 23:14:01:014 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 23:14:01:019 [Squire] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 23:14:01:028 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 23:14:01:077 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 23:14:01:194 [Squire] INFO  org.jgroups.JChannel - local_addr: a8841c72-a93c-4285-8bc2-5a704e0e01ca, name: faeef8a4-cf7c-45dd-a54f-011b5964fc7a
+2025-11-28 23:14:01:201 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 23:14:01:202 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 23:14:01:219 [Squire] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.51528
+2025-11-28 23:14:04:223 [Squire] INFO  org.jgroups.protocols.pbcast.GMS - faeef8a4-cf7c-45dd-a54f-011b5964fc7a: no members discovered after 3002 ms: creating cluster as coordinator
+2025-11-28 23:14:04:233 [Squire] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 23:14:04:445 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 23:14:04:728 [Squire] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 23:14:04:782 [Squire] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 0ms
+2025-11-28 23:14:04:862 [Squire] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 23:14:05:997 [Squire] INFO  net.runelite.client.RuneLite - Client initialization took 7514ms. Uptime: 60583ms
+2025-11-28 23:14:06:166 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 23:21:12:630 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Hardware ID: 9db30851e5fabc505febfd95e2d9af77fa5e03a0
+2025-11-28 23:21:15:702 [Squire] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version 2.7.8) starting up, args: none
+2025-11-28 23:21:15:709 [Squire] INFO  net.runelite.client.RuneLite - Java VM arguments: 
+2025-11-28 23:21:18:402 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-11-28 23:21:18:754 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-11-28 23:21:19:028 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-11-28 23:21:19:082 [pool-3-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-11-28 23:21:19:117 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 23:21:19:121 [Squire] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-11-28 23:21:19:122 [Squire] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-11-28 23:21:19:136 [Squire] INFO  n.r.client.account.SessionManager - No session file exists
+2025-11-28 23:21:19:143 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-11-28 23:21:19:144 [Squire] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-11-28 23:21:19:147 [Squire] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-11-28 23:21:19:339 [Squire] INFO  org.jgroups.JChannel - local_addr: aa05cb0d-55bf-4432-afe0-f342631b4389, name: ff472d14-b851-4cca-9032-6190438a6fdb
+2025-11-28 23:21:19:346 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 23:21:19:348 [Squire] ERROR org.jgroups.protocols.UDP - failed setting interface to name:ethernet_32776 (Realtek Gaming 2.5GbE Family Controller) (/192.168.7.220): java.net.SocketException: Invalid argument: setsockopt
+2025-11-28 23:21:19:368 [Squire] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.55502
+2025-11-28 23:21:22:372 [Squire] INFO  org.jgroups.protocols.pbcast.GMS - ff472d14-b851-4cca-9032-6190438a6fdb: no members discovered after 3003 ms: creating cluster as coordinator
+2025-11-28 23:21:22:383 [Squire] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-11-28 23:21:22:691 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 23:21:22:765 [Squire] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-11-28 23:21:22:923 [Squire] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 0ms
+2025-11-28 23:21:23:003 [Squire] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-11-28 23:21:23:145 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-11-28 23:21:24:131 [Squire] INFO  net.runelite.client.RuneLite - Client initialization took 8420ms. Uptime: 120386ms
