@@ -2,6 +2,7 @@ package net.runelite.launcher;
 
 import net.runelite.launcher.logging.NetworkLoggingInterceptor;
 import net.runelite.launcher.logging.HttpConnectionLogger;
+import net.runelite.launcher.logging.DownloadInterceptor;
 
 import java.awt.*;
 import java.io.*;
@@ -28,6 +29,19 @@ public class LauncherWithLogging {
         debug("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.arch"));
         debug("Working dir: " + System.getProperty("user.dir"));
         debug("Original args: " + String.join(" ", args));
+
+        // CRITICAL: Install download interceptor FIRST before any downloads happen
+        // This captures JAR downloads from HttpURLConnection, OkHttp, and Lambda APIs
+        try {
+            debug("Installing comprehensive download interceptor...");
+            DownloadInterceptor.install();
+            System.out.println("[NetworkLogger] Download interceptor installed - saving JARs to: " + DownloadInterceptor.getSaveDir());
+            debug("Download interceptor installed successfully");
+        } catch (Exception e) {
+            System.err.println("[NetworkLogger] Warning: Download interceptor failed: " + e.getMessage());
+            debug("Download interceptor FAILED: " + e.getMessage());
+            debugException(e);
+        }
 
         // CRITICAL: Inject --nojvm flag to prevent JvmLauncher from spawning a new JVM
         // This keeps everything in the same process so we can log network traffic
