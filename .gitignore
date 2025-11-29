@@ -23,7 +23,7 @@ net/
 build/
 decompiled/
 deobfuscated_src/
-tools/
+/tools/
 
 # Generated directories
 reorganized_src/
@@ -32,3 +32,8 @@ local_launcher/local_plugins/
 
 # Large binary files
 dist/squire-local.jar
+
+# Squire deobfuscated - exclude large generated data
+squire-deobfuscated/dist/
+squire-deobfuscated/data/
+squire-deobfuscated/plugins/

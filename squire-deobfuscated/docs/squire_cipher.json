@@ -1,0 +1,320 @@
+{
+  "_metadata": {
+    "description": "Squire Launcher Obfuscation Cipher",
+    "version": "2.7.1",
+    "source": "squire-launcher.jar (Mac ARM)",
+    "reference": "https://github.com/runelite/launcher",
+    "created": "2024",
+    "notes": "Mapping between obfuscated Squire classes and original RuneLite/Squire-specific code"
+  },
+
+  "packages": {
+    "c.r.m": {
+      "original": "com.runelite.modified OR squire.launcher",
+      "description": "Custom Squire launcher classes (not in original RuneLite)"
+    },
+    "net.runelite.launcher": {
+      "original": "net.runelite.launcher",
+      "description": "Standard RuneLite launcher classes (mostly unmodified)"
+    },
+    "net.runelite.launcher.beans": {
+      "original": "net.runelite.launcher.beans",
+      "description": "Data model classes"
+    },
+    "net.runelite.launcher.utils": {
+      "original": "SQUIRE CUSTOM",
+      "description": "Squire-specific utility classes (not in original RuneLite)"
+    }
+  },
+
+  "classes": {
+    "obfuscated_to_original": {
+      "c/r/m/a": {
+        "likely_name": "SquireAuthHandler OR ApiClient",
+        "size_bytes": 32382,
+        "purpose": "Main authentication and API communication handler",
+        "key_features": ["OkHttp requests", "JSON parsing", "License verification"],
+        "not_in_runelite": true
+      },
+      "c/r/m/L": {
+        "likely_name": "LoginFrame OR AuthFrame",
+        "size_bytes": 10783,
+        "purpose": "Login UI window (extends JFrame)",
+        "key_features": ["DES string decryption", "Login dialog", "Auth token storage"],
+        "not_in_runelite": true
+      },
+      "c/r/m/c": {
+        "likely_name": "AuthPanel OR LoginPanel",
+        "size_bytes": 13539,
+        "purpose": "Authentication panel component (extends JPanel)",
+        "key_features": ["Blowfish string decryption", "Token file operations"],
+        "not_in_runelite": true
+      },
+      "c/r/m/z": {
+        "likely_name": "ProgressPanel OR StatusPanel",
+        "size_bytes": 17839,
+        "purpose": "Progress/status display panel",
+        "key_features": ["JProgressBar", "Status labels"],
+        "not_in_runelite": true
+      },
+      "c/r/m/F": {
+        "likely_name": "PlatformDetector OR OSHelper",
+        "size_bytes": 4861,
+        "purpose": "Platform/OS detection",
+        "key_features": ["Returns c/r/m/G enum values"],
+        "compare_to": "net.runelite.launcher.OS"
+      },
+      "c/r/m/G": {
+        "likely_name": "Platform (enum)",
+        "size_bytes": 3680,
+        "purpose": "Platform enumeration",
+        "values": ["MacOS", "Windows", "Linux"],
+        "compare_to": "net.runelite.launcher.OS enum values"
+      },
+      "c/r/m/n": {
+        "likely_name": "HardwareAccelerationMode (enum)",
+        "size_bytes": 6745,
+        "purpose": "Hardware acceleration settings",
+        "values": ["OFF", "DIRECTDRAW", "OPENGL", "METAL"],
+        "compare_to": "net.runelite.launcher.HardwareAccelerationMode"
+      },
+      "c/r/m/k": {
+        "likely_name": "ThemeColors OR ColorScheme",
+        "size_bytes": 935,
+        "purpose": "Color constants for UI theming",
+        "key_features": ["af field = Color constant"],
+        "not_in_runelite": true
+      },
+      "c/r/m/m": {
+        "likely_name": "FontManager OR FontHelper",
+        "size_bytes": 4968,
+        "purpose": "Font loading and management",
+        "key_features": ["j() = get font", "o() = get font style"],
+        "not_in_runelite": true
+      },
+      "c/r/m/q": {
+        "likely_name": "DimensionConstants OR LayoutHelper",
+        "size_bytes": 14478,
+        "purpose": "UI dimension constants",
+        "key_features": ["ao field = Dimension constant"],
+        "not_in_runelite": true
+      },
+      "c/r/m/x": {
+        "likely_name": "SwitchMapping OR OrdinalHelper",
+        "size_bytes": 845,
+        "purpose": "Switch statement ordinal array helper",
+        "key_features": ["aP array for switch on G.ordinal()"],
+        "not_in_runelite": true
+      },
+      "c/r/m/H": {
+        "likely_name": "Unknown",
+        "size_bytes": 9883,
+        "purpose": "Unknown major component",
+        "not_in_runelite": true
+      },
+      "c/r/m/K": {
+        "likely_name": "Unknown",
+        "size_bytes": 5021,
+        "purpose": "Unknown",
+        "not_in_runelite": true
+      },
+      "c/r/m/u": {
+        "likely_name": "Unknown",
+        "size_bytes": 9253,
+        "purpose": "Unknown",
+        "not_in_runelite": true
+      },
+      "c/r/m/y": {
+        "likely_name": "Unknown",
+        "size_bytes": 8776,
+        "purpose": "Unknown",
+        "not_in_runelite": true
+      }
+    },
+
+    "runelite_classes_in_squire": {
+      "net/runelite/launcher/Launcher": {
+        "modified": true,
+        "size_bytes": 28678,
+        "modifications": [
+          "Added auth check (c/r/m/L.k, aN flag)",
+          "Added S3Utils.getBootstrapModes()",
+          "Added squire.properties loading",
+          "Added jagexlauncher option"
+        ]
+      },
+      "net/runelite/launcher/LauncherProperties": {
+        "modified": false,
+        "size_bytes": 1081
+      },
+      "net/runelite/launcher/beans/Bootstrap": {
+        "modified": true,
+        "size_bytes": 6374
+      },
+      "net/runelite/launcher/beans/BootstrapMode": {
+        "modified": true,
+        "size_bytes": 1331,
+        "notes": "Squire-specific bootstrap mode handling"
+      },
+      "net/runelite/launcher/beans/BootstrapCode": {
+        "modified": true,
+        "size_bytes": 1423
+      },
+      "net/runelite/launcher/beans/SignedBsMode": {
+        "modified": true,
+        "size_bytes": 1444,
+        "notes": "Squire-specific signed bootstrap mode"
+      },
+      "net/runelite/launcher/beans/Artifact": {
+        "modified": false,
+        "size_bytes": 2639
+      },
+      "net/runelite/launcher/beans/Diff": {
+        "modified": false,
+        "size_bytes": 2363
+      },
+      "net/runelite/launcher/beans/Platform": {
+        "modified": false,
+        "size_bytes": 1367
+      },
+      "net/runelite/launcher/utils/S3Utils": {
+        "modified": true,
+        "size_bytes": 4719,
+        "notes": "Squire-specific, not in original RuneLite"
+      },
+      "net/runelite/launcher/utils/GitHubUtils": {
+        "modified": true,
+        "size_bytes": 916,
+        "notes": "Squire-specific, not in original RuneLite"
+      }
+    }
+  },
+
+  "methods": {
+    "c/r/m/L": {
+      "S()": "getInstance() - Returns singleton",
+      "k(String)": "showLogin(String message) - Shows login UI",
+      "lIlIl(String, String)": "decryptDES(encrypted, key) - DES decryption",
+      "o(String)": "setProgressText(String) - Update progress bar text",
+      "i(String, String)": "setStatusMessage(title, message)",
+      "h(String, String)": "static showStatus(title, message)",
+      "K()": "static clearStatus()"
+    },
+    "c/r/m/c": {
+      "e()": "getStoredToken() - Read token from file",
+      "lllIllI(String, String)": "decryptBlowfish(encrypted, key) - Blowfish decryption"
+    },
+    "c/r/m/a": {
+      "a(Map, OkHttpClient)": "authenticateWithServer(params, client)"
+    },
+    "net/runelite/launcher/Launcher": {
+      "A()": "getAuthToken() - Returns current auth token",
+      "main(String[])": "Main entry point"
+    },
+    "net/runelite/launcher/utils/S3Utils": {
+      "getBootstrapMode(String)": "Fetch bootstrap from API Gateway",
+      "getBootstrapModes()": "Fetch all bootstrap modes from Lambda"
+    }
+  },
+
+  "fields": {
+    "c/r/m/L": {
+      "by": "static instance (singleton)",
+      "bz": "c/r/m/z instance (progress panel)",
+      "bA": "c/r/m/c instance (auth panel)",
+      "bw": "Logger",
+      "bx": "Dimension constant",
+      "A": "File (token storage path)",
+      "llll": "Encrypted string array",
+      "lIlII": "Integer index array"
+    },
+    "c/r/m/c": {
+      "A": "File (base directory)",
+      "B": "Dimension (panel size)",
+      "C": "Dimension (sub-component size)",
+      "F": "Color (background)",
+      "G": "JLabel (title)",
+      "J": "JLabel (status)",
+      "K": "JProgressBar",
+      "L": "JScrollPane",
+      "N": "JPanel (container)",
+      "lllIlI": "Encrypted string array",
+      "lllIll": "Integer index array"
+    },
+    "c/r/m/a": {
+      "t": "String (unknown)",
+      "n": "static final String (constant)",
+      "h": "static final String (constant)",
+      "r": "static final String (constant)",
+      "l": "static final Gson instance",
+      "llllI": "Encrypted string array",
+      "lIlIIl": "Integer index array"
+    },
+    "net/runelite/launcher/Launcher": {
+      "aE": "Logger",
+      "aF": "static final String (constant)",
+      "aG": "static final String (constant)",
+      "aH": "static final String (constant)",
+      "aI": "File (base dir)",
+      "aJ": "File (logs dir)",
+      "aK": "File (repo dir)",
+      "aL": "File (unknown)",
+      "aM": "String (current auth token)",
+      "aN": "boolean (isAuthenticated flag)",
+      "aO": "String (selected account)"
+    }
+  },
+
+  "encryption": {
+    "des_method": {
+      "class": "c/r/m/L",
+      "method": "lIlIl",
+      "algorithm": "DES/ECB/PKCS5Padding",
+      "key_derivation": "MD5(password)[:8]",
+      "input": "Base64 encoded ciphertext",
+      "output": "UTF-8 plaintext"
+    },
+    "blowfish_method": {
+      "class": "c/r/m/c",
+      "method": "lllIllI",
+      "algorithm": "Blowfish/ECB/PKCS5Padding",
+      "key_derivation": "MD5(password)",
+      "input": "Base64 encoded ciphertext",
+      "output": "UTF-8 plaintext"
+    },
+    "suspected_keys": [
+      "squire",
+      "launcher",
+      "auth",
+      "1up",
+      "2.7.1"
+    ]
+  },
+
+  "aws_endpoints": {
+    "lambda_functions": [
+      "https://jyb5ino5ucg4ylf6dhj7xp6lpe0fvycm.lambda-url.eu-west-1.on.aws/",
+      "https://6kvxsi2v4a3jozbz3qlc56uuxa0ecqrh.lambda-url.eu-west-1.on.aws/",
+      "https://6zyqmauzakrgs4jprwsf6tqotm0zyepn.lambda-url.eu-west-1.on.aws/",
+      "https://xjgpaktg4y3h6uazduo2pfqjk40mibhr.lambda-url.eu-west-1.on.aws/"
+    ],
+    "api_gateway": [
+      "https://g0dp8zyku3.execute-api.eu-west-1.amazonaws.com/default/GetBootloadJars"
+    ],
+    "s3_bucket": [
+      "https://squire-hosting.s3.eu-west-1.amazonaws.com/bootstrap-%s.json"
+    ]
+  },
+
+  "auth_flow": {
+    "1": "Launcher.main() starts",
+    "2": "Load squire.properties",
+    "3": "Check Launcher.A() for existing token",
+    "4": "If no token: c/r/m/L.k(null) shows login UI",
+    "5": "Wait loop until Launcher.aN = true",
+    "6": "Log 'Authenticated'",
+    "7": "S3Utils.getBootstrapModes() with auth header",
+    "8": "Fetch bootstrap config from S3",
+    "9": "Launch client"
+  }
+}
