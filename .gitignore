@@ -1,5 +1,7 @@
 # Build output
 target/
+build/
+extracted/
 
 # IDE files
 .idea/
