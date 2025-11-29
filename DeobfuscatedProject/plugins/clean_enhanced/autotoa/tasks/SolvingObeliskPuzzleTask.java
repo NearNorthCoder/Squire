@@ -219,7 +219,7 @@ public class SolvingObeliskPuzzleTask extends KephriManager {
     }
 
     @Subscribe
-    public void a(NpcChanged event) {
+    public void onNpcChanged(NpcChanged event) {
         // Track when obelisks change state (hit successfully or failed)
         NPC npc = event.getNpc();
 
@@ -239,15 +239,15 @@ public class SolvingObeliskPuzzleTask extends KephriManager {
     }
 
     @Subscribe
-    public void b(GraphicsObjectCreated event) {
+    public void onGraphicsObjectCreated(GraphicsObjectCreated event) {
         // Track dangerous ground effects that appear during the puzzle
-        WorldPoint location = WorldPoint.fromLocal(this.cu, event.getGraphicsObject().getLocation());
+        WorldPoint location = WorldPoint.fromLocal(this.client, event.getGraphicsObject().getLocation());
         dangerousTiles.add(location);
     }
 
     @Subscribe
     @Override
-    public void a(ChatMessage message) {
+    public void onChatMessage(ChatMessage message) {
         // Reset puzzle state if party fails
         if (message.getMessage().startsWith("Your party failed to complete the challenge")) {
             this.obeliskSequenceIndex = 0;

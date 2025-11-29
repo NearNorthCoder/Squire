@@ -34,7 +34,7 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Prayers;
 import gg.squire.autotoa.tasks.KephriManager;
-import gg.squire.autotoa.tasks.GameEnum12;
+import gg.squire.autotoa.tasks.TOAItemType;
 
 /**
  * Task: Use Sun Keris Special Attack on Obelisk Projectile
@@ -109,7 +109,7 @@ public class SunKerisObeliskTask extends KephriManager {
     @Override
     protected boolean shouldExecute() {
         // Check if we don't have keris or in inventory
-        if (cl()) {
+        if (isKerisUnavailable()) {
             this.plugin.c(false);
             return false;
         }
@@ -118,7 +118,7 @@ public class SunKerisObeliskTask extends KephriManager {
         if (Prayers.getPoints() < LOW_PRAYER_THRESHOLD) {
             Item prayerRestore = Inventory.getFirst(item -> {
                 // Check for tears of elidinis and prayer restore potions
-                if (!q.-.t.a.o.u.i.-.o.u.t.e.s.a.r.e.TEARS_OF_ELIDINIS.d(item.getId())
+                if (!TOAItemType.TEARS_OF_ELIDINIS.hasItemId(item.getId())
                         || !item.getName().contains(ITEM_NAME_RESTORE)
                         || !item.getName().contains(ITEM_NAME_PRAYER)
                         || item.getName().contains(ITEM_NAME_SANFEW)) {
@@ -144,12 +144,12 @@ public class SunKerisObeliskTask extends KephriManager {
         }
 
         // Check if we should tick eat based on incoming projectile
-        if (ck()) {
+        if (shouldTickEat()) {
             return false;
         }
 
         // Don't spec if health too low
-        if (Combat.getCurrentHealth() > cj()) {
+        if (Combat.getCurrentHealth() > getHealthThreshold()) {
             return false;
         }
 
@@ -201,7 +201,7 @@ public class SunKerisObeliskTask extends KephriManager {
      * Check if we should tick eat based on incoming projectile timing
      * @return true if dangerous projectile is incoming and we should eat
      */
-    private boolean ck() {
+    private boolean shouldTickEat() {
         Projectile nearestObeliskProjectile = Projectiles.getAll(OBELISK_PROJECTILE_1, OBELISK_PROJECTILE_2)
                 .stream()
                 .filter(projectile -> {
@@ -229,7 +229,7 @@ public class SunKerisObeliskTask extends KephriManager {
      * Get health threshold for using spec based on projectile type
      * @return health value to maintain
      */
-    private int cj() {
+    private int getHealthThreshold() {
         Projectile nearestProjectile = Projectiles.getNearest(OBELISK_PROJECTILE_1, OBELISK_PROJECTILE_2);
         if (nearestProjectile == null) {
             return 1;
@@ -246,7 +246,7 @@ public class SunKerisObeliskTask extends KephriManager {
      * Check if player has Keris available (equipped or in inventory)
      * @return true if keris not available
      */
-    private boolean cl() {
+    private boolean isKerisUnavailable() {
         if (!Equipment.contains(KERIS_PARTISAN_SUN) && !Inventory.contains(KERIS_PARTISAN_SUN)) {
             return true;
         }

@@ -90,25 +90,25 @@ public class RedXCycleTask extends KephriManager {
     }
 
     @Override
-    public boolean bm() {
+    public boolean onBossDeath() {
         // Reset state when boss dies/mechanic ends
         this.reset();
-        return super.bm();
+        return super.onBossDeath();
     }
 
     @Override
-    public boolean bC() {
+    public boolean executeTask() {
         // Check if red X mechanic is active via config
         if (!this.config.redX()) {
             return false;
         }
 
-        NPC targetNPC = this.bB();
+        NPC targetNPC = this.getTargetNPC();
         if (targetNPC == null) {
             return false;
         }
 
-        Set<WorldPoint> dangerZones = this.bF();
+        Set<WorldPoint> dangerZones = this.getDangerZones();
         Player localPlayer = Players.getLocal();
 
         // Check if we're in cooldown period after graphics spawn
@@ -148,20 +148,20 @@ public class RedXCycleTask extends KephriManager {
             this.lastAttackTick = this.client.getTickCount();
 
             // Determine delay based on raid level
-            int attackDelay = (this.bA() == RAID_LEVEL_EXPERT) ? SHORT_ATTACK_DELAY : LONG_ATTACK_DELAY;
+            int attackDelay = (this.getRaidLevel() == RAID_LEVEL_EXPERT) ? SHORT_ATTACK_DELAY : LONG_ATTACK_DELAY;
             this.graphicsCooldownTick = this.client.getTickCount() + attackDelay;
         }
 
         // Use cycle positions when not in immediate danger
-        if (this.client.getTickCount() - this.tickCounter == 0 && this.bA() != RAID_LEVEL_EXPERT) {
+        if (this.client.getTickCount() - this.tickCounter == 0 && this.getRaidLevel() != RAID_LEVEL_EXPERT) {
             // Ensure run is enabled
             if (!Movement.isRunEnabled()) {
                 Movement.toggleRun();
             }
 
             // Alternate between two cycle positions
-            WorldPoint cyclePos1 = this.a(CYCLE_POSITION_1);
-            WorldPoint cyclePos2 = this.a(CYCLE_POSITION_2);
+            WorldPoint cyclePos1 = this.toWorldPoint(CYCLE_POSITION_1);
+            WorldPoint cyclePos2 = this.toWorldPoint(CYCLE_POSITION_2);
             WorldPoint playerLocation = localPlayer.getWorldLocation();
 
             // Choose the farthest position to maximize distance
@@ -182,7 +182,7 @@ public class RedXCycleTask extends KephriManager {
         }
 
         // Prepare to attack
-        this.bp();
+        this.prepareAttack();
 
         // Attack the boss if we're in its area
         if (targetNPC.getWorldArea().contains(localPlayer) &&
@@ -208,7 +208,7 @@ public class RedXCycleTask extends KephriManager {
      *
      * @return Set of world points that are currently dangerous
      */
-    private Set<WorldPoint> bF() {
+    private Set<WorldPoint> getDangerZones() {
         HashSet<WorldPoint> dangerZones = new HashSet<>();
 
         Iterator<GraphicsObject> iterator = this.client.getGraphicsObjects().iterator();
@@ -218,7 +218,7 @@ public class RedXCycleTask extends KephriManager {
             // Only track the specific danger zone graphics
             if (graphicsObject.getId() == GRAPHICS_DANGER_ZONE) {
                 WorldPoint dangerLocation = WorldPoint.fromLocal(
-                    this.cu,
+                    this.client,
                     graphicsObject.getLocation()
                 );
                 dangerZones.add(dangerLocation);
@@ -233,7 +233,7 @@ public class RedXCycleTask extends KephriManager {
      * When danger graphics spawn, activates cooldown to trigger dodging.
      */
     @Subscribe
-    public void a(GraphicsObjectCreated graphicsObjectCreated) {
+    public void onGraphicsObjectCreated(GraphicsObjectCreated graphicsObjectCreated) {
         // Ignore if already in cooldown
         if (this.graphicsCooldownTick > this.client.getTickCount()) {
             return;
@@ -241,7 +241,7 @@ public class RedXCycleTask extends KephriManager {
 
         int graphicsId = graphicsObjectCreated.getGraphicsObject().getId();
         WorldPoint graphicsLocation = WorldPoint.fromLocal(
-            this.cu,
+            this.client,
             graphicsObjectCreated.getGraphicsObject().getLocation()
         );
 
@@ -261,7 +261,7 @@ public class RedXCycleTask extends KephriManager {
      * Listens for player death to reset the task state.
      */
     @Subscribe
-    public void a(ActorDeath actorDeath) {
+    public void onActorDeath(ActorDeath actorDeath) {
         if (actorDeath.getActor() == Players.getLocal()) {
             this.reset();
         }
@@ -272,7 +272,7 @@ public class RedXCycleTask extends KephriManager {
      */
     @Override
     @Subscribe
-    public void a(ChatMessage chatMessage) {
+    public void onChatMessage(ChatMessage chatMessage) {
         String message = chatMessage.getMessage();
         if (message.contains(DEATH_MESSAGE)) {
             this.reset();

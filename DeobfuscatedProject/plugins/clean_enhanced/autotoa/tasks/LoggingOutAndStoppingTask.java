@@ -56,7 +56,7 @@ public class LoggingOutAndStoppingTask extends TOAConfigurableTask {
      * @param chatMessage the chat message event
      */
     @Subscribe
-    public void a(ChatMessage chatMessage) {
+    public void onChatMessage(ChatMessage chatMessage) {
         // Check if message contains the out-of-charges warning
         if (chatMessage.getMessage().contains(OUT_OF_CHARGES_MESSAGE)) {
             // Set flag to trigger stop on next run
