@@ -17,3 +17,7 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Compiled class files in root
+net/
+build/
