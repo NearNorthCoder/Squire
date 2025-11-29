@@ -1,0 +1,503 @@
+TOP 500 MOST COMMON DECRYPTED STRINGS
+================================================================================
+
+  1. [1011x] Open
+  2. [ 523x] Wear
+  3. [ 512x] Drink
+  4. [ 485x] Attack
+  5. [ 461x] Eat
+  6. [ 449x] Earth rune
+  7. [ 434x] Air rune
+  8. [ 433x] Water rune
+  9. [ 428x] Handling banking
+ 10. [ 409x] Search
+ 11. [ 328x] Wield
+ 12. [ 320x] Door
+ 13. [ 319x] Take
+ 14. [ 315x] Climb-down
+ 15. [ 308x] Nav to start
+ 16. [ 298x] ring of wealth (
+ 17. [ 276x] We are missing quest supplies, switching to BUYING
+ 18. [ 266x] We are missing supplies, switching to BUYING
+ 19. [ 248x] 
+ 20. [ 230x] Buying items
+ 21. [ 222x] Drop
+ 22. [ 216x] Nav to bank
+ 23. [ 215x] Jump
+ 24. [ 215x] Yes.
+ 25. [ 212x] Gap
+ 26. [ 206x] Navigating to bank
+ 27. [ 182x] Break
+ 28. [ 182x] Climb-up
+ 29. [ 172x] Finished buying items, switching back to quest
+ 30. [ 154x] Ladder
+ 31. [ 145x] Shark
+ 32. [ 136x] Glarial's amulet
+ 33. [ 136x] Glarial's urn
+ 34. [ 129x] Talk-to
+ 35. [ 128x] Climb
+ 36. [ 126x] Enter
+ 37. [ 124x] Trapdoor
+ 38. [ 114x] dueling
+ 39. [ 105x] Cross
+ 40. [  98x] Opening bank
+ 41. [  95x] Wall
+ 42. [  94x] Vial
+ 43. [  92x] Veliaf Hurtz
+ 44. [  89x] seed
+ 45. [  88x] Stairs
+ 46. [  86x] Bank
+ 47. [  81x] Pull
+ 48. [  80x] Move to door
+ 49. [  76x]  
+ 50. [  75x] Leap
+ 51. [  75x] Filliman Tarlock
+ 52. [  74x] Cow
+ 53. [  72x] Pull lever
+ 54. [  70x] Equip
+ 55. [  68x] Found mark on ground
+ 56. [  68x] passage
+ 57. [  68x] Port Piscarilius
+ 58. [  67x] Dig
+ 59. [  66x] Use
+ 60. [  65x] Starting quest
+ 61. [  63x] Ithoi the Navigator
+ 62. [  63x] Climb-over
+ 63. [  62x] Empty
+ 64. [  59x] wealth
+ 65. [  58x] Yes
+ 66. [  58x] Veos
+ 67. [  58x] Drezel
+ 68. [  57x] Plank
+ 69. [  57x] Spade
+ 70. [  56x] glory
+ 71. [  56x] Magic door
+ 72. [  54x] Bones
+ 73. [  54x] Chest
+ 74. [  51x] Mark of grace
+ 75. [  51x] Taking mark
+ 76. [  51x] Starting course
+ 77. [  51x] Jumping gap 3
+ 78. [  51x] Large door
+ 79. [  50x] Close
+ 80. [  50x] Nav to cows
+ 81. [  50x] Attacking cows
+ 82. [  50x] Rope
+ 83. [  49x] Mine
+ 84. [  49x] Logs
+ 85. [  49x] Wizard Statue
+ 86. [  48x] Using runes
+ 87. [  48x] Small fishing net
+ 88. [  46x] Read
+ 89. [  45x] Feather
+ 90. [  44x] teleport
+ 91. [  44x] Gate
+ 92. [  44x] Push
+ 93. [  44x] Staircase
+ 94. [  44x] Earth Strike
+ 95. [  42x] Iron key
+ 96. [  42x] Antique lamp
+ 97. [  42x] Tithe patch
+ 98. [  41x] Stamina
+ 99. [  41x] Games
+100. [  41x] Iron scimitar
+101. [  41x] Steel scimitar
+102. [  41x] Mithril scimitar
+103. [  40x] Prayer
+104. [  40x] Cook
+105. [  40x] Chop down
+106. [  40x] Nav to boat
+107. [  40x] Inspect
+108. [  40x] Key
+109. [  39x] Rub
+110. [  38x] Hammer
+111. [  38x] cow
+112. [  38x] Continue
+113. [  38x] Dropping logs
+114. [  37x] Runtime
+115. [  37x] Edge
+116. [  37x] null
+117. [  37x] Fishing
+118. [  36x] Version
+119. [  36x] How can I help?
+120. [  36x] Malcolm
+121. [  36x] Reinforced goggles
+122. [  36x] Cecilia
+123. [  35x] Gangplank
+124. [  35x] Talk npc
+125. [  35x] Handling chat
+126. [  35x] Garlic
+127. [  35x] Cell door
+128. [  35x] Golden key
+129. [  35x] Aris
+130. [  34x] Pick
+131. [  34x] Coffin
+132. [  34x] Climbing net
+133. [  34x] Obstacle net
+134. [  34x] Tree branch
+135. [  34x] Jumping gap 2
+136. [  34x] Nav to canafis course
+137. [  34x] Jumping gap 1
+138. [  34x] Jumping gap 4
+139. [  34x] Bucket
+140. [  33x] ,
+141. [  33x] Make
+142. [  33x] Tightrope
+143. [  33x] Crate
+144. [  32x] Trade
+145. [  32x] Jump-to
+146. [  32x] Cheese
+147. [  32x] Actually, I know where to find this stuff.
+148. [  32x] Walk-across
+149. [  32x] Lobster pot
+150. [  32x] Castle Wars
+151. [  32x] Fountain
+152. [  32x] Stalagmite
+153. [  32x] Rubber tube
+154. [  32x] Oil can
+155. [  32x] Handle chat
+156. [  31x] Remove
+157. [  31x] Auto retaliate
+158. [  31x] Confirm
+159. [  31x] Finished buying items, switching back to magic training
+160. [  30x] Arsen the Thief
+161. [  30x] Ivan Strom
+162. [  30x] Manhole
+163. [  30x] Hill
+164. [  30x] Fishing rod
+165. [  30x] Fishing bait
+166. [  30x] Root
+167. [  29x] Fill
+168. [  29x] Chaos altar
+169. [  29x] Breaking tab
+170. [  29x] Missing clue emote items, ending script
+171. [  29x] Eadgar
+172. [  28x] Teleport
+173. [  28x] Continue-trek
+174. [  28x] Quick-escape
+175. [  28x] I'm looking for a quest!
+176. [  28x] Ok, let me help then.
+177. [  28x] Yep, now tell me what the problem is.
+178. [  28x] Sure.
+179. [  28x] Yes, I'm sure.
+180. [  28x] Nav to altar
+181. [  28x] Getting key
+182. [  28x] Wig
+183. [  28x] Temple Guardian
+184. [  28x] Mirror
+185. [  28x] Bookcase
+186. [  27x] NONE
+187. [  27x] Task: 
+188. [  27x] Squeeze-through
+189. [  27x] Finishing quest
+190. [  27x] Gnocci the Cook
+191. [  27x] Talking
+192. [  27x] Floor
+193. [  27x] Choosing dialog
+194. [  27x] Toggle
+195. [  27x] Grotto
+196. [  27x] Water
+197. [  27x] potion
+198. [  26x] Pure essence
+199. [  26x] Check
+200. [  26x] Finished buying items, switching back to questing
+201. [  26x] talk npc
+202. [  26x] Bronze axe
+203. [  26x] range
+204. [  25x] Boat
+205. [  25x] Cupboard
+206. [  25x] Bank booth
+207. [  25x] Delrith
+208. [  24x] restore
+209. [  24x] Nature rune
+210. [  24x] Skeleton
+211. [  24x] Pass-through
+212. [  24x] Silk
+213. [  24x] Unfired bowl
+214. [  24x] Wizard's mind bomb
+215. [  24x] Nav to jail
+216. [  24x] In combat
+217. [  24x] Nav to magnet box
+218. [  24x] Ball
+219. [  24x] Book on baxtorian
+220. [  24x] total
+221. [  24x] Strange hole
+222. [  24x] Blockage
+223. [  23x] Chop
+224. [  23x] Dead tree
+225. [  23x] Knife
+226. [  23x] Ok, I'm up for an adventure.
+227. [  23x] A glass of your finest ale please.
+228. [  23x] Morgan needs your help!
+229. [  23x] Talk
+230. [  23x] Choose spell
+231. [  23x] Wind Strike
+232. [  23x] Magic training
+233. [  23x] Beta
+234. [  22x] Activate
+235. [  22x] Rough wall
+236. [  22x] Slayer
+237. [  22x] Board
+238. [  22x] Casting varrock tele
+239. [  22x] Casting lumby tele
+240. [  22x] Casting fally tele
+241. [  22x] Casting cammy tele
+242. [  22x] Alching
+243. [  22x] Move to alch spot
+244. [  22x] Opening autocast
+245. [  22x] Water Strike
+246. [  22x] Fire Strike
+247. [  22x] I'm always happy to help a cook in distress.
+248. [  22x] PvP
+249. [  22x] Deadman
+250. [  22x] Deposit
+251. [  21x] Portal
+252. [  21x] Agility
+253. [  21x] Safalaan Hallow
+254. [  21x] Interesting door
+255. [  21x] Blessed water
+256. [  21x] Nav to final tile
+257. [  21x] Vampyre Juvinate
+258. [  21x] Rocks
+259. [  21x] Searching crates
+260. [  20x] Short vine
+261. [  20x] Coins
+262. [  20x] Interact npc
+263. [  20x] Rubbing lamp
+264. [  20x] Selecting slayer
+265. [  20x] Climbing down
+266. [  20x] Nav to pub
+267. [  20x] Handling dialog
+268. [  20x] Paste
+269. [  20x] You're right, we don't.
+270. [  20x] General Bentnoze
+271. [  20x] Blue dye
+272. [  20x] Orange dye
+273. [  20x] Silverlight
+274. [  20x] Harvest
+275. [  19x] Chaos rune
+276. [  19x] Balance
+277. [  19x] Hurdle
+278. [  19x] Jump-off
+279. [  19x] Finished buying items, switching back to agility
+280. [  19x] Ok, thanks.
+281. [  19x] Fire rune
+282. [  19x] Tinderbox
+283. [  19x] melee
+284. [  19x] timetracking
+285. [  18x] Pickpocket
+286. [  18x] Clothes line
+287. [  18x] Tall tree
+288. [  18x] Pole-vault
+289. [  18x] Vault
+290. [  18x] Walk-on
+291. [  18x] Finished buying items, switching back to melee training
+292. [  18x] Father Aereck sent me to talk to you.
+293. [  18x] He's got a ghost haunting his graveyard.
+294. [  18x] I'm wearing an amulet of ghost speak!
+295. [  18x] Mind rune
+296. [  18x] Captain Tock
+297. [  18x] Telescope
+298. [  18x] Leaping
+299. [  18x] Tome of experience (3)
+300. [  18x] Tome of experience (2)
+301. [  18x] Tome of experience (1)
+302. [  18x] Druid pouch
+303. [  18x] Cave entrance
+304. [  18x] Boy
+305. [  18x] Molten glass
+306. [  18x] Bank chest
+307. [  18x] Sturdy door
+308. [  18x] Build
+309. [  18x] Done
+310. [  18x] Mort myre fungus
+311. [  18x] Nature Spirit
+312. [  18x] Longhall door
+313. [  18x] Perform
+314. [  18x] Squamata.
+315. [  18x] Gnomes.
+316. [  18x] Two.
+317. [  18x] Seaweed.
+318. [  18x] Harmless.
+319. [  18x] Tree Door
+320. [  18x] Alice
+321. [  18x] Dirty blast
+322. [  18x] Fly fishing rod
+323. [  18x] Nav to small fish spot
+324. [  18x] Rohak
+325. [  18x] Red vine worm
+326. [  18x] Wall Pipe
+327. [  18x] Let's trade.
+328. [  18x] Orlando Smith
+329. [  18x] Farm door
+330. [  18x] Entrance
+331. [  18x] Searching drawers
+332. [  18x] Drawers
+333. [  18x] Yes, I have.
+334. [  17x] bow
+335. [  17x] Knight Statue
+336. [  17x] Nav to gnome course
+337. [  17x] Crossing log
+338. [  17x] Log balance
+339. [  17x] Climbing branch
+340. [  17x] Crossing rope
+341. [  17x] Balancing rope
+342. [  17x] Crossing pipe
+343. [  17x] Crossing clothes line
+344. [  17x] Balancing
+345. [  17x] Jumping gap
+346. [  17x] Hurdle roof
+347. [  17x] Finishing course
+348. [  17x] Vaulting
+349. [  17x] Jumping gap 5
+350. [  17x] Jumping gap 6
+351. [  17x] cross rope
+352. [  17x] Jumping Edge
+353. [  17x] Go down
+354. [  17x] Nav to ladder
+355. [  17x] Vanstrom Klause
+356. [  17x] Entering maze
+357. [  17x] Well, what is it, I may be able to help?
+358. [  17x] Camelot teleport
+359. [  17x] Father Aereck
+360. [  17x] Restless ghost
+361. [  17x] Switching to BUYING
+362. [  16x] Runtime:
+363. [  16x] Crafting
+364. [  16x] Rune 2h sword
+365. [  16x] Dwarf
+366. [  16x] Adding lobster to buy list
+367. [  16x] Adding cheese to buy list
+368. [  16x] Adding fally tabs to buy list
+369. [  16x] Adding mind runes to buy list
+370. [  16x] Adding air runes to buy list
+371. [  16x] Adding water runes to buy list
+372. [  16x] Adding earth runes to buy list
+373. [  16x] Wizard Mizgog
+374. [  16x] Give me a quest please.
+375. [  16x] I'll try.
+376. [  16x] What's the matter?
+377. [  16x] Ok, I'll see what I can do.
+378. [  16x] Nav to hole
+379. [  16x] Hole
+380. [  16x] Staff of air
+381. [  16x] Leather gloves
+382. [  16x] Wine of zamorak
+383. [  16x] Maze key
+384. [  16x] Can I journey on this ship?
+385. [  16x] Search away, I have nothing to hide.
+386. [  16x] Ok.
+387. [  16x] Beer glass
+388. [  16x] Antifire
+389. [  16x] King Roald
+390. [  16x] Digging
+391. [  16x] 1234567891234567
+392. [  16x] 1234567891234568
+393. [  16x] AES
+394. [  16x] AES/CBC/PKCS5Padding
+395. [  16x] %20
+396. [  16x] User-Agent
+397. [  16x] Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)
+398. [  16x] Taking magnet
+399. [  16x] Nav to fountain
+400. [  16x] Getting ammy
+401. [  16x] Rock
+402. [  16x] C:\Users\Nick\AppData\Roaming\.tribot\GodsMule\mule.txt
+403. [  16x] Disabling GE warning
+404. [  16x] Bucket of water
+405. [  16x] Pressure gauge
+406. [  16x] Nav to a
+407. [  16x] Lever A
+408. [  16x] Nav to b
+409. [  16x] Lever B
+410. [  16x] Nav to e
+411. [  16x] Lever E
+412. [  16x] Nav to professor
+413. [  16x] Professor Oddenstein
+414. [  16x] Nav to coffin
+415. [  16x] Handling coffin
+416. [  16x] Burning
+417. [  16x] plant
+418. [  16x] Cooked bream
+419. [  15x] Oh dear, you are dead!
+420. [  15x] Open-all
+421. [  15x] Zombie
+422. [  15x] Chief Tess
+423. [  15x] Obstacle pipe
+424. [  15x] Elder Chaos druid
+425. [  15x] Exchange
+426. [  15x] Exchange All
+427. [  15x] Ned
+428. [  15x] Nav to guard
+429. [  15x] Hengrad
+430. [  15x] Polmafi Ferdygris
+431. [  15x] Beer
+432. [  15x] What's wrong?
+433. [  15x] Osman
+434. [  15x] Nav to romeo
+435. [  15x] Romeo
+436. [  15x] Cadava potion
+437. [  15x] Nav to veos
+438. [  15x] King Bolren
+439. [  15x] Nav to tracker
+440. [  15x] Fire
+441. [  15x] Orbs of protection
+442. [  15x] Weakened Delrith
+443. [  15x] Nav to burgh bank
+444. [  15x] MAGIC
+445. [  15x] Turael
+446. [  15x] Attacking hill giant
+447. [  15x] Bait
+448. [  15x] Seaweed
+449. [  15x] Sarah
+450. [  15x] Passage
+451. [  15x] Unlock
+452. [  15x] Revitalisation
+453. [  15x] Uri
+454. [  14x] blowpipe
+455. [  14x] prayer
+456. [  14x] Reward token
+457. [  14x] Coal
+458. [  14x] Rune kiteshield
+459. [  14x] I'm looking for a quest.
+460. [  14x] Finished buying items, switching back to prayer
+461. [  14x] We are missing prayer supplies, switching to BUYING
+462. [  14x] Tele to wildy
+463. [  14x] Lava Maze
+464. [  14x] Okay, teleport to level 41 Wilderness.
+465. [  14x] 1 tick pray
+466. [  14x] Unnoting bones
+467. [  14x] Exchange 5
+468. [  14x] Suiciding
+469. [  14x] Prayer training
+470. [  14x] Repair
+471. [  14x] Nav to door
+472. [  14x] Entering cave
+473. [  14x] Can you make me a cake?
+474. [  14x] I'll get going.
+475. [  14x] Soul
+476. [  14x] Searching crate
+477. [  14x] Nav to temple door
+478. [  14x] tell the king
+479. [  14x] Murky water
+480. [  14x] Entering cell
+481. [  14x] Maple longbow (u)
+482. [  14x] Handle veos chat
+483. [  14x] Closed chest
+484. [  14x] Ernest the Chicken
+485. [  14x] Craft
+486. [  14x] bones
+487. [  14x] Woodcutting
+488. [  14x] continue
+489. [  14x] seedling
+490. [  14x] Sanfew
+491. [  14x] Path
+492. [  13x] trident
+493. [  13x] :
+494. [  13x] Details
+495. [  13x] Stamina potion(4)
+496. [  13x] anti
+497. [  13x] Magic logs
+498. [  13x] Altar
+499. [  13x] Sourhog
+500. [  13x] Saw

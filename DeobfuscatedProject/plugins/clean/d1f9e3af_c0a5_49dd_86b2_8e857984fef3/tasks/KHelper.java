@@ -1,0 +1,916 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.runelite.api.coords.WorldArea
+ *  net.runelite.api.coords.WorldPoint
+ *  net.runelite.api.widgets.Widget
+ *  net.unethicalite.api.commons.Time
+ *  net.unethicalite.api.entities.NPCs
+ *  net.unethicalite.api.entities.Players
+ *  net.unethicalite.api.entities.TileObjects
+ *  net.unethicalite.api.game.Vars
+ *  net.unethicalite.api.items.Bank
+ *  net.unethicalite.api.items.Equipment
+ *  net.unethicalite.api.items.Inventory
+ *  net.unethicalite.api.movement.Movement
+ *  net.unethicalite.api.movement.pathfinder.model.BankLocation
+ *  net.unethicalite.api.quests.QuestVarbits
+ *  net.unethicalite.api.widgets.Dialog
+ *  net.unethicalite.client.Static
+ */
+package gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks;
+
+import gg.squire.account.AccBuilderEasyClues;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.Predicate;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks.D1f9e3af-c0a5-49dd-86b2-8e857984fef3Manager;
+import l.i.r.i.y.c.c.-.s.e.n.-.e.l.b.e.l.k.d.-.c.o.a.u.e.u.-.W;
+import gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks.AHelper;
+import gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks.ANHelper;
+import gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks.BHelper;
+import gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks.DHelper;
+import gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks.EHelper;
+import gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks.FHelper;
+import gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks.GHelper;
+import gg.squire.d1f9e3af-c0a5-49dd-86b2-8e857984fef3.tasks.IHelper;
+import net.runelite.api.coords.WorldArea;
+import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.widgets.Widget;
+import net.unethicalite.api.commons.Time;
+import net.unethicalite.api.entities.NPCs;
+import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.entities.TileObjects;
+import net.unethicalite.api.game.Vars;
+import net.unethicalite.api.items.Bank;
+import net.unethicalite.api.items.Equipment;
+import net.unethicalite.api.items.Inventory;
+import net.unethicalite.api.movement.Movement;
+import net.unethicalite.api.movement.pathfinder.model.BankLocation;
+import net.unethicalite.api.quests.QuestVarbits;
+import net.unethicalite.api.widgets.Dialog;
+import net.unethicalite.client.Static;
+
+public class KHelper
+implements W {
+    static  WorldPoint iY;
+    static  boolean cm;
+    static  WorldPoint iV;
+    private final  int ja = 0;
+    static  WorldPoint iX;
+    static  WorldPoint iT;
+    static  WorldPoint iW;
+    public static  boolean bt;
+
+    static  int cl;
+    public static  List<d> bv;
+    
+    static  WorldPoint iU;
+    static  String[] bR;
+    static  WorldPoint bX;
+    public static  boolean iS;
+    private static final  String iR;
+    private static final  HashMap<Integer, String> iQ;
+
+    public static void ce() {
+        block77: {
+            block78: {
+                Object lllIlllIlllIll;
+                block80: {
+                    block79: {
+                        if (K.lIIIlIlIllII(bt ? 1 : 0)) {
+                            b.a(bv);
+                            if (K.lIIIlIlIllIl(bv.size(), lIlIIlIlI[1])) {
+                                System.out.println(lIlIIlIIl[lIlIIlIlI[0]]);
+                                bt = lIlIIlIlI[0];
+                            }
+                        }
+                        if (!K.lIIIlIlIlllI(bt ? 1 : 0)) break block77;
+                        if (K.lIIIlIlIlllI(K.ab() ? 1 : 0) && K.lIIIlIlIlllI(Vars.getBit((int)QuestVarbits.QUEST_DEMON_SLAYER.getId()))) {
+                            lllIlllIlllIll = BankLocation.getNearest();
+                            if (K.lIIIlIlIllll(lllIlllIlllIll) && K.lIIIlIlIlllI(lllIlllIlllIll.getArea().contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
+                                AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[1]];
+                                a.a((BankLocation)lllIlllIlllIll);
+                            }
+                            if (K.lIIIlIlIllll(lllIlllIlllIll) && K.lIIIlIlIllII(lllIlllIlllIll.getArea().contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
+                                if (K.lIIIlIlIlllI(Bank.isOpen() ? 1 : 0)) {
+                                    a.a();
+                                    Time.sleepUntil(() -> Bank.isOpen(), (int)lIlIIlIlI[2]);
+
+                                }
+                                if (K.lIIIlIlIllII(Bank.isOpen() ? 1 : 0)) {
+                                    AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[3]];
+                                    if (K.lIIIlIllIIII(Inventory.getAll().size())) {
+                                        Bank.depositInventory();
+                                        Time.sleepTicks((int)lIlIIlIlI[4]);
+
+                                    }
+                                    if (K.lIIIlIllIIII(Equipment.getAll().size())) {
+                                        Bank.depositEquipment();
+                                        Time.sleepTicks((int)lIlIIlIlI[3]);
+
+                                    }
+                                    int[] nArray = new int[lIlIIlIlI[5]];
+                                    nArray[K.lIlIIlIlI[0]] = lIlIIlIlI[6];
+                                    nArray[K.lIlIIlIlI[1]] = lIlIIlIlI[7];
+                                    nArray[K.lIlIIlIlI[3]] = lIlIIlIlI[8];
+                                    if (K.lIIIlIlIlllI(e.b(nArray) ? 1 : 0)) {
+                                        K.af();
+                                        System.out.println(lIlIIlIIl[lIlIIlIlI[5]]);
+                                        bt = lIlIIlIlI[1];
+                                        return;
+                                    }
+                                    int[] nArray2 = new int[lIlIIlIlI[1]];
+                                    nArray2[K.lIlIIlIlI[0]] = lIlIIlIlI[7];
+                                    if (K.lIIIlIlIllII(Bank.contains((int[])nArray2) ? 1 : 0)) {
+                                        int[] nArray3 = new int[lIlIIlIlI[1]];
+                                        nArray3[K.lIlIIlIlI[0]] = lIlIIlIlI[7];
+                                        if (K.lIIIlIlIllIl(Bank.getFirst((int[])nArray3).getQuantity(), lIlIIlIlI[9])) {
+                                            K.af();
+                                            System.out.println(lIlIIlIIl[lIlIIlIlI[4]]);
+                                            bt = lIlIIlIlI[1];
+                                            return;
+                                        }
+                                    }
+                                    int[] nArray4 = new int[lIlIIlIlI[5]];
+                                    nArray4[K.lIlIIlIlI[0]] = lIlIIlIlI[6];
+                                    nArray4[K.lIlIIlIlI[1]] = lIlIIlIlI[7];
+                                    nArray4[K.lIlIIlIlI[3]] = lIlIIlIlI[8];
+                                    if (K.lIIIlIlIllII(e.b(nArray4) ? 1 : 0)) {
+                                        if (K.lIIIlIlIlllI(Equipment.contains((int[])f.aR) ? 1 : 0) && K.lIIIlIlIlllI(Inventory.contains((int[])f.aR) ? 1 : 0)) {
+                                            a.b(f.aR, lIlIIlIlI[1]);
+                                        }
+                                        if (K.lIIIlIlIllII(Inventory.contains((int[])f.aR) ? 1 : 0)) {
+                                            Inventory.getFirst((int[])f.aR).interact(lIlIIlIIl[lIlIIlIlI[10]]);
+                                            Time.sleepTicks((int)lIlIIlIlI[5]);
+
+                                        }
+                                        if (K.lIIIlIlIlllI(Bank.isOpen() ? 1 : 0)) {
+                                            a.a();
+                                            Time.sleepTicks((int)lIlIIlIlI[5]);
+
+                                        }
+                                        a.a(lIlIIlIlI[11], lIlIIlIlI[1]);
+                                        a.a(lIlIIlIlI[8], lIlIIlIlI[1]);
+                                        a.a(lIlIIlIlI[6], lIlIIlIlI[12]);
+                                        a.a(lIlIIlIlI[13], lIlIIlIlI[14]);
+                                    }
+                                }
+                            }
+                        }
+                        if (K.lIIIlIlIllII(Inventory.contains((int[])f.aV) ? 1 : 0) && K.lIIIlIlIllIl(Movement.getRunEnergy(), lIlIIlIlI[15])) {
+                            Inventory.getFirst((int[])f.aV).interact(lIlIIlIIl[lIlIIlIlI[16]]);
+                            Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                        }
+                        int[] nArray = new int[lIlIIlIlI[1]];
+                        nArray[K.lIlIIlIlI[0]] = lIlIIlIlI[17];
+                        if (K.lIIIlIlIllII(Inventory.contains((int[])nArray) ? 1 : 0) && K.lIIIlIllIIIl(K.lIIIlIlIlIll(e.u(), 55.0))) {
+                            int[] nArray5 = new int[lIlIIlIlI[1]];
+                            nArray5[K.lIlIIlIlI[0]] = lIlIIlIlI[17];
+                            Inventory.getFirst((int[])nArray5).interact(lIlIIlIIl[lIlIIlIlI[18]]);
+                        }
+                        if (K.lIIIlIlIllII(K.ab() ? 1 : 0) && K.lIIIlIlIlllI(Vars.getBit((int)QuestVarbits.QUEST_DEMON_SLAYER.getId()))) {
+                            if (K.lIIIlIllIIlI(Players.getLocal().getWorldLocation().distanceTo(bX), lIlIIlIlI[4]) && K.lIIIlIlIlllI(Static.getClient().isInInstancedRegion() ? 1 : 0)) {
+                                AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[19]];
+                                Movement.walkTo((WorldPoint)bX);
+
+                                Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                            }
+                            if (K.lIIIlIllIIll(Players.getLocal().getWorldLocation().distanceTo(bX), lIlIIlIlI[4])) {
+                                g.a(lIlIIlIIl[lIlIIlIlI[20]], bR);
+                            }
+                        }
+                        if (K.lIIIlIllIlII(Vars.getBit((int)QuestVarbits.QUEST_DEMON_SLAYER.getId()), lIlIIlIlI[1])) {
+                            lllIlllIlllIll = new WorldArea(lIlIIlIlI[21], lIlIIlIlI[22], lIlIIlIlI[19], lIlIIlIlI[18], lIlIIlIlI[0]);
+                            if (K.lIIIlIlIlllI(lllIlllIlllIll.contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
+                                AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[12]];
+                                Movement.walkTo((WorldPoint)iT);
+
+                                Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                            }
+                            if (K.lIIIlIlIllII(lllIlllIlllIll.contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
+                                g.a(lIlIIlIIl[lIlIIlIlI[23]], bR);
+                            }
+                        }
+                        if (!K.lIIIlIllIlII(Vars.getBit((int)QuestVarbits.QUEST_DEMON_SLAYER.getId()), lIlIIlIlI[3])) break block78;
+                        cl = lIlIIlIlI[0];
+                        int[] nArray6 = new int[lIlIIlIlI[1]];
+                        nArray6[K.lIlIIlIlI[0]] = lIlIIlIlI[24];
+                        if (K.lIIIlIlIlllI(Inventory.contains((int[])nArray6) ? 1 : 0)) {
+                            String[] stringArray = new String[lIlIIlIlI[1]];
+                            stringArray[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[25]];
+                            if (K.lIIIlIlIlllI(Equipment.contains((String[])stringArray) ? 1 : 0) && K.lIIIlIlIlllI(iS ? 1 : 0)) {
+                                if (!K.lIIIlIllIIll(Players.getLocal().getWorldLocation().distanceTo(iU), lIlIIlIlI[4]) || K.lIIIlIllIlIl(Players.getLocal().getWorldLocation().getPlane(), lIlIIlIlI[3])) {
+                                    AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[26]];
+                                    Movement.walkTo((WorldPoint)iU);
+
+                                    Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                                }
+                                if (K.lIIIlIllIIll(Players.getLocal().getWorldLocation().distanceTo(iU), lIlIIlIlI[4])) {
+                                    g.a(lIlIIlIIl[lIlIIlIlI[27]], bR);
+                                }
+                            }
+                        }
+                        int[] nArray7 = new int[lIlIIlIlI[1]];
+                        nArray7[K.lIlIIlIlI[0]] = lIlIIlIlI[24];
+                        if (K.lIIIlIlIllII(Inventory.contains((int[])nArray7) ? 1 : 0) && K.lIIIlIlIlllI(iS ? 1 : 0)) {
+                            String[] stringArray = new String[lIlIIlIlI[1]];
+                            stringArray[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[28]];
+                            if (K.lIIIlIlIllII(Inventory.contains((String[])stringArray) ? 1 : 0)) {
+                                if (K.lIIIlIllIIlI(Players.getLocal().getWorldLocation().distanceTo(iV), lIlIIlIlI[4])) {
+                                    AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[29]];
+                                    Movement.walkTo((WorldPoint)iV);
+
+                                    Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                                }
+                                if (K.lIIIlIllIIll(Players.getLocal().getWorldLocation().distanceTo(iV), lIlIIlIlI[4])) {
+                                    String[] stringArray2 = new String[lIlIIlIlI[1]];
+                                    stringArray2[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[30]];
+                                    String[] stringArray3 = new String[lIlIIlIlI[1]];
+                                    stringArray3[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[31]];
+                                    Inventory.getFirst((String[])stringArray2).useOn(TileObjects.getNearest((String[])stringArray3));
+                                    Time.sleepTicks((int)lIlIIlIlI[10]);
+
+                                }
+                            }
+                            String[] stringArray4 = new String[lIlIIlIlI[1]];
+                            stringArray4[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[32]];
+                            if (K.lIIIlIlIlllI(Inventory.contains((String[])stringArray4) ? 1 : 0)) {
+                                if (K.lIIIlIllIIlI(Players.getLocal().getWorldLocation().distanceTo(iW), lIlIIlIlI[4])) {
+                                    AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[33]];
+                                    String[] stringArray5 = new String[lIlIIlIlI[1]];
+                                    stringArray5[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[34]];
+                                    if (K.lIIIlIlIllll(TileObjects.getNearest((String[])stringArray5))) {
+                                        String[] stringArray6 = new String[lIlIIlIlI[1]];
+                                        stringArray6[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[35]];
+                                        String[] stringArray7 = new String[lIlIIlIlI[1]];
+                                        stringArray7[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[36]];
+                                        if (K.lIIIlIlIllII(TileObjects.getNearest((String[])stringArray6).hasAction(stringArray7) ? 1 : 0)) {
+                                            String[] stringArray8 = new String[lIlIIlIlI[1]];
+                                            stringArray8[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[37]];
+                                            TileObjects.getNearest((String[])stringArray8).interact(lIlIIlIIl[lIlIIlIlI[9]]);
+                                            Time.sleepTicks((int)lIlIIlIlI[3]);
+
+                                        }
+                                    }
+                                    String[] stringArray9 = new String[lIlIIlIlI[1]];
+                                    stringArray9[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[38]];
+                                    if (K.lIIIlIlIllll(TileObjects.getNearest((String[])stringArray9))) {
+                                        String[] stringArray10 = new String[lIlIIlIlI[1]];
+                                        stringArray10[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[39]];
+                                        String[] stringArray11 = new String[lIlIIlIlI[1]];
+                                        stringArray11[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[40]];
+                                        if (K.lIIIlIlIllII(TileObjects.getNearest((String[])stringArray10).hasAction(stringArray11) ? 1 : 0)) {
+                                            String[] stringArray12 = new String[lIlIIlIlI[1]];
+                                            stringArray12[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[41]];
+                                            TileObjects.getNearest((String[])stringArray12).interact(lIlIIlIIl[lIlIIlIlI[42]]);
+                                            Time.sleepTicks((int)lIlIIlIlI[3]);
+
+                                        }
+                                    }
+                                    Movement.walkTo((WorldPoint)iW);
+
+                                    Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                                }
+                                if (K.lIIIlIllIIll(Players.getLocal().getWorldLocation().distanceTo(iW), lIlIIlIlI[4])) {
+                                    String[] stringArray13 = new String[lIlIIlIlI[1]];
+                                    stringArray13[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[43]];
+                                    if (K.lIIIlIlIllll(TileObjects.getNearest((String[])stringArray13))) {
+                                        String[] stringArray14 = new String[lIlIIlIlI[1]];
+                                        stringArray14[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[44]];
+                                        TileObjects.getNearest((String[])stringArray14).interact(lIlIIlIIl[lIlIIlIlI[45]]);
+                                        Time.sleepTicks((int)lIlIIlIlI[4]);
+
+                                    }
+                                }
+                            }
+                        }
+                        int[] nArray8 = new int[lIlIIlIlI[1]];
+                        nArray8[K.lIlIIlIlI[0]] = lIlIIlIlI[24];
+                        if (K.lIIIlIlIllII(Inventory.contains((int[])nArray8) ? 1 : 0)) {
+                            int[] nArray9 = new int[lIlIIlIlI[1]];
+                            nArray9[K.lIlIIlIlI[0]] = lIlIIlIlI[46];
+                            if (K.lIIIlIlIllII(Inventory.contains((int[])nArray9) ? 1 : 0)) {
+                                iS = lIlIIlIlI[1];
+                            }
+                        }
+                        if (K.lIIIlIlIllII(iS ? 1 : 0)) {
+                            String[] stringArray = new String[lIlIIlIlI[1]];
+                            stringArray[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[47]];
+                            if (K.lIIIlIlIlllI(Equipment.contains((String[])stringArray) ? 1 : 0)) {
+                                int[] nArray10 = new int[lIlIIlIlI[1]];
+                                nArray10[K.lIlIIlIlI[0]] = lIlIIlIlI[48];
+                                if (K.lIIIlIlIlllI(Inventory.contains((int[])nArray10) ? 1 : 0)) {
+                                    String[] stringArray15 = new String[lIlIIlIlI[1]];
+                                    stringArray15[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[49]];
+                                    if (K.lIIIlIlIlllI(Inventory.contains((String[])stringArray15) ? 1 : 0)) {
+                                        K.cg();
+                                    }
+                                    String[] stringArray16 = new String[lIlIIlIlI[1]];
+                                    stringArray16[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[50]];
+                                    if (K.lIIIlIlIllII(Inventory.contains((String[])stringArray16) ? 1 : 0)) {
+                                        if (K.lIIIlIllIIlI(Players.getLocal().getWorldLocation().distanceTo(iX), lIlIIlIlI[3])) {
+                                            AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[51]];
+                                            Movement.walkTo((WorldPoint)iX);
+
+                                            Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                                        }
+                                        if (K.lIIIlIllIIll(Players.getLocal().getWorldLocation().distanceTo(iX), lIlIIlIlI[3])) {
+                                            g.a(lIlIIlIIl[lIlIIlIlI[52]], bR);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (K.lIIIlIlIllII(iS ? 1 : 0)) {
+                            int[] nArray11 = new int[lIlIIlIlI[1]];
+                            nArray11[K.lIlIIlIlI[0]] = lIlIIlIlI[48];
+                            if (K.lIIIlIlIllII(Inventory.contains((int[])nArray11) ? 1 : 0)) {
+                                String[] stringArray = new String[lIlIIlIlI[1]];
+                                stringArray[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[53]];
+                                if (K.lIIIlIlIlllI(Equipment.contains((String[])stringArray) ? 1 : 0)) {
+                                    int[] nArray12 = new int[lIlIIlIlI[1]];
+                                    nArray12[K.lIlIIlIlI[0]] = lIlIIlIlI[24];
+                                    if (K.lIIIlIlIlllI(Inventory.contains((int[])nArray12) ? 1 : 0)) {
+                                        K.cg();
+                                    }
+                                    int[] nArray13 = new int[lIlIIlIlI[1]];
+                                    nArray13[K.lIlIIlIlI[0]] = lIlIIlIlI[24];
+                                    if (K.lIIIlIlIllII(Inventory.contains((int[])nArray13) ? 1 : 0)) {
+                                        lllIlllIlllIll = new WorldArea(lIlIIlIlI[21], lIlIIlIlI[22], lIlIIlIlI[19], lIlIIlIlI[18], lIlIIlIlI[0]);
+                                        if (K.lIIIlIlIlllI(lllIlllIlllIll.contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
+                                            AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[54]];
+                                            Movement.walkTo((WorldPoint)iT);
+
+                                            Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                                        }
+                                        if (K.lIIIlIlIllII(lllIlllIlllIll.contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
+                                            g.a(lIlIIlIIl[lIlIIlIlI[55]], bR);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        String[] stringArray = new String[lIlIIlIlI[1]];
+                        stringArray[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[56]];
+                        if (!K.lIIIlIlIllII(Equipment.contains((String[])stringArray) ? 1 : 0)) break block78;
+                        String[] stringArray17 = new String[lIlIIlIlI[1]];
+                        stringArray17[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[57]];
+                        if (K.lIIIlIllIllI(NPCs.getNearest((String[])stringArray17))) {
+                            String[] stringArray18 = new String[lIlIIlIlI[1]];
+                            stringArray18[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[58]];
+                            if (K.lIIIlIllIllI(NPCs.getNearest((String[])stringArray18))) {
+                                AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[59]];
+                                Movement.walkTo((WorldPoint)iY);
+
+                                Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                            }
+                        }
+                        String[] stringArray19 = new String[lIlIIlIlI[1]];
+                        stringArray19[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[60]];
+                        if (!K.lIIIlIllIllI(NPCs.getNearest((String[])stringArray19))) break block79;
+                        String[] stringArray20 = new String[lIlIIlIlI[1]];
+                        stringArray20[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[61]];
+                        if (!K.lIIIlIlIllll(NPCs.getNearest((String[])stringArray20))) break block80;
+                    }
+                    if (K.lIIIlIllIllI(iZ)) {
+                        K.cf();
+                    }
+                    if (K.lIIIlIlIllll(lllIlllIlllIll = NPCs.getNearest(nPC -> {
+                        int n2;
+                        if (K.lIIIlIlIllII(nPC.getName().contains(lIlIIlIIl[lIlIIlIlI[89]]) ? 1 : 0) && K.lIIIlIlllIII(nPC.getInteracting(), Players.getLocal())) {
+                            n2 = lIlIIlIlI[1];
+
+                            if ((0xB0 ^ 0xB4) <= -1) {
+                                return false;
+                            }
+                        } else {
+                            n2 = lIlIIlIlI[0];
+                        }
+                        return n2 != 0;
+                    })) && K.lIIIlIllIllI(Players.getLocal().getInteracting())) {
+                        lllIlllIlllIll.interact(lIlIIlIIl[lIlIIlIlI[62]]);
+                        Time.sleepTicks((int)lIlIIlIlI[3]);
+
+                    }
+                    if (K.lIIIlIllIllI(lllIlllIlllIll) && K.lIIIlIllIllI(Players.getLocal().getInteracting())) {
+                        String[] stringArray = new String[lIlIIlIlI[1]];
+                        stringArray[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[63]];
+                        if (K.lIIIlIlIllll(NPCs.getNearest((String[])stringArray))) {
+                            String[] stringArray21 = new String[lIlIIlIlI[1]];
+                            stringArray21[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[15]];
+                            if (K.lIIIlIlIlllI(NPCs.getNearest((String[])stringArray21).isDead() ? 1 : 0) && K.lIIIlIlIlllI(Dialog.isOpen() ? 1 : 0)) {
+                                String[] stringArray22 = new String[lIlIIlIlI[1]];
+                                stringArray22[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[64]];
+                                NPCs.getNearest((String[])stringArray22).interact(lIlIIlIIl[lIlIIlIlI[65]]);
+                            }
+                        }
+                    }
+                    if (K.lIIIlIlIllII(Dialog.isOpen() ? 1 : 0)) {
+                        AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[66]];
+                        List lllIlllIlllIlI = Dialog.getOptions();
+                        if (K.lIIIlIlIlllI(lllIlllIlllIlI.isEmpty() ? 1 : 0)) {
+                            int lllIlllIlllIIl = lIlIIlIlI[0];
+                            while (K.lIIIlIlIllIl(lllIlllIlllIIl, lllIlllIlllIlI.size())) {
+                                if (K.lIIIlIlIllII(((Widget)lllIlllIlllIlI.get(lllIlllIlllIIl)).getText().contains(lIlIIlIIl[lIlIIlIlI[67]]) ? 1 : 0)) {
+                                    String[] stringArray = new String[lIlIIlIlI[1]];
+                                    stringArray[K.lIlIIlIlI[0]] = ((Widget)lllIlllIlllIlI.get(lllIlllIlllIIl)).getText();
+                                    Dialog.chooseOption((String[])stringArray);
+
+                                    Time.sleepTicks((int)lIlIIlIlI[3]);
+
+                                    if (((0xF9 ^ 0xA3) & ~(0xEF ^ 0xB5)) >= 0) break;
+                                    return;
+                                }
+                                ++lllIlllIlllIIl;
+
+                                if ((0x72 ^ 0x39 ^ (0xFB ^ 0xB4)) <= (0x9D ^ 0x92 ^ (0x21 ^ 0x2A))) continue;
+                                return;
+                            }
+                        }
+                    }
+                }
+                String[] stringArray = new String[lIlIIlIlI[1]];
+                stringArray[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[68]];
+                if (K.lIIIlIlIllll(NPCs.getNearest((String[])stringArray))) {
+                    if (K.lIIIlIlIllIl(cl, lIlIIlIlI[1]) && K.lIIIlIlIlllI(cm ? 1 : 0)) {
+                        an.pP += lIlIIlIlI[1];
+                        an.o(AccBuilderEasyClues.m);
+                        cl += lIlIIlIlI[1];
+                        an.pP = lIlIIlIlI[0];
+                        cm = lIlIIlIlI[1];
+                    }
+                    if (K.lIIIlIlIllII(Dialog.isOpen() ? 1 : 0)) {
+                        AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[69]];
+                        lllIlllIlllIll = Dialog.getOptions();
+                        if (K.lIIIlIlIlllI(lllIlllIlllIll.isEmpty() ? 1 : 0)) {
+                            int lllIlllIlllIlI = lIlIIlIlI[0];
+                            while (K.lIIIlIlIllIl(lllIlllIlllIlI, lllIlllIlllIll.size())) {
+                                String lllIlllIlllIIl = iZ[lllIlllIlllIlI];
+                                int lllIlllIlllIII = lIlIIlIlI[0];
+                                while (K.lIIIlIlIllIl(lllIlllIlllIII, lllIlllIlllIll.size())) {
+                                    if (K.lIIIlIlIllII(((Widget)lllIlllIlllIll.get(lllIlllIlllIII)).getText().contains(lllIlllIlllIIl) ? 1 : 0)) {
+                                        System.out.println("Selecting: " + ((Widget)lllIlllIlllIll.get(lllIlllIlllIII)).getText());
+                                        Time.sleepTicks((int)lIlIIlIlI[3]);
+
+                                        String[] stringArray23 = new String[lIlIIlIlI[1]];
+                                        stringArray23[K.lIlIIlIlI[0]] = ((Widget)lllIlllIlllIll.get(lllIlllIlllIII)).getText();
+                                        Dialog.chooseOption((String[])stringArray23);
+
+                                        Time.sleepTicks((int)lIlIIlIlI[12]);
+
+                                        if (2 == 2) break;
+                                        return;
+                                    }
+                                    ++lllIlllIlllIII;
+
+                                    if (2 > 0) continue;
+                                    return;
+                                }
+                                ++lllIlllIlllIlI;
+
+                                if (1 != 0) continue;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            g.a(bR);
+        }
+    }
+
+    private static boolean lIIIlIlIllIl(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static boolean lIIIlIllIIlI(int n2, int n3) {
+        return n2 > n3;
+    }
+
+    private static boolean lIIIlIllIIII(int n2) {
+        return n2 > 0;
+    }
+
+    @Override
+    public boolean S() {
+        return lIlIIlIlI[0];
+    }
+
+    private static void af() {
+        block17: {
+            d lllIlllIlIllII;
+            block16: {
+                block15: {
+                    block14: {
+                        Object lllIlllIlIllIl;
+                        block13: {
+                            block12: {
+                                int[] nArray = new int[lIlIIlIlI[1]];
+                                nArray[K.lIlIIlIlI[0]] = lIlIIlIlI[7];
+                                if (!K.lIIIlIlIllII(Bank.contains((int[])nArray) ? 1 : 0)) break block12;
+                                int[] nArray2 = new int[lIlIIlIlI[1]];
+                                nArray2[K.lIlIIlIlI[0]] = lIlIIlIlI[7];
+                                if (!K.lIIIlIlIllII(Bank.contains((int[])nArray2) ? 1 : 0)) break block13;
+                                int[] nArray3 = new int[lIlIIlIlI[1]];
+                                nArray3[K.lIlIIlIlI[0]] = lIlIIlIlI[7];
+                                if (!K.lIIIlIlIllIl(Bank.getFirst((int[])nArray3).getQuantity(), lIlIIlIlI[9])) break block13;
+                            }
+                            lllIlllIlIllIl = new DHelper(lIlIIlIlI[7], lIlIIlIlI[9], lIlIIlIlI[80]);
+                            bv.add((DHelper) llIlllIlIllIl);
+
+                        }
+                        int[] nArray = new int[lIlIIlIlI[1]];
+                        nArray[K.lIlIIlIlI[0]] = lIlIIlIlI[8];
+                        if (K.lIIIlIlIlllI(Bank.contains((int[])nArray) ? 1 : 0)) {
+                            lllIlllIlIllIl = new DHelper(lIlIIlIlI[8], lIlIIlIlI[1], lIlIIlIlI[81]);
+                            bv.add((DHelper) llIlllIlIllIl);
+
+                        }
+                        if (K.lIIIlIlIlllI(Bank.contains((Predicate)(lllIlllIlIllIl = item -> item.getName().toLowerCase().contains(lIlIIlIIl[lIlIIlIlI[88]]))) ? 1 : 0)) {
+                            lllIlllIlIllII = new DHelper(lIlIIlIlI[82], lIlIIlIlI[10], lIlIIlIlI[83]);
+                            bv.add(lllIlllIlIllII);
+
+                        }
+                        int[] nArray4 = new int[lIlIIlIlI[1]];
+                        nArray4[K.lIlIIlIlI[0]] = lIlIIlIlI[17];
+                        if (!K.lIIIlIlIllII(Bank.contains((int[])nArray4) ? 1 : 0)) break block14;
+                        int[] nArray5 = new int[lIlIIlIlI[1]];
+                        nArray5[K.lIlIIlIlI[0]] = lIlIIlIlI[17];
+                        if (!K.lIIIlIlIllII(Bank.contains((int[])nArray5) ? 1 : 0)) break block15;
+                        int[] nArray6 = new int[lIlIIlIlI[1]];
+                        nArray6[K.lIlIIlIlI[0]] = lIlIIlIlI[17];
+                        if (!K.lIIIlIlIllIl(Bank.getFirst((int[])nArray6).getQuantity(), lIlIIlIlI[10])) break block15;
+                    }
+                    lllIlllIlIllII = new DHelper(lIlIIlIlI[17], lIlIIlIlI[12], lIlIIlIlI[84]);
+                    bv.add(lllIlllIlIllII);
+
+                }
+                int[] nArray = new int[lIlIIlIlI[1]];
+                nArray[K.lIlIIlIlI[0]] = lIlIIlIlI[11];
+                if (K.lIIIlIlIlllI(Bank.contains((int[])nArray) ? 1 : 0)) {
+                    lllIlllIlIllII = new DHelper(lIlIIlIlI[11], lIlIIlIlI[4], i.bq);
+                    bv.add(lllIlllIlIllII);
+
+                }
+                int[] nArray7 = new int[lIlIIlIlI[1]];
+                nArray7[K.lIlIIlIlI[0]] = lIlIIlIlI[6];
+                if (!K.lIIIlIlIllII(Bank.contains((int[])nArray7) ? 1 : 0)) break block16;
+                int[] nArray8 = new int[lIlIIlIlI[1]];
+                nArray8[K.lIlIIlIlI[0]] = lIlIIlIlI[6];
+                if (!K.lIIIlIlIllII(Bank.contains((int[])nArray8) ? 1 : 0)) break block17;
+                int[] nArray9 = new int[lIlIIlIlI[1]];
+                nArray9[K.lIlIIlIlI[0]] = lIlIIlIlI[6];
+                if (!K.lIIIlIlIllIl(Bank.getFirst((int[])nArray9).getQuantity(), lIlIIlIlI[28])) break block17;
+            }
+            lllIlllIlIllII = new DHelper(lIlIIlIlI[6], lIlIIlIlI[54], lIlIIlIlI[85]);
+            bv.add(lllIlllIlIllII);
+
+        }
+    }
+
+    private static boolean lIIIlIlIllll(Object object) {
+        return object != null;
+    }
+
+        return String.valueOf(lllIlllIIllIll);
+    }
+
+    @Override
+    public String U() {
+        return lIlIIlIIl[lIlIIlIlI[87]];
+    }
+
+    private static boolean lIIIlIllIllI(Object object) {
+        return object == null;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    private static boolean ab() {
+        void lllIlllIllIIIl;
+        int[] nArray = new int[lIlIIlIlI[3]];
+        nArray[K.lIlIIlIlI[0]] = lIlIIlIlI[6];
+        nArray[K.lIlIIlIlI[1]] = lIlIIlIlI[8];
+        int[] nArray2 = nArray;
+        int lllIlllIllIIII = lIlIIlIlI[0];
+        while (K.lIIIlIlIllIl(lllIlllIllIIII, ((void)lllIlllIllIIIl).length)) {
+            int[] nArray3 = new int[lIlIIlIlI[1]];
+            nArray3[K.lIlIIlIlI[0]] = lllIlllIllIIIl[lllIlllIllIIII];
+            if (K.lIIIlIlIlllI(Inventory.contains((int[])nArray3) ? 1 : 0)) {
+                return lIlIIlIlI[0];
+            }
+            ++lllIlllIllIIII;
+
+            if (1 >= 0) continue;
+            return false;
+        }
+        return lIlIIlIlI[1];
+    }
+
+    private static boolean lIIIlIllIIIl(int n2) {
+        return n2 < 0;
+    }
+
+    @Override
+    public int T() {
+        try {
+            K.ce();
+
+        }
+        catch (Exception exception) {
+            // empty catch block
+        }
+        
+        }
+        return lIlIIlIlI[86];
+    }
+
+    static {
+        K.lIIIlIlIlIlI();
+        K.lIIIlIlIlIIl();
+        iR = lIlIIlIIl[lIlIIlIlI[90]];
+        iQ = new D1f9e3af-c0a5-49dd-86b2-8e857984fef3Manager();
+        bv = new ArrayList<d>();
+        bX = new WorldPoint(lIlIIlIlI[91], lIlIIlIlI[92], lIlIIlIlI[0]);
+        iT = new WorldPoint(lIlIIlIlI[93], lIlIIlIlI[94], lIlIIlIlI[0]);
+        iU = new WorldPoint(lIlIIlIlI[93], lIlIIlIlI[95], lIlIIlIlI[3]);
+        iV = new WorldPoint(lIlIIlIlI[96], lIlIIlIlI[97], lIlIIlIlI[0]);
+        iW = new WorldPoint(lIlIIlIlI[96], lIlIIlIlI[98], lIlIIlIlI[0]);
+        iX = new WorldPoint(lIlIIlIlI[99], lIlIIlIlI[100], lIlIIlIlI[1]);
+        iY = new WorldPoint(lIlIIlIlI[101], lIlIIlIlI[102], lIlIIlIlI[0]);
+        String[] stringArray = new String[lIlIIlIlI[31]];
+        stringArray[K.lIlIIlIlI[0]] = lIlIIlIIl[lIlIIlIlI[103]];
+        stringArray[K.lIlIIlIlI[1]] = lIlIIlIIl[lIlIIlIlI[104]];
+        stringArray[K.lIlIIlIlI[3]] = lIlIIlIIl[lIlIIlIlI[105]];
+        stringArray[K.lIlIIlIlI[5]] = lIlIIlIIl[lIlIIlIlI[106]];
+        stringArray[K.lIlIIlIlI[4]] = lIlIIlIIl[lIlIIlIlI[107]];
+        stringArray[K.lIlIIlIlI[10]] = lIlIIlIIl[lIlIIlIlI[108]];
+        stringArray[K.lIlIIlIlI[16]] = lIlIIlIIl[lIlIIlIlI[109]];
+        stringArray[K.lIlIIlIlI[18]] = lIlIIlIIl[lIlIIlIlI[110]];
+        stringArray[K.lIlIIlIlI[19]] = lIlIIlIIl[lIlIIlIlI[111]];
+        stringArray[K.lIlIIlIlI[20]] = lIlIIlIIl[lIlIIlIlI[112]];
+        stringArray[K.lIlIIlIlI[12]] = lIlIIlIIl[lIlIIlIlI[113]];
+        stringArray[K.lIlIIlIlI[23]] = lIlIIlIIl[lIlIIlIlI[114]];
+        stringArray[K.lIlIIlIlI[25]] = lIlIIlIIl[lIlIIlIlI[115]];
+        stringArray[K.lIlIIlIlI[26]] = lIlIIlIIl[lIlIIlIlI[116]];
+        stringArray[K.lIlIIlIlI[27]] = lIlIIlIIl[lIlIIlIlI[117]];
+        stringArray[K.lIlIIlIlI[28]] = lIlIIlIIl[lIlIIlIlI[118]];
+        stringArray[K.lIlIIlIlI[29]] = lIlIIlIIl[lIlIIlIlI[119]];
+        stringArray[K.lIlIIlIlI[30]] = lIlIIlIIl[lIlIIlIlI[120]];
+        bR = stringArray;
+    }
+
+    @Override
+    public boolean V() {
+        boolean bl;
+        if (K.lIIIlIllIlll(Vars.getBit((int)QuestVarbits.QUEST_DEMON_SLAYER.getId()), lIlIIlIlI[5])) {
+            bl = lIlIIlIlI[1];
+
+            if (1 < 1) {
+                return ((0x4B ^ 4 ^ (0xC0 ^ 0x81)) & (0x22 ^ 0x3D ^ (0xD6 ^ 0xC7) ^ -1)) != 0;
+            }
+        } else {
+            bl = lIlIIlIlI[0];
+        }
+        return bl;
+    }
+
+    private static boolean lIIIlIllIIll(int n2, int n3) {
+        return n2 <= n3;
+    }
+
+    private static int lIIIlIlIlIll(double d2, double d3) {
+        return d2 == d3 ? 0 : (d2 < d3 ? -1 : 1);
+    }
+
+    private static boolean lIIIlIllIlIl(int n2, int n3) {
+        return n2 != n3;
+    }
+
+    public KHelper() {
+        this.ja = lIlIIlIlI[0];
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    private static void cg() {
+        void lllIlllIllIlII;
+        BankLocation bankLocation = BankLocation.getNearest();
+        if (K.lIIIlIlIllll(bankLocation) && K.lIIIlIlIlllI(bankLocation.getArea().contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
+            AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[76]];
+            a.a(bankLocation);
+        }
+        if (K.lIIIlIlIllll(lllIlllIllIlII) && K.lIIIlIlIllII(lllIlllIllIlII.getArea().contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
+            if (K.lIIIlIlIlllI(Bank.isOpen() ? 1 : 0)) {
+                a.a();
+                Time.sleepUntil(() -> Bank.isOpen(), (int)lIlIIlIlI[2]);
+
+                Time.sleepTicks((int)lIlIIlIlI[5]);
+
+            }
+            if (K.lIIIlIlIllII(Bank.isOpen() ? 1 : 0)) {
+                AccBuilderEasyClues.c = lIlIIlIIl[lIlIIlIlI[77]];
+                if (K.lIIIlIlIllII(iS ? 1 : 0)) {
+                    int[] nArray = new int[lIlIIlIlI[1]];
+                    nArray[K.lIlIIlIlI[0]] = lIlIIlIlI[48];
+                    if (K.lIIIlIlIlllI(Inventory.contains((int[])nArray) ? 1 : 0) && K.lIIIlIllIIII(Inventory.getAll().size())) {
+                        Bank.depositInventory();
+                        Time.sleepTicks((int)lIlIIlIlI[4]);
+
+                    }
+                }
+                if (K.lIIIlIllIIII(Equipment.getAll().size())) {
+                    Bank.depositEquipment();
+                    Time.sleepTicks((int)lIlIIlIlI[3]);
+
+                }
+                if (K.lIIIlIlIllII(iS ? 1 : 0)) {
+                    int[] nArray = new int[lIlIIlIlI[1]];
+                    nArray[K.lIlIIlIlI[0]] = lIlIIlIlI[48];
+                    if (K.lIIIlIlIllII(Inventory.contains((int[])nArray) ? 1 : 0)) {
+                        a.a(lIlIIlIlI[11], lIlIIlIlI[1]);
+                        a.a(lIlIIlIlI[6], lIlIIlIlI[12]);
+                        a.a(lIlIIlIlI[48], lIlIIlIlI[1]);
+                        a.a(lIlIIlIlI[24], lIlIIlIlI[1]);
+                        a.a(lIlIIlIlI[46], lIlIIlIlI[1]);
+                        Time.sleepTicks((int)lIlIIlIlI[1]);
+
+                        int[] nArray2 = new int[lIlIIlIlI[1]];
+                        nArray2[K.lIlIIlIlI[0]] = lIlIIlIlI[11];
+                        if (K.lIIIlIlIlllI(Inventory.contains((int[])nArray2) ? 1 : 0)) {
+                            a.a(lIlIIlIlI[78], lIlIIlIlI[1]);
+                        }
+                        a.a(lIlIIlIlI[17], Inventory.getFreeSlots() - lIlIIlIlI[1]);
+                    }
+                }
+                if (K.lIIIlIlIllII(iS ? 1 : 0)) {
+                    int[] nArray = new int[lIlIIlIlI[1]];
+                    nArray[K.lIlIIlIlI[0]] = lIlIIlIlI[48];
+                    if (K.lIIIlIlIlllI(Inventory.contains((int[])nArray) ? 1 : 0)) {
+                        if (K.lIIIlIlIlllI(Equipment.contains((int[])f.aR) ? 1 : 0) && K.lIIIlIlIlllI(Inventory.contains((int[])f.aR) ? 1 : 0)) {
+                            a.b(f.aR, lIlIIlIlI[1]);
+                        }
+                        if (K.lIIIlIlIllII(Inventory.contains((int[])f.aR) ? 1 : 0)) {
+                            Inventory.getFirst((int[])f.aR).interact(lIlIIlIIl[lIlIIlIlI[79]]);
+                            Time.sleepTicks((int)lIlIIlIlI[5]);
+
+                        }
+                        if (K.lIIIlIlIlllI(Bank.isOpen() ? 1 : 0)) {
+                            a.a();
+                            Time.sleepTicks((int)lIlIIlIlI[10]);
+
+                        }
+                        if (K.lIIIlIlIllII(Bank.isOpen() ? 1 : 0)) {
+                            a.a(lIlIIlIlI[11], lIlIIlIlI[1]);
+                            a.a(lIlIIlIlI[6], lIlIIlIlI[12]);
+                            a.a(lIlIIlIlI[7], lIlIIlIlI[9]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void lIIIlIlIlIIl() {
+        lIlIIlIIl = new String[lIlIIlIlI[121]];
+        K.lIlIIlIIl[K.lIlIIlIlI[0]] = "Finished buying items, switching back to quest";
+        K.lIlIIlIIl[K.lIlIIlIlI[1]] = "Nav to bank";
+        K.lIlIIlIIl[K.lIlIIlIlI[3]] = "Handling banking";
+        K.lIlIIlIIl[K.lIlIIlIlI[5]] = "We are missing quest supplies, switching to BUYING";
+        K.lIlIIlIIl[K.lIlIIlIlI[4]] = "We are missing quest supplies, switching to BUYING";
+        K.lIlIIlIIl[K.lIlIIlIlI[10]] = "Wear";
+        K.lIlIIlIIl[K.lIlIIlIlI[16]] = "Drink";
+        K.lIlIIlIIl[K.lIlIIlIlI[18]] = "Eat";
+        K.lIlIIlIIl[K.lIlIIlIlI[19]] = "Nav to start";
+        K.lIlIIlIIl[K.lIlIIlIlI[20]] = "Aris";
+        K.lIlIIlIIl[K.lIlIIlIlI[12]] = "Nav to sir pyrsin";
+        K.lIlIIlIIl[K.lIlIIlIlI[23]] = "Sir Prysin";
+        K.lIlIIlIIl[K.lIlIIlIlI[25]] = "Silverlight";
+        K.lIlIIlIIl[K.lIlIIlIlI[26]] = "Nav to captain";
+        K.lIlIIlIIl[K.lIlIIlIlI[27]] = "Captain Rovin";
+        K.lIlIIlIIl[K.lIlIIlIlI[28]] = "Bucket of water";
+        K.lIlIIlIIl[K.lIlIIlIlI[29]] = "Nav to drain";
+        K.lIlIIlIIl[K.lIlIIlIlI[30]] = "Bucket of water";
+        K.lIlIIlIIl[K.lIlIIlIlI[31]] = "Drain";
+        K.lIlIIlIIl[K.lIlIIlIlI[32]] = "Bucket of water";
+        K.lIlIIlIIl[K.lIlIIlIlI[33]] = "Nav to sewer key";
+        K.lIlIIlIIl[K.lIlIIlIlI[34]] = "Manhole";
+        K.lIlIIlIIl[K.lIlIIlIlI[35]] = "Manhole";
+        K.lIlIIlIIl[K.lIlIIlIlI[36]] = "Open";
+        K.lIlIIlIIl[K.lIlIIlIlI[37]] = "Manhole";
+        K.lIlIIlIIl[K.lIlIIlIlI[9]] = "Open";
+        K.lIlIIlIIl[K.lIlIIlIlI[38]] = "Manhole";
+        K.lIlIIlIIl[K.lIlIIlIlI[39]] = "Manhole";
+        K.lIlIIlIIl[K.lIlIIlIlI[40]] = "Climb-down";
+        K.lIlIIlIIl[K.lIlIIlIlI[41]] = "Manhole";
+        K.lIlIIlIIl[K.lIlIIlIlI[42]] = "Climb-down";
+        K.lIlIIlIIl[K.lIlIIlIlI[43]] = "Rusty key";
+        K.lIlIIlIIl[K.lIlIIlIlI[44]] = "Rusty key";
+        K.lIlIIlIIl[K.lIlIIlIlI[45]] = "Take";
+        K.lIlIIlIIl[K.lIlIIlIlI[47]] = "Silverlight";
+        K.lIlIIlIIl[K.lIlIIlIlI[49]] = "Bones";
+        K.lIlIIlIIl[K.lIlIIlIlI[50]] = "Bones";
+        K.lIlIIlIIl[K.lIlIIlIlI[51]] = "Nav to wizard";
+        K.lIlIIlIIl[K.lIlIIlIlI[52]] = "Wizard Traiborn";
+        K.lIlIIlIIl[K.lIlIIlIlI[53]] = "Silverlight";
+        K.lIlIIlIIl[K.lIlIIlIlI[54]] = "Nav to sir pyrsin";
+        K.lIlIIlIIl[K.lIlIIlIlI[55]] = "Sir Prysin";
+        K.lIlIIlIIl[K.lIlIIlIlI[56]] = "Silverlight";
+        K.lIlIIlIIl[K.lIlIIlIlI[57]] = "Delrith";
+        K.lIlIIlIIl[K.lIlIIlIlI[58]] = "Weakened Delrith";
+        K.lIlIIlIIl[K.lIlIIlIlI[59]] = "Nav to demon";
+        K.lIlIIlIIl[K.lIlIIlIlI[60]] = "Delrith";
+        K.lIlIIlIIl[K.lIlIIlIlI[61]] = "Weakened Delrith";
+        K.lIlIIlIIl[K.lIlIIlIlI[62]] = "Attack";
+        K.lIlIIlIIl[K.lIlIIlIlI[63]] = "Delrith";
+        K.lIlIIlIIl[K.lIlIIlIlI[15]] = "Delrith";
+        K.lIlIIlIIl[K.lIlIIlIlI[64]] = "Delrith";
+        K.lIlIIlIIl[K.lIlIIlIlI[65]] = "Attack";
+        K.lIlIIlIIl[K.lIlIIlIlI[66]] = "Banishing";
+        K.lIlIIlIIl[K.lIlIIlIlI[67]] = "[";
+        K.lIlIIlIIl[K.lIlIIlIlI[68]] = "Weakened Delrith";
+        K.lIlIIlIIl[K.lIlIIlIlI[69]] = "Banishing";
+        K.lIlIIlIIl[K.lIlIIlIlI[75]] = ", ";
+        K.lIlIIlIIl[K.lIlIIlIlI[76]] = "Nav to bank";
+        K.lIlIIlIIl[K.lIlIIlIlI[77]] = "Handling banking";
+        K.lIlIIlIIl[K.lIlIIlIlI[79]] = "Wear";
+        K.lIlIIlIIl[K.lIlIIlIlI[87]] = "Demon Slayer";
+        K.lIlIIlIIl[K.lIlIIlIlI[88]] = "ring of wealth (";
+        K.lIlIIlIIl[K.lIlIIlIlI[89]] = "wizard";
+        K.lIlIIlIIl[K.lIlIIlIlI[90]] = "Now what was that incantation again?";
+        K.lIlIIlIIl[K.lIlIIlIlI[103]] = "Yes.";
+        K.lIlIIlIIl[K.lIlIIlIlI[104]] = "The Demon Slayer Quest";
+        K.lIlIIlIIl[K.lIlIIlIlI[105]] = "Okay, where is he? I'll kill him for you!";
+        K.lIlIIlIIl[K.lIlIIlIlI[106]] = "So how did Wally kill Delrith?";
+        K.lIlIIlIIl[K.lIlIIlIlI[107]] = "What is the magical incantation?";
+        K.lIlIIlIIl[K.lIlIIlIlI[108]] = "Aris said I should come and talk to you.";
+        K.lIlIIlIIl[K.lIlIIlIlI[109]] = "I need to find Silverlight.";
+        K.lIlIIlIIl[K.lIlIIlIlI[110]] = "He's back and unfortunately I've got to deal with him.";
+        K.lIlIIlIIl[K.lIlIIlIlI[111]] = "So give me the keys!";
+        K.lIlIIlIIl[K.lIlIIlIlI[112]] = "Yes I know, but this is important.";
+        K.lIlIIlIIl[K.lIlIIlIlI[113]] = "There's a demon who wants to invade this city.";
+        K.lIlIIlIIl[K.lIlIIlIlI[114]] = "Yes, very.";
+        K.lIlIIlIIl[K.lIlIIlIlI[115]] = "It's not them who are going to fight the demon, it's me.";
+        K.lIlIIlIIl[K.lIlIIlIlI[116]] = "Sir Prysin said you would give me the key.";
+        K.lIlIIlIIl[K.lIlIIlIlI[117]] = "Why did he give you one of the keys then?";
+        K.lIlIIlIIl[K.lIlIIlIlI[118]] = "Talk about Demon Slayer.";
+        K.lIlIIlIIl[K.lIlIIlIlI[119]] = "Well, have you got any keys knocking around?";
+        K.lIlIIlIIl[K.lIlIIlIlI[120]] = "I'll get the bones for you.";
+    }
+
+    private static void cf() {
+        if (!K.lIIIlIllIllI(iZ) || K.lIIIlIlIlllI(Vars.getBit((int)lIlIIlIlI[70])) && K.lIIIlIlIlllI(Vars.getBit((int)lIlIIlIlI[71]))) {
+            return;
+        }
+        String[] stringArray = new String[lIlIIlIlI[10]];
+        stringArray[K.lIlIIlIlI[0]] = iQ.get(Vars.getBit((int)lIlIIlIlI[70]));
+        stringArray[K.lIlIIlIlI[1]] = iQ.get(Vars.getBit((int)lIlIIlIlI[71]));
+        stringArray[K.lIlIIlIlI[3]] = iQ.get(Vars.getBit((int)lIlIIlIlI[72]));
+        stringArray[K.lIlIIlIlI[5]] = iQ.get(Vars.getBit((int)lIlIIlIlI[73]));
+        stringArray[K.lIlIIlIlI[4]] = iQ.get(Vars.getBit((int)lIlIIlIlI[74]));
+        iZ = stringArray;
+        String string = "Say the following in order: " + String.join((CharSequence)lIlIIlIIl[lIlIIlIlI[75]], iZ);
+        System.out.println(string);
+    }
+
+    private static boolean lIIIlIlIllII(int n2) {
+        return n2 != 0;
+    }
+
+    private static boolean lIIIlIlIlllI(int n2) {
+        return n2 == 0;
+    }
+
+    private static boolean lIIIlIllIlll(int n2, int n3) {
+        return n2 >= n3;
+    }
+
+    private static boolean lIIIlIllIlII(int n2, int n3) {
+        return n2 == n3;
+    }
+
+    private static boolean lIIIlIlllIII(Object object, Object object2) {
+        return object == object2;
+    }
+}
+

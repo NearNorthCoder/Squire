@@ -1,0 +1,163 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  javax.annotation.Nonnull
+ *  net.runelite.api.Client
+ *  net.runelite.api.Player
+ *  net.runelite.api.coords.LocalPoint
+ *  net.runelite.api.coords.WorldPoint
+ */
+package s.r.s.o.l.t.t.l.r.a.-.i.n.d.u.-.q.i.i.e.a.u;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.util.List;
+import java.util.stream.Stream;
+import javax.annotation.Nonnull;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.Client;
+import net.runelite.api.Player;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
+import s.r.s.o.l.t.t.l.r.a.-.i.n.d.u.-.q.i.i.e.a.u.d_Unknown;
+import s.r.s.o.l.t.t.l.r.a.-.i.n.d.u.-.q.i.i.e.a.u.e_Unknown;
+import s.r.s.o.l.t.t.l.r.a.-.i.n.d.u.-.q.i.i.e.a.u.i;
+
+public class k_Unknown
+extends e_Unknown {
+    private final /* synthetic */ boolean ae;
+    private /* synthetic */ String af;
+    private static /* synthetic */ String[] lIlIIIllIIlII;
+    private static /* synthetic */ int[] lIlIIIllIIlIl;
+    private final /* synthetic */ List<d> ad;
+
+    private static boolean lIlllIIIIIlllII(int n2, int n3) {
+        return n2 == n3;
+    }
+
+    private static boolean lIlllIIIIIlllIl(Object object) {
+        return object == null;
+    }
+
+    private static boolean lIlllIIIIIllIlI(int n2) {
+        return n2 == 0;
+    }
+
+    @Override
+    public boolean a(Client client) {
+        Player player = client.getLocalPlayer();
+        if (k.lIlllIIIIIllIll(player) && k.lIlllIIIIIllIll(this.ad)) {
+            boolean bl;
+            WorldPoint worldPoint = WorldPoint.fromLocalInstance((Client)client, (LocalPoint)player.getLocalLocation());
+            int n2 = this.ad.stream().anyMatch(d2 -> d2.a(worldPoint)) ? 1 : 0;
+            if (k.lIlllIIIIIlllII(n2, this.ae ? 1 : 0)) {
+                bl = lIlIIIllIIlIl[1];
+                0;
+                if (-(0x11 ^ 0x15) >= 0) {
+                    return false;
+                }
+            } else {
+                bl = lIlIIIllIIlIl[0];
+            }
+            return bl;
+        }
+        return lIlIIIllIIlIl[0];
+    }
+
+    private static void lIlllIIIIIllIII() {
+        lIlIIIllIIlII = new String[lIlIIIllIIlIl[1]];
+        k.lIlIIIllIIlII[k.lIlIIIllIIlIl[0]] = k."";
+    }
+
+    public k(WorldPoint ... worldPointArray) {
+        this.ad = Stream.of(worldPointArray).map(d::new).collect(i.x());
+        this.ae = lIlIIIllIIlIl[1];
+    }
+
+    public k(String string, d d2) {
+        this(string, lIlIIIllIIlIl[0], d2);
+    }
+
+    public k(boolean bl, d ... dArray) {
+        this.ad = i.a(dArray);
+        this.ae = bl;
+    }
+
+    private static String lIlllIIIIIlIlll(String var4, String var5) {
+        try {
+            SecretKeySpec var2 = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(var5.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher var6 = Cipher.getInstance("Blowfish");
+            var6.init(lIlIIIllIIlIl[2], var2);
+            return new String(var6.doFinal(Base64.getDecoder().decode(var4.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception var1) {
+            var1.printStackTrace();
+            return null;
+        }
+    }
+
+    private static boolean lIlllIIIIIllIll(Object object) {
+        return object != null;
+    }
+
+    @Override
+    @Nonnull
+    public String k() {
+        String string;
+        if (k.lIlllIIIIIlllIl(this.af)) {
+            string = lIlIIIllIIlII[lIlIIIllIIlIl[0]];
+            0;
+            if (-(0x27 ^ 0x73 ^ (0xD6 ^ 0x86)) > 0) {
+                return null;
+            }
+        } else {
+            k var3;
+            string = var3.af;
+        }
+        return string;
+    }
+
+    public k(d ... dArray) {
+        this.ad = i.a(dArray);
+        this.ae = lIlIIIllIIlIl[1];
+    }
+
+    static {
+        k.lIlllIIIIIllIIl();
+        k.lIlllIIIIIllIII();
+    }
+
+    private static void lIlllIIIIIllIIl() {
+        lIlIIIllIIlIl = new int[3];
+        k.lIlIIIllIIlIl[0] = (155 + 78 - 219 + 145 ^ 48 + 44 - -5 + 98) & (0x5C ^ 0x2A ^ (0x35 ^ 0x1F) ^ -1);
+        k.lIlIIIllIIlIl[1] = 1;
+        k.lIlIIIllIIlIl[2] = 2;
+    }
+
+    public k(boolean bl, WorldPoint ... worldPointArray) {
+        this.ad = Stream.of(worldPointArray).map(d::new).collect(i.x());
+        this.ae = bl;
+    }
+
+    public k(String string, boolean bl, d d2) {
+        int n2;
+        this.af = string;
+        if (k.lIlllIIIIIllIlI(bl ? 1 : 0)) {
+            n2 = lIlIIIllIIlIl[1];
+            0;
+            if (3 == 2) {
+                throw null;
+            }
+        } else {
+            n2 = lIlIIIllIIlIl[0];
+        }
+        this.ae = n2;
+        d[] dArray = new d[lIlIIIllIIlIl[1]];
+        dArray[k.lIlIIIllIIlIl[0]] = d2;
+        this.ad = i.a(dArray);
+    }
+}
+

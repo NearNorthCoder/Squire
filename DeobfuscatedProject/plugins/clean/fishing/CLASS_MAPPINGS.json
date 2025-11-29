@@ -1,0 +1,15 @@
+{
+  "b": "ClimbingUpLadderTask",
+  "i": "OpeningTheBarrelTask",
+  "k": "BankingThroughButlerTask",
+  "g": "BankingTask",
+  "j": "FishingTask",
+  "c": "LootingTask",
+  "a": "ChoppingTentacleTask",
+  "e": "EnteringFishingTrawlerTask",
+  "l": "UsingSpecialAttackTask",
+  "m": "TickManipulatingTask",
+  "d": "DepositingLootTask",
+  "f": "GameEnum",
+  "h": "DroppingFishTask"
+}

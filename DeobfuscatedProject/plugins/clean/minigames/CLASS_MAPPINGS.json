@@ -1,0 +1,21 @@
+{
+  "n": "NHelper",
+  "o": "JadFightTask",
+  "q": "Wave1To6Task",
+  "b": "GameEnum",
+  "i": "EatTask",
+  "k": "PrayerSwitchTask",
+  "g": "GHelper",
+  "j": "EnterCaveTask",
+  "s": "Wave7To14Task",
+  "c": "CHelper",
+  "a": "GameEnum10",
+  "e": "GameEnum11",
+  "l": "SafeSpottingTask",
+  "r": "WaveWave31_62Task",
+  "m": "MHelper",
+  "d": "GameEnum15",
+  "f": "FHelper",
+  "p": "Wave15To30Task",
+  "h": "BankTask"
+}

@@ -1,0 +1,76 @@
+SUGGESTED DIRECTORY RENAMES - UUID to Human-Readable Names
+===========================================================
+
+COMMAND FORMAT: mv [UUID] [new-name]
+
+# PVM/Combat Plugins
+mv 06deb524-30dc-422a-b422-0bec548b1d10 squire-blast-furnace
+mv 0e178634-2b3a-4290-8340-3d1b3f3eaff7 squire-whisperer
+mv 2266a50d-0893-46c4-a132-50718fc51d1a squire-duke-sucellus
+mv 29f97a50-4c1f-4047-b5b1-e3e7ab557a1b squire-shamans
+mv 4d97445a-f331-4d37-a32a-a78260ee3d07 squire-cerberus
+mv 581bf999-de0d-4fc5-a3b6-1ebe3d93b748 squire-auto-toa
+mv 5c667a01-93f1-4288-83c1-de3f0a449bc2 squire-scurrius
+mv 70c49992-0f4a-4f1f-b83d-1bdcbc531725 squire-vorkath
+mv 75784950-1a80-40ed-8300-cd0507c03978 squire-moons-of-peril
+mv 778e0a57-7760-4510-94d3-2c1213879e48 squire-chambers-of-xeric
+mv 861c713a-2076-4f84-9c7c-f1dff7263a11 squire-vardorvis
+mv 9cc2ff9a-834c-471c-85e9-f55eb9ce18c7 squire-saradomin
+mv a79d2820-2b30-4bed-9aed-0ccb18befd76 squire-corporeal-beast
+mv f13c63fa-3e76-4035-9dfa-e833a382cd4c squire-bandos
+mv f8a8c131-0c60-4150-a875-6d5d0cb07058 squire-zammy
+mv f9dee1ad-dcbf-4af9-9fb8-47dc91e2d43e squire-hydra
+mv f9e8fbd0-4571-4716-b37b-883b4ae7fc62 squire-zulrah
+mv 146c6f65-5ac8-4fe6-9d9c-0b402720538d squire-gauntlet
+mv 3be19261-31a6-42fb-a6f1-3e9f39e6a450 squire-blue-dragon-killer
+
+# Minigames
+mv 1242c893-c960-46c9-b833-9f028c156ac6 squire-nightmare-zone
+mv 185d2d5a-4681-414b-93d2-e699fe383083 squire-wintertodt
+mv 1a91e21b-fcbe-4432-8f0e-1258958a8366 squire-temple-trekking
+mv 2fcaa9ca-dfa8-475d-992d-ba368c0c843d squire-hallowed-sepulchre
+mv 36afa564-21f3-409d-8955-c6e80fe75d70 squire-sorceress-garden
+mv 37ff9308-5bb6-4332-83e0-8ab13e118f7a squire-mixology
+mv 3b638005-922a-492f-9405-93e6a5194477 squire-barrows
+mv afc9cf98-0627-4d2a-8a9e-4e9657a2fb2d squire-tithe-farm
+mv d1b70a7e-d534-4fe7-a2d5-7f0423b04edb squire-tempoross
+mv d3ba43e2-4966-4faf-8fcb-fba83fc95121 squire-pest-control
+mv fabe4829-ed55-47a3-b654-ca361772d01e squire-fight-caves
+
+# Skilling
+mv 29a54919-2e79-4bd5-923c-285f5cdb7f9a squire-agility
+mv 3f45ab50-7de6-493f-a8bc-b432dabdf252 squire-miner
+mv 5d6a9183-7b7a-42a1-8cad-f88f0a9fad3c squire-herblore
+mv 99cb6034-aaf0-4ea3-9488-bd66257fa44c squire-farmer
+mv 9bb83689-ff7d-471d-9a08-411d7484ad87 squire-aerial-fisher
+mv a162439f-48e7-4aeb-adb7-778d42249168 squire-charter-ships
+mv a295c4aa-95d9-42ec-b8cf-442736b096bd squire-giants-foundry
+mv d11e2dee-7190-435e-95f6-a7b9761c02e8 squire-zeah-runecrafter
+mv df6d2a51-cc28-47f1-b346-c5a30f777aad squire-herbiboar
+mv e2a56d76-bd9d-40c9-839c-e5b25fb4c3a0 squire-hunter
+mv f90b6cea-b1e4-4f52-8aee-23d3738ff311 squire-woodcutter
+
+# Account Builders
+mv 3047f210-3107-4c67-939d-3c9e588029ae squire-templetrek-builder
+mv 51c4371d-854c-4c1b-8841-207ed7d6bdc3 squire-barrows-builder
+mv 57051692-5fea-40a8-a012-903ac1ab23ac squire-shaman-builder
+mv 7c1d3521-d222-494e-8c51-697efca0674b squire-sotf-builder
+mv 7ff08cb7-2eac-4b0f-b288-ca118289a708 squire-gwd-builder
+mv 9e609a1b-c462-421a-8c76-4c9774ea7671 squire-rat-king-builder
+mv d1f9e3af-c0a5-49dd-86b2-8e857984fef3 squire-easy-clue-builder
+mv fdd2f9b9-6584-4a70-afa7-d1946c214094 squire-rogues-outfit-builder
+
+# Quest/Slayer/Other
+mv 9740bba2-b19d-4983-898f-2f8083c87d94 squire-quester
+mv 2e35b2d3-afef-4589-b5f3-450cbc042322 squire-turael-skipper
+mv 7bb63fa7-229b-499f-b77f-e1768cbbcc1e squire-easy-clues
+mv 21e931a2-dcd2-41bf-996b-cb50a8d5161d squire-leagues-note-items
+
+===========================================================
+Total: 53 renames
+Location: /home/user/Squire/DeobfuscatedProject/plugins/src/
+
+NOTES:
+- Two plugins have non-standard package structures (see JSON mapping)
+- Consider backing up before running mass renames
+- Update any build configuration files after renaming

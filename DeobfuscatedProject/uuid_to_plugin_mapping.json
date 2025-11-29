@@ -1,0 +1,509 @@
+{
+  "metadata": {
+    "total_uuid_plugins": 53,
+    "total_named_plugins": 15,
+    "total_plugins": 68,
+    "generated_date": "2025-11-29",
+    "description": "Complete UUID-to-plugin-name mapping for Squire OSRS botting client plugins"
+  },
+  "uuid_plugins": {
+    "06deb524-30dc-422a-b422-0bec548b1d10": {
+      "name": "Squire Blast Furnace",
+      "description": "Automatically does blast furnace",
+      "package": "gg.squire.minigames",
+      "mainClass": "SquireBlastFurnace.java",
+      "category": "minigames"
+    },
+    "0e178634-2b3a-4290-8340-3d1b3f3eaff7": {
+      "name": "Squire Whisperer",
+      "description": "Kills the Whisperer boss",
+      "package": "gg.squire.whisperer",
+      "mainClass": "SquireWhisperer.java",
+      "category": "pvm"
+    },
+    "1242c893-c960-46c9-b833-9f028c156ac6": {
+      "name": "Squire Nightmare Zone",
+      "description": "Automates Nightmare Zone minigame",
+      "package": "gg.squire.nightmarezone",
+      "mainClass": "SquireNightmareZone.java",
+      "category": "minigames"
+    },
+    "146c6f65-5ac8-4fe6-9d9c-0b402720538d": {
+      "name": "Squire Gauntlet",
+      "description": "Automates the Gauntlet",
+      "package": "gg.squire.plugins",
+      "mainClass": "SquireGauntlet.java",
+      "category": "pvm"
+    },
+    "185d2d5a-4681-414b-93d2-e699fe383083": {
+      "name": "Squire Wintertodt",
+      "description": "Automates Wintertodt minigame",
+      "package": "gg.squire.wintertodt",
+      "mainClass": "SquireWintertodt.java",
+      "category": "minigames"
+    },
+    "1a91e21b-fcbe-4432-8f0e-1258958a8366": {
+      "name": "Squire Temple Trekking",
+      "description": "Zooming through temple trekking for rewards",
+      "package": "gg.squire.templeTrekking",
+      "mainClass": "TempleTrekkingPlugin.java",
+      "category": "minigames"
+    },
+    "21e931a2-dcd2-41bf-996b-cb50a8d5161d": {
+      "name": "[Leagues] Note items",
+      "description": "Leagues-specific plugin to note items",
+      "package": "gg.squire.leagues",
+      "mainClass": "NoteItems.java",
+      "category": "leagues"
+    },
+    "2266a50d-0893-46c4-a132-50718fc51d1a": {
+      "name": "Squire Duke Sucellus",
+      "description": "Kills Duke Sucellus boss",
+      "package": "gg.squire.duke",
+      "mainClass": "SquireDukeSucellus.java",
+      "category": "pvm"
+    },
+    "29a54919-2e79-4bd5-923c-285f5cdb7f9a": {
+      "name": "Squire Agility",
+      "description": "Completes agility courses",
+      "package": "gg.squire.plugins",
+      "mainClass": "SquireAgilityPlugin.java",
+      "category": "skilling"
+    },
+    "29f97a50-4c1f-4047-b5b1-e3e7ab557a1b": {
+      "name": "Squire Shamans",
+      "description": "Kills Lizardman Shamans",
+      "package": "gg.squire.pvm",
+      "mainClass": "SquireShamansPlugin.java",
+      "category": "pvm"
+    },
+    "2e35b2d3-afef-4589-b5f3-450cbc042322": {
+      "name": "Squire Turael Skipper",
+      "description": "Skips slayer tasks using Turael",
+      "package": "gg.squire.slayer",
+      "mainClass": "SquireSkipperPlugin.java",
+      "category": "slayer"
+    },
+    "2fcaa9ca-dfa8-475d-992d-ba368c0c843d": {
+      "name": "Squire Hallowed Sepulchre",
+      "description": "Runs laps in Hallowed Sepulchre",
+      "package": "gg.squire.sepulchre",
+      "mainClass": "SquireSepulchre.java",
+      "category": "minigames"
+    },
+    "3047f210-3107-4c67-939d-3c9e588029ae": {
+      "name": "Squire Templetrek Builder",
+      "description": "Account builder using Temple Trekking",
+      "package": "gg.squire.account",
+      "mainClass": "AccBuilderTempleTrek.java",
+      "category": "account-builder"
+    },
+    "36afa564-21f3-409d-8955-c6e80fe75d70": {
+      "name": "Squire Sorceress Garden",
+      "description": "Easy XP from Sorceress Garden",
+      "package": "gg.squire.minigames",
+      "mainClass": "SquireSorceressGarden.java",
+      "category": "minigames"
+    },
+    "37ff9308-5bb6-4332-83e0-8ab13e118f7a": {
+      "name": "Squire Mixology",
+      "description": "Automates Mixology minigame",
+      "package": "gg.squire.mixology",
+      "mainClass": "SquireMixology.java",
+      "category": "minigames"
+    },
+    "3b638005-922a-492f-9405-93e6a5194477": {
+      "name": "Squire Barrows",
+      "description": "Does the barrows minigame",
+      "package": "gg.squire.barrows",
+      "mainClass": "SquireBarrows.java",
+      "category": "minigames"
+    },
+    "3be19261-31a6-42fb-a6f1-3e9f39e6a450": {
+      "name": "Squire Blue Dragon Killer",
+      "description": "Kills Blue Dragons",
+      "package": "gg.squire.combat",
+      "mainClass": "SquireBlueDragonKiller.java",
+      "category": "combat"
+    },
+    "3f45ab50-7de6-493f-a8bc-b432dabdf252": {
+      "name": "Squire Miner",
+      "description": "Mining done easy",
+      "package": "gg.squire.mining",
+      "mainClass": "SquireMiner.java",
+      "category": "skilling"
+    },
+    "4d97445a-f331-4d37-a32a-a78260ee3d07": {
+      "name": "Squire Cerberus",
+      "description": "Kills Cerberus for you, banks and loots items",
+      "package": "gg.squire.basics",
+      "mainClass": "SquireCerberus.java",
+      "category": "pvm"
+    },
+    "51c4371d-854c-4c1b-8841-207ed7d6bdc3": {
+      "name": "Squire Barrows Builder",
+      "description": "Account builder using Barrows",
+      "package": "gg.squire.account",
+      "mainClass": "AccBuilderBarrows.java",
+      "category": "account-builder"
+    },
+    "57051692-5fea-40a8-a012-903ac1ab23ac": {
+      "name": "Squire Shaman Builder",
+      "description": "Account builder using Shamans",
+      "package": "gg.squire.account",
+      "mainClass": "AccBuilderShamans.java",
+      "category": "account-builder"
+    },
+    "581bf999-de0d-4fc5-a3b6-1ebe3d93b748": {
+      "name": "Squire Auto TOA",
+      "description": "Different helpers/automation for TOA",
+      "package": "gg.squire.autotoa",
+      "mainClass": "SquireAutoTOA.java",
+      "category": "pvm"
+    },
+    "5c667a01-93f1-4288-83c1-de3f0a449bc2": {
+      "name": "Squire Scurrius",
+      "description": "Kills Scurrius boss",
+      "package": "gg.squire.scurrius",
+      "mainClass": "SquireScurrius.java",
+      "category": "pvm"
+    },
+    "5d6a9183-7b7a-42a1-8cad-f88f0a9fad3c": {
+      "name": "Squire Herblore",
+      "description": "Does Herblore stuff",
+      "package": "gg.squire.plugins",
+      "mainClass": "SquireHerblore.java",
+      "category": "skilling"
+    },
+    "70c49992-0f4a-4f1f-b83d-1bdcbc531725": {
+      "name": "Squire Vorkath",
+      "description": "Kills the big blue dragon",
+      "package": "gg.squire.vorkath",
+      "mainClass": "SquireVorkathPlugin.java",
+      "category": "pvm"
+    },
+    "75784950-1a80-40ed-8300-cd0507c03978": {
+      "name": "Squire Moons of Peril",
+      "description": "Automates Moons of Peril content",
+      "package": "gg.squire.moons",
+      "mainClass": "SquireMoonsOfPeril.java",
+      "category": "pvm"
+    },
+    "778e0a57-7760-4510-94d3-2c1213879e48": {
+      "name": "Squire Chambers Of Xeric",
+      "description": "All squire devs know is vacation and cox",
+      "package": "gg.squire.cox",
+      "mainClass": "SquireChambersPlugin.java",
+      "category": "pvm"
+    },
+    "7bb63fa7-229b-499f-b77f-e1768cbbcc1e": {
+      "name": "Squire Easy Clues",
+      "description": "Completes easy clue scrolls",
+      "package": "net.unethicalite.plugins.logout",
+      "mainClass": "Clues.java",
+      "category": "clues",
+      "note": "Different package structure - net.unethicalite instead of gg.squire"
+    },
+    "7c1d3521-d222-494e-8c51-697efca0674b": {
+      "name": "Squire Sotf Builder",
+      "description": "Account builder using Secrets of the North",
+      "package": "gg.squire.account",
+      "mainClass": "AccBuilderSotf.java",
+      "category": "account-builder"
+    },
+    "7ff08cb7-2eac-4b0f-b288-ca118289a708": {
+      "name": "Squire GWD Builder",
+      "description": "Account builder using God Wars Dungeon",
+      "package": "gg.squire.account",
+      "mainClass": "AccBuilderGWD.java",
+      "category": "account-builder"
+    },
+    "861c713a-2076-4f84-9c7c-f1dff7263a11": {
+      "name": "Squire Vardorvis",
+      "description": "Kills Vardorvis boss",
+      "package": "gg.squire.vardorvis",
+      "mainClass": "SquireVardorvis.java",
+      "category": "pvm"
+    },
+    "9740bba2-b19d-4983-898f-2f8083c87d94": {
+      "name": "Squire Quester",
+      "description": "Automates various quests",
+      "package": "gg.squire.quest",
+      "mainClass": "SquireQuester.java",
+      "category": "quest"
+    },
+    "99cb6034-aaf0-4ea3-9488-bd66257fa44c": {
+      "name": "Squire Farmer",
+      "description": "Automatically does farm runs",
+      "package": "gg.squire.farmer",
+      "mainClass": "SquireFarmer.java",
+      "category": "skilling"
+    },
+    "9bb83689-ff7d-471d-9a08-411d7484ad87": {
+      "name": "Squire Aerial Fisher",
+      "description": "Automates Aerial Fishing",
+      "package": "gg.squire.aerialfisher",
+      "mainClass": "SquireAerialFisher.java",
+      "category": "skilling"
+    },
+    "9cc2ff9a-834c-471c-85e9-f55eb9ce18c7": {
+      "name": "Squire Saradomin",
+      "description": "Kills Saradomin in GWD",
+      "package": "gg.squire.saradomin",
+      "mainClass": "SquireSaradomin.java",
+      "category": "pvm"
+    },
+    "9e609a1b-c462-421a-8c76-4c9774ea7671": {
+      "name": "Squire Rat King Builder",
+      "description": "Account builder using Scurrius/Rat King",
+      "package": "gg.squire.account",
+      "mainClass": "AccBuilderRat.java",
+      "category": "account-builder"
+    },
+    "a162439f-48e7-4aeb-adb7-778d42249168": {
+      "name": "Squire Charter Ships",
+      "description": "Does crafting methods using charter ships",
+      "package": "gg.squire.plugins",
+      "mainClass": "SquireCharterShips.java",
+      "category": "skilling"
+    },
+    "a295c4aa-95d9-42ec-b8cf-442736b096bd": {
+      "name": "Squire Giants Foundry",
+      "description": "Automates Giants Foundry smithing",
+      "package": "gg.squire.giantsfoundry",
+      "mainClass": "SquireGiantsFoundry.java",
+      "category": "skilling"
+    },
+    "a79d2820-2b30-4bed-9aed-0ccb18befd76": {
+      "name": "Squire Corporeal Beast",
+      "description": "Kills the corporeal beast",
+      "package": "gg.squire.corp",
+      "mainClass": "SquireCorp.java",
+      "category": "pvm"
+    },
+    "afc9cf98-0627-4d2a-8a9e-4e9657a2fb2d": {
+      "name": "Squire Tithe Farm",
+      "description": "Automatically harvests and collects from Tithe Farm",
+      "package": "gg.squire.tithefarm",
+      "mainClass": "SquireTitheFarm.java",
+      "category": "minigames"
+    },
+    "d11e2dee-7190-435e-95f6-a7b9761c02e8": {
+      "name": "Squire Zeah Runecrafter",
+      "description": "Runecrafts in Zeah",
+      "package": "gg.squire.runecrafting",
+      "mainClass": "SquireZeahRunecrafter.java",
+      "category": "skilling"
+    },
+    "d1b70a7e-d534-4fe7-a2d5-7f0423b04edb": {
+      "name": "Squire Tempoross",
+      "description": "Automates Tempoross minigame",
+      "package": "gg.squire.tempoross",
+      "mainClass": "SquireTempoross.java",
+      "category": "minigames"
+    },
+    "d1f9e3af-c0a5-49dd-86b2-8e857984fef3": {
+      "name": "Squire Easy Clue Builder",
+      "description": "Account builder using Easy Clues",
+      "package": "gg.squire.account",
+      "mainClass": "AccBuilderEasyClues.java",
+      "category": "account-builder"
+    },
+    "d3ba43e2-4966-4faf-8fcb-fba83fc95121": {
+      "name": "Squire Pest Control",
+      "description": "Automates Pest Control minigame",
+      "package": "gg.squire.minigame",
+      "mainClass": "SquirePestControl.java",
+      "category": "minigames"
+    },
+    "df6d2a51-cc28-47f1-b346-c5a30f777aad": {
+      "name": "Squire Herbiboar",
+      "description": "Hunts Herbiboar",
+      "package": "squire.gg.hunter",
+      "mainClass": "SquireHerbiboarPlugin.java",
+      "category": "skilling",
+      "note": "Different package structure - squire.gg instead of gg.squire"
+    },
+    "e2a56d76-bd9d-40c9-839c-e5b25fb4c3a0": {
+      "name": "Squire Hunter",
+      "description": "General hunter automation",
+      "package": "gg.squire.hunter",
+      "mainClass": "SquireHunter.java",
+      "category": "skilling"
+    },
+    "f13c63fa-3e76-4035-9dfa-e833a382cd4c": {
+      "name": "Squire Bandos",
+      "description": "Kills Bandos in GWD",
+      "package": "gg.squire.bandos",
+      "mainClass": "SquireBandos.java",
+      "category": "pvm"
+    },
+    "f8a8c131-0c60-4150-a875-6d5d0cb07058": {
+      "name": "Squire Zammy",
+      "description": "Kills Zamorak in GWD",
+      "package": "gg.squire.zammy",
+      "mainClass": "SquireZammy.java",
+      "category": "pvm"
+    },
+    "f90b6cea-b1e4-4f52-8aee-23d3738ff311": {
+      "name": "Squire Woodcutter",
+      "description": "Automates woodcutting",
+      "package": "gg.squire.woodcutting",
+      "mainClass": "SquireWoodcutterPlugin.java",
+      "category": "skilling"
+    },
+    "f9dee1ad-dcbf-4af9-9fb8-47dc91e2d43e": {
+      "name": "Squire Hydra",
+      "description": "Does stuff for the Alchemical Hydra",
+      "package": "gg.squire.hydra",
+      "mainClass": "SquireAlchemicalHydraPlugin.java",
+      "category": "pvm"
+    },
+    "f9e8fbd0-4571-4716-b37b-883b4ae7fc62": {
+      "name": "Squire Zulrah",
+      "description": "Zulrah killing plugin",
+      "package": "gg.squire.zulrah",
+      "mainClass": "SquireZulrah.java",
+      "category": "pvm"
+    },
+    "fabe4829-ed55-47a3-b654-ca361772d01e": {
+      "name": "Squire Fight Caves",
+      "description": "Automates the entire Fight Caves minigame",
+      "package": "gg.squire.minigames",
+      "mainClass": "SquireFightCavesPlugin.java",
+      "category": "minigames"
+    },
+    "fdd2f9b9-6584-4a70-afa7-d1946c214094": {
+      "name": "Squire Rogues Outfit Builder",
+      "description": "Account builder for Rogues Outfit",
+      "package": "gg.squire.account",
+      "mainClass": "AccBuilderRogues.java",
+      "category": "account-builder"
+    }
+  },
+  "named_plugins": {
+    "squire-account-cleaner-0.2.2": {
+      "name": "Squire Account Cleaner",
+      "description": "Account cleanup/management utilities",
+      "package": "gg.squire.cleaner",
+      "mainClass": "SquireAccountCleaner.java",
+      "category": "utility"
+    },
+    "squire-bank-stander-0.1.0": {
+      "name": "Squire Bankstander",
+      "description": "Does bank skilling",
+      "package": "gg.squire.plugins.skilling",
+      "mainClass": "SquireBankStander.java",
+      "category": "skilling"
+    },
+    "squire-drift-net-fishing-0.0.1": {
+      "name": "Squire Drift Net Fisher",
+      "description": "Automates Drift Net Fishing",
+      "package": "gg.squire.driftnet",
+      "mainClass": "SquireDriftNet.java",
+      "category": "skilling"
+    },
+    "squire-fisher-0.1.0": {
+      "name": "Squire Fishing",
+      "description": "General fishing automation",
+      "package": "gg.squire.fishing",
+      "mainClass": "SquireFisherPlugin.java",
+      "category": "skilling"
+    },
+    "squire-gorillas-0.2.1": {
+      "name": "Squire Demonic Gorillas",
+      "description": "Kills Demonic Gorillas",
+      "package": "gg.squire.gorillas",
+      "mainClass": "SquireGorillaPlugin.java",
+      "category": "pvm"
+    },
+    "squire-gotr-0.4.1": {
+      "name": "Squire Guardians of The Rift",
+      "description": "Plays the GOTR minigame",
+      "package": "gg.squire.runecrafting",
+      "mainClass": "SquireGOTRPlugin.java",
+      "category": "minigames"
+    },
+    "squire-homes-0.1.0": {
+      "name": "Squire Mahogany Homes",
+      "description": "Automates Mahogany Homes",
+      "package": "gg.squire.mahoghomes",
+      "mainClass": "SquireHomesPlugin.java",
+      "category": "skilling"
+    },
+    "squire-mta-0.2.1": {
+      "name": "Squire Mage Training Arena",
+      "description": "Automatically completes MTA for nice rewards",
+      "package": "gg.squire.mta",
+      "mainClass": "SquireMTA.java",
+      "category": "minigames"
+    },
+    "squire-nightmare-0.1.0": {
+      "name": "Squire Phosani Nightmare",
+      "description": "Kills Phosani Nightmare",
+      "package": "gg.squire.nightmare",
+      "mainClass": "SquireNightmarePlugin.java",
+      "category": "pvm"
+    },
+    "squire-planker-0.0.5": {
+      "name": "Squire Plank Maker",
+      "description": "Makes Planks",
+      "package": "gg.squire.construction",
+      "mainClass": "SquirePlankerPlugin.java",
+      "category": "skilling"
+    },
+    "squire-plunder-0.1.0": {
+      "name": "Squire Pyramid Plunder",
+      "description": "Automates Pyramid Plunder",
+      "package": "gg.squire.thieving",
+      "mainClass": "SquirePlunder.java",
+      "category": "minigames"
+    },
+    "squire-thieving-0.0.1": {
+      "name": "Squire Thiever",
+      "description": "General thieving automation",
+      "package": "gg.squire.thieving",
+      "mainClass": "SquireThieving.java",
+      "category": "skilling"
+    },
+    "squire-toa-1.0.1": {
+      "name": "Squire TOA",
+      "description": "Different helpers/automation for TOA",
+      "package": "gg.squire.toa",
+      "mainClass": "SquireTOA.java",
+      "category": "pvm"
+    },
+    "squire-tutorial-island-0.1.0": {
+      "name": "Squire Tutorial Island",
+      "description": "Automates Tutorial Island",
+      "package": "gg.squire.quest",
+      "mainClass": "SquireTutorialIsland.java",
+      "category": "quest"
+    },
+    "squire-warriors-guild-0.0.1": {
+      "name": "Squire Warriors Guild",
+      "description": "Dragon defender in no time",
+      "package": "gg.squire.warriorsGuild",
+      "mainClass": "SquireWarriorsGuild.java",
+      "category": "minigames"
+    }
+  },
+  "categories": {
+    "pvm": ["Combat/PVM plugins - bosses and monsters"],
+    "skilling": ["Skilling plugins - gathering and production skills"],
+    "minigames": ["Minigame automation plugins"],
+    "account-builder": ["Account builder plugins for specific content"],
+    "combat": ["General combat plugins"],
+    "slayer": ["Slayer-related plugins"],
+    "quest": ["Quest automation plugins"],
+    "clues": ["Clue scroll plugins"],
+    "leagues": ["Leagues-specific plugins"],
+    "utility": ["Utility and helper plugins"]
+  },
+  "notes": [
+    "Two plugins have non-standard package structures:",
+    "  - 7bb63fa7-229b-499f-b77f-e1768cbbcc1e uses net.unethicalite instead of gg.squire",
+    "  - df6d2a51-cc28-47f1-b346-c5a30f777aad uses squire.gg instead of gg.squire",
+    "All other UUID plugins follow the standard gg.squire.* package structure"
+  ]
+}

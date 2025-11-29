@@ -1,0 +1,54 @@
+UUID,Plugin Name,Category,Main Class,Package
+06deb524-30dc-422a-b422-0bec548b1d10,Squire Blast Furnace,minigames,SquireBlastFurnace.java,gg.squire.minigames
+0e178634-2b3a-4290-8340-3d1b3f3eaff7,Squire Whisperer,pvm,SquireWhisperer.java,gg.squire.whisperer
+1242c893-c960-46c9-b833-9f028c156ac6,Squire Nightmare Zone,minigames,SquireNightmareZone.java,gg.squire.nightmarezone
+146c6f65-5ac8-4fe6-9d9c-0b402720538d,Squire Gauntlet,pvm,SquireGauntlet.java,gg.squire.plugins
+185d2d5a-4681-414b-93d2-e699fe383083,Squire Wintertodt,minigames,SquireWintertodt.java,gg.squire.wintertodt
+1a91e21b-fcbe-4432-8f0e-1258958a8366,Squire Temple Trekking,minigames,TempleTrekkingPlugin.java,gg.squire.templeTrekking
+21e931a2-dcd2-41bf-996b-cb50a8d5161d,[Leagues] Note items,leagues,NoteItems.java,gg.squire.leagues
+2266a50d-0893-46c4-a132-50718fc51d1a,Squire Duke Sucellus,pvm,SquireDukeSucellus.java,gg.squire.duke
+29a54919-2e79-4bd5-923c-285f5cdb7f9a,Squire Agility,skilling,SquireAgilityPlugin.java,gg.squire.plugins
+29f97a50-4c1f-4047-b5b1-e3e7ab557a1b,Squire Shamans,pvm,SquireShamansPlugin.java,gg.squire.pvm
+2e35b2d3-afef-4589-b5f3-450cbc042322,Squire Turael Skipper,slayer,SquireSkipperPlugin.java,gg.squire.slayer
+2fcaa9ca-dfa8-475d-992d-ba368c0c843d,Squire Hallowed Sepulchre,minigames,SquireSepulchre.java,gg.squire.sepulchre
+3047f210-3107-4c67-939d-3c9e588029ae,Squire Templetrek Builder,account-builder,AccBuilderTempleTrek.java,gg.squire.account
+36afa564-21f3-409d-8955-c6e80fe75d70,Squire Sorceress Garden,minigames,SquireSorceressGarden.java,gg.squire.minigames
+37ff9308-5bb6-4332-83e0-8ab13e118f7a,Squire Mixology,minigames,SquireMixology.java,gg.squire.mixology
+3b638005-922a-492f-9405-93e6a5194477,Squire Barrows,minigames,SquireBarrows.java,gg.squire.barrows
+3be19261-31a6-42fb-a6f1-3e9f39e6a450,Squire Blue Dragon Killer,combat,SquireBlueDragonKiller.java,gg.squire.combat
+3f45ab50-7de6-493f-a8bc-b432dabdf252,Squire Miner,skilling,SquireMiner.java,gg.squire.mining
+4d97445a-f331-4d37-a32a-a78260ee3d07,Squire Cerberus,pvm,SquireCerberus.java,gg.squire.basics
+51c4371d-854c-4c1b-8841-207ed7d6bdc3,Squire Barrows Builder,account-builder,AccBuilderBarrows.java,gg.squire.account
+57051692-5fea-40a8-a012-903ac1ab23ac,Squire Shaman Builder,account-builder,AccBuilderShamans.java,gg.squire.account
+581bf999-de0d-4fc5-a3b6-1ebe3d93b748,Squire Auto TOA,pvm,SquireAutoTOA.java,gg.squire.autotoa
+5c667a01-93f1-4288-83c1-de3f0a449bc2,Squire Scurrius,pvm,SquireScurrius.java,gg.squire.scurrius
+5d6a9183-7b7a-42a1-8cad-f88f0a9fad3c,Squire Herblore,skilling,SquireHerblore.java,gg.squire.plugins
+70c49992-0f4a-4f1f-b83d-1bdcbc531725,Squire Vorkath,pvm,SquireVorkathPlugin.java,gg.squire.vorkath
+75784950-1a80-40ed-8300-cd0507c03978,Squire Moons of Peril,pvm,SquireMoonsOfPeril.java,gg.squire.moons
+778e0a57-7760-4510-94d3-2c1213879e48,Squire Chambers Of Xeric,pvm,SquireChambersPlugin.java,gg.squire.cox
+7bb63fa7-229b-499f-b77f-e1768cbbcc1e,Squire Easy Clues,clues,Clues.java,net.unethicalite.plugins.logout
+7c1d3521-d222-494e-8c51-697efca0674b,Squire Sotf Builder,account-builder,AccBuilderSotf.java,gg.squire.account
+7ff08cb7-2eac-4b0f-b288-ca118289a708,Squire GWD Builder,account-builder,AccBuilderGWD.java,gg.squire.account
+861c713a-2076-4f84-9c7c-f1dff7263a11,Squire Vardorvis,pvm,SquireVardorvis.java,gg.squire.vardorvis
+9740bba2-b19d-4983-898f-2f8083c87d94,Squire Quester,quest,SquireQuester.java,gg.squire.quest
+99cb6034-aaf0-4ea3-9488-bd66257fa44c,Squire Farmer,skilling,SquireFarmer.java,gg.squire.farmer
+9bb83689-ff7d-471d-9a08-411d7484ad87,Squire Aerial Fisher,skilling,SquireAerialFisher.java,gg.squire.aerialfisher
+9cc2ff9a-834c-471c-85e9-f55eb9ce18c7,Squire Saradomin,pvm,SquireSaradomin.java,gg.squire.saradomin
+9e609a1b-c462-421a-8c76-4c9774ea7671,Squire Rat King Builder,account-builder,AccBuilderRat.java,gg.squire.account
+a162439f-48e7-4aeb-adb7-778d42249168,Squire Charter Ships,skilling,SquireCharterShips.java,gg.squire.plugins
+a295c4aa-95d9-42ec-b8cf-442736b096bd,Squire Giants Foundry,skilling,SquireGiantsFoundry.java,gg.squire.giantsfoundry
+a79d2820-2b30-4bed-9aed-0ccb18befd76,Squire Corporeal Beast,pvm,SquireCorp.java,gg.squire.corp
+afc9cf98-0627-4d2a-8a9e-4e9657a2fb2d,Squire Tithe Farm,minigames,SquireTitheFarm.java,gg.squire.tithefarm
+d11e2dee-7190-435e-95f6-a7b9761c02e8,Squire Zeah Runecrafter,skilling,SquireZeahRunecrafter.java,gg.squire.runecrafting
+d1b70a7e-d534-4fe7-a2d5-7f0423b04edb,Squire Tempoross,minigames,SquireTempoross.java,gg.squire.tempoross
+d1f9e3af-c0a5-49dd-86b2-8e857984fef3,Squire Easy Clue Builder,account-builder,AccBuilderEasyClues.java,gg.squire.account
+d3ba43e2-4966-4faf-8fcb-fba83fc95121,Squire Pest Control,minigames,SquirePestControl.java,gg.squire.minigame
+df6d2a51-cc28-47f1-b346-c5a30f777aad,Squire Herbiboar,skilling,SquireHerbiboarPlugin.java,squire.gg.hunter
+e2a56d76-bd9d-40c9-839c-e5b25fb4c3a0,Squire Hunter,skilling,SquireHunter.java,gg.squire.hunter
+f13c63fa-3e76-4035-9dfa-e833a382cd4c,Squire Bandos,pvm,SquireBandos.java,gg.squire.bandos
+f8a8c131-0c60-4150-a875-6d5d0cb07058,Squire Zammy,pvm,SquireZammy.java,gg.squire.zammy
+f90b6cea-b1e4-4f52-8aee-23d3738ff311,Squire Woodcutter,skilling,SquireWoodcutterPlugin.java,gg.squire.woodcutting
+f9dee1ad-dcbf-4af9-9fb8-47dc91e2d43e,Squire Hydra,pvm,SquireAlchemicalHydraPlugin.java,gg.squire.hydra
+f9e8fbd0-4571-4716-b37b-883b4ae7fc62,Squire Zulrah,pvm,SquireZulrah.java,gg.squire.zulrah
+fabe4829-ed55-47a3-b654-ca361772d01e,Squire Fight Caves,minigames,SquireFightCavesPlugin.java,gg.squire.minigames
+fdd2f9b9-6584-4a70-afa7-d1946c214094,Squire Rogues Outfit Builder,account-builder,AccBuilderRogues.java,gg.squire.account

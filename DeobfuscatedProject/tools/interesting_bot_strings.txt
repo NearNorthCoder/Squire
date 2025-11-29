@@ -1,0 +1,564 @@
+INTERESTING BOT-RELATED STRINGS
+================================================================================
+
+
+Bot System Messages (126 strings)
+--------------------------------------------------------------------------------
+  - 
+[Plugin] Plugin shut down
+
+  - 
+[Plugin] Plugin starting up
+
+  - BOTTOMLESS_BUCKET
+  - BOTTOM_V_II
+  - BOTTOM_V_III
+  - BOTTOM_V_IV
+  - C:\Users\Nick\AppData\Roaming\.tribot\GodsMule\mule.txt
+  - Crop state: %s
+  - Current Actual Task
+  - Current Sword Task
+  - Current Task
+  - Current Task: 
+  - Current state: 
+  - Died - Ending script: Please report what quest it died on and location,step if you saw
+  - Estate agent
+  - Failed to withdraw loadout, we're probably out of ammo or staff charges. Stopping plugin, and logging out.
+  - Finished buying items, switching back to agility
+  - Finished buying items, switching back to construction
+  - Finished buying items, switching back to cooking
+  - Finished buying items, switching back to crafting
+  - Finished buying items, switching back to farming
+  - Finished buying items, switching back to firemaking
+  - Finished buying items, switching back to fishing
+  - Finished buying items, switching back to fletching
+  - Finished buying items, switching back to gearing
+  - Finished buying items, switching back to herblore
+  - Finished buying items, switching back to magic training
+  - Finished buying items, switching back to melee training
+  - Finished buying items, switching back to mining
+  - Finished buying items, switching back to prayer
+  - Finished buying items, switching back to quest
+  - Finished buying items, switching back to questing
+  - Finished buying items, switching back to randomGearing
+  - Finished buying items, switching back to woodcutting
+  - Finished buying, switching back to clues
+  - Fixing boss task
+  - Have you completed your task yet?
+  - In F2P, need to switch to a P2P world, ending script
+  - Minigame State
+  - Missing clue emote items, ending script
+  - Performing Task
+  - Plugin is enabled, turning off
+  - Plugin started
+  - QUEST_ALFRED_GRIMHANDS_BARCRAWL_STATE_76
+  - QUEST_SHIELD_OF_ARRAV_STATE_146
+  - QUEST_UNDERGROUND_PASS_STATE_162
+  - Quest helper needs to be enabled for this plugin to work
+  - QuestHelperPlugin
+  - REACHED_BOTTOM
+  - RechargeStaff: missing recharge item {} and we do not have it, stopping plugin.
+  - Resetting game state!
+  - Slayer Task: 
+  - Something going wrong banking stopping plugin
+  - Stopping plugin, have a nice day :)
+  - Stopping script, you are at max points
+  - Stopping, found the hunted task!
+  - Storing compost state [{}] for patch [{}]
+  - Surely there must be upsides to the task?
+  - Switching course from {} to {}
+  - Switching to BUYING
+  - Switching to One Click Barrows account
+  - Switching to One Click Easy Clue Scroll Account
+  - Switching to One Click F2P
+  - Switching to One Click GWD
+  - Switching to One Click Rogues Outfit account
+  - Switching to One Click Shaman account
+  - Switching to One Click Sotf account
+  - Switching to One Temple Trek Account
+  - Task Completed Per Hour: 
+  - Task Completed: 
+  - Tasks Completed:
+  - Virtus robe bottom
+  - Walking towards task location
+  - We are missing a certain amount of quest supplies, switching to BUYING
+  - We are missing air runes or fire runes, switching to BUYING
+  - We are missing axes, switching to BUYING
+  - We are missing clue supplies, switching to BUYING
+  - We are missing dueling supplies, switching to BUYING
+  - We are missing hammer, switching to BUYING
+  - We are missing house tab, switching to BUYING
+  - We are missing magic short i, switching to BUYING
+  - We are missing nails, switching to BUYING
+  - We are missing oak planks, switching to BUYING
+  - We are missing pickaxes, switching to BUYING
+  - We are missing plank, switching to BUYING
+  - We are missing planks, switching to BUYING
+  - We are missing prayer supplies, switching to BUYING
+  - We are missing quest supplies, switching to BUYING
+  - We are missing random gear, switching to BUYING
+  - We are missing rings, switching to BUYING
+  - We are missing rune arrows, switching to BUYING
+  - We are missing rune scim, switching to BUYING
+  - We are missing rune scimitar, switching to BUYING
+  - We are missing runes, switching to BUYING
+  - We are missing runessupplies, switching to BUYING
+  - We are missing saw, switching to BUYING
+  - We are missing shark, switching to BUYING
+  - We are missing stamina supplies, switching to BUYING
+  - We are missing staminas, switching to BUYING
+  - We are missing steel nails, switching to BUYING
+
+Error/Failure Messages (52 strings)
+--------------------------------------------------------------------------------
+  - Attacking crashed
+  - Banking failed 5 times in a row, stopping
+  - Being crashed
+  - Depositing all items except for the exceptions
+  - Died and no death handler just yet, so just stopping for now
+  - Failed Raids
+  - Failed banking more than 5 times.
+  - Failed to build raid
+  - Failed to lookup worlds.
+  - Failed to withdraw loadout after 5 tries, pausing for 5 ticks
+  - How many claws do terrorbirds have?
+  - How many teeth do terrorbirds have?
+  - No items to buy, or no recharge amount set, stopping restocking
+  - Offset error! Observed new offset of {}, previous observed offset was {} ({}) Player Loc:{}
+  - Setting died to false
+  - Solving terror bird
+  - Someone is crashing us, hopping worlds.
+  - Stopping because we are missing equipped axe or knife in inventory!
+  - Stopping because we are out of coins
+  - Stopping because we cannot cast superglass make
+  - Stopping cause we are out of seed (seed id = {})
+  - Stopping relog due to ban
+  - Stopping relog due to update/ban
+  - TERRORBIRD_1
+  - TERRORBIRD_2
+  - TERRORBIRD_3
+  - TERRORBIRD_4
+  - TERRORBIRD_5
+  - TERRORBIRD_6
+  - TERROR_DOGS
+  - Terror dogs
+  - UNABLE TO MAKE SPACE FOR GEAR SWAP! ERRROR ERROR!
+  - Unexpected error occurred while getting a random key.
+  - We DIED!! :(
+  - We can't cast superheat, stopping.
+  - We failed a 3t cycle, trying to withdraw a new log.
+  - We have less than 26k - stopping
+  - We need ancient spellbook, stopping
+  - What do terrorbirds eat to aid digestion?
+  - What is a terrorbird's preferred food?
+  - Where do terrorbirds get most of their water?
+  - Who use terrorbirds as mounts?
+  - You failed to survive
+  - You failed to survive the Tombs
+  - You have died
+  - Your party failed to complete the challenge
+  - [BuyNewSupplies]: We have all of the required items, stopping restocking.
+  - [ClaimDeathItems] Setting died to false
+  - [GAUNTLET] Your authentication has expired, stopping!
+  - [RechargeStaff]: We are out of blowpipe darts or scales, teleporting out and stopping.
+  - failed to complete
+  - failed to withdraw bankloadout 10 times
+
+Banking Operations (120 strings)
+--------------------------------------------------------------------------------
+  - Attempting to solve by depositing inventory.
+  - BANKING
+  - Bank Booth
+  - Bank Camel
+  - Bank Chest
+  - Bank Chest-wreck
+  - Bank Deposit Chest
+  - Bank all
+  - Bank booth
+  - Bank chest
+  - Bank contains sellable: {}, noDropsInInventory: {}
+  - Bank counter
+  - Bank is null - something went wrong
+  - Bank-all
+  - Banker
+  - Banking
+  - Banking:
+  - Banking: 
+  - Buying
+  - Buying Items
+  - Buying glassblowing pipe
+  - Buying items
+  - Buying molten glass
+  - Calcified deposit
+  - Cannot find the ladder to go down to the bank
+  - Closing bank
+  - Deposit
+  - Deposit bars/ore
+  - Deposit inventory
+  - Deposit money.
+  - Deposit stamina potions
+  - Deposit-All
+  - Deposit-pickaxe
+  - Deposit-runes
+  - Depositing to bank
+  - Done banking, closing bank.
+  - Fixing bank
+  - Found bank, and we are opening
+  - Grand Exchange
+  - Grand Exchange booth
+  - Grand Exchange clerk
+  - Guardians rooms is enabled but no pickaxe found in Bank Loadout
+  - Handle banking
+  - Handling banking
+  - Hiring banker
+  - Inventory full, need to bank loot
+  - Inventory is full, going to bank.
+  - Logging out to start banking
+  - NO PRAYER; emergency teleporting out to bank
+  - Nav to Varrock W bank
+  - Nav to bank
+  - Nav to burgh bank
+  - Nav to canafis bank
+  - Nav to east bank ardy crate
+  - Nav to nmz bank
+  - Nav to tob bank
+  - Nav to tzhar bank
+  - Nav to varrock w bank basement crate
+  - Nav togrand exchange, dance
+  - Nav varrock e bank upstairs drawers
+  - Navigating to bank
+  - Need to bank: {}
+  - Needs items, banking
+  - No bank loadout selected
+  - No brew to deposit?
+  - No more components to make {} in bank
+  - No need to bank
+  - No prayer points, need to bank
+  - Not enough gold for buying
+  - Open bank chest
+  - Opening bank
+  - Out of prayer restores, need to bank
+  - Salt Deposit
+  - Setting banking to true invent full
+  - Setting banking to true out of food
+  - Should bank:
+  - Walk closer to bank
+  - Walking to bank
+  - We are in combat but not in pnm, going to bank
+  - We don't need to bank
+  - We have looted chest, but it doesn't seem like we need to bank yet.
+  - We have lost our tick manipulation items, going to bank.
+  - We need to deposit stuff to the bank!
+  - We need to withdraw energy potions from the bank
+  - We're done collecting slime, time to bank.
+  - We're done grinding, time to bank.
+  - We're done praying, time to bank.
+  - We're low on food, need to bank
+  - We're out of bolts, banking.
+  - Withdraw All
+  - Withdraw Max cape
+  - Withdraw Smithing cape
+  - Withdraw adamantite ore
+  - Withdraw an ore from the bank to start. You can start a hybrid method by also withdrawing gold ore.
+  - Withdraw coal
+  - Withdraw coal bag
+  - Withdraw gold ore
+  - Withdraw goldsmith gauntlets
+  - Withdraw ice gloves or smiths gloves (i)
+  - Withdraw iron ore
+
+Combat Operations (187 strings)
+--------------------------------------------------------------------------------
+  - %s got some loot from Chambers of Xeric!
+  - %s got some loot from Tombs of Amascut!
+  - - Fight Arena
+  - - Prayer
+  - ATTACK
+  - ATTACK_POTION
+  - And Daconia rocks will kill the tree!
+  - Attack
+  - Attack Style and Attack Type must be valid for AnimationData
+  - Attack Style must be valid for AnimationData
+  - Attack cycle
+  - Attack icefiend
+  - Attack ranger
+  - Attacking
+  - Attacking big blob
+  - Attacking bird
+  - Attacking cat
+  - Attacking cows
+  - Attacking frozen wep
+  - Attacking hill giant
+  - Attacking jad
+  - Attacking mager
+  - Attacking melee
+  - Attacking ranger
+  - Attacking right claw
+  - Attacking small blob
+  - Attacking soul
+  - Attacking soull
+  - Avoiding cat attack
+  - BOSS FIGHT
+  - BOSS_FIGHT
+  - Bandos Kills
+  - Between Kills: 
+  - Boss fight
+  - Boss fight!!
+  - Can you make a special sword for me?
+  - Cannot find a gorilla to attack
+  - Cerberus is not attackable yet.
+  - DIVINE_SUPER_ATTACK
+  - Dodge charge attack
+  - Doing nothing since... Worst inventory item {} is the same as the loot item {}
+  - Dropping worst inventory item: {} to make room for PRIORITY loot {}
+  - Dropping worst inventory item: {} to make room for loot {}
+  - Eating between kills as we're missing more than 25 hp.
+  - Elvarg boss fight
+  - Fight Arena
+  - Fight start time was null, we were not able to record the kill time.
+  - Fighting
+  - Fighting souls
+  - Final fight cycle
+  - Finishing kill
+  - Fleeing since we can be killed currently
+  - Fleeing since we need prayer and don't have any
+  - Generic loot > 1m
+  - Generic loot > 750k
+  - Handle fight
+  - Handling fight
+  - Herbiboar Kills
+  - Herbiboar Kills Per Hour
+  - How goes your fight with the trolls?
+  - Hunleff Prayer
+  - Hunllef kill time
+  - Hydra Attack
+  - Hydra Attack Count
+  - I understand. Let's fight.
+  - I've killed Ithoi for poisoning your crew.
+  - If some snakes use venom to kill their prey, what do other snakes use?
+  - In jad fight
+  - Inventory is full and worstInv is not worse than loot; ignoring loot {}
+  - Inventory is full and worstInv is null; and no supplies for next kill... so we're eating or drinking {} to make room for {} 
+  - Inventory is full and worstInv is null; and we have supplies for another kill; saving {} for later....
+  - It's not them who are going to fight the demon, it's me.
+  - KILLERWATTS
+  - Kill took {}, overall average time: {}
+  - Killed birds: 
+  - Killed zulrah
+  - Killer's knife
+  - Killerwatts
+  - Killing abigale
+  - Killing cows
+  - Killing ghasts
+  - Killing ghasts, no interacting
+  - Killing healers
+  - Killing spirit
+  - Kills Per Hour
+  - Kills/deaths
+  - Kills:
+  - Kills: 
+  - Last Blob Attack: 
+  - Last Mager Attack: 
+  - Last Meleer Attack: 
+  - Last Ranger Attack: 
+  - Loot drop
+  - Looted the chest, resetting
+  - Looting stacking or noted item that we already have! => {}
+  - Looting {}
+  - Looting: 
+  - Missing item ID: PRAYER_POTION4: Amount needed 3
+  - NOT_ATTACKING
+  - Nav to fight
+
+Navigation (523 strings)
+--------------------------------------------------------------------------------
+  - (Far away): Walking towards current target house. {}
+  - Alchemists Teleport
+  - Ardougne teleport
+  - Camelot teleport
+  - Can't reach, navigating
+  - Clicking teleport
+  - Corrupted teleport crystal
+  - Darts: walking ahead
+  - Enchanters Teleport
+  - Encountered NPE walking to quadrant order puzzle solution
+  - Exit Teleport
+  - Falador teleport
+  - Graveyard Teleport
+  - HOUSE_TELEPORT
+  - Handling walking
+  - Infected and out of cures. Also No sanfew found in inventory or on the ground, teleporting out
+  - LUMBRIDGE_TELEPORT
+  - Lumbridge teleport
+  - Missing item ID: BARROWS_TELEPORT: Amount needed 5
+  - Missing item ID: SALVE_GRAVEYARD_TELEPORT:  Amount needed 10
+  - Monastery Teleport
+  - Nav to  sammy
+  - Nav to 7th hide
+  - Nav to Ali the Leaflet Dropper
+  - Nav to Ambassador Spanfipple
+  - Nav to Apothecary
+  - Nav to Arhein
+  - Nav to Arsen
+  - Nav to Captain Tobias
+  - Nav to Cassie
+  - Nav to Cecilia
+  - Nav to Charles
+  - Nav to Chemist
+  - Nav to Cook
+  - Nav to DWARF
+  - Nav to Doomsayer
+  - Nav to Doric
+  - Nav to Doris
+  - Nav to Drezel
+  - Nav to Eadgar
+  - Nav to Eadgars cave
+  - Nav to Ellis
+  - Nav to Eohric
+  - Nav to Ermin
+  - Nav to FM tile
+  - Nav to Father Jean
+  - Nav to Gaius
+  - Nav to Gnocci
+  - Nav to Hairdresser
+  - Nav to Hans
+  - Nav to Harold
+  - Nav to Herquin
+  - Nav to Jatix
+  - Nav to Jeed
+  - Nav to Konoo
+  - Nav to Lady of the Lake
+  - Nav to Louisa
+  - Nav to Lucy
+  - Nav to McGrubers wood dig
+  - Nav to Morgan
+  - Nav to Ned
+  - Nav to Rusty
+  - Nav to SE Pillar
+  - Nav to SE house
+  - Nav to Sarah
+  - Nav to Sir Kay
+  - Nav to Spria
+  - Nav to Tenzing
+  - Nav to The Face
+  - Nav to Tool Leprechaun
+  - Nav to Turael
+  - Nav to Tynan
+  - Nav to Vannaka
+  - Nav to Wayne
+  - Nav to Zeke
+  - Nav to Zembo
+  - Nav to a
+  - Nav to aggie house wardrobe
+  - Nav to al kharid gem house crate
+  - Nav to al kharid palace top chest
+  - Nav to al kharid silk boxes
+  - Nav to al kharid, headbang
+  - Nav to al khrid mine dig
+  - Nav to altar
+  - Nav to ancient prison door
+  - Nav to anita
+  - Nav to apprentice
+  - Nav to arc tile
+  - Nav to ardy castle pub drawers
+  - Nav to ardy church crates
+  - Nav to ardy market drawers
+  - Nav to ardy zoo, raspberry
+  - Nav to armour
+  - Nav to atlas
+  - Nav to b
+  - Nav to ballista
+  - Nav to barb village chest
+  - Nav to barb village crates
+  - Nav to baseladder
+  - Nav to betty mage shop drawers
+
+Plugin Names (87 strings)
+--------------------------------------------------------------------------------
+  - And how is life as a squire?
+  - Mr Squire
+  - Nav to Squire
+  - Squire
+  - Squire Aerial Fisher
+  - Squire Agility
+  - Squire Auto TOA
+  - Squire Bandos
+  - Squire Bankstander
+  - Squire Barrows
+  - Squire Barrows Builder
+  - Squire Blast Furnace
+  - Squire Blood Runecrafter
+  - Squire Blue Dragon Killer
+  - Squire Cerberus
+  - Squire Chambers
+  - Squire Corporeal Beast
+  - Squire Drift Net Fisher
+  - Squire Duke Sucellus
+  - Squire Easy Clue Builder
+  - Squire Easy Clues
+  - Squire Ectofuntus
+  - Squire Farmer
+  - Squire Fight Caves
+  - Squire Fisher
+  - Squire GWD Builder
+  - Squire Gauntlet
+  - Squire Giants Foundry
+  - Squire Gorillas
+  - Squire Hallowed Sepulchre
+  - Squire Herbiboar
+  - Squire Herblore
+  - Squire Hunter
+  - Squire Hydra
+  - Squire MTA
+  - Squire Miner
+  - Squire Moons of Peril
+  - Squire NMZ
+  - Squire Pest Control
+  - Squire Pest Control Started.
+  - Squire Phosani's Nightmare
+  - Squire Plank Maker has been started
+  - Squire Planker
+  - Squire Pyramid Plunder
+  - Squire Quest QOL
+  - Squire Quester
+  - Squire Rat King Builder
+  - Squire Rogues Outfit Builder
+  - Squire Saradomin
+  - Squire Scurrius
+  - Squire Shamans
+  - Squire Shamans Builder
+  - Squire Sorceress Garden
+  - Squire Sotf Builder
+  - Squire TOA
+  - Squire Task Skipper
+  - Squire Temple Trekking
+  - Squire TempleTrek Builder
+  - Squire Tempoross
+  - Squire Thieving
+  - Squire Tithe Farm
+  - Squire Toad Killer
+  - Squire Vardorvis
+  - Squire Vorkath
+  - Squire Whisperer
+  - Squire Woodcutting
+  - Squire Woodcutting has been started.
+  - Squire Zamorak
+  - Squire Zulrah
+  - Stopping all Squire Plugins as we got Ring of Lifed.
+  - Talk squire
+  - [SQUIRE] - Woodcutting has been stopped.
+  - [Squire RoL] Just saved your life from a misconfiguration, stay safe!
+  - [SquireAgility] - Out of food and low HP, stopping.
+  - [SquirePNM]: We have died on phase {}, 
+  - squireattacker
+  - squirebdk
+  - squirebf
+  - squirecleaner
+  - squirefarmer
+  - squiregauntlet
+  - squireherblore
+  - squiremixology
+  - squiremoonsofperil
+  - squirequester
+  - squireraids
+  - squirezammy

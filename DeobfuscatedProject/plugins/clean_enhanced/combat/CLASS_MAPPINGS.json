@@ -1,0 +1,14 @@
+{
+  "b": "GameEnum",
+  "i": "FlickingPrayerTask",
+  "k": "WalkingToBankTask",
+  "g": "AttackingBlueDragonTask",
+  "j": "LootingTask",
+  "c": "GameEnum2",
+  "a": "CombatManager",
+  "e": "StartingTask",
+  "l": "WalkingToBlueDragonsTask",
+  "f": "BankingForItemsTask",
+  "h": "EatingTask",
+  "d": "DHelper"
+}

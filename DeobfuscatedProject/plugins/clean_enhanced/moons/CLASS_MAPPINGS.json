@@ -1,0 +1,14 @@
+{
+  "b": "BloodMoonTask",
+  "i": "WaitingRoomsTask",
+  "k": "PrepSuppliesTask",
+  "g": "EclipseMoonTask",
+  "j": "PrayflickTask",
+  "c": "BlueMoonTask",
+  "a": "MoonsManager",
+  "e": "DepositAndExitTask",
+  "d": "ClaimChestTask",
+  "f": "PrayflickTask",
+  "h": "CaveNavTask",
+  "l": "LHelper"
+}

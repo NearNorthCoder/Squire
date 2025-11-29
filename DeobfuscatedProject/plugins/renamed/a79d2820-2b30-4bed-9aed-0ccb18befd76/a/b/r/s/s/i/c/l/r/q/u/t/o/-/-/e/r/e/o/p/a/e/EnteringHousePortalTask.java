@@ -1,0 +1,93 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  gg.squire.client.plugins.fw.Task
+ *  gg.squire.client.plugins.fw.TaskDesc
+ *  net.runelite.api.TileObject
+ *  net.unethicalite.api.entities.TileObjects
+ */
+package a.b.r.s.s.i.c.l.r.q.u.t.o.-.-.e.r.e.o.p.a.e;
+
+import gg.squire.client.plugins.fw.Task;
+import gg.squire.client.plugins.fw.TaskDesc;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.TileObject;
+import net.unethicalite.api.entities.TileObjects;
+
+/* TASK: Entering house portal -> EnteringhouseportalTask */
+@TaskDesc(name="Entering house portal", priority=100, blocking=true)
+public class EnteringHousePortalTask
+extends Task {
+    private static /* synthetic */ String[] lIllIIIIlIII;
+    private static /* synthetic */ int[] lIllIIIIlIIl;
+
+    public boolean run() {
+        TileObject tileObject2 = TileObjects.getNearest(tileObject -> {
+            int n2;
+            if (k.lllIIIlllIlllI(lIllIIIIlIII[lIllIIIIlIIl[1]].equals(tileObject.getName()) ? 1 : 0)) {
+                String[] stringArray = new String[lIllIIIIlIIl[1]];
+                stringArray[k.lIllIIIIlIIl[0]] = lIllIIIIlIII[lIllIIIIlIIl[2]];
+                if (k.lllIIIlllIlllI(tileObject.hasAction(stringArray) ? 1 : 0)) {
+                    n2 = lIllIIIIlIIl[1];
+                    0;
+                    if (-3 <= 0) return n2 != 0;
+                    return false;
+                }
+            }
+            n2 = lIllIIIIlIIl[0];
+            return n2 != 0;
+        });
+        if (k.lllIIIlllIllIl(tileObject2)) {
+            return lIllIIIIlIIl[0];
+        }
+        tileObject2.interact(lIllIIIIlIII[lIllIIIIlIIl[0]]);
+        return lIllIIIIlIIl[1];
+    }
+
+    private static void lllIIIlllIlIll() {
+        lIllIIIIlIII = new String[lIllIIIIlIIl[3]];
+        k.lIllIIIIlIII[k.lIllIIIIlIIl[0]] = k."Home";
+        k.lIllIIIIlIII[k.lIllIIIIlIIl[1]] = k."Portal";
+        k.lIllIIIIlIII[k.lIllIIIIlIIl[2]] = k."Home";
+    }
+
+    private static boolean lllIIIlllIllIl(Object object) {
+        return object == null;
+    }
+
+    static {
+        k.lllIIIlllIllII();
+        k.lllIIIlllIlIll();
+    }
+
+    private static void lllIIIlllIllII() {
+        lIllIIIIlIIl = new int[4];
+        k.lIllIIIIlIIl[0] = (0xCA ^ 0x89 ^ (0x61 ^ 0x3E)) & (0x8D ^ 0x9A ^ (0x5B ^ 0x50) ^ -1);
+        k.lIllIIIIlIIl[1] = 1;
+        k.lIllIIIIlIIl[2] = 2;
+        k.lIllIIIIlIIl[3] = 3;
+    }
+
+    private static String lllIIIlllIlIlI(String var3, String var4) {
+        try {
+            SecretKeySpec var1 = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(var4.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher var2 = Cipher.getInstance("Blowfish");
+            var2.init(lIllIIIIlIIl[2], var1);
+            return new String(var2.doFinal(Base64.getDecoder().decode(var3.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception var5) {
+            var5.printStackTrace();
+            return null;
+        }
+    }
+
+    private static boolean lllIIIlllIlllI(int n2) {
+        return n2 != 0;
+    }
+}
+

@@ -1,0 +1,8 @@
+{
+  "b": "FishingTask",
+  "c": "GatheringBaitTask",
+  "a": "AHelper",
+  "e": "HoppingToAvoidNearbyPlayerTask",
+  "d": "GettingBirdTask",
+  "f": "WalkingToSpotTask"
+}

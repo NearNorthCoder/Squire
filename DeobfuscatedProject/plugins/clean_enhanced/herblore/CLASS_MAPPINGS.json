@@ -1,0 +1,11 @@
+{
+  "b": "GameEnum",
+  "i": "MakingPotionsTask",
+  "c": "GameEnum2",
+  "e": "GameEnum3",
+  "f": "BankingTask",
+  "h": "CleaningHerbsTask",
+  "g": "GHelper",
+  "a": "AHelper",
+  "d": "HerbloreTaskBase"
+}

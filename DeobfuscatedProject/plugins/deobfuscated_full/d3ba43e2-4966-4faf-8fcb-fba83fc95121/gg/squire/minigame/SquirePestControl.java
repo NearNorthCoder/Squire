@@ -1,0 +1,231 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.google.inject.Inject
+ *  com.google.inject.Provides
+ *  gg.squire.client.plugins.SquirePlugin
+ *  net.runelite.api.events.GameTick
+ *  net.runelite.client.config.ConfigManager
+ *  net.runelite.client.eventbus.EventBus
+ *  net.runelite.client.eventbus.Subscribe
+ *  net.runelite.client.plugins.PluginDescriptor
+ *  net.runelite.client.ui.overlay.Overlay
+ *  net.runelite.client.ui.overlay.OverlayManager
+ *  net.unethicalite.api.events.MenuActionProcessed
+ *  net.unethicalite.api.widgets.Widgets
+ */
+package gg.squire.minigame;
+
+import com.google.inject.Inject;
+import com.google.inject.Provides;
+import gg.squire.client.plugins.SquirePlugin;
+import gg.squire.minigame.SquirePestControlConfig;
+import gg.squire.minigame.overlay.InfoBox;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import l.-.-.n.s.s.i.e.r.q.p.o.c.o.t.u.r.e.t.a;
+import l.-.-.n.s.s.i.e.r.q.p.o.c.o.t.u.r.e.t.f;
+import l.-.-.n.s.s.i.e.r.q.p.o.c.o.t.u.r.e.t.g;
+import net.runelite.api.events.GameTick;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.ui.overlay.OverlayManager;
+import net.unethicalite.api.events.MenuActionProcessed;
+import net.unethicalite.api.widgets.Widgets;
+
+@PluginDescriptor(name="Squire Pest Control", enabledByDefault=false)
+public class SquirePestControl
+extends SquirePlugin {
+    private /* synthetic */ int j;
+    @Inject
+    private /* synthetic */ a f;
+    private /* synthetic */ int h;
+    @Inject
+    private /* synthetic */ EventBus d;
+    @Inject
+    private /* synthetic */ ConfigManager e;
+    @Inject
+    private /* synthetic */ OverlayManager b;
+    @Inject
+    private /* synthetic */ InfoBox c;
+    private static /* synthetic */ long a;
+    private static /* synthetic */ String[] lIIIlIlIIIlIl;
+    private static /* synthetic */ int[] lIIIlIlIIIllI;
+    private /* synthetic */ int i;
+    private /* synthetic */ Instant g;
+
+    private static void lIIllllllIllIlI() {
+        lIIIlIlIIIllI = new int[8];
+        SquirePestControl.lIIIlIlIIIllI[0] = 0xFFFFFFA5 & 0xFFA;
+        SquirePestControl.lIIIlIlIIIllI[1] = (0x27 ^ 0x2B) & ~(0xB2 ^ 0xBE);
+        SquirePestControl.lIIIlIlIIIllI[2] = 0xFFFFE1BF & 0x1FD7;
+        SquirePestControl.lIIIlIlIIIllI[3] = 0x88 ^ 0x8D;
+        SquirePestControl.lIIIlIlIIIllI[4] = 1;
+        SquirePestControl.lIIIlIlIIIllI[5] = 2;
+        SquirePestControl.lIIIlIlIIIllI[6] = 3;
+        SquirePestControl.lIIIlIlIIIllI[7] = 0x29 ^ 0x75 ^ (0x4D ^ 0x19);
+    }
+
+    @Provides
+    SquirePestControlConfig a(ConfigManager configManager) {
+        return (SquirePestControlConfig)configManager.getConfig(SquirePestControlConfig.class);
+    }
+
+    protected void onStart() {
+        System.out.println(lIIIlIlIIIlIl[lIIIlIlIIIllI[5]]);
+        this.b.add((Overlay)this.c);
+        0;
+        this.g = Instant.now();
+        this.j = lIIIlIlIIIllI[1];
+    }
+
+    private static String lIIllllllIllIII(String var15, String var9) {
+        try {
+            SecretKeySpec var10 = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(var9.getBytes(StandardCharsets.UTF_8)), lIIIlIlIIIllI[7]), "DES");
+            Cipher var4 = Cipher.getInstance("DES");
+            var4.init(lIIIlIlIIIllI[5], var10);
+            return new String(var4.doFinal(Base64.getDecoder().decode(var15.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception var13) {
+            var13.printStackTrace();
+            return null;
+        }
+    }
+
+    public void c(int n) {
+        this.j = n;
+    }
+
+    private static boolean lIIllllllIlllII(Object object) {
+        return object == null;
+    }
+
+    private static boolean lIIllllllIlllll(int n, int n2) {
+        return n < n2;
+    }
+
+    protected Class<?>[] tasks() {
+        Class[] classArray = new Class[lIIIlIlIIIllI[5]];
+        classArray[SquirePestControl.lIIIlIlIIIllI[1]] = g.class;
+        classArray[SquirePestControl.lIIIlIlIIIllI[4]] = f.class;
+        return classArray;
+    }
+
+    public void a(int n) {
+        this.h = n;
+    }
+
+    @Subscribe
+    public void onGameTick(GameTick gameTick) {
+        SquirePestControl var14;
+        if (SquirePestControl.lIIllllllIllIll(this.j, lIIIlIlIIIllI[0])) {
+            System.out.println(lIIIlIlIIIlIl[lIIIlIlIIIllI[1]]);
+            this.forceStop();
+        }
+        if (SquirePestControl.lIIllllllIlllII(Widgets.get((int)lIIIlIlIIIllI[2], (int)lIIIlIlIIIllI[3]))) {
+            return;
+        }
+        if (SquirePestControl.lIIllllllIlllIl(Widgets.get((int)lIIIlIlIIIllI[2], (int)lIIIlIlIIIllI[3]).getText().isEmpty() ? 1 : 0)) {
+            return;
+        }
+        var14.j = Integer.parseInt(Widgets.get((int)lIIIlIlIIIllI[2], (int)lIIIlIlIIIllI[3]).getText().split(lIIIlIlIIIlIl[lIIIlIlIIIllI[4]])[lIIIlIlIIIllI[4]]);
+        if (SquirePestControl.lIIllllllIllllI(var14.b())) {
+            var14.a(var14.j);
+            0;
+            if (((0x55 ^ 0x75) & ~(0xD ^ 0x2D)) != ((0x7C ^ 0x42) & ~(0x30 ^ 0xE))) {
+                return;
+            }
+        } else {
+            var14.i = var14.j - var14.h;
+        }
+    }
+
+    public static long a() {
+        return a;
+    }
+
+    static {
+        SquirePestControl.lIIllllllIllIlI();
+        SquirePestControl.lIIllllllIllIIl();
+    }
+
+    public Instant getStarted() {
+        return this.g;
+    }
+
+    public void b(int n) {
+        this.i = n;
+    }
+
+    public int c() {
+        return this.i;
+    }
+
+    private static String lIIllllllIlIlll(String var2, String var12) {
+        var2 = new String(Base64.getDecoder().decode(var2.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder var11 = new StringBuilder();
+        char[] var5 = var12.toCharArray();
+        int var7 = lIIIlIlIIIllI[1];
+        char[] var8 = var2.toCharArray();
+        int var6 = var8.length;
+        int var3 = lIIIlIlIIIllI[1];
+        while (SquirePestControl.lIIllllllIlllll(var3, var6)) {
+            char var1 = var8[var3];
+            var11.append((char)(var1 ^ var5[var7 % var5.length]));
+            0;
+            ++var7;
+            ++var3;
+            0;
+            if (((0xDF ^ 0x95) & ~(0xCD ^ 0x87)) == 0) continue;
+            return null;
+        }
+        return String.valueOf(var11);
+    }
+
+    private static boolean lIIllllllIllIll(int n, int n2) {
+        return n >= n2;
+    }
+
+    private static boolean lIIllllllIlllIl(int n) {
+        return n != 0;
+    }
+
+    public int d() {
+        return this.j;
+    }
+
+    public int b() {
+        return this.h;
+    }
+
+    @Subscribe
+    public void a(MenuActionProcessed menuActionProcessed) {
+        System.out.println(menuActionProcessed);
+    }
+
+    private static void lIIllllllIllIIl() {
+        lIIIlIlIIIlIl = new String[lIIIlIlIIIllI[6]];
+        SquirePestControl.lIIIlIlIIIlIl[SquirePestControl.lIIIlIlIIIllI[1]] = SquirePestControl."Stopping script, you are at max points";
+        SquirePestControl.lIIIlIlIIIlIl[SquirePestControl.lIIIlIlIIIllI[4]] = SquirePestControl.": ";
+        SquirePestControl.lIIIlIlIIIlIl[SquirePestControl.lIIIlIlIIIllI[5]] = SquirePestControl."Squire Pest Control Started.";
+    }
+
+    private static boolean lIIllllllIllllI(int n) {
+        return n == 0;
+    }
+
+    protected void onStop() {
+        this.b.remove((Overlay)this.c);
+        0;
+    }
+}
+

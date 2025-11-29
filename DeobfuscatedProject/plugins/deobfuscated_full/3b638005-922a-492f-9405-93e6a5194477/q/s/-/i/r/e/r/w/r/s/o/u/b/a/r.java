@@ -1,0 +1,108 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  gg.squire.client.plugins.fw.Task
+ *  gg.squire.client.plugins.fw.TaskDesc
+ *  javax.inject.Inject
+ *  net.runelite.api.Item
+ *  net.unethicalite.api.game.Vars
+ *  net.unethicalite.api.items.Inventory
+ */
+package q.s.-.i.r.e.r.w.r.s.o.u.b.a;
+
+import gg.squire.barrows.SquireBarrows;
+import gg.squire.client.plugins.fw.Task;
+import gg.squire.client.plugins.fw.TaskDesc;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
+import net.runelite.api.Item;
+import net.unethicalite.api.game.Vars;
+import net.unethicalite.api.items.Inventory;
+
+/* TASK: Using imbued heart -> UseImbuedHeartTask */
+@TaskDesc(name="Using imbued heart", priority=13337, blocking=true)
+public class r
+extends Task {
+    private static /* synthetic */ int[] llllIIIllll;
+    private final /* synthetic */ SquireBarrows aa;
+    private static /* synthetic */ String[] llllIIIlllI;
+
+    /*
+     * WARNING - void declaration
+     */
+    public boolean run() {
+        void var1_1;
+        if (r.lIllIIlllllIIl(this.aa.m() ? 1 : 0) && r.lIllIIlllllIIl(this.aa.h() ? 1 : 0)) {
+            return llllIIIllll[0];
+        }
+        int[] nArray = new int[llllIIIllll[1]];
+        nArray[r.llllIIIllll[0]] = llllIIIllll[2];
+        nArray[r.llllIIIllll[3]] = llllIIIllll[4];
+        Item var6 = Inventory.getFirst((int[])nArray);
+        if (r.lIllIIlllllIlI(var6)) {
+            return llllIIIllll[0];
+        }
+        int var2 = Vars.getBit((int)llllIIIllll[5]);
+        if (r.lIllIIlllllIll(var2)) {
+            return llllIIIllll[0];
+        }
+        var1_1.interact(llllIIIlllI[llllIIIllll[0]]);
+        return llllIIIllll[3];
+    }
+
+    private static boolean lIllIIlllllIll(int n2) {
+        return n2 > 0;
+    }
+
+    private static void lIllIIllllIlll() {
+        llllIIIlllI = new String[llllIIIllll[3]];
+        r.llllIIIlllI[r.llllIIIllll[0]] = r."Invigorate";
+    }
+
+    private static String lIllIIllllIllI(String var7, String var3) {
+        try {
+            SecretKeySpec var1 = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(var3.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher var5 = Cipher.getInstance("Blowfish");
+            var5.init(llllIIIllll[1], var1);
+            return new String(var5.doFinal(Base64.getDecoder().decode(var7.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception var4) {
+            var4.printStackTrace();
+            return null;
+        }
+    }
+
+    private static boolean lIllIIlllllIIl(int n2) {
+        return n2 == 0;
+    }
+
+    static {
+        r.lIllIIlllllIII();
+        r.lIllIIllllIlll();
+    }
+
+    @Inject
+    public r(SquireBarrows squireBarrows) {
+        this.aa = squireBarrows;
+    }
+
+    private static boolean lIllIIlllllIlI(Object object) {
+        return object == null;
+    }
+
+    private static void lIllIIlllllIII() {
+        llllIIIllll = new int[6];
+        r.llllIIIllll[0] = (0x77 ^ 0x30) & ~(0x43 ^ 4);
+        r.llllIIIllll[1] = 2;
+        r.llllIIIllll[2] = -(0xFFFFFFA7 & 0x2E5B) & (0xFFFFFFFF & 0x7EF6);
+        r.llllIIIllll[3] = 1;
+        r.llllIIIllll[4] = -1 & (0xFFFFFBFB & 0x6FFD);
+        r.llllIIIllll[5] = -(0xFFFFEB7D & 0x7F8B) & (0xFFFFFFFD & 0x7FFB);
+    }
+}
+

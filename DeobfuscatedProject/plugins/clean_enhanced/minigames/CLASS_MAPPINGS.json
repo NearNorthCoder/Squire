@@ -1,0 +1,21 @@
+{
+  "n": "MinigamesManager",
+  "o": "JadFightTask",
+  "q": "Wave1To6Task",
+  "b": "GameEnum",
+  "i": "EatTask",
+  "k": "PrayerSwitchTask",
+  "j": "EnterCaveTask",
+  "s": "Wave7To14Task",
+  "a": "GameEnum2",
+  "e": "GameEnum3",
+  "l": "SafeSpottingTask",
+  "r": "WaveWave31_62Task",
+  "d": "GameEnum4",
+  "p": "Wave15To30Task",
+  "h": "BankTask",
+  "g": "GHelper",
+  "c": "CHelper",
+  "m": "MHelper",
+  "f": "FHelper"
+}

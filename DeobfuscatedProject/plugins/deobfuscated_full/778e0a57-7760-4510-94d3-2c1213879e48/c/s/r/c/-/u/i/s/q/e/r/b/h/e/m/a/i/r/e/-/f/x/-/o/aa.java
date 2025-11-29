@@ -1,0 +1,274 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  gg.squire.client.plugins.fw.TaskDesc
+ *  gg.squire.client.util.Log
+ *  net.runelite.api.Item
+ *  net.runelite.api.Locatable
+ *  net.runelite.api.TileObject
+ *  net.runelite.api.coords.WorldPoint
+ *  net.runelite.api.widgets.Widget
+ *  net.runelite.client.plugins.squire.BankLoadouts
+ *  net.runelite.client.plugins.squire.bankloadouts.BankLoadout
+ *  net.unethicalite.api.entities.Players
+ *  net.unethicalite.api.entities.TileObjects
+ *  net.unethicalite.api.items.Bank
+ *  net.unethicalite.api.items.Inventory
+ *  net.unethicalite.api.movement.Movement
+ *  net.unethicalite.api.widgets.Dialog
+ *  net.unethicalite.api.widgets.Widgets
+ *  net.unethicalite.client.Static
+ */
+package c.s.r.c.-.u.i.s.q.e.r.b.h.e.m.a.i.r.e.-.f.x.-.o;
+
+import c.s.r.c.-.u.i.s.q.e.r.b.h.e.m.a.i.r.e.-.f.x.-.o.Y;
+import gg.squire.client.plugins.fw.TaskDesc;
+import gg.squire.client.util.Log;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.Item;
+import net.runelite.api.Locatable;
+import net.runelite.api.TileObject;
+import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.widgets.Widget;
+import net.runelite.client.plugins.squire.BankLoadouts;
+import net.runelite.client.plugins.squire.bankloadouts.BankLoadout;
+import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.entities.TileObjects;
+import net.unethicalite.api.items.Bank;
+import net.unethicalite.api.items.Inventory;
+import net.unethicalite.api.movement.Movement;
+import net.unethicalite.api.widgets.Dialog;
+import net.unethicalite.api.widgets.Widgets;
+import net.unethicalite.client.Static;
+
+/* TASK: Withdrawing items -> WithdrawingitemsTask */
+@TaskDesc(name="Withdrawing items", priority=19000, blocking=true)
+public class aa
+extends Y {
+    private static /* synthetic */ int[] lIlIIllIIlll;
+    private static /* synthetic */ String[] lIlIIllIIllI;
+    private final /* synthetic */ int cz = 0xF0000A;
+
+    public aa() {
+        this.cz = lIlIIllIIlll[0];
+    }
+
+    private static boolean llIllIlIIlIIIl(Object object) {
+        return object == null;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    private boolean cs() {
+        void var3_4;
+        int[] nArray = new int[lIlIIllIIlll[3]];
+        nArray[aa.lIlIIllIIlll[1]] = lIlIIllIIlll[4];
+        if (aa.llIllIlIIIllIl(Inventory.contains((int[])nArray) ? 1 : 0)) {
+            return lIlIIllIIlll[1];
+        }
+        if (aa.llIllIlIIlIIII(Dialog.canContinue() ? 1 : 0)) {
+            Dialog.continueSpace();
+            return lIlIIllIIlll[3];
+        }
+        if (aa.llIllIlIIlIIII(Dialog.isViewingOptions() ? 1 : 0) && aa.llIllIlIIlIIII(Dialog.hasOption((String)lIlIIllIIllI[lIlIIllIIlll[7]]) ? 1 : 0) && aa.llIllIlIIlIIII(Dialog.hasOption((String)lIlIIllIIllI[lIlIIllIIlll[5]]) ? 1 : 0)) {
+            String[] stringArray = new String[lIlIIllIIlll[3]];
+            stringArray[aa.lIlIIllIIlll[1]] = lIlIIllIIllI[lIlIIllIIlll[8]];
+            Dialog.chooseOption((String[])stringArray);
+            0;
+            return lIlIIllIIlll[3];
+        }
+        Widget var18 = Widgets.get((int)lIlIIllIIlll[9], (int)lIlIIllIIlll[10], (int)lIlIIllIIlll[1]);
+        if (aa.llIllIlIIIlllI(var18) && aa.llIllIlIIlIIII(var18.isVisible() ? 1 : 0) && aa.llIllIlIIlIIII(var18.getText().contains(lIlIIllIIllI[lIlIIllIIlll[6]]) ? 1 : 0)) {
+            Widget var19 = Widgets.get((int)lIlIIllIIlll[9], (int)lIlIIllIIlll[10]);
+            if (aa.llIllIlIIlIIIl(var19)) {
+                return lIlIIllIIlll[1];
+            }
+            var19.interact(lIlIIllIIllI[lIlIIllIIlll[2]]);
+            return lIlIIllIIlll[3];
+        }
+        Widget var19 = Static.getClient().getWidget(lIlIIllIIlll[0]);
+        if (aa.llIllIlIIIlllI(var19)) {
+            var19.interact(lIlIIllIIlll[3], lIlIIllIIlll[11], lIlIIllIIlll[12], lIlIIllIIlll[0]);
+            return lIlIIllIIlll[3];
+        }
+        int[] nArray2 = new int[lIlIIllIIlll[3]];
+        nArray2[aa.lIlIIllIIlll[1]] = lIlIIllIIlll[4];
+        Item var8 = Inventory.getFirst((int[])nArray2);
+        if (aa.llIllIlIIlIIIl(var8)) {
+            return lIlIIllIIlll[1];
+        }
+        var3_4.interact(lIlIIllIIllI[lIlIIllIIlll[13]]);
+        return lIlIIllIIlll[3];
+    }
+
+    private static boolean llIllIlIIIllll(int n2, int n3) {
+        return n2 > n3;
+    }
+
+    private static boolean llIllIlIIIlllI(Object object) {
+        return object != null;
+    }
+
+    private static String llIllIlIIIlIlI(String var14, String var13) {
+        try {
+            SecretKeySpec var22 = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(var13.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher var2 = Cipher.getInstance("Blowfish");
+            var2.init(lIlIIllIIlll[7], var22);
+            return new String(var2.doFinal(Base64.getDecoder().decode(var14.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception var16) {
+            var16.printStackTrace();
+            return null;
+        }
+    }
+
+    private static boolean llIllIlIIlIIlI(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static void llIllIlIIIllII() {
+        lIlIIllIIlll = new int[17];
+        aa.lIlIIllIIlll[0] = 0xFFFFDFFB & 0xF0200E;
+        aa.lIlIIllIIlll[1] = (144 + 110 - 77 + 74 ^ 35 + 67 - 59 + 125) & (144 + 170 - 122 + 10 ^ 115 + 129 - 129 + 38 ^ -1);
+        aa.lIlIIllIIlll[2] = 0xB0 ^ 0xB6;
+        aa.lIlIIllIIlll[3] = 1;
+        aa.lIlIIllIIlll[4] = 0xFFFFDB27 & 0x76FB;
+        aa.lIlIIllIIlll[5] = 3;
+        aa.lIlIIllIIlll[6] = 0x37 ^ 0x7A ^ (0x24 ^ 0x6C);
+        aa.lIlIIllIIlll[7] = 2;
+        aa.lIlIIllIIlll[8] = 0xBC ^ 0xA6 ^ (0x55 ^ 0x4B);
+        aa.lIlIIllIIlll[9] = 208 + 225 - 292 + 99;
+        aa.lIlIIllIIlll[10] = 75 + 97 - 65 + 20 ^ (0x4E ^ 0x2B);
+        aa.lIlIIllIIlll[11] = 130 + 77 - 63 + 4 ^ 132 + 56 - 49 + 34;
+        aa.lIlIIllIIlll[12] = -1;
+        aa.lIlIIllIIlll[13] = 0x2A ^ 0x2D;
+        aa.lIlIIllIIlll[14] = 0x7E ^ 0x76;
+        aa.lIlIIllIIlll[15] = 0x92 ^ 0x9B;
+        aa.lIlIIllIIlll[16] = 0x15 ^ 0x77 ^ (0x50 ^ 0x38);
+    }
+
+    private static String llIllIlIIIlIII(String var11, String var7) {
+        try {
+            SecretKeySpec var21 = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(var7.getBytes(StandardCharsets.UTF_8)), lIlIIllIIlll[14]), "DES");
+            Cipher var9 = Cipher.getInstance("DES");
+            var9.init(lIlIIllIIlll[7], var21);
+            return new String(var9.doFinal(Base64.getDecoder().decode(var11.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception var4) {
+            var4.printStackTrace();
+            return null;
+        }
+    }
+
+    private static boolean llIllIlIIlIIII(int n2) {
+        return n2 != 0;
+    }
+
+    private static void llIllIlIIIlIll() {
+        lIlIIllIIllI = new String[lIlIIllIIlll[16]];
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[1]] = aa."No bank loadout selected";
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[3]] = aa."Banking failed 5 times in a row, stopping";
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[7]] = aa."Accept";
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[5]] = aa."Choose again";
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[8]] = aa."Accept";
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[6]] = aa."Herblore";
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[2]] = aa."Confirm";
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[13]] = aa."Commune";
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[14]] = aa."Bank chest";
+        aa.lIlIIllIIllI[aa.lIlIIllIIlll[15]] = aa."Use";
+    }
+
+    static {
+        aa.llIllIlIIIllII();
+        aa.llIllIlIIIlIll();
+    }
+
+    @Override
+    public boolean cg() {
+        aa var3;
+        if (aa.llIllIlIIIllIl(this.cr() ? 1 : 0)) {
+            return lIlIIllIIlll[1];
+        }
+        if (aa.llIllIlIIIllIl(cw ? 1 : 0)) {
+            return lIlIIllIIlll[1];
+        }
+        TileObject var10 = TileObjects.getNearest(tileObject -> {
+            int n2;
+            if (aa.llIllIlIIlIIII(tileObject.getName().equals(lIlIIllIIllI[lIlIIllIIlll[14]]) ? 1 : 0)) {
+                String[] stringArray = new String[lIlIIllIIlll[3]];
+                stringArray[aa.lIlIIllIIlll[1]] = lIlIIllIIllI[lIlIIllIIlll[15]];
+                if (aa.llIllIlIIlIIII(tileObject.hasAction(stringArray) ? 1 : 0)) {
+                    n2 = lIlIIllIIlll[3];
+                    0;
+                    if (-1 <= 0) return n2 != 0;
+                    return ((24 + 237 - 182 + 160 ^ 79 + 15 - -12 + 73) & (0x25 ^ 0x6A ^ (0xA ^ 0x19) ^ -1)) != 0;
+                }
+            }
+            n2 = lIlIIllIIlll[1];
+            return n2 != 0;
+        });
+        if (aa.llIllIlIIIlllI(var10) && aa.llIllIlIIIllll(Players.getLocal().distanceTo((Locatable)var10), lIlIIllIIlll[2])) {
+            Movement.setDestination((WorldPoint)var10.getWorldLocation());
+            return lIlIIllIIlll[3];
+        }
+        int[] nArray = new int[lIlIIllIIlll[3]];
+        nArray[aa.lIlIIllIIlll[1]] = lIlIIllIIlll[4];
+        if (aa.llIllIlIIlIIII(Inventory.contains((int[])nArray) ? 1 : 0)) {
+            var3.cs();
+            0;
+            return lIlIIllIIlll[3];
+        }
+        if (aa.llIllIlIIlIIIl(var3.q())) {
+            Log.error((String)lIlIIllIIllI[lIlIIllIIlll[1]]);
+            return lIlIIllIIlll[1];
+        }
+        if (aa.llIllIlIIIllIl(var3.q().needsToBank() ? 1 : 0)) {
+            if (aa.llIllIlIIIllIl(Bank.isOpen() ? 1 : 0)) {
+                var3.v.b(lIlIIllIIlll[1]);
+                return lIlIIllIIlll[1];
+            }
+            Bank.close();
+            var3.sleep(lIlIIllIIlll[5]);
+            return lIlIIllIIlll[3];
+        }
+        if (aa.llIllIlIIIllIl(BankLoadouts.withdrawWithRetries((BankLoadout)var3.q(), (int)lIlIIllIIlll[6]).booleanValue() ? 1 : 0)) {
+            Log.info((String)lIlIIllIIllI[lIlIIllIIlll[3]]);
+            return lIlIIllIIlll[1];
+        }
+        this.sleep(lIlIIllIIlll[7]);
+        return lIlIIllIIlll[3];
+    }
+
+    private static String llIllIlIIIlIIl(String var1, String var6) {
+        var1 = new String(Base64.getDecoder().decode(var1.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder var12 = new StringBuilder();
+        char[] var5 = var6.toCharArray();
+        int var15 = lIlIIllIIlll[1];
+        char[] var20 = var1.toCharArray();
+        int var23 = var20.length;
+        int var24 = lIlIIllIIlll[1];
+        while (aa.llIllIlIIlIIlI(var24, var23)) {
+            char var17 = var20[var24];
+            var12.append((char)(var17 ^ var5[var15 % var5.length]));
+            0;
+            ++var15;
+            ++var24;
+            0;
+            if ((0x1B ^ 0x1F) == (0x4D ^ 0x49)) continue;
+            return null;
+        }
+        return String.valueOf(var12);
+    }
+
+    private static boolean llIllIlIIIllIl(int n2) {
+        return n2 == 0;
+    }
+}
+

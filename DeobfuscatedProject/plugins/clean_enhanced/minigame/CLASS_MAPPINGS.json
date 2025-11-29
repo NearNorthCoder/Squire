@@ -1,0 +1,9 @@
+{
+  "g": "EnteringBoatTask",
+  "c": "GameEnum",
+  "e": "GameEnum2",
+  "d": "GameEnum3",
+  "f": "AttackingTask",
+  "b": "BHelper",
+  "a": "AHelper"
+}

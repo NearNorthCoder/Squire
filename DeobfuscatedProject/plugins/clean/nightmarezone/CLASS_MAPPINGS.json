@@ -1,0 +1,22 @@
+{
+  "t": "WaitingForPinTask",
+  "n": "BuyHerbBoxesTask",
+  "o": "StartDreamTask",
+  "q": "GetAbsorptionTask",
+  "b": "BHelper",
+  "i": "PickPowerUpTask",
+  "k": "SwappingGearTask",
+  "g": "FlickRapidHealTask",
+  "j": "PrayerFlickingTask",
+  "s": "RestockPotionsTask",
+  "c": "GameEnum",
+  "a": "AHelper",
+  "e": "DrinkAbsorptionTask",
+  "l": "SwitchingStyleTask",
+  "r": "GetAbsorptionTask",
+  "m": "UsingSpecialAttackTask",
+  "d": "AttackNpcTask",
+  "f": "DrinkOverloadTask",
+  "p": "EnterDreamTask",
+  "h": "LowerHpTask"
+}

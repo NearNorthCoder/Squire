@@ -1,0 +1,12 @@
+{
+  "b": "GameEnum",
+  "i": "UsingSeersTeleportTask",
+  "g": "UsingPortalTask",
+  "j": "TraversingObstaclesTask",
+  "c": "CHelper",
+  "a": "AHelper",
+  "e": "DroppingEmptyPiesTask",
+  "d": "ConsumingTask",
+  "f": "LootingMarksTask",
+  "h": "CastingSpellTask"
+}
