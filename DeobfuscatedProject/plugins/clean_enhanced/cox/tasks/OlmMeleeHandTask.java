@@ -1,23 +1,9 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.Prayer
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.game.Combat
- *  net.unethicalite.api.game.Combat$AttackStyle
- *  net.unethicalite.api.items.Equipment
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
- *  net.unethicalite.api.widgets.Prayers
+ * Deobfuscated Great Olm Melee Hand Task
+ * Handles attacking the melee hand during the Great Olm fight
  */
 package gg.squire.cox.tasks;
 
-import gg.squire.cox.tasks.CoxManager;
 import com.google.inject.Inject;
 import gg.squire.client.plugins.fw.TaskDesc;
 import gg.squire.cox.SquireChambersConfig;
@@ -35,170 +21,198 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.widgets.Prayers;
 
-@TaskDesc(name="Olm Melee Hand", priority=20000)
-public class OlmMeleeHandTask
-extends CoxManager {
+/**
+ * Task for attacking the Great Olm's melee hand.
+ *
+ * Great Olm mechanics:
+ * - The melee hand performs close-range melee attacks
+ * - The melee hand can "clench" to heal itself or the other hand
+ * - When clenched, the hand becomes immune and must be avoided
+ * - Players need to position correctly to attack while avoiding swipes
+ * - Different positioning strategies based on Olm's phase and direction
+ */
+@TaskDesc(name = "Olm Melee Hand", priority = 20000)
+public class OlmMeleeHandTask extends CoxManager {
 
-    private  boolean dZ;
-
-    @Override
-    public List<Prayer> ci() {
-        ArrayList<Prayer> arrayList = new ArrayList<Prayer>();
-        Prayer prayer = this.ed.aE();
-        if prayer == null {
-            prayer = Prayer.PROTECT_FROM_MAGIC;
-        }
-        List list = Prayers.getOffensive();
-        arrayList.add(prayer);
-        0;
-        arrayList.addAll(list);
-        0;
-        return arrayList;
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    private boolean dp() {
-        aO var3;
-        void var4;
-        List<WorldPoint> var5;
-        ArrayList arrayList = new ArrayList();
-        int n2 = this.ed.aA();
-        if (n2 == 1) {
-            var5 = this.dH();
-        }
-        if (((int)var4 == 4)) {
-            Movement.setDestination((WorldPoint)var3.dJ());
-            return 3;
-        }
-        if (((int)var4 == 3)) {
-            if (!(var3.ed.az() != 2) || (var3.ed.az() == 4)) {
-                Movement.setDestination((WorldPoint)var3.dK());
-                return 3;
-            }
-            Movement.setDestination((WorldPoint)var3.dJ());
-            return 3;
-        }
-        if (((int)var4 == 2)) {
-            if ((var3.ed.am( != 0).equals(var2[2]) ? 1 : 0)) {
-                Movement.setDestination((WorldPoint)var3.dJ());
-                return 3;
-            }
-            var5 = var3.dQ().toWorldPointList();
-        }
-        String var6 = var3.k(3);
-        if ((var3.dI( != 0) ? 1 : 0) && (var6.equals(var2[1] != 0) ? 1 : 0)) {
-            return var3.dt();
-        }
-        if ((var5.size( == 0))) {
-            var5 = var3.dH();
-        }
-        if ((var5.contains(var3.bS.getWorldLocation( == 0)) ? 1 : 0)) {
-            WorldPoint var7 = var5.stream().filter(Reachable::isWalkable).min(Comparator.comparingDouble(worldPoint -> worldPoint.distanceTo2DHypotenuse(this.bS.getWorldLocation()))).orElse(null);
-            Movement.setDestination((WorldPoint)var7);
-            return 3;
-        }
-        return 3;
-    }
-
-    public void db() {
-        if ((this.cj( != 0).isFullyEquipped() ? 1 : 0) && (Combat.getAttackStyle() != Combat.getAttackStyle()2)) {
-            int[] nArray = new int[4];
-            nArray[0] = 5;
-            nArray[3] = 6;
-            if ((Equipment.contains((int[] != 0)nArray) ? 1 : 0)) {
-                Combat.setAttackStyle((Combat.AttackStyle)Combat.AttackStyle.FIRST);
-            }
-        }
-    }
-
-    @Override
-    public EquipmentSetup cj() {
-        return this.ea.Q();
-    }
+    /** Whether special positioning is required */
+    private boolean specialPositioningRequired;
 
     @Inject
-    protected OlmMeleeHandTask(SquireChambersPlugin squireChambersPlugin, SquireChambersConfig squireChambersConfig, Client client) {
-        super(squireChambersPlugin, squireChambersConfig, client);
-        this.dZ = 0;
+    protected OlmMeleeHandTask(SquireChambersPlugin plugin, SquireChambersConfig config, Client client) {
+        super(plugin, config, client);
+        this.specialPositioningRequired = false;
     }
 
-        catch (Exception var13) {
-            var13.printStackTrace();
-            return null;
-        }
-    }
-
+    /**
+     * Main execution method for the melee hand task
+     */
     @Override
-    public boolean cg() {
-        aO var14;
-        if ((this.ct( == 0) ? 1 : 0)) {
-            return 0;
+    public boolean execute() {
+        // Check if Olm fight is active
+        if (!isOlmActive()) {
+            return false;
         }
-        if ((var14.du( != 0) ? 1 : 0)) {
-            return 0;
+
+        // Check if melee hand is attackable
+        if (!isMeleeHandAttackable()) {
+            return false;
         }
-        if ((var14.ds( == 0) ? 1 : 0)) {
-            return 0;
+
+        // Check if melee hand is disabled
+        if (!isMeleeHandActive()) {
+            return false;
         }
-        var14.cm();
-        var14.db();
-        if ((var14.ed.aG( == 0))) {
-            var14.dt();
-            0;
-            return 0;
+
+        // Update prayers and attack style
+        updatePrayers();
+        ensureMeleeAttackStyle();
+
+        // If melee hand is not alive, attack it
+        if (!olmTracker.isMeleeHandAlive()) {
+            attackMeleeHand();
+            return false;
         }
-        String var15 = var14.ed.am();
-        if ((var14.ed.az() == 1)) {
-            return var14.dt();
+
+        String olmDirection = olmTracker.getOlmDirection();
+
+        // Phase 1 (startup) - attack immediately
+        if (olmTracker.getOlmPhase() == 1) {
+            return attackMeleeHand();
         }
-        if ((var14.ed.aA() == 2)) {
-            int n2;
-            if (!(var15.equals(var2[0] == 0) ? 1 : 0) || (var15.equals(var2[3] != 0) ? 1 : 0)) {
-                n2 = 3;
-                0;
-                if null != null {
-                    return ((0x43 ^ 0x20 ^ (0x19 ^ 0x2B)) & (21 + 219 - 161 + 144 ^ 122 + 52 - 113 + 81 ^ -1)) != 0;
-                }
+
+        // Phase 2 - check positioning requirements
+        if (olmTracker.getOlmPhase() == 2) {
+            // If direction is east or south, use special positioning
+            if (olmDirection.equals("EAST") || olmDirection.equals("SOUTH")) {
+                specialPositioningRequired = true;
             } else {
-                var14.dZ = 0;
-                n2 = var14.dZ;
+                specialPositioningRequired = false;
             }
         }
-        if (var14.dZ != 0) {
-            return var14.dp();
+
+        // Use special positioning if required
+        if (specialPositioningRequired) {
+            return handleSpecialPositioning();
         }
-        if ((var15.equals(var2[4] != 0) ? 1 : 0) && (var14.bS.getWorldLocation( == 0).equals((Object)var14.dJ()) ? 1 : 0)) {
-            Movement.setDestination((WorldPoint)var14.dJ());
-            return 3;
+
+        // Standard positioning based on direction
+        if (olmDirection.equals("WEST") && localPlayer.getWorldLocation().equals(getMeleeAttackPosition())) {
+            Movement.setDestination(getMeleeAttackPosition());
+            return true;
         }
-        if ((var14.bS.getWorldLocation( == 0).equals((Object)var14.dJ()) ? 1 : 0)) {
-            Movement.setDestination((WorldPoint)var14.dL());
-            return 3;
+
+        // Move to melee attack position
+        if (localPlayer.getWorldLocation().equals(getMeleeAttackPosition())) {
+            Movement.setDestination(getMeleeSafePosition());
+            return true;
         }
-        return 0;
+
+        return false;
     }
 
-    private static String var16(String var17, String var18) {
-        var17 = new String(Base64.getDecoder().decode(var17.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var19 = new StringBuilder();
-        char[] var20 = var18.toCharArray();
-        int var21 = 0;
-        char[] var22 = var17.toCharArray();
-        int var23 = var22.length;
-        int var24 = 0;
-        while (var24 < var23) {
-            char var25 = var22[var24];
-            var19.append((char)(var25 ^ var20[var21 % var20.length]));
-            0;
-            ++var21;
-            ++var24;
-            0;
-            if (3 != 0) continue;
-            return null;
+    /**
+     * Handles special positioning for melee hand based on Olm phase
+     */
+    private boolean handleSpecialPositioning() {
+        List<WorldPoint> safeTiles = new ArrayList<>();
+        int olmPhase = olmTracker.getOlmPhase();
+
+        // Phase 1 - use melee positions
+        if (olmPhase == 1) {
+            safeTiles = getMeleePositions();
         }
-        return String.valueOf(var19);
+
+        // Phase 4 - move to melee attack position
+        if (olmPhase == 4) {
+            Movement.setDestination(getMeleeAttackPosition());
+            return true;
+        }
+
+        // Phase 3 - check Olm direction
+        if (olmPhase == 3) {
+            if (olmTracker.getOlmPhase() != 2 || olmTracker.getOlmPhase() == 4) {
+                Movement.setDestination(getMeleeSafePosition());
+                return true;
+            }
+            Movement.setDestination(getMeleeAttackPosition());
+            return true;
+        }
+
+        // Phase 2 - handle melee range tiles
+        if (olmPhase == 2) {
+            if (olmTracker.getOlmDirection().equals("NORTH")) {
+                Movement.setDestination(getMeleeAttackPosition());
+                return true;
+            }
+            safeTiles = getMeleeRangeTiles().toWorldPointList();
+        }
+
+        String direction = getDirectionForTurn(3);
+        if (isActiveTurn() && direction.equals("ATTACK")) {
+            return attackMeleeHand();
+        }
+
+        // Ensure we have safe tiles
+        if (safeTiles.size() == 0) {
+            safeTiles = getMeleePositions();
+        }
+
+        // Move to closest safe tile
+        if (!safeTiles.contains(localPlayer.getWorldLocation())) {
+            WorldPoint targetTile = safeTiles.stream()
+                .filter(Reachable::isWalkable)
+                .min(Comparator.comparingDouble(worldPoint -> worldPoint.distanceTo2DHypotenuse(localPlayer.getWorldLocation())))
+                .orElse(null);
+
+            Movement.setDestination(targetTile);
+            return true;
+        }
+
+        return true;
+    }
+
+    /**
+     * Gets the required prayers for the melee hand fight
+     */
+    @Override
+    public List<Prayer> getPrayers() {
+        ArrayList<Prayer> prayers = new ArrayList<>();
+
+        // Get defensive prayer from Olm tracker
+        Prayer defensivePrayer = olmTracker.getDefensivePrayer();
+        if (defensivePrayer == null) {
+            defensivePrayer = Prayer.PROTECT_FROM_MAGIC;
+        }
+
+        // Add offensive prayers
+        List<Prayer> offensivePrayers = Prayers.getOffensive();
+        prayers.add(defensivePrayer);
+        prayers.addAll(offensivePrayers);
+
+        return prayers;
+    }
+
+    /**
+     * Gets the equipment setup for melee hand
+     */
+    @Override
+    public EquipmentSetup getGear() {
+        return plugin.getMeleeGear();
+    }
+
+    /**
+     * Ensures the correct attack style is set for melee
+     */
+    public void ensureMeleeAttackStyle() {
+        if (getGear().isFullyEquipped() && Combat.getAttackStyle() != Combat.AttackStyle.FIRST) {
+            // Item IDs for special weapons (Dragon Warhammer, Bandos Godsword, etc.)
+            int[] specialWeaponIds = new int[4];
+            specialWeaponIds[0] = 13576; // Dragon Warhammer
+            specialWeaponIds[3] = 11804; // Bandos Godsword
+
+            if (Equipment.contains(specialWeaponIds)) {
+                Combat.setAttackStyle(Combat.AttackStyle.FIRST);
+            }
+        }
     }
 }
-

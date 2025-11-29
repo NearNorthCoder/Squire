@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.plugins.fw.Task
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.unethicalite.api.commons.Rand
- *  net.unethicalite.api.movement.Movement
- */
 package gg.squire.cox.tasks;
 
 import gg.squire.client.plugins.fw.Task;
@@ -14,34 +5,33 @@ import gg.squire.client.plugins.fw.TaskDesc;
 import net.unethicalite.api.commons.Rand;
 import net.unethicalite.api.movement.Movement;
 
+/**
+ * Simple task to keep run energy enabled during Chambers of Xeric.
+ * Enables run when energy is above a random threshold to avoid
+ * predictable behavior patterns.
+ */
 @TaskDesc(name="Enabling run", priority=30000)
-public class EnablingRunTask
-extends Task {
-    
-    private  int cI;
+public class EnablingRunTask extends Task {
 
-    private boolean cB() {
-        if ((Movement.getRunEnergy() < this.cI)) {
-            return 1;
-        }
-        if ((Movement.isRunEnabled( != 0) ? 1 : 0)) {
-            return 1;
-        }
-        this.cI = Rand.nextInt((int)2, (int)3);
-        Movement.toggleRun();
-        return 2;
-    }
+    private int energyThreshold;
 
     public EnablingRunTask() {
-        this.cI = 0;
+        this.energyThreshold = 0;
     }
 
-    static {
-        af.var2();
-    }
-
+    @Override
     public boolean run() {
-        return this.cB();
+        if (Movement.getRunEnergy() < energyThreshold) {
+            return true;
+        }
+
+        if (Movement.isRunEnabled()) {
+            return true;
+        }
+
+        // Set random threshold for next time to vary behavior
+        this.energyThreshold = Rand.nextInt(20, 30);
+        Movement.toggleRun();
+        return true;
     }
 }
-

@@ -1,39 +1,21 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Actor
- *  net.runelite.api.Client
- *  net.runelite.api.CollisionData
- *  net.runelite.api.Locatable
- *  net.runelite.api.NPC
- *  net.runelite.api.Player
- *  net.runelite.api.Point
- *  net.runelite.api.Prayer
- *  net.runelite.api.Tile
- *  net.runelite.api.TileObject
- *  net.runelite.api.coords.LocalPoint
- *  net.runelite.api.coords.WorldArea
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.api.events.AnimationChanged
- *  net.runelite.client.eventbus.Subscribe
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.entities.TileObjects
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
- *  net.unethicalite.api.widgets.Prayers
+/**
+ * Mystics Task - Handles the Skeletal Mystics boss room in Chambers of Xeric
+ *
+ * Boss Mechanics:
+ * - Three skeletal mages that use different combat styles (Melee/Range/Mage)
+ * - Each mystic has unique attack animations and patterns
+ * - Mystics can heal each other if grouped together
+ * - Players should use Protect from Magic and attack from a safe distance
+ *
+ * Strategy:
+ * - Position at safespot to avoid being surrounded
+ * - Attack mystics one at a time, maintaining safe distance
+ * - Use Protect from Magic prayer
+ * - Keep mystics separated to prevent healing
+ * - Use line of sight to control aggro
  */
 package gg.squire.cox.tasks;
 
-import gg.squire.cox.tasks.GameEnum6;
-import gg.squire.cox.tasks.GameEnum8;
-import gg.squire.cox.tasks.CoxManager;
-import gg.squire.cox.tasks.NHelper;
-import gg.squire.cox.tasks.QHelper;
 import com.google.inject.Inject;
 import gg.squire.client.plugins.fw.TaskDesc;
 import gg.squire.cox.SquireChambersConfig;
@@ -64,586 +46,588 @@ import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.movement.Movement;
-import net.unethicalite.api.movement.Reachable;
+import net.unelite.api.movement.Reachable;
 import net.unethicalite.api.widgets.Prayers;
 
-@TaskDesc(name="Mystics", priority=10000, blocking=true, register=true)
-public class MysticsTask
-extends CoxManager {
-    
-    private  boolean dH;
-    private  n al;
-    private  List<q> dG;
-    
-    private  n ak;
-    private  Set<Integer> dF;
-    private  int am;
+@TaskDesc(name = "Mystics", priority = 10000, blocking = true, register = true)
+public class MysticsTask extends CoxTaskBase {
 
-    /*
-     * WARNING - void declaration
-     */
-    private boolean cS() {
-        void var1_1;
-        aC var3;
-        if ((Reachable.isWalkable(WorldPointthis.ak.bt) ? 1 : 0)) {
-            if ((Movement.getDestination( != null)) && (Movement.getDestination( != 0).equals((Object)this.al.bt) ? 1 : 0)) {
-                return 1;
-            }
-            Movement.setDestination((WorldPoint)var3.al.bs);
-            return 2;
-        }
-        TileObject var4 = var3.cR();
-        if var4 == null {
-            Movement.setDestination((WorldPoint)var3.ak.bq.dx(7).dy(7));
-            return 2;
-        }
-        if (!(var3.bS.isMoving( == 0) ? 1 : 0) || (var3.bS.isAnimating( != 0) ? 1 : 0)) {
-            return 1;
-        }
-        var1_1.interact(var2[8]);
-        return 2;
-    }
+    /** Current room information */
+    private NHelper currentRoom;
 
-    /*
-     * WARNING - void declaration
-     */
-    public boolean a(Client client, WorldArea worldArea, WorldArea worldArea2) {
-        List list = worldArea.toWorldPointList();
-        Iterator var5 = list.iterator();
-        while ((var5.hasNext( != 0) ? 1 : 0)) {
-            void var6;
-            void var7;
-            aC var8;
-            WorldPoint var9 = (WorldPoint)var5.next();
-            if ((var8.b((Client == 0)var7, var9.toWorldArea(), (WorldArea)var6) ? 1 : 0)) {
-                return 1;
-            }
-            0;
-            if null == null continue;
-            return ((0x3F ^ 0x38) & ~(0x38 ^ 0x3F)) != 0;
-        }
-        return 2;
-    }
+    /** Next room information */
+    private NHelper nextRoom;
 
-    /*
-     * WARNING - void declaration
-     */
-    private void cV() {
-        aC var10;
-        q var11;
-        Object var12;
-        void var13;
-        List list = NPCs.getAll(nPC -> nPC.getName().contains(var2[var1[20]]));
-        if ((list.isEmpty( != 0) ? 1 : 0)) {
-            this.cS();
-            0;
-            return;
-        }
-        int lllllllllllllllIllIlllIIlIIlIlIl22 = 1;
-        while ((lllllllllllllllIllIlllIIlIIlIlIl22 < var13.size())) {
-            var12 = (NPC)var13.get(lllllllllllllllIllIlllIIlIIlIlIl22);
-            if var12 == null {
-                0;
-                if (3 > (0xC3 ^ 0xC7)) {
-                    return;
-                }
-            } else {
-                var11 = new QHelper((NPC)var12);
-                if ((var10.dG.contains(var11 == 0) ? 1 : 0)) {
-                    var10.dG.add(var11);
-                    0;
-                    System.out.println("Adding more mystics | index: " + var12.getIndex());
-                }
-            }
-            ++lllllllllllllllIllIlllIIlIIlIlIl22;
-            0;
-            if null == null continue;
-            return;
-        }
-        var10.dG.removeIf(q2 -> {
-            boolean bl2;
-            if ((q2.aP( == null))) {
-                bl2 = 2;
-                0;
-                if (3 == ((0x7B ^ 0x64) & ~(0x26 ^ 0x39))) {
-                    return ((0x5D ^ 0x3F) & ~(0xFC ^ 0x9E)) != 0;
-                }
-            } else {
-                bl2 = 1;
-            }
-            return bl2;
-        });
-        0;
-        Iterator<q> lllllllllllllllIllIlllIIlIIlIlIl22 = var10.dG.iterator();
-        while ((lllllllllllllllIllIlllIIlIIlIlIl22.hasNext( != 0) ? 1 : 0)) {
-            var12 = lllllllllllllllIllIlllIIlIIlIlIl22.next();
-            if (((qlllllllllllllllIllIlllIIlIIlIlII).aR() ? 1 : 0)) {
-                0;
-                if null == null continue;
-                return;
-            }
-            var11 = ((q)var12).aP().getInteracting();
-            if ((((q)var12).aP().getWorldArea().distanceTo((Locatable)var10.bS) <= 6) && var11 != null && ((ObjectlllllllllllllllIllIlllIIlIIlIIll).equals(var10.bS) ? 1 : 0) && ((qlllllllllllllllIllIlllIIlIIlIlII).aP().isMoving() ? 1 : 0)) {
-                ((q)var12).g(2);
-            }
-            0;
-            if (1 != 0) continue;
-            return;
-        }
-    }
+    /** Current room index */
+    private int roomIndex;
 
-    private TileObject cR() {
-        return TileObjects.getNearest(tileObject -> {
-            int n2;
-            if ((tileObject.getName( != 0).equals(var2[var1[10]]) ? 1 : 0)) {
-                String[] stringArray = new String[2];
-                stringArray[1] = var2[var1[18]];
-                if ((tileObject.hasActionstringArray) && (this.ak.a(LocatabletileObject) ? 1 : 0)) {
-                    n2 = 2;
-                    0;
-                    if (2 > 0) return n2 != 0;
-                    return ((0xB2 ^ 0x94 ^ (0x4E ^ 0x74)) & (8 + 101 - -28 + 84 ^ 161 + 189 - 249 + 92 ^ -1)) != 0;
-                }
-            }
-            n2 = 1;
-            return n2 != 0;
-        });
-    }
+    /** List of tracked mystic NPCs */
+    private List&lt;MysticTracker&gt; trackedMystics;
+
+    /** Set to track mystic indices we've seen */
+    private Set&lt;Integer&gt; seenMysticIndices;
+
+    /** Flag for initial mage attack setup */
+    private boolean needsInitialMageAttack;
+
+    /** NPC name for mystics */
+    private static final String MYSTIC_NAME = "Skeletal Mystic";
+
+    /** Action for attacking */
+    private static final String ATTACK_ACTION = "Attack";
+
+    /** Passage name */
+    private static final String PASSAGE_NAME = "Passage";
+
+    /** Enter action */
+    private static final String ENTER_ACTION = "Enter";
+
+    /** Animation ID for mystic melee attack */
+    private static final int ANIMATION_MYSTIC_MELEE = 7605;
+
+    /** Animation ID for mystic range attack */
+    private static final int ANIMATION_MYSTIC_RANGE = 7606;
+
+    /** Collision flag for west wall */
+    private static final int COLLISION_WEST = 0x80;
+
+    /** Collision flag for east wall */
+    private static final int COLLISION_EAST = 0x200;
+
+    /** Collision flag for south wall */
+    private static final int COLLISION_SOUTH = 0x400;
+
+    /** Collision flag for north wall */
+    private static final int COLLISION_NORTH = 0x1000;
 
     @Inject
-    protected MysticsTask(SquireChambersPlugin squireChambersPlugin, SquireChambersConfig squireChambersConfig, Client client) {
-        super(squireChambersPlugin, squireChambersConfig, client);
-        this.dF = new HashSet<Integer>();
-        this.dG = new ArrayList<q>();
-        this.am = 0;
-        this.dH = 1;
+    protected MysticsTask(SquireChambersPlugin plugin, SquireChambersConfig config, Client client) {
+        super(plugin, config, client);
+        this.seenMysticIndices = new HashSet&lt;&gt;();
+        this.trackedMystics = new ArrayList&lt;&gt;();
+        this.roomIndex = 0;
+        this.needsInitialMageAttack = false;
     }
 
     @Override
-    public EquipmentSetup cj() {
+    public EquipmentSetup getEquipmentSetup() {
         return null;
     }
 
-        catch (Exception var19) {
-            var19.printStackTrace();
-            return null;
-        }
-    }
-
-        catch (Exception var25) {
-            var25.printStackTrace();
-            return null;
-        }
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    private static boolean a(Client client, Tile tile, Tile tile2) {
-        void var26;
-        void var27;
-        Client var28;
-        if ((tile.getPlane() != tile2.getPlane())) {
-            return 1;
-        }
-        CollisionData[] var29 = var28.getCollisionMaps();
-        if var29 == null {
-            return 1;
-        }
-        int var30 = var27.getPlane();
-        int[][] var31 = var29[var30].getFlags();
-        Point var32 = var27.getSceneLocation();
-        Point var33 = var26.getSceneLocation();
-        if ((var32.getX() == var33.getX()) && (var32.getY() == var33.getY())) {
-            return 2;
-        }
-        int var34 = var33.getX() - var32.getX();
-        int var35 = var33.getY() - var32.getY();
-        int var36 = Math.abs(var34);
-        int var37 = Math.abs(var35);
-        int var38 = 9;
-        int var39 = 9;
-        if (var34 < 0) {
-            var38 |= var1[10];
-            0;
-            if ((40 + 109 - -6 + 4 ^ 3 + 43 - -74 + 35) <= 0) {
-                return ((0xCA ^ 0xA6 ^ (0x7D ^ 0x73)) & (83 + 71 - 61 + 149 ^ 124 + 65 - 168 + 123 ^ -1)) != 0;
-            }
-        } else {
-            var38 |= var1[11];
-        }
-        if (var35 < 0) {
-            var39 |= 3;
-            0;
-            if (-3 > 0) {
-                return ((0x2C ^ 0xC) & ~(0xB5 ^ 0x95)) != 0;
-            }
-        } else {
-            var39 |= var1[12];
-        }
-        if (var36 > var37) {
-            int var40;
-            int n2;
-            int var41 = var32.getX();
-            int var42 = var32.getY() << 7;
-            int var43 = (var35 << 7) / var36;
-            var42 += var1[13];
-            if (var35 < 0) {
-                --var42;
-            }
-            if (var34 < 0) {
-                n2 = 0;
-                0;
-                if null != null {
-                    return ((0x40 ^ 0x17) & ~(0x62 ^ 0x35)) != 0;
-                }
-            } else {
-                n2 = var40 = 2;
-            }
-            while ((var41 != var33.getX())) {
-                int var44 = var42 >>> 7;
-                if (var31[var41 += var40][var44] & var38 != 0) {
-                    return 1;
-                }
-                int var45 = (var42 += var43) >>> 7;
-                if ((var45 != var44) && (var31[var41][var45] & var39 != 0)) {
-                    return 1;
-                }
-                0;
-                if (-1 < 3) continue;
-                return ((0x33 ^ 0x79) & ~(0xDA ^ 0x90)) != 0;
-            }
-            0;
-            if (((0x7F ^ 0x3F) & ~(0x23 ^ 0x63)) > 0) {
-                return ((0x1F ^ 0x3B) & ~(0xBD ^ 0x99)) != 0;
-            }
-        } else {
-            int var40;
-            int n3;
-            int var41 = var32.getY();
-            int var42 = var32.getX() << 7;
-            int var43 = (var34 << 7) / var37;
-            var42 += var1[13];
-            if (var34 < 0) {
-                --var42;
-            }
-            if (var35 < 0) {
-                n3 = 0;
-                0;
-                if ((0x93 ^ 0xA9 ^ (0x23 ^ 0x1D)) < 0) {
-                    return ((0xF6 ^ 0x8C ^ (0xAB ^ 0x87)) & (0x5B ^ 0x54 ^ (0x6E ^ 0x37) ^ -1)) != 0;
-                }
-            } else {
-                n3 = var40 = 2;
-            }
-            while ((var41 != var33.getY())) {
-                int var44 = var42 >>> 7;
-                if (var31[var44][var41 += var40] & var39 != 0) {
-                    return 1;
-                }
-                int var45 = (var42 += var43) >>> 7;
-                if ((var45 != var44) && (var31[var45][var41] & var38 != 0)) {
-                    return 1;
-                }
-                0;
-                if (1 > -1) continue;
-                return ((0xD9 ^ 0xB8) & ~(0x25 ^ 0x44)) != 0;
-            }
-        }
-        return 2;
-    }
-
-    private static String var46(String var47, String var48) {
-        var47 = new String(Base64.getDecoder().decode(var47.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var49 = new StringBuilder();
-        char[] var50 = var48.toCharArray();
-        int var51 = 1;
-        char[] var52 = var47.toCharArray();
-        int var53 = var52.length;
-        int var54 = 1;
-        while (var54 < var53) {
-            char var55 = var52[var54];
-            var49.append((char)(var55 ^ var50[var51 % var50.length]));
-            0;
-            ++var51;
-            ++var54;
-            0;
-            if (3 > 0) continue;
-            return null;
-        }
-        return String.valueOf(var49);
-    }
-
-    @Override
-    public List<Prayer> ci() {
-        NPC nPC2 = NPCs.getNearest(nPC -> {
-            int n2;
-            if ((nPC.getName( != 0).contains(var2[6]) ? 1 : 0)) {
-                String[] stringArray = new String[2];
-                stringArray[1] = var2[var1[19]];
-                if ((nPC.hasActionstringArray)) {
-                    n2 = 2;
-                    0;
-                    if (((5 ^ 0x30) & ~(0x80 ^ 0xB5)) > -1) return n2 != 0;
-                    return ((0xE3 ^ 0xB0) & ~(0xCF ^ 0x9C)) != 0;
-                }
-            }
-            n2 = 1;
-            return n2 != 0;
-        });
-        if nPC2 == null {
-            return null;
-        }
-        ArrayList<Prayer> arrayList = new ArrayList<Prayer>();
-        List list = Prayers.getOffensive();
-        Prayer prayer = Prayer.PROTECT_FROM_MAGIC;
-        arrayList.add(prayer);
-        0;
-        arrayList.addAll(list);
-        0;
-        return arrayList;
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Check if this task should be active
+     * @return true if we're in the Mystics room
      */
     @Override
-    public boolean cg() {
-        void var3_6;
-        aC var56;
-        this.cV();
-        if ((this.dG.isEmpty( != 0) ? 1 : 0)) {
-            return this.cS();
+    public boolean shouldExecute() {
+        this.currentRoom = this.coxManager.getCurrentRoom();
+        this.roomIndex = this.coxManager.getRoomIndex();
+        this.nextRoom = this.coxManager.getNextRoom();
+
+        if (this.currentRoom.getRoomType() == RoomType.MYSTICS) {
+            return true;
         }
-        if (var56.dH != 0) {
-            System.out.println(var2[1]);
-            NPC var57 = NPCs.getNearest(nPC -> nPC.getName().contains(var2[var1[22]]));
-            if var57 == null {
-                return 1;
-            }
-            if ((var56.bS.getInteracting( != null)) && (var56.bS.getInteracting( != 0).getName().contains(var2[2]) ? 1 : 0)) {
-                return 2;
-            }
-            var57.interact(var2[3]);
-            return 2;
-        }
-        q var57 = var56.dG.stream().filter(q2 -> {
-            int n2;
-            if ((q2.aP( != null)) && (q2.aR( == 0) ? 1 : 0)) {
-                n2 = 2;
-                0;
-                if (2 <= 0) {
-                    return ((140 + 73 - 184 + 128 ^ 63 + 60 - 90 + 165) & (0x5A ^ 0x2F ^ (0x5F ^ 0x71) ^ -1)) != 0;
-                }
-            } else {
-                n2 = 1;
-            }
-            return n2 != 0;
-        }).min(Comparator.comparingInt(q2 -> this.bS.getWorldLocation().distanceToPath(this.cq, q2.aP().getWorldLocation()))).orElse(null);
-        if var57 == null {
-            System.out.println(var2[4]);
-            WorldPoint var58 = H.MYSTICS_SAFESPOT.c(var56.ak);
-            if ((var56.bS.getWorldLocation( != 0).equals((Object)var58) ? 1 : 0)) {
-                int var59 = 1;
-                while ((var59 < var56.dG.size())) {
-                    q var60 = var56.dG.get(var59);
-                    if ((var60.aP( != null)) && (var60.aP( != 0).isMoving() ? 1 : 0)) {
-                        return 2;
-                    }
-                    ++var59;
-                    0;
-                    if (((215 + 215 - 349 + 160 ^ 157 + 137 - 219 + 97) & (126 + 20 - 14 + 71 ^ 74 + 15 - -28 + 33 ^ -1)) == 0) continue;
-                    return ((0xA1 ^ 0x82 ^ (0xFE ^ 0x86)) & (0x7D ^ 0x38 ^ (0xA0 ^ 0xBE) ^ -1)) != 0;
-                }
-                if ((var56.dG.size() == NPCs.getAll(nPC -> {
-                    int n2;
-                    if ((nPC.getName( != 0).contains(var2[var1[21]]) ? 1 : 0) && (this.ak.a(LocatablenPC) ? 1 : 0)) {
-                        n2 = 2;
-                        0;
-                        if (-1 > 1) {
-                            return ((0xA5 ^ 0xC4) & ~(0x49 ^ 0x28)) != 0;
-                        }
-                    } else {
-                        n2 = 1;
-                    }
-                    return n2 != 0;
-                }).size())) {
-                    var56.dH = 2;
-                }
-                return 2;
-            }
-            Movement.setDestination((WorldPoint)var58);
-            return 2;
-        }
-        List var58 = var57.aP().getWorldLocation().createWorldArea(4).toWorldPointList();
-        WorldPoint var59 = var58.stream().filter(worldPoint -> {
-            int n2;
-            if ((Reachable.isWalkable(WorldPointworldPoint) ? 1 : 0) && (var57.aP().getWorldArea().distanceTo(worldPoint) >= 3) && (this.a(this.cq, var57.aP( != 0).getWorldArea(), worldPoint.toWorldArea()) ? 1 : 0)) {
-                n2 = 2;
-                0;
-                if null != null {
-                    return ((0x57 ^ 0x11) & ~(0x15 ^ 0x53)) != 0;
-                }
-            } else {
-                n2 = 1;
-            }
-            return n2 != 0;
-        }).min(Comparator.comparingInt(worldPoint -> worldPoint.distanceTo((Locatable)this.bS))).orElse(null);
-        if var59 == null {
-            System.out.println(var2[5]);
-            return 2;
-        }
-        Movement.setDestination((WorldPoint)var3_6);
-        return 2;
+
+        // Reset state when leaving room
+        this.trackedMystics.clear();
+        this.needsInitialMageAttack = false;
+        return false;
     }
 
+    /**
+     * Get prayers to use during Mystics fight
+     * @return List of prayers including Protect from Magic and offensive prayers
+     */
     @Override
-    public boolean ch() {
-        this.ak = this.co.L();
-        this.am = this.co.N();
-        this.al = this.co.M();
-        if (((Object)this.ak.bw == (Object)this.ak.bw2)N.MYSTICS)) {
-            return 2;
+    public List&lt;Prayer&gt; getPrayersToActivate() {
+        NPC mystic = NPCs.getNearest(npc -&gt;
+            npc.getName() != null &amp;&amp;
+            npc.getName().contains(MYSTIC_NAME) &amp;&amp;
+            npc.hasAction(ATTACK_ACTION)
+        );
+
+        if (mystic == null) {
+            return null;
         }
-        this.dG.clear();
-        this.dH = 1;
-        return 1;
+
+        ArrayList&lt;Prayer&gt; prayers = new ArrayList&lt;&gt;();
+        List&lt;Prayer&gt; offensivePrayers = Prayers.getOffensive();
+        Prayer protectMagic = Prayer.PROTECT_FROM_MAGIC;
+
+        prayers.add(protectMagic);
+        prayers.addAll(offensivePrayers);
+
+        return prayers;
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Execute the main Mystics task logic
+     * @return true if task executed successfully
      */
-    @Subscribe(priority=1.0f)
-    private void a(AnimationChanged animationChanged) {
-        Actor actor = animationChanged.getActor();
-        if ((actor.getName( != 0).contains(var2[var1[14]]) ? 1 : 0)) {
-            int n2 = ((NPC)actor).getIndex();
-            Iterator<q> var61 = this.dG.iterator();
-            while ((var61.hasNext( != 0) ? 1 : 0)) {
-                void var62;
-                q var63 = var61.next();
-                if ((var63.aP().getIndex() == (int)var62)) {
-                    void var64;
-                    if ((var64.getAnimation() == var1[15])) {
-                        Actor var65;
-                        Player var66 = Players.getLocal();
-                        if (var66 != null && (var65 = var66.getInteracting( != null)) && (var65.equalslllllllllllllllIllIlllIIIIIllIlI)) {
-                            return;
-                        }
-                        var63.g(1);
+    @Override
+    public boolean execute() {
+        updateTrackedMystics();
+
+        if (this.trackedMystics.isEmpty()) {
+            return navigateToNextRoom();
+        }
+
+        if (this.needsInitialMageAttack) {
+            System.out.println("Initial mage attack");
+            NPC nearestMystic = NPCs.getNearest(npc -&gt;
+                npc.getName() != null &amp;&amp;
+                npc.getName().contains(MYSTIC_NAME)
+            );
+
+            if (nearestMystic == null) {
+                return false;
+            }
+
+            // Wait if already attacking a mystic
+            if (this.localPlayer.getInteracting() != null &amp;&amp;
+                this.localPlayer.getInteracting().getName() != null &amp;&amp;
+                this.localPlayer.getInteracting().getName().contains(MYSTIC_NAME)) {
+                return true;
+            }
+
+            nearestMystic.interact(ATTACK_ACTION);
+            return true;
+        }
+
+        // Find attackable mystic
+        MysticTracker targetMystic = trackedMystics.stream()
+            .filter(tracker -&gt; tracker.getNpc() != null &amp;&amp; !tracker.isDead())
+            .min(Comparator.comparingInt(tracker -&gt;
+                this.localPlayer.getWorldLocation().distanceToPath(
+                    this.client,
+                    tracker.getNpc().getWorldLocation()
+                )
+            ))
+            .orElse(null);
+
+        if (targetMystic == null) {
+            System.out.println("No attackable mystic, moving to safespot");
+            WorldPoint safespot = RoomSafespot.MYSTICS_SAFESPOT.getLocation(this.currentRoom);
+
+            if (this.localPlayer.getWorldLocation().equals(safespot)) {
+                // Wait at safespot until all mystics are positioned
+                for (int i = 0; i &lt; this.trackedMystics.size(); i++) {
+                    MysticTracker tracker = this.trackedMystics.get(i);
+                    if (tracker.getNpc() != null &amp;&amp; tracker.getNpc().isMoving()) {
+                        return true;
                     }
-                    if ((var64.getAnimation() == var1[16])) {
-                        var63.g(2);
-                    }
-                    System.out.println(var2[var1[17]]);
                 }
-                0;
-                if (2 == 2) continue;
-                return;
+
+                // Check if all mystics are in the room
+                List&lt;NPC&gt; allMystics = NPCs.getAll(npc -&gt;
+                    npc.getName() != null &amp;&amp;
+                    npc.getName().contains(MYSTIC_NAME) &amp;&amp;
+                    this.currentRoom.contains((Locatable) npc)
+                );
+
+                if (this.trackedMystics.size() == allMystics.size()) {
+                    this.needsInitialMageAttack = true;
+                }
+                return true;
             }
+
+            Movement.setDestination(safespot);
+            return true;
         }
+
+        // Find safe position to attack from
+        List&lt;WorldPoint&gt; nearbyPoints = targetMystic.getNpc()
+            .getWorldLocation()
+            .createWorldArea(4)
+            .toWorldPointList();
+
+        WorldPoint attackPosition = nearbyPoints.stream()
+            .filter(point -&gt;
+                Reachable.isWalkable(point) &amp;&amp;
+                point.distanceTo(targetMystic.getNpc().getWorldArea()) &gt;= 3 &amp;&amp;
+                hasLineOfSight(this.client, targetMystic.getNpc().getWorldArea(), point.toWorldArea())
+            )
+            .min(Comparator.comparingInt(point -&gt;
+                point.distanceTo((Locatable) this.localPlayer)
+            ))
+            .orElse(null);
+
+        if (attackPosition == null) {
+            System.out.println("No valid attack position found");
+            return true;
+        }
+
+        Movement.setDestination(attackPosition);
+        return true;
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Update the list of tracked mystics
      */
-    public boolean b(Client client, WorldArea worldArea, WorldArea worldArea2) {
-        void var21_21;
-        void var20_20;
-        void var67;
-        int var68;
-        int var69;
-        void var70;
-        int var71;
-        void var72;
-        int var73;
-        void var74;
-        void var75;
-        void var76;
-        void var77;
-        int n2 = worldArea.getPlane();
-        int n3 = worldArea.getX();
-        int n4 = worldArea.getY();
-        int n5 = worldArea.getWidth();
-        int n6 = worldArea.getHeight();
-        if ((n2 != worldArea2.getPlane())) {
-            return 1;
+    private void updateTrackedMystics() {
+        List&lt;NPC&gt; allMystics = NPCs.getAll(npc -&gt;
+            npc.getName() != null &amp;&amp;
+            npc.getName().contains(MYSTIC_NAME)
+        );
+
+        if (allMystics.isEmpty()) {
+            navigateToNextRoom();
+            return;
         }
-        LocalPoint var78 = LocalPoint.fromWorld((Client)var77, (int)var76, (int)var75);
-        LocalPoint var79 = LocalPoint.fromWorld((Client)var77, (int)var74.getX(), (int)var74.getY());
-        if (!var78 != null || var79 == null) {
-            return 1;
+
+        // Add new mystics to tracking list
+        for (NPC mystic : allMystics) {
+            if (mystic == null) {
+                continue;
+            }
+
+            MysticTracker tracker = new MysticTracker(mystic);
+            if (!this.trackedMystics.contains(tracker)) {
+                this.trackedMystics.add(tracker);
+                System.out.println("Adding more mystics | index: " + mystic.getIndex());
+            }
         }
-        int var80 = var78.getSceneX();
-        int var81 = var78.getSceneY();
-        int var82 = var79.getSceneX();
-        int var83 = var79.getSceneY();
-        if (var82 <= var80) {
-            var73 = var80;
-            0;
-            if ((0x79 ^ 0x7C ^ 1) < -1) {
-                return ((146 + 82 - 92 + 32 ^ 8 + 16 - -20 + 110) & (41 + 144 - 119 + 97 ^ 88 + 74 - 29 + 12 ^ -1)) != 0;
+
+        // Remove dead mystics from tracking
+        this.trackedMystics.removeIf(tracker -&gt; tracker.getNpc() == null);
+
+        // Update mystic states based on their behavior
+        for (MysticTracker tracker : this.trackedMystics) {
+            if (tracker.isDead()) {
+                continue;
             }
-        } else if (var82 >= var80 + var72 - 2) {
-            var73 = var80 + var72 - 2;
-            0;
-            if (-(0x78 ^ 0x7C) > 0) {
-                return ((0x66 ^ 0x39) & ~(0x76 ^ 0x29)) != 0;
+
+            Actor interacting = tracker.getNpc().getInteracting();
+            if (tracker.getNpc().getWorldArea().distanceTo((Locatable) this.localPlayer) &lt;= 6 &amp;&amp;
+                interacting != null &amp;&amp;
+                interacting.equals(this.localPlayer) &amp;&amp;
+                tracker.getNpc().isMoving()) {
+                tracker.setAttackStyle(MysticAttackStyle.MELEE);
             }
-        } else {
-            var73 = var82;
         }
-        if (var83 <= var81) {
-            var71 = var81;
-            0;
-            if (-3 > 0) {
-                return ((0x9F ^ 0x9B) & ~(0x4F ^ 0x4B)) != 0;
-            }
-        } else if (var83 >= var81 + var70 - 2) {
-            var71 = var81 + var70 - 2;
-            0;
-            if (3 <= 2) {
-                return ((0x5A ^ 0x75) & ~(0xE9 ^ 0xC6)) != 0;
-            }
-        } else {
-            var71 = var83;
-        }
-        if (var80 <= var82) {
-            var69 = var82;
-            0;
-            if (((0x42 ^ 0x17 ^ (0x1F ^ 0x67)) & (0x1B ^ 0x63 ^ (0xF2 ^ 0xA7) ^ -1)) != 0) {
-                return (1 & (1 ^ -1)) != 0;
-            }
-        } else if ((var80 >= var82 + var74.getWidth() - 2)) {
-            var69 = var82 + var74.getWidth() - 2;
-            0;
-            if null != null {
-                return ((0x21 ^ 0x76 ^ (0x12 ^ 0x1A)) & (0xF4 ^ 0x9F ^ (0x9D ^ 0xA9) ^ -1)) != 0;
-            }
-        } else {
-            var69 = var80;
-        }
-        if (var81 <= var83) {
-            var68 = var83;
-            0;
-            
-        } else if ((var81 >= var83 + var74.getHeight() - 2)) {
-            var68 = var83 + var74.getHeight() - 2;
-            0;
-            if (((0x28 ^ 0x15 ^ (0x2A ^ 0x36)) & (0x21 ^ 0x4A ^ (0xEE ^ 0xA4) ^ -1)) != 0) {
-                return ((198 + 111 - 281 + 187 ^ 26 + 101 - 109 + 122) & (154 + 110 - 213 + 156 ^ 37 + 18 - 2 + 95 ^ -1)) != 0;
-            }
-        } else {
-            var68 = var81;
-        }
-        Tile[][][] var84 = var77.getScene().getTiles();
-        Tile var85 = var84[var67][var73][var71];
-        Tile var86 = var84[var74.getPlane()][var69][var68];
-        if (!var85 != null || var86 == null) {
-            return 1;
-        }
-        return aC.a(client, (Tile)var20_20, (Tile)var21_21);
     }
 
+    /**
+     * Navigate to the next room via passage
+     * @return true if navigation was successful
+     */
+    private boolean navigateToNextRoom() {
+        if (Reachable.isWalkable(this.currentRoom.getExitLocation())) {
+            if (Movement.getDestination() != null &amp;&amp;
+                Movement.getDestination().equals(this.nextRoom.getExitLocation())) {
+                return false;
+            }
+            Movement.setDestination(this.nextRoom.getEntryLocation());
+            return true;
+        }
+
+        TileObject passage = findPassage();
+        if (passage == null) {
+            Movement.setDestination(this.currentRoom.getCenterLocation().dx(7).dy(7));
+            return true;
+        }
+
+        if (this.localPlayer.isMoving() || this.localPlayer.isAnimating()) {
+            return false;
+        }
+
+        passage.interact(ENTER_ACTION);
+        return true;
+    }
+
+    /**
+     * Find the passage object to enter the next room
+     * @return TileObject representing the passage, or null if not found
+     */
+    private TileObject findPassage() {
+        return TileObjects.getNearest(tileObject -&gt;
+            tileObject.getName() != null &amp;&amp;
+            tileObject.getName().equals(PASSAGE_NAME) &amp;&amp;
+            tileObject.hasAction(ENTER_ACTION) &amp;&amp;
+            this.currentRoom.contains((Locatable) tileObject)
+        );
+    }
+
+    /**
+     * Listen for mystic animation changes to track their attack patterns
+     */
+    @Subscribe(priority = 1.0f)
+    private void onAnimationChanged(AnimationChanged event) {
+        Actor actor = event.getActor();
+        if (actor.getName() == null || !actor.getName().contains(MYSTIC_NAME)) {
+            return;
+        }
+
+        int npcIndex = ((NPC) actor).getIndex();
+
+        for (MysticTracker tracker : this.trackedMystics) {
+            if (tracker.getNpc().getIndex() != npcIndex) {
+                continue;
+            }
+
+            int animation = actor.getAnimation();
+
+            // Detect melee attack
+            if (animation == ANIMATION_MYSTIC_MELEE) {
+                Player player = Players.getLocal();
+                if (player != null) {
+                    Actor playerTarget = player.getInteracting();
+                    if (playerTarget != null &amp;&amp; playerTarget.equals(actor)) {
+                        return;
+                    }
+                }
+                tracker.setAttackStyle(MysticAttackStyle.MELEE);
+            }
+
+            // Detect range attack
+            if (animation == ANIMATION_MYSTIC_RANGE) {
+                tracker.setAttackStyle(MysticAttackStyle.RANGE);
+            }
+
+            System.out.println("Mystic animation detected");
+        }
+    }
+
+    /**
+     * Check if there is line of sight between two world areas
+     * Uses simple distance check for nearby areas
+     */
+    private boolean hasLineOfSight(Client client, WorldArea from, WorldArea to) {
+        List&lt;WorldPoint&gt; fromPoints = from.toWorldPointList();
+
+        for (WorldPoint point : fromPoints) {
+            if (hasLineOfSightBetweenPoints(client, point.toWorldArea(), to)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check line of sight between two points using tile-based pathfinding
+     */
+    private boolean hasLineOfSightBetweenPoints(Client client, WorldArea from, WorldArea to) {
+        int fromPlane = from.getPlane();
+        int fromX = from.getX();
+        int fromY = from.getY();
+        int fromWidth = from.getWidth();
+        int fromHeight = from.getHeight();
+
+        if (fromPlane != to.getPlane()) {
+            return false;
+        }
+
+        LocalPoint fromLocal = LocalPoint.fromWorld(client, fromX, fromY);
+        LocalPoint toLocal = LocalPoint.fromWorld(client, to.getX(), to.getY());
+
+        if (fromLocal == null || toLocal == null) {
+            return false;
+        }
+
+        int fromSceneX = fromLocal.getSceneX();
+        int fromSceneY = fromLocal.getSceneY();
+        int toSceneX = toLocal.getSceneX();
+        int toSceneY = toLocal.getSceneY();
+
+        // Clamp target to source bounds
+        int targetX;
+        if (toSceneX &lt;= fromSceneX) {
+            targetX = fromSceneX;
+        } else if (toSceneX &gt;= fromSceneX + fromWidth - 1) {
+            targetX = fromSceneX + fromWidth - 1;
+        } else {
+            targetX = toSceneX;
+        }
+
+        int targetY;
+        if (toSceneY &lt;= fromSceneY) {
+            targetY = fromSceneY;
+        } else if (toSceneY &gt;= fromSceneY + fromHeight - 1) {
+            targetY = fromSceneY + fromHeight - 1;
+        } else {
+            targetY = toSceneY;
+        }
+
+        int destX;
+        if (fromSceneX &lt;= toSceneX) {
+            destX = toSceneX;
+        } else if (fromSceneX &gt;= toSceneX + to.getWidth() - 1) {
+            destX = toSceneX + to.getWidth() - 1;
+        } else {
+            destX = fromSceneX;
+        }
+
+        int destY;
+        if (fromSceneY &lt;= toSceneY) {
+            destY = toSceneY;
+        } else if (fromSceneY &gt;= toSceneY + to.getHeight() - 1) {
+            destY = toSceneY + to.getHeight() - 1;
+        } else {
+            destY = fromSceneY;
+        }
+
+        Tile[][][] tiles = client.getScene().getTiles();
+        Tile startTile = tiles[fromPlane][targetX][targetY];
+        Tile endTile = tiles[to.getPlane()][destX][destY];
+
+        if (startTile == null || endTile == null) {
+            return false;
+        }
+
+        return checkTileLineOfSight(client, startTile, endTile);
+    }
+
+    /**
+     * Check line of sight between two tiles using collision detection
+     */
+    private static boolean checkTileLineOfSight(Client client, Tile from, Tile to) {
+        if (from.getPlane() != to.getPlane()) {
+            return false;
+        }
+
+        CollisionData[] collisionMaps = client.getCollisionMaps();
+        if (collisionMaps == null) {
+            return false;
+        }
+
+        int plane = to.getPlane();
+        int[][] flags = collisionMaps[plane].getFlags();
+
+        Point fromPoint = from.getSceneLocation();
+        Point toPoint = to.getSceneLocation();
+
+        if (fromPoint.getX() == toPoint.getX() &amp;&amp; fromPoint.getY() == toPoint.getY()) {
+            return true;
+        }
+
+        int deltaX = toPoint.getX() - fromPoint.getX();
+        int deltaY = toPoint.getY() - fromPoint.getY();
+        int absX = Math.abs(deltaX);
+        int absY = Math.abs(deltaY);
+
+        int flagX = 0;
+        int flagY = 0;
+
+        if (deltaX &lt; 0) {
+            flagX |= COLLISION_WEST;
+        } else {
+            flagX |= COLLISION_EAST;
+        }
+
+        if (deltaY &lt; 0) {
+            flagY |= COLLISION_SOUTH;
+        } else {
+            flagY |= COLLISION_NORTH;
+        }
+
+        // Check collision along the path
+        if (absX &gt; absY) {
+            int currentX = fromPoint.getX();
+            int currentYFixed = fromPoint.getY() &lt;&lt; 7;
+            int slopeY = (deltaY &lt;&lt; 7) / absX;
+            currentYFixed += 64;
+
+            if (deltaY &lt; 0) {
+                --currentYFixed;
+            }
+
+            int stepX = deltaX &lt; 0 ? -1 : 1;
+
+            while (currentX != toPoint.getX()) {
+                int checkY = currentYFixed &gt;&gt;&gt; 7;
+                currentX += stepX;
+
+                if (flags[currentX][checkY] &amp; flagX != 0) {
+                    return false;
+                }
+
+                currentYFixed += slopeY;
+                int nextY = currentYFixed &gt;&gt;&gt; 7;
+
+                if (nextY != checkY &amp;&amp; flags[currentX][nextY] &amp; flagY != 0) {
+                    return false;
+                }
+            }
+        } else {
+            int currentY = fromPoint.getY();
+            int currentXFixed = fromPoint.getX() &lt;&lt; 7;
+            int slopeX = (deltaX &lt;&lt; 7) / absY;
+            currentXFixed += 64;
+
+            if (deltaX &lt; 0) {
+                --currentXFixed;
+            }
+
+            int stepY = deltaY &lt; 0 ? -1 : 1;
+
+            while (currentY != toPoint.getY()) {
+                int checkX = currentXFixed &gt;&gt;&gt; 7;
+                currentY += stepY;
+
+                if (flags[checkX][currentY] &amp; flagY != 0) {
+                    return false;
+                }
+
+                currentXFixed += slopeX;
+                int nextX = currentXFixed &gt;&gt;&gt; 7;
+
+                if (nextX != checkX &amp;&amp; flags[nextX][currentY] &amp; flagX != 0) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Inner class to track individual mystic state
+     */
+    private static class MysticTracker {
+        private NPC npc;
+        private MysticAttackStyle attackStyle;
+
+        public MysticTracker(NPC npc) {
+            this.npc = npc;
+            this.attackStyle = MysticAttackStyle.UNKNOWN;
+        }
+
+        public NPC getNpc() {
+            return npc;
+        }
+
+        public void setAttackStyle(MysticAttackStyle style) {
+            this.attackStyle = style;
+        }
+
+        public boolean isDead() {
+            return npc == null || npc.isDead();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof MysticTracker)) {
+                return false;
+            }
+            MysticTracker other = (MysticTracker) obj;
+            return this.npc != null &amp;&amp; other.npc != null &amp;&amp;
+                   this.npc.getIndex() == other.npc.getIndex();
+        }
+
+        @Override
+        public int hashCode() {
+            return npc != null ? npc.getIndex() : 0;
+        }
+    }
+
+    /**
+     * Enum for mystic attack styles
+     */
+    private enum MysticAttackStyle {
+        UNKNOWN,
+        MELEE,
+        RANGE,
+        MAGE
+    }
 }
-

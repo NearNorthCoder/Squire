@@ -27,7 +27,7 @@ import net.unethicalite.api.widgets.Dialog;
 
 @TaskDesc(name="Configure Party", priority=0x7FFFFF99, blocking=true)
 public class ConfigurePartyTask
-extends az {
+extends CoxTask {
     private final  SquireChambersConfig du;
     
     private final  SquireChambersPlugin dt;
