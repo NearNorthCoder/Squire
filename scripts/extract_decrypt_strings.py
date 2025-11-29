@@ -36,6 +36,23 @@ class SquireStringDecryptor:
     """Decrypts strings using Squire's encryption methods."""
 
     @staticmethod
+    def xor_decrypt(encrypted_b64: str, key: str) -> Optional[str]:
+        """XOR decrypt a Base64 encoded string."""
+        try:
+            decoded = base64.b64decode(encrypted_b64)
+            result = []
+            key_bytes = key.encode('utf-8')
+            for i, byte in enumerate(decoded):
+                result.append(byte ^ key_bytes[i % len(key_bytes)])
+            decrypted = bytes(result).decode('utf-8')
+            # Validate result is printable and reasonable
+            if decrypted and all(c.isprintable() or c in '\n\r\t' for c in decrypted):
+                return decrypted
+            return None
+        except Exception:
+            return None
+
+    @staticmethod
     def blowfish_decrypt(encrypted_b64: str, key: str) -> Optional[str]:
         """Decrypt using Blowfish with MD5-hashed key."""
         try:
@@ -64,8 +81,8 @@ class SquireStringDecryptor:
 
     @classmethod
     def try_decrypt(cls, encrypted_b64: str, key: str) -> Optional[str]:
-        """Try both Blowfish and DES decryption."""
-        # Try Blowfish first (more common)
+        """Try all decryption methods: Blowfish, DES, and XOR."""
+        # Try Blowfish first (most common for longer strings)
         result = cls.blowfish_decrypt(encrypted_b64, key)
         if result and result.isprintable():
             return result
@@ -73,6 +90,11 @@ class SquireStringDecryptor:
         # Try DES
         result = cls.des_decrypt(encrypted_b64, key)
         if result and result.isprintable():
+            return result
+
+        # Try XOR (used for many strings with unique keys)
+        result = cls.xor_decrypt(encrypted_b64, key)
+        if result:
             return result
 
         return None
