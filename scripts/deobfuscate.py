@@ -37,6 +37,9 @@ except ImportError:
 class StringDecryptor:
     """Decrypts obfuscated strings found in the code."""
 
+    # Pre-computed string mapping (loaded from file)
+    _string_mapping: Dict[str, str] = None
+
     # Known encryption keys from cipher analysis
     KNOWN_KEYS = [
         "squire",
@@ -45,6 +48,22 @@ class StringDecryptor:
         "client",
         "gg.squire",
     ]
+
+    @classmethod
+    def load_mapping(cls, mapping_path: Path) -> int:
+        """Load pre-computed string mapping from JSON file."""
+        if mapping_path.exists():
+            with open(mapping_path, 'r') as f:
+                cls._string_mapping = json.load(f)
+            return len(cls._string_mapping)
+        return 0
+
+    @classmethod
+    def lookup_decrypted(cls, encrypted: str) -> Optional[str]:
+        """Look up a decrypted string from the pre-computed mapping."""
+        if cls._string_mapping:
+            return cls._string_mapping.get(encrypted)
+        return None
 
     @staticmethod
     def xor_decrypt(encoded: str, key: str) -> Optional[str]:
@@ -102,6 +121,12 @@ class StringDecryptor:
     @classmethod
     def try_decrypt(cls, encoded: str) -> Optional[str]:
         """Try all known decryption methods and keys."""
+        # First, check pre-computed mapping (fastest and most accurate)
+        result = cls.lookup_decrypted(encoded)
+        if result:
+            return result
+
+        # Fall back to trying various encryption methods
         for key in cls.KNOWN_KEYS:
             # Try XOR first (most common)
             result = cls.xor_decrypt(encoded, key)
@@ -588,6 +613,14 @@ def main():
     print("=" * 60)
     print(f"  Input:  {input_dir}")
     print(f"  Output: {output_dir}")
+
+    # Try to load pre-computed string mapping
+    mapping_path = output_dir / 'string_mapping.json'
+    if mapping_path.exists():
+        count = StringDecryptor.load_mapping(mapping_path)
+        print(f"  Loaded: {count} pre-computed string decryptions")
+    else:
+        print("  Note: Run extract_decrypt_strings.py first for better decryption")
 
     # Create deobfuscator and run
     deobfuscator = SquireDeobfuscator(input_dir, output_dir)
