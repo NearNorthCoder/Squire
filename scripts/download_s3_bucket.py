@@ -24,7 +24,10 @@ from datetime import datetime
 # Configuration
 FILE_LIST_URL = "https://raw.githubusercontent.com/NearNorthCoder/Squire/main/s3_complete_file_list.txt"
 S3_BUCKET = "squire-bootload-storage.s3.amazonaws.com"
-OUTPUT_DIR = Path("./squire_s3_mirror")
+
+# Download location - change this to your preferred path
+OUTPUT_DIR = Path("G:/Squire_Copy")
+
 STATE_FILE = OUTPUT_DIR / ".download_state.json"
 LOG_FILE = OUTPUT_DIR / "download.log"
 
