@@ -1,244 +1,241 @@
 package net.runelite.launcher;
 
 import net.runelite.launcher.logging.NetworkLoggingInterceptor;
-import net.runelite.launcher.logging.LoggingProxyServer;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
+import net.runelite.launcher.logging.HttpConnectionLogger;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
+import java.awt.*;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Wrapper launcher that enables network logging before starting the main launcher.
- * This ensures all HTTP requests and responses are logged in clear text.
- *
- * Uses multiple approaches to capture HTTP traffic:
- * 1. System proxy server for transparent interception
- * 2. Reflection to patch OkHttpClient instances
- * 3. NetworkLoggingInterceptor for direct interception
+ * Keeps the JVM alive even if Launcher.main() returns early.
  */
 public class LauncherWithLogging {
 
     private static final NetworkLoggingInterceptor LOGGING_INTERCEPTOR = new NetworkLoggingInterceptor();
-    private static final int PROXY_PORT = 18888;
-    private static volatile boolean interceptorInstalled = false;
-    private static LoggingProxyServer proxyServer;
+    private static PrintWriter debugLog;
+    private static volatile boolean keepRunning = true;
 
     public static void main(String[] args) throws Exception {
+        // Initialize debug log FIRST
+        initDebugLog();
+        debug("=== LauncherWithLogging started ===");
+        debug("Java version: " + System.getProperty("java.version"));
+        debug("Java home: " + System.getProperty("java.home"));
+        debug("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.arch"));
+        debug("Working dir: " + System.getProperty("user.dir"));
+        debug("Original args: " + String.join(" ", args));
+
+        // CRITICAL: Inject --nojvm flag to prevent JvmLauncher from spawning a new JVM
+        // This keeps everything in the same process so we can log network traffic
+        final String[] finalArgs = injectNoJvmFlag(args);
+        debug("Modified args: " + String.join(" ", finalArgs));
+
         printBanner();
 
         System.out.println("[NetworkLogger] Initializing network logging...");
+        debug("Initializing network logging...");
 
         // Add shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            debug("=== Shutdown hook triggered ===");
+            keepRunning = false;
             System.out.println("\n═══════════════════════════════════════════════════════════════════════════════");
-            System.out.println("Network logging session ended. Check logs at: ~/.squire/logs/network_*.log");
+            System.out.println("Network logging session ended. Check logs at: ~/.squire/logs/");
             System.out.println("═══════════════════════════════════════════════════════════════════════════════\n");
-            if (proxyServer != null) {
-                proxyServer.stop();
-            }
+            closeDebugLog();
         }));
 
-        // Strategy 1: Start a proxy server to intercept HTTP traffic
+        // Install HTTP connection logger
         try {
-            System.out.println("[NetworkLogger] Starting logging proxy server...");
-            proxyServer = new LoggingProxyServer(PROXY_PORT);
-            proxyServer.startAndConfigure();
-            System.out.println("[NetworkLogger] Proxy server started on port " + PROXY_PORT);
+            debug("Installing HttpConnectionLogger...");
+            HttpConnectionLogger.install();
+            System.out.println("[NetworkLogger] ResponseCache logger installed!");
+            debug("ResponseCache logger installed successfully");
         } catch (Exception e) {
-            System.err.println("[NetworkLogger] Warning: Could not start proxy server: " + e.getMessage());
+            System.err.println("[NetworkLogger] Warning: ResponseCache logger failed: " + e.getMessage());
+            debug("ResponseCache logger FAILED: " + e.getMessage());
+            debugException(e);
         }
 
-        // Strategy 2: Patch OkHttpClient to use our proxy and interceptor
-        try {
-            patchOkHttpDefaults();
-            System.out.println("[NetworkLogger] OkHttpClient defaults patched!");
-        } catch (Exception e) {
-            System.err.println("[NetworkLogger] Warning: Could not patch OkHttpClient: " + e.getMessage());
-            e.printStackTrace();
-        }
+        System.out.println("[NetworkLogger] Logging installed. Launching Squire...\n");
+        System.out.println("═══════════════════════════════════════════════════════════════════════════════\n");
+        debug("About to call Launcher.main()...");
 
-        System.out.println("[NetworkLogger] Launching Squire...\n");
-
-        // Call the original launcher
-        Launcher.main(args);
-    }
-
-    /**
-     * Patches OkHttpClient defaults to use our proxy and interceptor.
-     */
-    private static void patchOkHttpDefaults() throws Exception {
-        System.out.println("[NetworkLogger] Configuring OkHttp to use logging proxy...");
-
-        // Create a test client to verify the configuration works
-        Proxy loggingProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", PROXY_PORT));
-
-        OkHttpClient testClient = new OkHttpClient.Builder()
-            .addInterceptor(LOGGING_INTERCEPTOR)
-            .proxy(loggingProxy)
-            .build();
-
-        System.out.println("[NetworkLogger] Test client created with interceptor and proxy");
-
-        // Try to patch static OkHttpClient fields in Launcher and utility classes
-        patchStaticClients();
-
-        interceptorInstalled = true;
-    }
-
-    /**
-     * Attempts to patch static OkHttpClient fields in the Launcher and related classes.
-     */
-    private static void patchStaticClients() {
-        System.out.println("[NetworkLogger] Scanning for static OkHttpClient fields...");
-
-        // List of classes that might have OkHttpClient fields
-        String[] classesToCheck = {
-            "net.runelite.launcher.Launcher",
-            "net.runelite.launcher.utils.S3Utils",
-            "net.runelite.launcher.utils.GitHubUtils",
-            "c.r.m.a"  // Obfuscated class from Squire
-        };
-
-        Proxy loggingProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", PROXY_PORT));
-
-        for (String className : classesToCheck) {
+        // Call the original launcher in a separate thread so we can monitor
+        Thread launcherThread = new Thread(() -> {
             try {
-                Class<?> clazz = Class.forName(className);
-                patchOkHttpFieldsInClass(clazz, loggingProxy);
-            } catch (ClassNotFoundException e) {
-                System.out.println("[NetworkLogger] Class not found (expected): " + className);
+                debug("Launcher thread: Calling Launcher.main() with --nojvm");
+                Launcher.main(finalArgs);
+                debug("Launcher thread: Launcher.main() returned normally");
             } catch (Exception e) {
-                System.err.println("[NetworkLogger] Error patching " + className + ": " + e.getMessage());
+                debug("Launcher thread: Exception: " + e.getMessage());
+                debugException(e);
+            } catch (Throwable t) {
+                debug("Launcher thread: Throwable: " + t.getMessage());
+                debugException(t);
             }
-        }
-    }
+        }, "LauncherThread");
+        launcherThread.start();
+        debug("Launcher thread started");
 
-    /**
-     * Patches all OkHttpClient fields in a class to use our interceptor.
-     */
-    private static void patchOkHttpFieldsInClass(Class<?> clazz, Proxy proxy) throws Exception {
-        for (Field field : clazz.getDeclaredFields()) {
-            if (OkHttpClient.class.isAssignableFrom(field.getType())) {
-                System.out.println("[NetworkLogger] Found OkHttpClient field: " + clazz.getSimpleName() + "." + field.getName());
+        // Monitor thread to log active windows and threads
+        Thread monitorThread = new Thread(() -> {
+            int iteration = 0;
+            while (keepRunning) {
+                try {
+                    Thread.sleep(5000); // Log every 5 seconds
+                    iteration++;
 
-                if (Modifier.isStatic(field.getModifiers())) {
-                    field.setAccessible(true);
-
-                    // Try to read current value
-                    OkHttpClient currentClient = (OkHttpClient) field.get(null);
-
-                    // Create a new client with our interceptor and proxy
-                    OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                        .addInterceptor(LOGGING_INTERCEPTOR);
-
-                    if (proxy != null) {
-                        builder.proxy(proxy);
+                    // Count active windows
+                    Window[] windows = Window.getWindows();
+                    int visibleWindows = 0;
+                    for (Window w : windows) {
+                        if (w.isVisible()) {
+                            visibleWindows++;
+                            debug("Monitor: Visible window: " + w.getClass().getName() + " - " + (w instanceof Frame ? ((Frame)w).getTitle() : "no title"));
+                        }
                     }
+                    debug("Monitor iteration " + iteration + ": " + visibleWindows + " visible windows, launcher thread alive: " + launcherThread.isAlive());
 
-                    // Copy settings from current client if it exists
-                    if (currentClient != null) {
-                        builder.connectTimeout(currentClient.connectTimeoutMillis(), java.util.concurrent.TimeUnit.MILLISECONDS)
-                               .readTimeout(currentClient.readTimeoutMillis(), java.util.concurrent.TimeUnit.MILLISECONDS)
-                               .writeTimeout(currentClient.writeTimeoutMillis(), java.util.concurrent.TimeUnit.MILLISECONDS);
+                    // List active non-daemon threads
+                    if (iteration % 6 == 0) { // Every 30 seconds
+                        debug("Monitor: Active threads:");
+                        for (Thread t : Thread.getAllStackTraces().keySet()) {
+                            if (!t.isDaemon()) {
+                                debug("  - " + t.getName() + " (state: " + t.getState() + ")");
+                            }
+                        }
                     }
-
-                    OkHttpClient newClient = builder.build();
-
-                    // Try to remove final modifier
-                    if (Modifier.isFinal(field.getModifiers())) {
-                        removeFinalModifier(field);
-                    }
-
-                    field.set(null, newClient);
-                    System.out.println("[NetworkLogger] Successfully patched: " + clazz.getSimpleName() + "." + field.getName());
+                } catch (InterruptedException e) {
+                    break;
                 }
             }
+            debug("Monitor thread ending");
+        }, "MonitorThread");
+        monitorThread.setDaemon(true);
+        monitorThread.start();
+
+        // Wait for launcher thread to finish OR keep running if there are visible windows
+        debug("Waiting for launcher thread or windows...");
+        while (keepRunning) {
+            // Check if launcher thread is still alive
+            if (!launcherThread.isAlive()) {
+                debug("Launcher thread finished");
+
+                // Check if there are any visible windows keeping us alive
+                Window[] windows = Window.getWindows();
+                boolean hasVisibleWindow = false;
+                for (Window w : windows) {
+                    if (w.isVisible()) {
+                        hasVisibleWindow = true;
+                        break;
+                    }
+                }
+
+                if (!hasVisibleWindow) {
+                    debug("No visible windows, checking for non-daemon threads...");
+                    // Check for any non-daemon threads besides our own
+                    boolean hasOtherThreads = false;
+                    for (Thread t : Thread.getAllStackTraces().keySet()) {
+                        if (!t.isDaemon() && t != Thread.currentThread() && t != launcherThread) {
+                            hasOtherThreads = true;
+                            debug("Found active non-daemon thread: " + t.getName());
+                        }
+                    }
+
+                    if (!hasOtherThreads) {
+                        debug("No other threads running, exiting main loop");
+                        break;
+                    }
+                }
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                break;
+            }
         }
+
+        debug("LauncherWithLogging.main() completing...");
     }
 
-    /**
-     * Attempts to remove the final modifier from a field.
-     */
-    private static void removeFinalModifier(Field field) {
+    private static void initDebugLog() {
         try {
-            // Java 8 approach
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        } catch (NoSuchFieldException e) {
-            // Java 12+ - this approach won't work
-            System.out.println("[NetworkLogger] Note: Cannot modify final field in Java 12+");
+            String userHome = System.getProperty("user.home");
+            File logDir = new File(userHome, ".squire/logs");
+            if (!logDir.exists()) {
+                logDir.mkdirs();
+            }
+            String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            File debugFile = new File(logDir, "debug_" + timestamp + ".log");
+            debugLog = new PrintWriter(new FileWriter(debugFile, true), true);
+            System.out.println("[NetworkLogger] Debug log: " + debugFile.getAbsolutePath());
         } catch (Exception e) {
-            System.out.println("[NetworkLogger] Could not remove final modifier: " + e.getMessage());
+            System.err.println("[NetworkLogger] Failed to create debug log: " + e.getMessage());
         }
     }
 
-    /**
-     * Get a pre-configured OkHttpClient with logging enabled.
-     */
-    public static OkHttpClient.Builder getLoggingClientBuilder() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-            .addInterceptor(LOGGING_INTERCEPTOR);
-
-        if (proxyServer != null) {
-            builder.proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", PROXY_PORT)));
+    private static void debug(String message) {
+        String timestamp = new SimpleDateFormat("HH:mm:ss.SSS").format(new Date());
+        String line = "[" + timestamp + "] " + message;
+        System.out.println("[DEBUG] " + line);
+        if (debugLog != null) {
+            debugLog.println(line);
+            debugLog.flush();
         }
-
-        return builder;
     }
 
-    /**
-     * Get the logging interceptor instance.
-     */
-    public static NetworkLoggingInterceptor getLoggingInterceptor() {
-        return LOGGING_INTERCEPTOR;
+    private static void debugException(Throwable t) {
+        if (debugLog != null) {
+            t.printStackTrace(debugLog);
+            debugLog.flush();
+        }
+        t.printStackTrace();
     }
 
-    /**
-     * Check if the interceptor is installed.
-     */
-    public static boolean isInterceptorInstalled() {
-        return interceptorInstalled;
-    }
-
-    /**
-     * Create an OkHttpClient with logging already configured.
-     */
-    public static OkHttpClient createLoggingClient() {
-        return getLoggingClientBuilder().build();
+    private static void closeDebugLog() {
+        if (debugLog != null) {
+            debug("Closing debug log");
+            debugLog.close();
+        }
     }
 
     private static void printBanner() {
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         System.out.println();
         System.out.println("╔═══════════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("║                                                                               ║");
-        System.out.println("║     ███╗   ██╗███████╗████████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗           ║");
-        System.out.println("║     ████╗  ██║██╔════╝╚══██╔══╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝           ║");
-        System.out.println("║     ██╔██╗ ██║█████╗     ██║   ██║ █╗ ██║██║   ██║██████╔╝█████╔╝            ║");
-        System.out.println("║     ██║╚██╗██║██╔══╝     ██║   ██║███╗██║██║   ██║██╔══██╗██╔═██╗            ║");
-        System.out.println("║     ██║ ╚████║███████╗   ██║   ╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗           ║");
-        System.out.println("║     ╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝           ║");
-        System.out.println("║                                                                               ║");
-        System.out.println("║              ██╗      ██████╗  ██████╗  ██████╗ ███████╗██████╗              ║");
-        System.out.println("║              ██║     ██╔═══██╗██╔════╝ ██╔════╝ ██╔════╝██╔══██╗             ║");
-        System.out.println("║              ██║     ██║   ██║██║  ███╗██║  ███╗█████╗  ██████╔╝             ║");
-        System.out.println("║              ██║     ██║   ██║██║   ██║██║   ██║██╔══╝  ██╔══██╗             ║");
-        System.out.println("║              ███████╗╚██████╔╝╚██████╔╝╚██████╔╝███████╗██║  ██║             ║");
-        System.out.println("║              ╚══════╝ ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝             ║");
-        System.out.println("║                                                                               ║");
+        System.out.println("║                    SQUIRE NETWORK LOGGER                                      ║");
         System.out.println("╠═══════════════════════════════════════════════════════════════════════════════╣");
-        System.out.println("║  All HTTP requests and responses will be logged in clear text                 ║");
-        System.out.println("║  Logs: ~/.squire/logs/network_*.log                                           ║");
-        System.out.println("║  Proxy: localhost:" + PROXY_PORT + "                                                      ║");
+        System.out.println("║  Logs: ~/.squire/logs/                                                        ║");
+        System.out.println("║  Mode: --nojvm (single JVM for complete logging)                              ║");
         System.out.println("║  Started: " + timestamp + "                                             ║");
         System.out.println("╚═══════════════════════════════════════════════════════════════════════════════╝");
         System.out.println();
+    }
+
+    /**
+     * Injects the --nojvm flag into the args array if not already present.
+     * This prevents JvmLauncher from spawning a new JVM process, keeping
+     * everything in the same JVM so we can log all network traffic.
+     */
+    private static String[] injectNoJvmFlag(String[] args) {
+        // Check if --nojvm is already present
+        for (String arg : args) {
+            if ("--nojvm".equals(arg) || "-nojvm".equals(arg)) {
+                debug("--nojvm flag already present");
+                return args;
+            }
+        }
+
+        // Add --nojvm to the args
+        String[] newArgs = new String[args.length + 1];
+        newArgs[0] = "--nojvm";
+        System.arraycopy(args, 0, newArgs, 1, args.length);
+        debug("Injected --nojvm flag to keep client in same JVM");
+        return newArgs;
     }
 }
