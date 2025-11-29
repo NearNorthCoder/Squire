@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
 Squire S3 Bucket Downloader with Resume Support
-Downloads all files from s3_complete_file_list.txt using signed URL credentials.
+Downloads files by capturing signed URLs from Squire's network traffic.
 
 Usage:
-    python download_s3_bucket.py
+    1. Run Squire with the network logger
+    2. Run this script
+    3. Paste the URLs as they appear in the logger
+    4. When URLs expire, get new ones from Squire and continue
 
-When URLs expire, the script pauses and waits for new credentials.
 Progress is saved automatically - safe to Ctrl+C or crash.
 """
 
@@ -36,11 +38,10 @@ class S3Downloader:
     def __init__(self):
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-        self.files = []  # List of (size, path) tuples
+        self.all_files = {}  # path -> size
         self.downloaded = set()
         self.failed = set()
-        self.current_index = 0
-        self.credentials = {}
+        self.pending_urls = []  # URLs waiting to be downloaded
 
         self.load_state()
         self.load_file_list()
@@ -61,9 +62,7 @@ class S3Downloader:
                     state = json.load(f)
                     self.downloaded = set(state.get("downloaded", []))
                     self.failed = set(state.get("failed", []))
-                    self.current_index = state.get("current_index", 0)
-                    self.credentials = state.get("credentials", {})
-                self.log(f"Resumed: {len(self.downloaded)} downloaded, index {self.current_index}")
+                self.log(f"Resumed: {len(self.downloaded)} files already downloaded")
             except Exception as e:
                 self.log(f"Warning: Could not load state: {e}")
 
@@ -72,8 +71,6 @@ class S3Downloader:
         state = {
             "downloaded": list(self.downloaded),
             "failed": list(self.failed),
-            "current_index": self.current_index,
-            "credentials": self.credentials,
             "last_updated": datetime.now().isoformat()
         }
         with open(STATE_FILE, 'w') as f:
@@ -92,74 +89,62 @@ class S3Downloader:
                     size_str, path = line.split('\t', 1)
                     try:
                         size = int(size_str)
-                        self.files.append((size, path))
+                        self.all_files[path] = size
                     except ValueError:
                         pass
 
-            total_size = sum(f[0] for f in self.files)
-            self.log(f"Loaded {len(self.files)} files ({total_size / (1024**3):.2f} GB total)")
+            total_size = sum(self.all_files.values())
+            remaining = len(self.all_files) - len(self.downloaded)
+            self.log(f"Total files: {len(self.all_files)} ({self.format_size(total_size)})")
+            self.log(f"Already downloaded: {len(self.downloaded)}")
+            self.log(f"Remaining: {remaining}")
 
         except Exception as e:
             self.log(f"Error loading file list: {e}")
             sys.exit(1)
 
-    def parse_credentials(self, url):
-        """Extract AWS credentials from a signed URL"""
+    def extract_filepath(self, url):
+        """Extract the file path from a signed URL"""
         try:
             parsed = urllib.parse.urlparse(url)
-            params = urllib.parse.parse_qs(parsed.query)
-
-            self.credentials = {
-                "AWSAccessKeyId": params.get("AWSAccessKeyId", [""])[0],
-                "Signature": params.get("Signature", [""])[0],
-                "x-amz-security-token": params.get("x-amz-security-token", [""])[0],
-                "Expires": params.get("Expires", [""])[0]
-            }
-
-            # Check expiration
-            if self.credentials["Expires"]:
-                exp_time = int(self.credentials["Expires"])
-                exp_date = datetime.fromtimestamp(exp_time)
-                remaining = exp_time - int(time.time())
-                self.log(f"Credentials expire: {exp_date} ({remaining // 60} min remaining)")
-
-            self.save_state()
-            return True
-
-        except Exception as e:
-            self.log(f"Error parsing credentials: {e}")
-            return False
-
-    def build_signed_url(self, filepath):
-        """Build a signed URL for a file using current credentials"""
-        if not self.credentials.get("AWSAccessKeyId"):
+            # Path is everything after the bucket name
+            path = parsed.path.lstrip('/')
+            return urllib.parse.unquote(path)
+        except:
             return None
 
-        base_url = f"https://{S3_BUCKET}/{urllib.parse.quote(filepath, safe='/')}"
-        params = urllib.parse.urlencode({
-            "AWSAccessKeyId": self.credentials["AWSAccessKeyId"],
-            "Signature": self.credentials["Signature"],
-            "x-amz-security-token": self.credentials["x-amz-security-token"],
-            "Expires": self.credentials["Expires"]
-        })
-        return f"{base_url}?{params}"
+    def parse_urls(self, text):
+        """Extract signed URLs from pasted text"""
+        pattern = r'https://squire-bootload-storage\.s3\.amazonaws\.com/[^\s\n\│\║]+'
+        urls = re.findall(pattern, text)
+        # Clean up URLs (remove trailing characters)
+        cleaned = []
+        for url in urls:
+            # Remove any trailing box-drawing characters or whitespace
+            url = re.sub(r'[│║\s]+$', '', url)
+            if 'AWSAccessKeyId' in url:
+                cleaned.append(url)
+        return cleaned
 
-    def download_file(self, filepath, expected_size):
-        """Download a single file"""
+    def download_file(self, url):
+        """Download a single file from its signed URL"""
+        filepath = self.extract_filepath(url)
+        if not filepath:
+            return False, "Could not extract filepath"
+
         if filepath in self.downloaded:
             return True, "already_downloaded"
 
+        expected_size = self.all_files.get(filepath, 0)
         output_path = OUTPUT_DIR / filepath
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Skip if file exists with correct size
-        if output_path.exists() and output_path.stat().st_size == expected_size:
-            self.downloaded.add(filepath)
-            return True, "already_exists"
-
-        url = self.build_signed_url(filepath)
-        if not url:
-            return False, "no_credentials"
+        if output_path.exists() and expected_size > 0:
+            if output_path.stat().st_size == expected_size:
+                self.downloaded.add(filepath)
+                self.save_state()
+                return True, "already_exists"
 
         try:
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -170,6 +155,7 @@ class S3Downloader:
                 f.write(content)
 
             self.downloaded.add(filepath)
+            self.save_state()
             return True, len(content)
 
         except urllib.error.HTTPError as e:
@@ -178,32 +164,6 @@ class S3Downloader:
             return False, f"HTTP {e.code}"
         except Exception as e:
             return False, str(e)
-
-    def prompt_for_credentials(self):
-        """Prompt user to paste a new signed URL"""
-        print("\n" + "=" * 70)
-        print("  CREDENTIALS EXPIRED OR MISSING")
-        print("=" * 70)
-        print("\n1. Run Squire with the network logger")
-        print("2. Wait for it to download any file")
-        print("3. Copy one of the signed URLs and paste it here")
-        print("\nPaste a signed URL (or 'quit' to exit):\n")
-
-        try:
-            url = input().strip()
-            if url.lower() == 'quit':
-                return False
-
-            if "squire-bootload-storage" in url and "AWSAccessKeyId" in url:
-                if self.parse_credentials(url):
-                    self.log("Credentials updated successfully!")
-                    return True
-
-            print("Invalid URL. Must be a signed S3 URL from Squire.")
-            return self.prompt_for_credentials()
-
-        except (EOFError, KeyboardInterrupt):
-            return False
 
     def format_size(self, bytes):
         """Format bytes as human readable"""
@@ -216,82 +176,120 @@ class S3Downloader:
         else:
             return f"{bytes / (1024 * 1024 * 1024):.2f} GB"
 
+    def show_progress(self):
+        """Show current progress"""
+        total = len(self.all_files)
+        done = len(self.downloaded)
+        pct = (done / total * 100) if total > 0 else 0
+
+        downloaded_size = sum(self.all_files.get(f, 0) for f in self.downloaded)
+        total_size = sum(self.all_files.values())
+
+        print(f"\n{'='*60}")
+        print(f"  PROGRESS: {done}/{total} files ({pct:.1f}%)")
+        print(f"  SIZE: {self.format_size(downloaded_size)} / {self.format_size(total_size)}")
+        print(f"{'='*60}\n")
+
     def run(self):
         """Main download loop"""
-        print("\n" + "=" * 70)
+        print("\n" + "=" * 60)
         print("  SQUIRE S3 BUCKET DOWNLOADER")
-        print("=" * 70)
-        print(f"\nTotal files: {len(self.files)}")
-        print(f"Already downloaded: {len(self.downloaded)}")
-        print(f"Starting from index: {self.current_index}")
-        print(f"Output directory: {OUTPUT_DIR.absolute()}")
-        print(f"Log file: {LOG_FILE}")
-        print("\nPress Ctrl+C to pause safely\n")
+        print("=" * 60)
+        print(f"\nOutput: {OUTPUT_DIR}")
+        print(f"\nHow to use:")
+        print("1. Run Squire with the network logger")
+        print("2. Paste URLs here as they appear (or paste the summary)")
+        print("3. Press Enter twice when done pasting")
+        print("4. Repeat when you have more URLs")
+        print("\nType 'status' to see progress, 'quit' to exit\n")
 
-        # Check if we have credentials
-        if not self.credentials.get("AWSAccessKeyId"):
-            if not self.prompt_for_credentials():
-                self.log("Exiting - no credentials provided")
-                return
+        self.show_progress()
 
-        try:
-            while self.current_index < len(self.files):
-                size, filepath = self.files[self.current_index]
+        while True:
+            print("Paste URLs (Enter twice when done, or 'quit'):")
 
-                # Progress display
-                pct = (self.current_index / len(self.files)) * 100
-                downloaded_size = sum(self.files[i][0] for i in range(len(self.files))
-                                     if self.files[i][1] in self.downloaded)
+            lines = []
+            empty_count = 0
 
-                print(f"\r[{self.current_index + 1}/{len(self.files)}] ({pct:.1f}%) "
-                      f"{self.format_size(downloaded_size)} downloaded | "
-                      f"{filepath[:50]}...", end="", flush=True)
+            while empty_count < 2:
+                try:
+                    line = input()
 
-                success, result = self.download_file(filepath, size)
+                    if line.strip().lower() == 'quit':
+                        self.save_state()
+                        self.print_summary()
+                        return
+
+                    if line.strip().lower() == 'status':
+                        self.show_progress()
+                        empty_count = 0
+                        continue
+
+                    if line.strip() == "":
+                        empty_count += 1
+                    else:
+                        empty_count = 0
+                        lines.append(line)
+
+                except (EOFError, KeyboardInterrupt):
+                    self.save_state()
+                    self.print_summary()
+                    return
+
+            text = "\n".join(lines)
+            urls = self.parse_urls(text)
+
+            if not urls:
+                print("No valid URLs found. Paste URLs from the network logger.\n")
+                continue
+
+            self.log(f"Processing {len(urls)} URLs...")
+
+            success_count = 0
+            skip_count = 0
+            fail_count = 0
+
+            for i, url in enumerate(urls, 1):
+                filepath = self.extract_filepath(url)
+                short_name = filepath[:50] + "..." if len(filepath) > 50 else filepath
+
+                print(f"[{i}/{len(urls)}] {short_name}", end=" ", flush=True)
+
+                success, result = self.download_file(url)
 
                 if success:
-                    if result not in ("already_downloaded", "already_exists"):
-                        print(f"\r[{self.current_index + 1}/{len(self.files)}] ✓ {filepath} "
-                              f"({self.format_size(size)})" + " " * 20)
-                    self.current_index += 1
-
-                    # Save state periodically
-                    if self.current_index % 100 == 0:
-                        self.save_state()
-
-                elif result == "expired" or result == "no_credentials":
-                    print("\n")
-                    self.log("Credentials expired!")
-                    self.save_state()
-
-                    if not self.prompt_for_credentials():
-                        break
+                    if result in ("already_downloaded", "already_exists"):
+                        print("(skip - already have)")
+                        skip_count += 1
+                    else:
+                        print(f"✓ {self.format_size(result)}")
+                        success_count += 1
                 else:
-                    self.log(f"Failed: {filepath} - {result}")
-                    self.failed.add(filepath)
-                    self.current_index += 1
+                    if result == "expired":
+                        print("✗ EXPIRED - need new URLs!")
+                        fail_count += 1
+                    else:
+                        print(f"✗ {result}")
+                        self.failed.add(filepath)
+                        fail_count += 1
 
-        except KeyboardInterrupt:
-            print("\n\nPausing...")
-        finally:
-            self.save_state()
-            self.print_summary()
+            self.log(f"Batch complete: {success_count} downloaded, {skip_count} skipped, {fail_count} failed")
+            self.show_progress()
 
     def print_summary(self):
         """Print final summary"""
-        print("\n" + "=" * 70)
+        print("\n" + "=" * 60)
         print("  DOWNLOAD SUMMARY")
-        print("=" * 70)
-        print(f"Total files:      {len(self.files)}")
+        print("=" * 60)
+        print(f"Total in bucket:  {len(self.all_files)}")
         print(f"Downloaded:       {len(self.downloaded)}")
         print(f"Failed:           {len(self.failed)}")
-        print(f"Remaining:        {len(self.files) - self.current_index}")
-        print(f"Current index:    {self.current_index}")
-        print(f"\nOutput:           {OUTPUT_DIR.absolute()}")
+        print(f"Remaining:        {len(self.all_files) - len(self.downloaded)}")
+        print(f"\nOutput:           {OUTPUT_DIR}")
         print(f"State file:       {STATE_FILE}")
         print(f"Log file:         {LOG_FILE}")
-        print("\nRun again to resume from where you left off!")
-        print("=" * 70)
+        print("\nRun again to continue!")
+        print("=" * 60)
 
 
 if __name__ == "__main__":
