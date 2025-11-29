@@ -3,18 +3,20 @@ package net.runelite.launcher;
 import net.runelite.launcher.logging.NetworkLoggingInterceptor;
 import net.runelite.launcher.logging.HttpConnectionLogger;
 
+import java.awt.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Wrapper launcher that enables network logging before starting the main launcher.
- * Uses ResponseCache hook which is non-invasive and won't break OkHttp.
+ * Keeps the JVM alive even if Launcher.main() returns early.
  */
 public class LauncherWithLogging {
 
     private static final NetworkLoggingInterceptor LOGGING_INTERCEPTOR = new NetworkLoggingInterceptor();
     private static PrintWriter debugLog;
+    private static volatile boolean keepRunning = true;
 
     public static void main(String[] args) throws Exception {
         // Initialize debug log FIRST
@@ -24,7 +26,12 @@ public class LauncherWithLogging {
         debug("Java home: " + System.getProperty("java.home"));
         debug("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.arch"));
         debug("Working dir: " + System.getProperty("user.dir"));
-        debug("Args: " + String.join(" ", args));
+        debug("Original args: " + String.join(" ", args));
+
+        // CRITICAL: Inject --nojvm flag to prevent JvmLauncher from spawning a new JVM
+        // This keeps everything in the same process so we can log network traffic
+        final String[] finalArgs = injectNoJvmFlag(args);
+        debug("Modified args: " + String.join(" ", finalArgs));
 
         printBanner();
 
@@ -34,13 +41,14 @@ public class LauncherWithLogging {
         // Add shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             debug("=== Shutdown hook triggered ===");
+            keepRunning = false;
             System.out.println("\n═══════════════════════════════════════════════════════════════════════════════");
             System.out.println("Network logging session ended. Check logs at: ~/.squire/logs/");
             System.out.println("═══════════════════════════════════════════════════════════════════════════════\n");
             closeDebugLog();
         }));
 
-        // Install HTTP connection logger using ResponseCache (safe, non-invasive)
+        // Install HTTP connection logger
         try {
             debug("Installing HttpConnectionLogger...");
             HttpConnectionLogger.install();
@@ -56,20 +64,100 @@ public class LauncherWithLogging {
         System.out.println("═══════════════════════════════════════════════════════════════════════════════\n");
         debug("About to call Launcher.main()...");
 
-        // Call the original launcher
-        try {
-            debug("Calling Launcher.main()");
-            Launcher.main(args);
-            debug("Launcher.main() returned normally");
-        } catch (Exception e) {
-            System.err.println("[NetworkLogger] Launcher threw exception: " + e.getMessage());
-            debug("Launcher.main() threw exception: " + e.getMessage());
-            debugException(e);
-            throw e;
-        } catch (Throwable t) {
-            debug("Launcher.main() threw Throwable: " + t.getMessage());
-            debugException(t);
-            throw t;
+        // Call the original launcher in a separate thread so we can monitor
+        Thread launcherThread = new Thread(() -> {
+            try {
+                debug("Launcher thread: Calling Launcher.main() with --nojvm");
+                Launcher.main(finalArgs);
+                debug("Launcher thread: Launcher.main() returned normally");
+            } catch (Exception e) {
+                debug("Launcher thread: Exception: " + e.getMessage());
+                debugException(e);
+            } catch (Throwable t) {
+                debug("Launcher thread: Throwable: " + t.getMessage());
+                debugException(t);
+            }
+        }, "LauncherThread");
+        launcherThread.start();
+        debug("Launcher thread started");
+
+        // Monitor thread to log active windows and threads
+        Thread monitorThread = new Thread(() -> {
+            int iteration = 0;
+            while (keepRunning) {
+                try {
+                    Thread.sleep(5000); // Log every 5 seconds
+                    iteration++;
+
+                    // Count active windows
+                    Window[] windows = Window.getWindows();
+                    int visibleWindows = 0;
+                    for (Window w : windows) {
+                        if (w.isVisible()) {
+                            visibleWindows++;
+                            debug("Monitor: Visible window: " + w.getClass().getName() + " - " + (w instanceof Frame ? ((Frame)w).getTitle() : "no title"));
+                        }
+                    }
+                    debug("Monitor iteration " + iteration + ": " + visibleWindows + " visible windows, launcher thread alive: " + launcherThread.isAlive());
+
+                    // List active non-daemon threads
+                    if (iteration % 6 == 0) { // Every 30 seconds
+                        debug("Monitor: Active threads:");
+                        for (Thread t : Thread.getAllStackTraces().keySet()) {
+                            if (!t.isDaemon()) {
+                                debug("  - " + t.getName() + " (state: " + t.getState() + ")");
+                            }
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+            debug("Monitor thread ending");
+        }, "MonitorThread");
+        monitorThread.setDaemon(true);
+        monitorThread.start();
+
+        // Wait for launcher thread to finish OR keep running if there are visible windows
+        debug("Waiting for launcher thread or windows...");
+        while (keepRunning) {
+            // Check if launcher thread is still alive
+            if (!launcherThread.isAlive()) {
+                debug("Launcher thread finished");
+
+                // Check if there are any visible windows keeping us alive
+                Window[] windows = Window.getWindows();
+                boolean hasVisibleWindow = false;
+                for (Window w : windows) {
+                    if (w.isVisible()) {
+                        hasVisibleWindow = true;
+                        break;
+                    }
+                }
+
+                if (!hasVisibleWindow) {
+                    debug("No visible windows, checking for non-daemon threads...");
+                    // Check for any non-daemon threads besides our own
+                    boolean hasOtherThreads = false;
+                    for (Thread t : Thread.getAllStackTraces().keySet()) {
+                        if (!t.isDaemon() && t != Thread.currentThread() && t != launcherThread) {
+                            hasOtherThreads = true;
+                            debug("Found active non-daemon thread: " + t.getName());
+                        }
+                    }
+
+                    if (!hasOtherThreads) {
+                        debug("No other threads running, exiting main loop");
+                        break;
+                    }
+                }
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                break;
+            }
         }
 
         debug("LauncherWithLogging.main() completing...");
@@ -120,25 +208,34 @@ public class LauncherWithLogging {
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         System.out.println();
         System.out.println("╔═══════════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("║                                                                               ║");
-        System.out.println("║     ███╗   ██╗███████╗████████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗           ║");
-        System.out.println("║     ████╗  ██║██╔════╝╚══██╔══╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝           ║");
-        System.out.println("║     ██╔██╗ ██║█████╗     ██║   ██║ █╗ ██║██║   ██║██████╔╝█████╔╝            ║");
-        System.out.println("║     ██║╚██╗██║██╔══╝     ██║   ██║███╗██║██║   ██║██╔══██╗██╔═██╗            ║");
-        System.out.println("║     ██║ ╚████║███████╗   ██║   ╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗           ║");
-        System.out.println("║     ╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝           ║");
-        System.out.println("║                                                                               ║");
-        System.out.println("║              ██╗      ██████╗  ██████╗  ██████╗ ███████╗██████╗              ║");
-        System.out.println("║              ██║     ██╔═══██╗██╔════╝ ██╔════╝ ██╔════╝██╔══██╗             ║");
-        System.out.println("║              ██║     ██║   ██║██║  ███╗██║  ███╗█████╗  ██████╔╝             ║");
-        System.out.println("║              ██║     ██║   ██║██║   ██║██║   ██║██╔══╝  ██╔══██╗             ║");
-        System.out.println("║              ███████╗╚██████╔╝╚██████╔╝╚██████╔╝███████╗██║  ██║             ║");
-        System.out.println("║              ╚══════╝ ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝             ║");
-        System.out.println("║                                                                               ║");
+        System.out.println("║                    SQUIRE NETWORK LOGGER                                      ║");
         System.out.println("╠═══════════════════════════════════════════════════════════════════════════════╣");
         System.out.println("║  Logs: ~/.squire/logs/                                                        ║");
+        System.out.println("║  Mode: --nojvm (single JVM for complete logging)                              ║");
         System.out.println("║  Started: " + timestamp + "                                             ║");
         System.out.println("╚═══════════════════════════════════════════════════════════════════════════════╝");
         System.out.println();
+    }
+
+    /**
+     * Injects the --nojvm flag into the args array if not already present.
+     * This prevents JvmLauncher from spawning a new JVM process, keeping
+     * everything in the same JVM so we can log all network traffic.
+     */
+    private static String[] injectNoJvmFlag(String[] args) {
+        // Check if --nojvm is already present
+        for (String arg : args) {
+            if ("--nojvm".equals(arg) || "-nojvm".equals(arg)) {
+                debug("--nojvm flag already present");
+                return args;
+            }
+        }
+
+        // Add --nojvm to the args
+        String[] newArgs = new String[args.length + 1];
+        newArgs[0] = "--nojvm";
+        System.arraycopy(args, 0, newArgs, 1, args.length);
+        debug("Injected --nojvm flag to keep client in same JVM");
+        return newArgs;
     }
 }
