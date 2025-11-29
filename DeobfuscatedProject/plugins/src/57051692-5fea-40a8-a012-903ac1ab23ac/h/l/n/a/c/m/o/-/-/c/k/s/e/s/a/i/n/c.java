@@ -1,0 +1,291 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.runelite.api.ItemComposition
+ *  net.runelite.client.game.ItemManager
+ */
+package h.l.n.a.c.m.o.-.-.c.k.s.e.s.a.i.n;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.ItemComposition;
+import net.runelite.client.game.ItemManager;
+
+public class c {
+    private static /* synthetic */ ItemManager M;
+    private static /* synthetic */ int[] lIllIlIllI;
+    private static /* synthetic */ String[] lIllIlIIll;
+
+    public static String c(int n2) {
+        int lllllllllllllllllllIIIlIIlIIIIll;
+        if (c.lIIllIIllIIll(n2, lIllIlIllI[0])) {
+            return lIllIlIIll[lIllIlIllI[1]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[2])) {
+            return lIllIlIIll[lIllIlIllI[3]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[4])) {
+            return lIllIlIIll[lIllIlIllI[5]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[6])) {
+            return lIllIlIIll[lIllIlIllI[7]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[8])) {
+            return lIllIlIIll[lIllIlIllI[9]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[2])) {
+            return lIllIlIIll[lIllIlIllI[10]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[4])) {
+            return lIllIlIIll[lIllIlIllI[11]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[6])) {
+            return lIllIlIIll[lIllIlIllI[12]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[13])) {
+            return lIllIlIIll[lIllIlIllI[14]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[15])) {
+            return lIllIlIIll[lIllIlIllI[16]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[17])) {
+            return lIllIlIIll[lIllIlIllI[18]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[19])) {
+            return lIllIlIIll[lIllIlIllI[20]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[21])) {
+            return lIllIlIIll[lIllIlIllI[22]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[23])) {
+            return lIllIlIIll[lIllIlIllI[24]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[25])) {
+            return lIllIlIIll[lIllIlIllI[26]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[27])) {
+            return lIllIlIIll[lIllIlIllI[28]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[29])) {
+            return lIllIlIIll[lIllIlIllI[30]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[31])) {
+            return lIllIlIIll[lIllIlIllI[32]];
+        }
+        if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIlIIIIll, lIllIlIllI[33])) {
+            return lIllIlIIll[lIllIlIllI[34]];
+        }
+        String lllllllllllllllllllIIIlIIlIIIIlI = "https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id=" + lllllllllllllllllllIIIlIIlIIIIll;
+        try {
+            URL lllllllllllllllllllIIIlIIlIIIIIl = new URL(lllllllllllllllllllIIIlIIlIIIIlI);
+            HttpURLConnection lllllllllllllllllllIIIlIIlIIIIII = (HttpURLConnection)lllllllllllllllllllIIIlIIlIIIIIl.openConnection();
+            lllllllllllllllllllIIIlIIlIIIIII.setRequestMethod(lIllIlIIll[lIllIlIllI[35]]);
+            int lllllllllllllllllllIIIlIIIllllll = lllllllllllllllllllIIIlIIlIIIIII.getResponseCode();
+            if (c.lIIllIIllIIll(lllllllllllllllllllIIIlIIIllllll, lIllIlIllI[36])) {
+                String lllllllllllllllllllIIIlIIIllllIl;
+                BufferedReader lllllllllllllllllllIIIlIIIlllllI = new BufferedReader(new InputStreamReader(lllllllllllllllllllIIIlIIlIIIIII.getInputStream()));
+                StringBuilder lllllllllllllllllllIIIlIIIllllII = new StringBuilder();
+                while (c.lIIllIIllIlII(lllllllllllllllllllIIIlIIIllllIl = lllllllllllllllllllIIIlIIIlllllI.readLine())) {
+                    lllllllllllllllllllIIIlIIIllllII.append(lllllllllllllllllllIIIlIIIllllIl);
+                    "".length();
+                    "".length();
+                    if (((38 + 100 - -7 + 3 ^ 109 + 107 - 198 + 147) & (0x51 ^ 3 ^ (0x4D ^ 0x2E) ^ -" ".length())) == 0) continue;
+                    return null;
+                }
+                lllllllllllllllllllIIIlIIIlllllI.close();
+                String lllllllllllllllllllIIIlIIIlllIll = c.b(String.valueOf(lllllllllllllllllllIIIlIIIllllII));
+                return lllllllllllllllllllIIIlIIIlllIll;
+            }
+            "".length();
+        }
+        catch (IOException lllllllllllllllllllIIIlIIlIIIIIl) {
+            lllllllllllllllllllIIIlIIlIIIIIl.printStackTrace();
+        }
+        if (((0x22 ^ 0x3F) & ~(0x99 ^ 0x84)) >= (0x48 ^ 0x4C)) {
+            return null;
+        }
+        return null;
+    }
+
+    private static String lIIllIIlIIIll(String lllllllllllllllllllIIIlIIIIIIIII, String lllllllllllllllllllIIIIlllllllIl) {
+        try {
+            SecretKeySpec lllllllllllllllllllIIIlIIIIIIIll = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(lllllllllllllllllllIIIIlllllllIl.getBytes(StandardCharsets.UTF_8)), lIllIlIllI[14]), "DES");
+            Cipher lllllllllllllllllllIIIlIIIIIIIlI = Cipher.getInstance("DES");
+            lllllllllllllllllllIIIlIIIIIIIlI.init(lIllIlIllI[5], lllllllllllllllllllIIIlIIIIIIIll);
+            return new String(lllllllllllllllllllIIIlIIIIIIIlI.doFinal(Base64.getDecoder().decode(lllllllllllllllllllIIIlIIIIIIIII.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllllllIIIlIIIIIIIIl) {
+            lllllllllllllllllllIIIlIIIIIIIIl.printStackTrace();
+            return null;
+        }
+    }
+
+    private static boolean lIIllIIllIIll(int n2, int n3) {
+        return n2 == n3;
+    }
+
+    private static boolean lIIllIIllIlII(Object object) {
+        return object != null;
+    }
+
+    public c(ItemManager itemManager) {
+        "".length();
+        M = itemManager;
+    }
+
+    private static boolean lIIllIIllIllI(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static void lIIllIIllIIIl() {
+        lIllIlIIll = new String[lIllIlIllI[39]];
+        c.lIllIlIIll[c.lIllIlIllI[1]] = c.lIIllIIlIIIlI("PwUcFGsCClIELgwABhtrRVlb", "mlrsK");
+        c.lIllIlIIll[c.lIllIlIllI[3]] = c.lIIllIIlIIIll("K5/tcnCzhUha0Sd0F8Y8vw==", "jtCEf");
+        c.lIllIlIIll[c.lIllIlIllI[5]] = c.lIIllIIlIIlII("4fu2IcZia/imICZLCn2Krg==", "nfkli");
+        c.lIllIlIIll[c.lIllIlIllI[7]] = c.lIIllIIlIIlII("TEC8GLYwhuw+6KaKYNLOZdCYBK3jcegH", "gCrMS");
+        c.lIllIlIIll[c.lIllIlIllI[9]] = c.lIIllIIlIIlII("zeXH8R/bC4JlwK6CvnZ9yQEbKFElOYCK", "rmKfV");
+        c.lIllIlIIll[c.lIllIlIllI[10]] = c.lIIllIIlIIlII("1ZuRo2xmccWJlraVBZWsTg==", "IgSiH");
+        c.lIllIlIIll[c.lIllIlIllI[11]] = c.lIIllIIlIIIll("FOO8pZMjR/+bivj8DVCYVw==", "JpkKj");
+        c.lIllIlIIll[c.lIllIlIllI[12]] = c.lIIllIIlIIlII("+G7mTD+JV3LgRZyL8y0VAHeN3ZEr3wfc", "ywTjH");
+        c.lIllIlIIll[c.lIllIlIllI[14]] = c.lIIllIIlIIlII("8ScLhcYa18w=", "QmmOU");
+        c.lIllIlIIll[c.lIllIlIllI[16]] = c.lIIllIIlIIIlI("BBMhHyZpHikRNg==", "IrFvE");
+        c.lIllIlIIll[c.lIllIlIllI[18]] = c.lIIllIIlIIIll("8VQ0wV/FM1blBTeFOUn6Dg==", "MvQbJ");
+        c.lIllIlIIll[c.lIllIlIllI[20]] = c.lIIllIIlIIlII("JO7iOpmpWGknk5AqrRkrtA==", "dJeEs");
+        c.lIllIlIIll[c.lIllIlIllI[22]] = c.lIIllIIlIIIll("p4MLgNEfTtQ=", "cPHgK");
+        c.lIllIlIIll[c.lIllIlIllI[24]] = c.lIIllIIlIIIll("uPLL9qeddKQDjc4agwpfIvhDIluitC+A", "kNkfT");
+        c.lIllIlIIll[c.lIllIlIllI[26]] = c.lIIllIIlIIIlI("JDsqGzENKGYOMA4/NhUnFg==", "bZFzU");
+        c.lIllIlIIll[c.lIllIlIllI[28]] = c.lIIllIIlIIlII("X3rBotvtdMKdQmpEzJI6UGilPHXJj6/B", "zNIjT");
+        c.lIllIlIIll[c.lIllIlIllI[30]] = c.lIIllIIlIIIll("AdF4V+rnr4UKvu593TaZBbqcbXcKRJID", "wkJMP");
+        c.lIllIlIIll[c.lIllIlIllI[32]] = c.lIIllIIlIIlII("xIXllkGJoHq+GX9sVsXobPBd2xShPBSU", "GbwNA");
+        c.lIllIlIIll[c.lIllIlIllI[34]] = c.lIIllIIlIIlII("l2fm8bMfJHQ=", "xCuIb");
+        c.lIllIlIIll[c.lIllIlIllI[35]] = c.lIIllIIlIIlII("hyHgIibfxLg=", "minFo");
+        c.lIllIlIIll[c.lIllIlIllI[37]] = c.lIIllIIlIIIlI("RT88AQ4cdX1bSEZidVhCNhgHJkIuIj4cXlY/PAEOHHU=", "yKUub");
+        c.lIllIlIIll[c.lIllIlIllI[38]] = c.lIIllIIlIIIll("KmUo6HLPbk1SgqqKSD5MdA==", "KGzZr");
+    }
+
+    private static void lIIllIIllIIlI() {
+        lIllIlIllI = new int[40];
+        c.lIllIlIllI[0] = -(0xFFFFDABA & 0x3577) & (0xFFFFBEFF & 0x7FFD);
+        c.lIllIlIllI[1] = (0xCE ^ 0x86) & ~(0xFA ^ 0xB2);
+        c.lIllIlIllI[2] = -(0xFFFFDB5D & 0x7CB3) & (0xFFFFDEFF & Short.MAX_VALUE);
+        c.lIllIlIllI[3] = " ".length();
+        c.lIllIlIllI[4] = -(0xFFFFE51F & 0x7FEB) & (0xFFFFE7FB & 0x7F3F);
+        c.lIllIlIllI[5] = "  ".length();
+        c.lIllIlIllI[6] = 0x57 ^ 0x3C ^ (0x56 ^ 3);
+        c.lIllIlIllI[7] = "   ".length();
+        c.lIllIlIllI[8] = 0xFFFFFFF5 & 0x326E;
+        c.lIllIlIllI[9] = 144 + 36 - 92 + 66 ^ 95 + 53 - 51 + 61;
+        c.lIllIlIllI[10] = 0x9A ^ 0x9F;
+        c.lIllIlIllI[11] = 67 + 135 - 100 + 56 ^ 127 + 80 - 93 + 38;
+        c.lIllIlIllI[12] = 0x2F ^ 0x28;
+        c.lIllIlIllI[13] = -(0xFFFFFFD3 & 0x69FD) & (0xFFFFFFFF & 0x6BDE);
+        c.lIllIlIllI[14] = 0x35 ^ 0x3D;
+        c.lIllIlIllI[15] = -(0xFFFFEAD9 & 0x3727) & (0xFFFFEFEB & 0x37FD);
+        c.lIllIlIllI[16] = 0x95 ^ 0x9C;
+        c.lIllIlIllI[17] = 0xFFFFAC29 & 0x5FF7;
+        c.lIllIlIllI[18] = 0x14 ^ 0x6D ^ (0xE2 ^ 0x91);
+        c.lIllIlIllI[19] = -(0xFFFFED7D & 0x7A87) & (0xFFFFEDFF & 0x7FF7);
+        c.lIllIlIllI[20] = 0xA2 ^ 0xA9;
+        c.lIllIlIllI[21] = -(0xFFFFABAF & 0x5ED3) & (0xFFFFDBB3 & 0x2FDF);
+        c.lIllIlIllI[22] = 0x76 ^ 0x20 ^ (0xFA ^ 0xA0);
+        c.lIllIlIllI[23] = -(0xFFFFBF49 & 0x60B7) & (0xFFFFBF5F & 0x7FE7);
+        c.lIllIlIllI[24] = 0x87 ^ 0x8A;
+        c.lIllIlIllI[25] = 0xFFFFFF5F & 0x1FE9;
+        c.lIllIlIllI[26] = 0xAE ^ 0xA0;
+        c.lIllIlIllI[27] = -(0xFFFFF4FD & 0x6BA7) & (0xFFFFFFEE & Short.MAX_VALUE);
+        c.lIllIlIllI[28] = 0x26 ^ 0x3F ^ (0x2B ^ 0x3D);
+        c.lIllIlIllI[29] = -(0x31 ^ 0x24) & (0xFFFFFFDF & 0x1F7F);
+        c.lIllIlIllI[30] = 0x28 ^ 0x38;
+        c.lIllIlIllI[31] = 0xFFFFCFF7 & 0x7CAF;
+        c.lIllIlIllI[32] = 0xB4 ^ 0xA5;
+        c.lIllIlIllI[33] = 0xFFFFDFDF & 0x27E1;
+        c.lIllIlIllI[34] = 65 + 143 - 185 + 122 ^ 42 + 72 - 60 + 77;
+        c.lIllIlIllI[35] = 0x8B ^ 0x98;
+        c.lIllIlIllI[36] = (0x66 ^ 0x54) + (112 + 31 - 73 + 91) - (0xFD ^ 0xB9) + (0x52 ^ 0x6B);
+        c.lIllIlIllI[37] = 0xA5 ^ 0xBC ^ (1 ^ 0xC);
+        c.lIllIlIllI[38] = 0xAD ^ 0xC2 ^ (0xF9 ^ 0x83);
+        c.lIllIlIllI[39] = 0x3F ^ 0x1F ^ (0x5A ^ 0x6C);
+    }
+
+    private static boolean lIIllIIllIlIl(int n2) {
+        return n2 != 0;
+    }
+
+    private static String b(String string) {
+        String string2 = null;
+        String string3 = lIllIlIIll[lIllIlIllI[37]];
+        Pattern pattern = Pattern.compile(string3);
+        Matcher matcher = pattern.matcher(string);
+        if (c.lIIllIIllIlIl(matcher.find() ? 1 : 0)) {
+            string2 = matcher.group(lIllIlIllI[3]);
+        }
+        return string2;
+    }
+
+    static {
+        c.lIIllIIllIIlI();
+        c.lIIllIIllIIIl();
+    }
+
+    private static String lIIllIIlIIlII(String lllllllllllllllllllIIIlIIIIIlIll, String lllllllllllllllllllIIIlIIIIIllII) {
+        try {
+            SecretKeySpec lllllllllllllllllllIIIlIIIIlIIII = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(lllllllllllllllllllIIIlIIIIIllII.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher lllllllllllllllllllIIIlIIIIIllll = Cipher.getInstance("Blowfish");
+            lllllllllllllllllllIIIlIIIIIllll.init(lIllIlIllI[5], lllllllllllllllllllIIIlIIIIlIIII);
+            return new String(lllllllllllllllllllIIIlIIIIIllll.doFinal(Base64.getDecoder().decode(lllllllllllllllllllIIIlIIIIIlIll.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllllllIIIlIIIIIlllI) {
+            lllllllllllllllllllIIIlIIIIIlllI.printStackTrace();
+            return null;
+        }
+    }
+
+    public String d(int n2) {
+        String string;
+        ItemComposition itemComposition = M.getItemComposition(n2);
+        if (c.lIIllIIllIlII(itemComposition)) {
+            string = itemComposition.getName();
+            "".length();
+            if (((0x3E ^ 0x32) & ~(0x6C ^ 0x60)) != 0) {
+                return null;
+            }
+        } else {
+            string = lIllIlIIll[lIllIlIllI[38]];
+        }
+        return string;
+    }
+
+    private static String lIIllIIlIIIlI(String lllllllllllllllllllIIIlIIIIlllIl, String lllllllllllllllllllIIIlIIIIlllII) {
+        lllllllllllllllllllIIIlIIIIlllIl = new String(Base64.getDecoder().decode(lllllllllllllllllllIIIlIIIIlllIl.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllllllIIIlIIIlIIIII = new StringBuilder();
+        char[] lllllllllllllllllllIIIlIIIIlllll = lllllllllllllllllllIIIlIIIIlllII.toCharArray();
+        int lllllllllllllllllllIIIlIIIIllllI = lIllIlIllI[1];
+        char[] lllllllllllllllllllIIIlIIIIllIII = lllllllllllllllllllIIIlIIIIlllIl.toCharArray();
+        int lllllllllllllllllllIIIlIIIIlIlll = lllllllllllllllllllIIIlIIIIllIII.length;
+        int lllllllllllllllllllIIIlIIIIlIllI = lIllIlIllI[1];
+        while (c.lIIllIIllIllI(lllllllllllllllllllIIIlIIIIlIllI, lllllllllllllllllllIIIlIIIIlIlll)) {
+            char lllllllllllllllllllIIIlIIIlIIIll = lllllllllllllllllllIIIlIIIIllIII[lllllllllllllllllllIIIlIIIIlIllI];
+            lllllllllllllllllllIIIlIIIlIIIII.append((char)(lllllllllllllllllllIIIlIIIlIIIll ^ lllllllllllllllllllIIIlIIIIlllll[lllllllllllllllllllIIIlIIIIllllI % lllllllllllllllllllIIIlIIIIlllll.length]));
+            "".length();
+            ++lllllllllllllllllllIIIlIIIIllllI;
+            ++lllllllllllllllllllIIIlIIIIlIllI;
+            "".length();
+            if (((23 + 67 - 72 + 134 ^ 57 + 103 - 36 + 27) & (146 + 125 - 103 + 4 ^ 148 + 102 - 120 + 33 ^ -" ".length())) == ((0xE9 ^ 0xAD ^ (0x1F ^ 0x56)) & (0x78 ^ 0x12 ^ (0xA7 ^ 0xC0) ^ -" ".length()))) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllllllIIIlIIIlIIIII);
+    }
+}
+

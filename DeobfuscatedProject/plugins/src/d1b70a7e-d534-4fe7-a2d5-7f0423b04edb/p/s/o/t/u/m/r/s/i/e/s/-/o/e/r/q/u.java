@@ -1,0 +1,116 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.google.inject.Inject
+ *  gg.squire.client.plugins.fw.TaskDesc
+ *  net.runelite.api.Client
+ *  net.unethicalite.api.items.Inventory
+ */
+package p.s.o.t.u.m.r.s.i.e.s.-.o.e.r.q;
+
+import com.google.inject.Inject;
+import gg.squire.client.plugins.fw.TaskDesc;
+import gg.squire.tempoross.SquireTempoross;
+import gg.squire.tempoross.SquireTemporossConfig;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.Client;
+import net.unethicalite.api.items.Inventory;
+import p.s.o.t.u.m.r.s.i.e.s.-.o.e.r.q.a;
+import p.s.o.t.u.m.r.s.i.e.s.-.o.e.r.q.l;
+
+@TaskDesc(name="Rid extras", priority=50)
+public class u
+extends l {
+    private static /* synthetic */ String[] lIIllIllIlIII;
+    private static /* synthetic */ int[] lIIllIllIlIIl;
+
+    private static void lIllIIIlIIllIlI() {
+        lIIllIllIlIII = new String[lIIllIllIlIIl[4]];
+        u.lIIllIllIlIII[u.lIIllIllIlIIl[1]] = u.lIllIIIlIIllIIl("0ctXm6VrG9w=", "wCzmD");
+        u.lIIllIllIlIII[u.lIIllIllIlIIl[0]] = u.lIllIIIlIIllIIl("fTv6tPBwLQI=", "QEBYz");
+    }
+
+    @Override
+    public boolean al() {
+        u llllllllllllllIlllIlllIlIIIllIll;
+        int[] nArray = new int[lIIllIllIlIIl[0]];
+        nArray[u.lIIllIllIlIIl[1]] = lIIllIllIlIIl[2];
+        if (u.lIllIIIlIIlllIl(Inventory.getCount((int[])nArray), lIIllIllIlIIl[0])) {
+            int[] nArray2 = new int[lIIllIllIlIIl[0]];
+            nArray2[u.lIIllIllIlIIl[1]] = lIIllIllIlIIl[2];
+            Inventory.getFirst((int[])nArray2).interact(lIIllIllIlIII[lIIllIllIlIIl[1]]);
+            return lIIllIllIlIIl[0];
+        }
+        if (u.lIllIIIlIIlllIl(llllllllllllllIlllIlllIlIIIllIll.ar.n(), llllllllllllllIlllIlllIlIIIllIll.as.numberOfBuckets())) {
+            int[] nArray3 = new int[lIIllIllIlIIl[0]];
+            nArray3[u.lIIllIllIlIIl[1]] = lIIllIllIlIIl[3];
+            Inventory.getFirst((int[])nArray3).interact(lIIllIllIlIII[lIIllIllIlIIl[0]]);
+        }
+        return lIIllIllIlIIl[1];
+    }
+
+    @Inject
+    protected u(a a2, SquireTemporossConfig squireTemporossConfig, Client client, SquireTempoross squireTempoross) {
+        super(a2, squireTemporossConfig, client, squireTempoross);
+    }
+
+    private static void lIllIIIlIIllIll() {
+        lIIllIllIlIIl = new int[6];
+        u.lIIllIllIlIIl[0] = " ".length();
+        u.lIIllIllIlIIl[1] = (0x4E ^ 0 ^ (0x72 ^ 0x5C)) & (121 + 21 - -7 + 106 ^ 69 + 53 - 0 + 37 ^ -" ".length());
+        u.lIIllIllIlIIl[2] = 0xFFFF9FBA & 0x63FF;
+        u.lIIllIllIlIIl[3] = -(0xFFFFD9D7 & 0x6639) & (0xFFFFCF9F & 0x7EFF);
+        u.lIIllIllIlIIl[4] = "  ".length();
+        u.lIIllIllIlIIl[5] = 0x68 ^ 1 ^ (0xA0 ^ 0xC1);
+    }
+
+    static {
+        u.lIllIIIlIIllIll();
+        u.lIllIIIlIIllIlI();
+    }
+
+    private static boolean lIllIIIlIIlllIl(int n2, int n3) {
+        return n2 > n3;
+    }
+
+    @Override
+    public boolean ak() {
+        int n2;
+        int[] nArray = new int[lIIllIllIlIIl[0]];
+        nArray[u.lIIllIllIlIIl[1]] = lIIllIllIlIIl[2];
+        if (!u.lIllIIIlIIlllII(Inventory.getCount((int[])nArray), lIIllIllIlIIl[0]) || u.lIllIIIlIIlllIl(this.ar.n(), this.as.numberOfBuckets())) {
+            n2 = lIIllIllIlIIl[0];
+            "".length();
+            if (null != null) {
+                return ((0xB3 ^ 0x91 ^ (0xBC ^ 0x8B)) & (0xA8 ^ 0x8D ^ (0x25 ^ 0x15) ^ -" ".length())) != 0;
+            }
+        } else {
+            n2 = lIIllIllIlIIl[1];
+        }
+        return n2 != 0;
+    }
+
+    private static boolean lIllIIIlIIlllII(int n2, int n3) {
+        return n2 <= n3;
+    }
+
+    private static String lIllIIIlIIllIIl(String llllllllllllllIlllIlllIlIIIlIIll, String llllllllllllllIlllIlllIlIIIlIIlI) {
+        try {
+            SecretKeySpec llllllllllllllIlllIlllIlIIIlIllI = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(llllllllllllllIlllIlllIlIIIlIIlI.getBytes(StandardCharsets.UTF_8)), lIIllIllIlIIl[5]), "DES");
+            Cipher llllllllllllllIlllIlllIlIIIlIlIl = Cipher.getInstance("DES");
+            llllllllllllllIlllIlllIlIIIlIlIl.init(lIIllIllIlIIl[4], llllllllllllllIlllIlllIlIIIlIllI);
+            return new String(llllllllllllllIlllIlllIlIIIlIlIl.doFinal(Base64.getDecoder().decode(llllllllllllllIlllIlllIlIIIlIIll.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception llllllllllllllIlllIlllIlIIIlIlII) {
+            llllllllllllllIlllIlllIlIIIlIlII.printStackTrace();
+            return null;
+        }
+    }
+}
+

@@ -1,0 +1,10 @@
+Summary for e2a56d76-bd9d-40c9-839c-e5b25fb4c3a0.jar
+Decompiled with CFR 0.152
+
+
+e.t.r.i.s.h.q.n.r.u.-.u.e.a
+----------------------------
+
+b()
+  Unable to fully structure code
+  Could not resolve type clashes

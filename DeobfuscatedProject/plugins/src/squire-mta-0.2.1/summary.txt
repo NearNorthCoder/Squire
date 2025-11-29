@@ -1,0 +1,2 @@
+Summary for squire-mta-0.2.1.jar
+Decompiled with CFR 0.152

@@ -1,0 +1,145 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.util.Objects;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a.o;
+import s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a.p;
+
+public final class m
+extends Enum<m> {
+    private static /* synthetic */ String[] llllIIlIIIll;
+    public static final /* synthetic */ /* enum */ m DEFENSIVE;
+    public static final /* synthetic */ /* enum */ m NONE;
+    private static final /* synthetic */ m[] $VALUES;
+    public static final /* synthetic */ /* enum */ m MAGIC;
+    private static /* synthetic */ int[] llllIIlIIlII;
+    public static final /* synthetic */ /* enum */ m CONTROLLED;
+    public static final /* synthetic */ /* enum */ m ACCURATE;
+    public static final /* synthetic */ /* enum */ m AGGRESSIVE;
+
+    private static String lIIIllllIlllIIl(String lllllllllllllllIIlIllllIlIlIlIII, String lllllllllllllllIIlIllllIlIlIIlIl) {
+        try {
+            SecretKeySpec lllllllllllllllIIlIllllIlIlIlIll = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(lllllllllllllllIIlIllllIlIlIIlIl.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher lllllllllllllllIIlIllllIlIlIlIlI = Cipher.getInstance("Blowfish");
+            lllllllllllllllIIlIllllIlIlIlIlI.init(llllIIlIIlII[2], lllllllllllllllIIlIllllIlIlIlIll);
+            return new String(lllllllllllllllIIlIllllIlIlIlIlI.doFinal(Base64.getDecoder().decode(lllllllllllllllIIlIllllIlIlIlIII.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIIlIllllIlIlIlIIl) {
+            lllllllllllllllIIlIllllIlIlIlIIl.printStackTrace();
+            return null;
+        }
+    }
+
+    public static m[] values() {
+        return (m[])$VALUES.clone();
+    }
+
+    private static void lIIIllllIlllIll() {
+        llllIIlIIlII = new int[7];
+        m.llllIIlIIlII[0] = (120 + 119 - 130 + 47 ^ 80 + 73 - 58 + 48) & (0x4C ^ 0x29 ^ (0x6D ^ 0x1B) ^ -" ".length());
+        m.llllIIlIIlII[1] = " ".length();
+        m.llllIIlIIlII[2] = "  ".length();
+        m.llllIIlIIlII[3] = "   ".length();
+        m.llllIIlIIlII[4] = 55 + 7 - 61 + 137 ^ 82 + 89 - 127 + 98;
+        m.llllIIlIIlII[5] = 0x80 ^ 0x85;
+        m.llllIIlIIlII[6] = 0xAE ^ 0xA8;
+    }
+
+    public boolean bk() {
+        boolean bl;
+        m[] mArray = new m[llllIIlIIlII[1]];
+        mArray[m.llllIIlIIlII[0]] = this;
+        if (m.lIIIllllIllllIl(p.a(mArray).isEmpty() ? 1 : 0)) {
+            bl = llllIIlIIlII[1];
+            "".length();
+            if ("   ".length() <= 0) {
+                return ((0xC ^ 0x4C ^ (0x17 ^ 0x11)) & (0xE0 ^ 0xA9 ^ (0x6D ^ 0x62) ^ -" ".length())) != 0;
+            }
+        } else {
+            bl = llllIIlIIlII[0];
+        }
+        return bl;
+    }
+
+    private static boolean lIIIllllIlllllI(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static void lIIIllllIlllIlI() {
+        llllIIlIIIll = new String[llllIIlIIlII[6]];
+        m.llllIIlIIIll[m.llllIIlIIlII[0]] = m.lIIIllllIlllIII("IywtEjwjOys=", "bonGn");
+        m.llllIIlIIIll[m.llllIIlIIlII[1]] = m.lIIIllllIlllIII("MzETPyIhJR07Ig==", "rvTmg");
+        m.llllIIlIIIll[m.llllIIlIIlII[2]] = m.lIIIllllIlllIII("BR06OwAJHjgqFg==", "FRtoR");
+        m.llllIIlIIIll[m.llllIIlIIlII[3]] = m.lIIIllllIlllIIl("b1uXTPrtBxOZH0UTE5kjLA==", "VPsQH");
+        m.llllIIlIIIll[m.llllIIlIIlII[4]] = m.lIIIllllIlllIIl("G3XM0On0XzI=", "cERRI");
+        m.llllIIlIIIll[m.llllIIlIIlII[5]] = m.lIIIllllIlllIIl("U6xEnh7WoEc=", "FfRdK");
+    }
+
+    private static boolean lIIIllllIllllIl(int n2) {
+        return n2 == 0;
+    }
+
+    private static String lIIIllllIlllIII(String lllllllllllllllIIlIllllIlIllllIl, String lllllllllllllllIIlIllllIlIllllII) {
+        lllllllllllllllIIlIllllIlIllllIl = new String(Base64.getDecoder().decode(lllllllllllllllIIlIllllIlIllllIl.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllIIlIllllIlIlllIll = new StringBuilder();
+        char[] lllllllllllllllIIlIllllIlIlllIlI = lllllllllllllllIIlIllllIlIllllII.toCharArray();
+        int lllllllllllllllIIlIllllIlIlllIIl = llllIIlIIlII[0];
+        char[] lllllllllllllllIIlIllllIlIllIIll = lllllllllllllllIIlIllllIlIllllIl.toCharArray();
+        int lllllllllllllllIIlIllllIlIllIIlI = lllllllllllllllIIlIllllIlIllIIll.length;
+        int lllllllllllllllIIlIllllIlIllIIIl = llllIIlIIlII[0];
+        while (m.lIIIllllIlllllI(lllllllllllllllIIlIllllIlIllIIIl, lllllllllllllllIIlIllllIlIllIIlI)) {
+            char lllllllllllllllIIlIllllIlIlllllI = lllllllllllllllIIlIllllIlIllIIll[lllllllllllllllIIlIllllIlIllIIIl];
+            lllllllllllllllIIlIllllIlIlllIll.append((char)(lllllllllllllllIIlIllllIlIlllllI ^ lllllllllllllllIIlIllllIlIlllIlI[lllllllllllllllIIlIllllIlIlllIIl % lllllllllllllllIIlIllllIlIlllIlI.length]));
+            "".length();
+            ++lllllllllllllllIIlIllllIlIlllIIl;
+            ++lllllllllllllllIIlIllllIlIllIIIl;
+            "".length();
+            if ("   ".length() > "  ".length()) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllIIlIllllIlIlllIll);
+    }
+
+    public static m valueOf(String string) {
+        return Enum.valueOf(m.class, string);
+    }
+
+    public boolean bj() {
+        o o2 = p.bq();
+        if (m.lIIIllllIllllII(o2)) {
+            return llllIIlIIlII[0];
+        }
+        return Objects.equals((Object)o2.bn(), (Object)this);
+    }
+
+    private static boolean lIIIllllIllllII(Object object) {
+        return object == null;
+    }
+
+    static {
+        m.lIIIllllIlllIll();
+        m.lIIIllllIlllIlI();
+        ACCURATE = new m();
+        AGGRESSIVE = new m();
+        CONTROLLED = new m();
+        DEFENSIVE = new m();
+        MAGIC = new m();
+        NONE = new m();
+        m[] mArray = new m[llllIIlIIlII[6]];
+        mArray[m.llllIIlIIlII[0]] = ACCURATE;
+        mArray[m.llllIIlIIlII[1]] = AGGRESSIVE;
+        mArray[m.llllIIlIIlII[2]] = CONTROLLED;
+        mArray[m.llllIIlIIlII[3]] = DEFENSIVE;
+        mArray[m.llllIIlIIlII[4]] = MAGIC;
+        mArray[m.llllIIlIIlII[5]] = NONE;
+        $VALUES = mArray;
+    }
+}
+

@@ -1,0 +1,151 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.runelite.api.Skill
+ *  net.runelite.api.TileObject
+ *  net.unethicalite.api.entities.TileObjects
+ *  net.unethicalite.api.game.Combat
+ *  net.unethicalite.api.game.Skills
+ *  net.unethicalite.api.movement.Movement
+ *  net.unethicalite.api.widgets.Prayers
+ */
+package a.b.r.s.s.i.c.l.r.q.u.t.o.-.-.e.r.e.o.p.a.e;
+
+import a.b.r.s.s.i.c.l.r.q.u.t.o.-.-.e.r.e.o.p.a.e.a;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.Skill;
+import net.runelite.api.TileObject;
+import net.unethicalite.api.entities.TileObjects;
+import net.unethicalite.api.game.Combat;
+import net.unethicalite.api.game.Skills;
+import net.unethicalite.api.movement.Movement;
+import net.unethicalite.api.widgets.Prayers;
+
+public abstract class m
+extends a {
+    private static /* synthetic */ int[] lIlIllllllll;
+    private static /* synthetic */ String[] lIlIlllllllI;
+
+    static {
+        m.lllIIIllIIIllI();
+        m.lllIIIllIIIlIl();
+    }
+
+    private static boolean lllIIIllIIlIlI(int n2) {
+        return n2 != 0;
+    }
+
+    private static boolean lllIIIllIIIlll(Object object) {
+        return object != null;
+    }
+
+    public boolean m() {
+        if (m.lllIIIllIIlIII(Combat.getSpecEnergy(), lIlIllllllll[2])) {
+            return lIlIllllllll[0];
+        }
+        if (m.lllIIIllIIlIIl(Combat.getMissingHealth())) {
+            return lIlIllllllll[0];
+        }
+        if (m.lllIIIllIIlIII(Prayers.getPoints(), Skills.getLevel((Skill)Skill.PRAYER))) {
+            return lIlIllllllll[0];
+        }
+        if (m.lllIIIllIIlIII(Movement.getRunEnergy(), lIlIllllllll[3])) {
+            return lIlIllllllll[0];
+        }
+        return lIlIllllllll[1];
+    }
+
+    private static void lllIIIllIIIlIl() {
+        lIlIlllllllI = new String[lIlIllllllll[4]];
+        m.lIlIlllllllI[m.lIlIllllllll[1]] = m."Portal";
+        m.lIlIlllllllI[m.lIlIllllllll[0]] = m."Lock";
+    }
+
+    private static String lllIIIllIIIIll(String lllllllllllllllIllIIIlIlllllIIll, String lllllllllllllllIllIIIlIlllllIIlI) {
+        lllllllllllllllIllIIIlIlllllIIll = new String(Base64.getDecoder().decode(lllllllllllllllIllIIIlIlllllIIll.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllIllIIIlIlllllIllI = new StringBuilder();
+        char[] lllllllllllllllIllIIIlIlllllIlIl = lllllllllllllllIllIIIlIlllllIIlI.toCharArray();
+        int lllllllllllllllIllIIIlIlllllIlII = lIlIllllllll[1];
+        char[] lllllllllllllllIllIIIlIllllIlllI = lllllllllllllllIllIIIlIlllllIIll.toCharArray();
+        int lllllllllllllllIllIIIlIllllIllIl = lllllllllllllllIllIIIlIllllIlllI.length;
+        int lllllllllllllllIllIIIlIllllIllII = lIlIllllllll[1];
+        while (m.lllIIIllIIlIII(lllllllllllllllIllIIIlIllllIllII, lllllllllllllllIllIIIlIllllIllIl)) {
+            char lllllllllllllllIllIIIlIllllllIIl = lllllllllllllllIllIIIlIllllIlllI[lllllllllllllllIllIIIlIllllIllII];
+            lllllllllllllllIllIIIlIlllllIllI.append((char)(lllllllllllllllIllIIIlIllllllIIl ^ lllllllllllllllIllIIIlIlllllIlIl[lllllllllllllllIllIIIlIlllllIlII % lllllllllllllllIllIIIlIlllllIlIl.length]));
+            0;
+            ++lllllllllllllllIllIIIlIlllllIlII;
+            ++lllllllllllllllIllIIIlIllllIllII;
+            0;
+            if ((138 + 1 - 99 + 145 ^ 38 + 152 - 4 + 3) == (106 + 31 - 62 + 57 ^ 101 + 99 - 136 + 64)) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllIllIIIlIlllllIllI);
+    }
+
+    public boolean l() {
+        boolean bl;
+        TileObject tileObject2 = TileObjects.getNearest(tileObject -> {
+            int n2;
+            if (m.lllIIIllIIlIlI(tileObject.getName().equals(lIlIlllllllI[lIlIllllllll[1]]) ? 1 : 0)) {
+                String[] stringArray = new String[lIlIllllllll[0]];
+                stringArray[m.lIlIllllllll[1]] = lIlIlllllllI[lIlIllllllll[0]];
+                if (m.lllIIIllIIlIlI(tileObject.hasAction(stringArray) ? 1 : 0)) {
+                    n2 = lIlIllllllll[0];
+                    0;
+                    if (-1 <= 2) return n2 != 0;
+                    return ((0x72 ^ 0x12) & ~(0x34 ^ 0x54)) != 0;
+                }
+            }
+            n2 = lIlIllllllll[1];
+            return n2 != 0;
+        });
+        if (m.lllIIIllIIIlll(tileObject2)) {
+            bl = lIlIllllllll[0];
+            0;
+            if (null != null) {
+                return ((0x5E ^ 7 ^ (0x78 ^ 0x70)) & (0xB ^ 0x17 ^ (0x22 ^ 0x6F) ^ -1)) != 0;
+            }
+        } else {
+            bl = lIlIllllllll[1];
+        }
+        return bl;
+    }
+
+    private static void lllIIIllIIIllI() {
+        lIlIllllllll = new int[6];
+        m.lIlIllllllll[0] = 1;
+        m.lIlIllllllll[1] = (125 + 125 - 228 + 129 ^ 63 + 109 - 159 + 140) & (0x12 ^ 0x4B ^ (0xDB ^ 0x8C) ^ -1);
+        m.lIlIllllllll[2] = 154 + 44 - 159 + 127 ^ 44 + 151 - 66 + 65;
+        m.lIlIllllllll[3] = 0xF4 ^ 0xC6;
+        m.lIlIllllllll[4] = 2;
+        m.lIlIllllllll[5] = 0x98 ^ 0x90;
+    }
+
+    private static boolean lllIIIllIIlIII(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static boolean lllIIIllIIlIIl(int n2) {
+        return n2 > 0;
+    }
+
+    private static String lllIIIllIIIlII(String lllllllllllllllIllIIIlIllllIIIll, String lllllllllllllllIllIIIlIllllIIIlI) {
+        try {
+            SecretKeySpec lllllllllllllllIllIIIlIllllIIllI = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(lllllllllllllllIllIIIlIllllIIIlI.getBytes(StandardCharsets.UTF_8)), lIlIllllllll[5]), "DES");
+            Cipher lllllllllllllllIllIIIlIllllIIlIl = Cipher.getInstance("DES");
+            lllllllllllllllIllIIIlIllllIIlIl.init(lIlIllllllll[4], lllllllllllllllIllIIIlIllllIIllI);
+            return new String(lllllllllllllllIllIIIlIllllIIlIl.doFinal(Base64.getDecoder().decode(lllllllllllllllIllIIIlIllllIIIll.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIllIIIlIllllIIlII) {
+            lllllllllllllllIllIIIlIllllIIlII.printStackTrace();
+            return null;
+        }
+    }
+}
+

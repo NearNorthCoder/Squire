@@ -1,0 +1,178 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  gg.squire.client.util.Log
+ *  net.runelite.api.Skill
+ *  net.runelite.api.widgets.Widget
+ *  net.unethicalite.api.commons.Rand
+ *  net.unethicalite.api.commons.Time
+ *  net.unethicalite.api.query.results.WidgetQueryResults
+ *  net.unethicalite.api.widgets.Tab
+ *  net.unethicalite.api.widgets.Tabs
+ *  net.unethicalite.api.widgets.Widgets
+ */
+package s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a;
+
+import gg.squire.client.util.Log;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Objects;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.Skill;
+import net.runelite.api.widgets.Widget;
+import net.unethicalite.api.commons.Rand;
+import net.unethicalite.api.commons.Time;
+import net.unethicalite.api.query.results.WidgetQueryResults;
+import net.unethicalite.api.widgets.Tab;
+import net.unethicalite.api.widgets.Tabs;
+import net.unethicalite.api.widgets.Widgets;
+import s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a.m;
+import s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a.n;
+import s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a.p;
+import s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a.q;
+
+public class o {
+    private static /* synthetic */ String[] lllIlllIIllI;
+    private final /* synthetic */ m bS;
+    private final /* synthetic */ q bQ;
+    private final /* synthetic */ n bR;
+    private static /* synthetic */ int[] lllIlllIIlll;
+    private final /* synthetic */ Skill[] bT;
+
+    public n bm() {
+        return this.bR;
+    }
+
+    private static void lIIIllIlllIIIll() {
+        lllIlllIIllI = new String[lllIlllIIlll[2]];
+        o.lllIlllIIllI[o.lllIlllIIlll[1]] = o.lIIIllIlllIIIIl("15D2rKP4XJoDWJdIUu9RMOZIyGNvwxXWfSKabGPJKFIJf/B1xBYZVw2XqDdfEo4Vkd6XOUpSe8lmHhgGx46kPoS3ZcbHU1F+vFc9qEFI7jQ=", "IrwIA");
+    }
+
+    public boolean bk() {
+        return p.br().contains(this);
+    }
+
+    public m bn() {
+        return this.bS;
+    }
+
+    private static boolean lIIIllIlllIIlll(int n2) {
+        return n2 != 0;
+    }
+
+    public boolean bj() {
+        return Objects.equals(p.bq(), this);
+    }
+
+    public Skill[] bo() {
+        return this.bT;
+    }
+
+    private static boolean lIIIllIlllIlIlI(Object object) {
+        return object != null;
+    }
+
+    private static String lIIIllIlllIIIIl(String lllllllllllllllIIllIIlIIlllIIIIl, String lllllllllllllllIIllIIlIIlllIIIlI) {
+        try {
+            SecretKeySpec lllllllllllllllIIllIIlIIlllIIllI = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(lllllllllllllllIIllIIlIIlllIIIlI.getBytes(StandardCharsets.UTF_8)), lllIlllIIlll[8]), "DES");
+            Cipher lllllllllllllllIIllIIlIIlllIIlIl = Cipher.getInstance("DES");
+            lllllllllllllllIIllIIlIIlllIIlIl.init(lllIlllIIlll[3], lllllllllllllllIIllIIlIIlllIIllI);
+            return new String(lllllllllllllllIIllIIlIIlllIIlIl.doFinal(Base64.getDecoder().decode(lllllllllllllllIIllIIlIIlllIIIIl.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIIllIIlIIlllIIlII) {
+            lllllllllllllllIIllIIlIIlllIIlII.printStackTrace();
+            return null;
+        }
+    }
+
+    private static void lIIIllIlllIIlIl() {
+        lllIlllIIlll = new int[9];
+        o.lllIlllIIlll[0] = "   ".length();
+        o.lllIlllIIlll[1] = (0x2D ^ 0x17 ^ (0x38 ^ 0x37)) & (103 + 140 - 178 + 103 ^ 151 + 75 - 173 + 104 ^ -" ".length());
+        o.lllIlllIIlll[2] = " ".length();
+        o.lllIlllIIlll[3] = "  ".length();
+        o.lllIlllIIlll[4] = 0x79 ^ 0x26;
+        o.lllIlllIIlll[5] = -(0xFFFFD53F & 0x7FEF) & (0xFFFFF77F & 0x5FFF);
+        o.lllIlllIIlll[6] = 0xFFFFFF78 & 0x2DF;
+        o.lllIlllIIlll[7] = -(0xFFFFD573 & 0x3B8F) & (0xFFFF97B3 & 0x7DFE);
+        o.lllIlllIIlll[8] = 0x86 ^ 0x8E;
+    }
+
+    private static boolean lIIIllIlllIlIII(int n2) {
+        return n2 == 0;
+    }
+
+    public boolean bp() {
+        o lllllllllllllllIIllIIlIIlllIlllI;
+        o o2 = p.bq();
+        if (o.lIIIllIlllIIllI(o2, this)) {
+            return lllIlllIIlll[2];
+        }
+        if (o.lIIIllIlllIIlll(p.br().contains(lllllllllllllllIIllIIlIIlllIlllI) ? 1 : 0)) {
+            System.out.println(lllIlllIIllI[lllIlllIIlll[1]]);
+            if (o.lIIIllIlllIlIII(Tabs.isOpen((Tab)Tab.COMBAT) ? 1 : 0)) {
+                Tabs.open((Tab)Tab.COMBAT);
+            }
+            if (o.lIIIllIlllIIlll(Tabs.isOpen((Tab)Tab.COMBAT) ? 1 : 0)) {
+                String lllllllllllllllIIllIIlIIlllIllII = lllllllllllllllIIllIIlIIlllIlllI.bQ.bC();
+                if (o.lIIIllIlllIlIIl(lllllllllllllllIIllIIlIIlllIllII)) {
+                    lllllllllllllllIIllIIlIIlllIllII = lllllllllllllllIIllIIlIIlllIlllI.bQ.name();
+                    lllllllllllllllIIllIIlIIlllIllII = lllllllllllllllIIllIIlIIlllIllII.substring(lllIlllIIlll[1], lllllllllllllllIIllIIlIIlllIllII.indexOf(lllIlllIIlll[4])).toLowerCase();
+                }
+                int[] nArray = new int[lllIlllIIlll[2]];
+                nArray[o.lllIlllIIlll[1]] = lllIlllIIlll[1];
+                String[] stringArray = new String[lllIlllIIlll[2]];
+                stringArray[o.lllIlllIIlll[1]] = lllllllllllllllIIllIIlIIlllIllII;
+                Widget lllllllllllllllIIllIIlIIlllIlIll = (Widget)((WidgetQueryResults)Widgets.query((int)lllIlllIIlll[5]).types(nArray).actions(stringArray).results()).first();
+                if (o.lIIIllIlllIlIlI(lllllllllllllllIIllIIlIIlllIlIll)) {
+                    lllllllllllllllIIllIIlIIlllIlIll.interact(lllllllllllllllIIllIIlIIlllIllII);
+                    return Time.sleepUntil(lllllllllllllllIIllIIlIIlllIlllI::bj, (int)Rand.nextInt((int)lllIlllIIlll[6], (int)lllIlllIIlll[7]));
+                }
+                "".length();
+                if (" ".length() < " ".length()) {
+                    return ((0x48 ^ 3) & ~(0xFD ^ 0xB6)) != 0;
+                }
+            }
+        } else {
+            Log.debug((String)("[CombatOption] " + lllllllllllllllIIllIIlIIlllIlllI + " is not available on " + p.bs()));
+        }
+        return lllIlllIIlll[1];
+    }
+
+    private static boolean lIIIllIlllIlIIl(Object object) {
+        return object == null;
+    }
+
+    o(q q2, n n2, m m2, Skill skill, Skill skill2) {
+        Skill[] skillArray = new Skill[lllIlllIIlll[0]];
+        skillArray[o.lllIlllIIlll[1]] = skill;
+        skillArray[o.lllIlllIIlll[2]] = skill2;
+        skillArray[o.lllIlllIIlll[3]] = null;
+        this(q2, n2, m2, skillArray);
+    }
+
+    static {
+        o.lIIIllIlllIIlIl();
+        o.lIIIllIlllIIIll();
+    }
+
+    public q bl() {
+        return this.bQ;
+    }
+
+    o(q q2, n n2, m m2, Skill ... skillArray) {
+        this.bQ = q2;
+        this.bR = n2;
+        this.bS = m2;
+        this.bT = skillArray;
+    }
+
+    private static boolean lIIIllIlllIIllI(Object object, Object object2) {
+        return object == object2;
+    }
+}
+

@@ -1,0 +1,131 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  gg.squire.client.plugins.fw.Task
+ *  gg.squire.client.plugins.fw.TaskDesc
+ *  gg.squire.client.util.Log
+ *  javax.inject.Inject
+ *  net.unethicalite.api.items.Bank
+ *  net.unethicalite.api.items.Inventory
+ */
+package w.r.e.i.d.r.q.u.e.-.c.u.o.s.o.t.t;
+
+import gg.squire.client.plugins.fw.Task;
+import gg.squire.client.plugins.fw.TaskDesc;
+import gg.squire.client.util.Log;
+import gg.squire.woodcutting.SquireWoodcutterConfig;
+import gg.squire.woodcutting.SquireWoodcutterPlugin;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
+import net.unethicalite.api.items.Bank;
+import net.unethicalite.api.items.Inventory;
+
+@TaskDesc(name="Checking state", priority=133337, register=true)
+public class h
+extends Task {
+    private static /* synthetic */ String[] lIllIIIlIIIlI;
+    private static /* synthetic */ int[] lIllIIIlIIIll;
+    private final /* synthetic */ SquireWoodcutterConfig H;
+    private final /* synthetic */ SquireWoodcutterPlugin G;
+
+    public boolean run() {
+        h llllllllllllllIllIIllIIIIIIlIllI;
+        if (h.llIIIlIIllIIIlI(this.G.g() ? 1 : 0) && h.llIIIlIIllIIIlI(Bank.isOpen() ? 1 : 0)) {
+            Log.info((String)lIllIIIlIIIlI[lIllIIIlIIIll[0]]);
+            this.G.a(lIllIIIlIIIll[0]);
+            Bank.close();
+        }
+        if (h.llIIIlIIllIIIlI(llllllllllllllIllIIllIIIIIIlIllI.G.p() ? 1 : 0)) {
+            return lIllIIIlIIIll[0];
+        }
+        if (h.llIIIlIIllIIIlI(Inventory.isFull() ? 1 : 0) && h.llIIIlIIllIIIlI(llllllllllllllIllIIllIIIIIIlIllI.H.bank() ? 1 : 0)) {
+            Log.info((String)lIllIIIlIIIlI[lIllIIIlIIIll[1]]);
+            llllllllllllllIllIIllIIIIIIlIllI.G.a(lIllIIIlIIIll[1]);
+            return lIllIIIlIIIll[1];
+        }
+        if (h.llIIIlIIllIIIll(llllllllllllllIllIIllIIIIIIlIllI.G.d() ? 1 : 0) && (!h.llIIIlIIllIIIll(llllllllllllllIllIIllIIIIIIlIllI.H.fastTickChop() ? 1 : 0) || h.llIIIlIIllIIIlI(llllllllllllllIllIIllIIIIIIlIllI.H.tickChop() ? 1 : 0))) {
+            Log.info((String)lIllIIIlIIIlI[lIllIIIlIIIll[2]]);
+            llllllllllllllIllIIllIIIIIIlIllI.G.a(lIllIIIlIIIll[1]);
+            return lIllIIIlIIIll[1];
+        }
+        return lIllIIIlIIIll[0];
+    }
+
+    private static boolean llIIIlIIllIIIll(int n) {
+        return n == 0;
+    }
+
+    @Inject
+    public h(SquireWoodcutterPlugin squireWoodcutterPlugin, SquireWoodcutterConfig squireWoodcutterConfig) {
+        this.G = squireWoodcutterPlugin;
+        this.H = squireWoodcutterConfig;
+    }
+
+    private static String llIIIlIIlIlllll(String llllllllllllllIllIIlIlllllllIlII, String llllllllllllllIllIIlIlllllllIIll) {
+        try {
+            SecretKeySpec llllllllllllllIllIIlIllllllllIIl = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(llllllllllllllIllIIlIlllllllIIll.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher llllllllllllllIllIIlIllllllllIII = Cipher.getInstance("Blowfish");
+            llllllllllllllIllIIlIllllllllIII.init(lIllIIIlIIIll[2], llllllllllllllIllIIlIllllllllIIl);
+            return new String(llllllllllllllIllIIlIllllllllIII.doFinal(Base64.getDecoder().decode(llllllllllllllIllIIlIlllllllIlII.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception llllllllllllllIllIIlIlllllllIlll) {
+            llllllllllllllIllIIlIlllllllIlll.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String llIIIlIIlIllllI(String llllllllllllllIllIIllIIIIIIIIllI, String llllllllllllllIllIIllIIIIIIIIlIl) {
+        llllllllllllllIllIIllIIIIIIIIllI = new String(Base64.getDecoder().decode(llllllllllllllIllIIllIIIIIIIIllI.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder llllllllllllllIllIIllIIIIIIIlIIl = new StringBuilder();
+        char[] llllllllllllllIllIIllIIIIIIIlIII = llllllllllllllIllIIllIIIIIIIIlIl.toCharArray();
+        int llllllllllllllIllIIllIIIIIIIIlll = lIllIIIlIIIll[0];
+        char[] llllllllllllllIllIIllIIIIIIIIIIl = llllllllllllllIllIIllIIIIIIIIllI.toCharArray();
+        int llllllllllllllIllIIllIIIIIIIIIII = llllllllllllllIllIIllIIIIIIIIIIl.length;
+        int llllllllllllllIllIIlIlllllllllll = lIllIIIlIIIll[0];
+        while (h.llIIIlIIllIIlII(llllllllllllllIllIIlIlllllllllll, llllllllllllllIllIIllIIIIIIIIIII)) {
+            char llllllllllllllIllIIllIIIIIIIllII = llllllllllllllIllIIllIIIIIIIIIIl[llllllllllllllIllIIlIlllllllllll];
+            llllllllllllllIllIIllIIIIIIIlIIl.append((char)(llllllllllllllIllIIllIIIIIIIllII ^ llllllllllllllIllIIllIIIIIIIlIII[llllllllllllllIllIIllIIIIIIIIlll % llllllllllllllIllIIllIIIIIIIlIII.length]));
+            "".length();
+            ++llllllllllllllIllIIllIIIIIIIIlll;
+            ++llllllllllllllIllIIlIlllllllllll;
+            "".length();
+            if ((0xA4 ^ 0xA1) != 0) continue;
+            return null;
+        }
+        return String.valueOf(llllllllllllllIllIIllIIIIIIIlIIl);
+    }
+
+    private static boolean llIIIlIIllIIlII(int n, int n2) {
+        return n < n2;
+    }
+
+    private static void llIIIlIIllIIIIl() {
+        lIllIIIlIIIll = new int[4];
+        h.lIllIIIlIIIll[0] = (0x48 ^ 0x6C ^ (0x2E ^ 0x55)) & ("   ".length() ^ (0x30 ^ 0x6C) ^ -" ".length());
+        h.lIllIIIlIIIll[1] = " ".length();
+        h.lIllIIIlIIIll[2] = "  ".length();
+        h.lIllIIIlIIIll[3] = "   ".length();
+    }
+
+    private static boolean llIIIlIIllIIIlI(int n) {
+        return n != 0;
+    }
+
+    static {
+        h.llIIIlIIllIIIIl();
+        h.llIIIlIIllIIIII();
+    }
+
+    private static void llIIIlIIllIIIII() {
+        lIllIIIlIIIlI = new String[lIllIIIlIIIll[3]];
+        h.lIllIIIlIIIlI[h.lIllIIIlIIIll[0]] = h.llIIIlIIlIllllI("FQkhPVAzByEzGT8BY3gTPQk8MR42Ri05HjpI", "QfOXp");
+        h.lIllIIIlIIIlI[h.lIllIIIlIIIll[1]] = h.llIIIlIIlIlllll("qJgKy4JGBoxxk2FXJ3ZrqHitva1+Jh8Ep7+a2DudqZvPGv+BH6xVyw==", "iuQqC");
+        h.lIllIIIlIIIlI[h.lIllIIIlIIIll[2]] = h.llIIIlIIlIlllll("ZHWwRyGqwFnO35Z6OHDquz0eKRmDx9XkYNicwAn21Xb7Nf5JFAcA3uujXjIbaEkQL9X9M/qRNe/26pMI2O13qQ==", "LQGDN");
+    }
+}
+

@@ -1,0 +1,165 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.util.Objects;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a.o;
+import s.i.e.i.m.r.-.q.e.g.h.u.n.t.r.a.p;
+
+public final class n
+extends Enum<n> {
+    private static final /* synthetic */ n[] $VALUES;
+    public static final /* synthetic */ /* enum */ n CRUSH;
+    public static final /* synthetic */ /* enum */ n EMITS_A_JET_OF_FLAME;
+    public static final /* synthetic */ /* enum */ n SPELLCASTING;
+    private static /* synthetic */ int[] llllIlllIlIl;
+    public static final /* synthetic */ /* enum */ n STAB;
+    public static final /* synthetic */ /* enum */ n NONE;
+    public static final /* synthetic */ /* enum */ n SLASH;
+    public static final /* synthetic */ /* enum */ n MAGIC;
+    private static /* synthetic */ String[] llllIlllIlII;
+    public static final /* synthetic */ /* enum */ n DEFENSIVE_CASTING;
+    public static final /* synthetic */ /* enum */ n RANGED;
+    public static final /* synthetic */ /* enum */ n FIRES_AN_EXPLOSIVE_ROUND;
+
+    private static void lIIlIIIllllIlII() {
+        llllIlllIlIl = new int[11];
+        n.llllIlllIlIl[0] = (0x9A ^ 0x87) & ~(0xB3 ^ 0xAE);
+        n.llllIlllIlIl[1] = " ".length();
+        n.llllIlllIlIl[2] = "  ".length();
+        n.llllIlllIlIl[3] = "   ".length();
+        n.llllIlllIlIl[4] = 0x67 ^ 0x63;
+        n.llllIlllIlIl[5] = 118 + 30 - 130 + 153 ^ 81 + 90 - 42 + 45;
+        n.llllIlllIlIl[6] = 0x31 ^ 0x37;
+        n.llllIlllIlIl[7] = 0x5C ^ 0x48 ^ (0x92 ^ 0x81);
+        n.llllIlllIlIl[8] = 0 ^ 8;
+        n.llllIlllIlIl[9] = 0x13 ^ 0x5E ^ (0xCE ^ 0x8A);
+        n.llllIlllIlIl[10] = 116 + 145 - 127 + 34 ^ 151 + 6 - 153 + 158;
+    }
+
+    public static n valueOf(String string) {
+        return Enum.valueOf(n.class, string);
+    }
+
+    public boolean bj() {
+        o o2 = p.bq();
+        if (n.lIIlIIIllllIlIl(o2)) {
+            return llllIlllIlIl[0];
+        }
+        return Objects.equals((Object)o2.bm(), (Object)this);
+    }
+
+    private static boolean lIIlIIIllllIlIl(Object object) {
+        return object == null;
+    }
+
+    public boolean bk() {
+        boolean bl;
+        n[] nArray = new n[llllIlllIlIl[1]];
+        nArray[n.llllIlllIlIl[0]] = this;
+        if (n.lIIlIIIllllIllI(p.a(nArray).isEmpty() ? 1 : 0)) {
+            bl = llllIlllIlIl[1];
+            "".length();
+            if (((0x26 ^ 0x1D) & ~(0x59 ^ 0x62)) == "   ".length()) {
+                return ((0x39 ^ 0x14) & ~(0xBC ^ 0x91)) != 0;
+            }
+        } else {
+            bl = llllIlllIlIl[0];
+        }
+        return bl;
+    }
+
+    private static void lIIlIIIllllIIll() {
+        llllIlllIlII = new String[llllIlllIlIl[10]];
+        n.llllIlllIlII[n.llllIlllIlIl[0]] = n.lIIlIIIllllIIII("UIgVWgdVnI4=", "WRhTl");
+        n.llllIlllIlII[n.llllIlllIlIl[1]] = n.lIIlIIIllllIIII("UGSxoQSl55g7iFWSbYMbLDAaZ13BZJLm", "lODsk");
+        n.llllIlllIlII[n.llllIlllIlIl[2]] = n.lIIlIIIllllIIlI("Ex8QJykJEwY5PwINFjUlEB4YPj8=", "VRYsz");
+        n.llllIlllIlII[n.llllIlllIlIl[3]] = n.lIIlIIIllllIIlI("DAcIIR0VDxQ7CxIeFisdAxgfOxwFGxQg", "JNZdN");
+        n.llllIlllIlII[n.llllIlllIlIl[4]] = n.lIIlIIIllllIIlI("OBkRKDs=", "uXVax");
+        n.llllIlllIlII[n.llllIlllIlIl[5]] = n.lIIlIIIllllIIlI("KwgWJA==", "eGXav");
+        n.llllIlllIlII[n.llllIlllIlIl[6]] = n.lIIlIIIllllIIlI("EAIpFhYG", "BCgQS");
+        n.llllIlllIlII[n.llllIlllIlIl[7]] = n.lIIlIIIllllIIII("sOHDbHIxKyg=", "rWZDw");
+        n.llllIlllIlII[n.llllIlllIlIl[8]] = n.lIIlIIIllllIIlI("AyoUBQUTOwIdAB49", "PzQII");
+        n.llllIlllIlII[n.llllIlllIlIl[9]] = n.lIIlIIIllllIIII("mekjIKk0ioI=", "qwSHS");
+    }
+
+    private static String lIIlIIIllllIIlI(String lllllllllllllllIIlIlIllIIllIIIII, String lllllllllllllllIIlIlIllIIlIlllll) {
+        lllllllllllllllIIlIlIllIIllIIIII = new String(Base64.getDecoder().decode(lllllllllllllllIIlIlIllIIllIIIII.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllIIlIlIllIIllIIIll = new StringBuilder();
+        char[] lllllllllllllllIIlIlIllIIllIIIlI = lllllllllllllllIIlIlIllIIlIlllll.toCharArray();
+        int lllllllllllllllIIlIlIllIIllIIIIl = llllIlllIlIl[0];
+        char[] lllllllllllllllIIlIlIllIIlIllIll = lllllllllllllllIIlIlIllIIllIIIII.toCharArray();
+        int lllllllllllllllIIlIlIllIIlIllIlI = lllllllllllllllIIlIlIllIIlIllIll.length;
+        int lllllllllllllllIIlIlIllIIlIllIIl = llllIlllIlIl[0];
+        while (n.lIIlIIIllllIlll(lllllllllllllllIIlIlIllIIlIllIIl, lllllllllllllllIIlIlIllIIlIllIlI)) {
+            char lllllllllllllllIIlIlIllIIllIIllI = lllllllllllllllIIlIlIllIIlIllIll[lllllllllllllllIIlIlIllIIlIllIIl];
+            lllllllllllllllIIlIlIllIIllIIIll.append((char)(lllllllllllllllIIlIlIllIIllIIllI ^ lllllllllllllllIIlIlIllIIllIIIlI[lllllllllllllllIIlIlIllIIllIIIIl % lllllllllllllllIIlIlIllIIllIIIlI.length]));
+            "".length();
+            ++lllllllllllllllIIlIlIllIIllIIIIl;
+            ++lllllllllllllllIIlIlIllIIlIllIIl;
+            "".length();
+            if (null == null) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllIIlIlIllIIllIIIll);
+    }
+
+    private static boolean lIIlIIIllllIlll(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static String lIIlIIIllllIIII(String lllllllllllllllIIlIlIllIIlIIlllI, String lllllllllllllllIIlIlIllIIlIIllIl) {
+        try {
+            SecretKeySpec lllllllllllllllIIlIlIllIIlIlIIll = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(lllllllllllllllIIlIlIllIIlIIllIl.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher lllllllllllllllIIlIlIllIIlIlIIlI = Cipher.getInstance("Blowfish");
+            lllllllllllllllIIlIlIllIIlIlIIlI.init(llllIlllIlIl[2], lllllllllllllllIIlIlIllIIlIlIIll);
+            return new String(lllllllllllllllIIlIlIllIIlIlIIlI.doFinal(Base64.getDecoder().decode(lllllllllllllllIIlIlIllIIlIIlllI.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIIlIlIllIIlIlIIIl) {
+            lllllllllllllllIIlIlIllIIlIlIIIl.printStackTrace();
+            return null;
+        }
+    }
+
+    public static n[] values() {
+        return (n[])$VALUES.clone();
+    }
+
+    private static boolean lIIlIIIllllIllI(int n2) {
+        return n2 == 0;
+    }
+
+    static {
+        n.lIIlIIIllllIlII();
+        n.lIIlIIIllllIIll();
+        CRUSH = new n();
+        DEFENSIVE_CASTING = new n();
+        EMITS_A_JET_OF_FLAME = new n();
+        FIRES_AN_EXPLOSIVE_ROUND = new n();
+        MAGIC = new n();
+        NONE = new n();
+        RANGED = new n();
+        SLASH = new n();
+        SPELLCASTING = new n();
+        STAB = new n();
+        n[] nArray = new n[llllIlllIlIl[10]];
+        nArray[n.llllIlllIlIl[0]] = CRUSH;
+        nArray[n.llllIlllIlIl[1]] = DEFENSIVE_CASTING;
+        nArray[n.llllIlllIlIl[2]] = EMITS_A_JET_OF_FLAME;
+        nArray[n.llllIlllIlIl[3]] = FIRES_AN_EXPLOSIVE_ROUND;
+        nArray[n.llllIlllIlIl[4]] = MAGIC;
+        nArray[n.llllIlllIlIl[5]] = NONE;
+        nArray[n.llllIlllIlIl[6]] = RANGED;
+        nArray[n.llllIlllIlIl[7]] = SLASH;
+        nArray[n.llllIlllIlIl[8]] = SPELLCASTING;
+        nArray[n.llllIlllIlIl[9]] = STAB;
+        $VALUES = nArray;
+    }
+}
+

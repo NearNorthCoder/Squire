@@ -1,0 +1,285 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.runelite.api.Item
+ *  net.unethicalite.api.input.Keyboard
+ */
+package s.h.-.m.a.n.u.r.i.s.q.a.s.e;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.Item;
+import net.unethicalite.api.input.Keyboard;
+
+public final class h
+extends Enum<h> {
+    private static /* synthetic */ int[] lIIllIIIIIIll;
+    private static /* synthetic */ String[] lIIllIIIIIIlI;
+    private final /* synthetic */ Predicate<Item> test;
+    private final /* synthetic */ Consumer<Item> execution;
+    public static final /* synthetic */ /* enum */ h CONSTRUCTION_CAPE;
+    public static final /* synthetic */ /* enum */ h SKILLS_NECKLACE;
+    private final /* synthetic */ boolean stopping;
+    public static final /* synthetic */ /* enum */ h ECTOPHIAL;
+    private final /* synthetic */ boolean leaveRoom;
+    public static final /* synthetic */ /* enum */ h FARMING_CAPE;
+    public static final /* synthetic */ /* enum */ h ARDY_CLOAK;
+    public static final /* synthetic */ /* enum */ h HOUSE_TELEPORT;
+    private static final /* synthetic */ h[] $VALUES;
+    private final /* synthetic */ boolean fairy;
+
+    private static boolean lIlIlllIIllllIl(int n2, int n3) {
+        return n2 <= n3;
+    }
+
+    private static String lIlIlllIIllIlII(String llllllllllllllIllllIIllIIlIIlIlI, String llllllllllllllIllllIIllIIlIIlIIl) {
+        try {
+            SecretKeySpec llllllllllllllIllllIIllIIlIIllll = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(llllllllllllllIllllIIllIIlIIlIIl.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher llllllllllllllIllllIIllIIlIIlllI = Cipher.getInstance("Blowfish");
+            llllllllllllllIllllIIllIIlIIlllI.init(lIIllIIIIIIll[6], llllllllllllllIllllIIllIIlIIllll);
+            return new String(llllllllllllllIllllIIllIIlIIlllI.doFinal(Base64.getDecoder().decode(llllllllllllllIllllIIllIIlIIlIlI.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception llllllllllllllIllllIIllIIlIIllIl) {
+            llllllllllllllIllllIIllIIlIIllIl.printStackTrace();
+            return null;
+        }
+    }
+
+    private static void lIlIlllIIllIlll() {
+        lIIllIIIIIIlI = new String[lIIllIIIIIIll[23]];
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[0]] = h.lIlIlllIIllIlII("g99NljKjgAOFYXadOZidiw==", "lLTfE");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[3]] = h.lIlIlllIIllIlIl("DgoHIxI1HR8=", "ZokFb");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[6]] = h.lIlIlllIIllIlIl("Ay4qDQE=", "FCZyx");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[8]] = h.lIlIlllIIllIllI("nKDmV9UElm8=", "LDVCy");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[10]] = h.lIlIlllIIllIllI("R07DGZ0L8j8=", "qgKBN");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[11]] = h.lIlIlllIIllIlII("zJxHuKpRaxU=", "TVNRd");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[12]] = h.lIlIlllIIllIlIl("AD0RLyAgdhYmLzg6GSAp", "SVxCL");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[14]] = h.lIlIlllIIllIlII("6eqhXCjtV4NaeCgPe2Yd6gDP4EfwSGmx", "SaMdi");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[17]] = h.lIlIlllIIllIlIl("NSAONic3PgUuMw==", "trJox");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[18]] = h.lIlIlllIIllIlII("M8PfwQRZw/1l+Rhf/5hfAA==", "tYvxN");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[19]] = h.lIlIlllIIllIlII("pkfdZklLDYL+NLe2X+e6IQ==", "tlHbI");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[20]] = h.lIlIlllIIllIllI("awBAnUswjrg7Ycpcf99CRg==", "xYKMq");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[21]] = h.lIlIlllIIllIlIl("NSACFQ09Jg8bBSMk", "saPXD");
+        h.lIIllIIIIIIlI[h.lIIllIIIIIIll[22]] = h.lIlIlllIIllIllI("CZJM4XSGAPmk0458Akjl984CtadKWIad", "pWvuV");
+    }
+
+    private static boolean lIlIlllIIlllIll(int n2) {
+        return n2 != 0;
+    }
+
+    private static String lIlIlllIIllIlIl(String llllllllllllllIllllIIllIIIlIlIlI, String llllllllllllllIllllIIllIIIlIlIIl) {
+        llllllllllllllIllllIIllIIIlIlIlI = new String(Base64.getDecoder().decode(llllllllllllllIllllIIllIIIlIlIlI.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder llllllllllllllIllllIIllIIIlIllIl = new StringBuilder();
+        char[] llllllllllllllIllllIIllIIIlIllII = llllllllllllllIllllIIllIIIlIlIIl.toCharArray();
+        int llllllllllllllIllllIIllIIIlIlIll = lIIllIIIIIIll[0];
+        char[] llllllllllllllIllllIIllIIIlIIlIl = llllllllllllllIllllIIllIIIlIlIlI.toCharArray();
+        int llllllllllllllIllllIIllIIIlIIlII = llllllllllllllIllllIIllIIIlIIlIl.length;
+        int llllllllllllllIllllIIllIIIlIIIll = lIIllIIIIIIll[0];
+        while (h.lIlIlllIIlllllI(llllllllllllllIllllIIllIIIlIIIll, llllllllllllllIllllIIllIIIlIIlII)) {
+            char llllllllllllllIllllIIllIIIllIIII = llllllllllllllIllllIIllIIIlIIlIl[llllllllllllllIllllIIllIIIlIIIll];
+            llllllllllllllIllllIIllIIIlIllIl.append((char)(llllllllllllllIllllIIllIIIllIIII ^ llllllllllllllIllllIIllIIIlIllII[llllllllllllllIllllIIllIIIlIlIll % llllllllllllllIllllIIllIIIlIllII.length]));
+            "".length();
+            ++llllllllllllllIllllIIllIIIlIlIll;
+            ++llllllllllllllIllllIIllIIIlIIIll;
+            "".length();
+            if (((0x44 ^ 0x7D) & ~(0x7A ^ 0x43)) >= 0) continue;
+            return null;
+        }
+        return String.valueOf(llllllllllllllIllllIIllIIIlIllIl);
+    }
+
+    public Consumer<Item> B() {
+        return this.execution;
+    }
+
+    public Predicate<Item> u() {
+        return this.test;
+    }
+
+    static {
+        h.lIlIlllIIlllIII();
+        h.lIlIlllIIllIlll();
+        ARDY_CLOAK = new h(item -> {
+            int n2;
+            if (h.lIlIlllIIllllII(item.getId(), lIIllIIIIIIll[15]) && h.lIlIlllIIllllIl(item.getId(), lIIllIIIIIIll[16])) {
+                n2 = lIIllIIIIIIll[3];
+                "".length();
+                if ((0x7A ^ 0x7E) <= ((0x5E ^ 0x6B) & ~(0xE ^ 0x3B))) {
+                    return ((0xEA ^ 0xB3) & ~(0x48 ^ 0x11)) != 0;
+                }
+            } else {
+                n2 = lIIllIIIIIIll[0];
+            }
+            return n2 != 0;
+        }, item -> item.interact(lIIllIIIIIIlI[lIIllIIIIIIll[14]]), lIIllIIIIIIll[0], lIIllIIIIIIll[3], lIIllIIIIIIll[0]);
+        SKILLS_NECKLACE = new h(item -> {
+            int n2;
+            if (h.lIlIlllIIlllIll(item.getName().startsWith(lIIllIIIIIIlI[lIIllIIIIIIll[12]]) ? 1 : 0) && h.lIlIlllIIlllIIl(item.getId(), lIIllIIIIIIll[13])) {
+                n2 = lIIllIIIIIIll[3];
+                "".length();
+                if (-" ".length() == " ".length()) {
+                    return ((0x40 ^ 0x79) & ~(0x74 ^ 0x4D)) != 0;
+                }
+            } else {
+                n2 = lIIllIIIIIIll[0];
+            }
+            return n2 != 0;
+        }, item -> {
+            item.interact(lIIllIIIIIIlI[lIIllIIIIIIll[10]]);
+            Keyboard.type((String)lIIllIIIIIIlI[lIIllIIIIIIll[11]]);
+        }, lIIllIIIIIIll[0], lIIllIIIIIIll[0], lIIllIIIIIIll[3]);
+        HOUSE_TELEPORT = new h(item -> {
+            boolean bl;
+            if (h.lIlIlllIIlllIlI(item.getId(), lIIllIIIIIIll[9])) {
+                bl = lIIllIIIIIIll[3];
+                "".length();
+                if (((0xF7 ^ 0x94) & ~(0x1B ^ 0x78)) < 0) {
+                    return ((0x89 ^ 0xA2) & ~(0xA5 ^ 0x8E)) != 0;
+                }
+            } else {
+                bl = lIIllIIIIIIll[0];
+            }
+            return bl;
+        }, item -> item.interact(lIIllIIIIIIlI[lIIllIIIIIIll[8]]), lIIllIIIIIIll[0], lIIllIIIIIIll[0], lIIllIIIIIIll[0]);
+        ECTOPHIAL = new h(item -> {
+            boolean bl;
+            if (h.lIlIlllIIlllIlI(item.getId(), lIIllIIIIIIll[7])) {
+                bl = lIIllIIIIIIll[3];
+                "".length();
+                if ("  ".length() == " ".length()) {
+                    return ((0x2B ^ 0x2F) & ~(0x2E ^ 0x2A)) != 0;
+                }
+            } else {
+                bl = lIIllIIIIIIll[0];
+            }
+            return bl;
+        }, item -> item.interact(lIIllIIIIIIlI[lIIllIIIIIIll[6]]), lIIllIIIIIIll[3], lIIllIIIIIIll[3], lIIllIIIIIIll[0]);
+        FARMING_CAPE = new h(item -> {
+            boolean bl;
+            if (!h.lIlIlllIIlllIIl(item.getId(), lIIllIIIIIIll[4]) || h.lIlIlllIIlllIlI(item.getId(), lIIllIIIIIIll[5])) {
+                bl = lIIllIIIIIIll[3];
+                "".length();
+                if ((78 + 128 - 103 + 43 ^ 70 + 124 - 57 + 13) <= ((0x3F ^ 0x25 ^ (0x1B ^ 0x61)) & (0xE6 ^ 0x96 ^ (0x1C ^ 0xC) ^ -" ".length()))) {
+                    return ((41 + 83 - 121 + 125 ^ 144 + 172 - 145 + 13) & (0x51 ^ 0x68 ^ " ".length() ^ -" ".length())) != 0;
+                }
+            } else {
+                bl = lIIllIIIIIIll[0];
+            }
+            return bl;
+        }, item -> item.interact(lIIllIIIIIIlI[lIIllIIIIIIll[3]]), lIIllIIIIIIll[0], lIIllIIIIIIll[0], lIIllIIIIIIll[0]);
+        CONSTRUCTION_CAPE = new h(item -> {
+            int n2;
+            if (!h.lIlIlllIIlllIIl(item.getId(), lIIllIIIIIIll[1]) || h.lIlIlllIIlllIlI(item.getId(), lIIllIIIIIIll[2])) {
+                n2 = lIIllIIIIIIll[3];
+                "".length();
+                if (null != null) {
+                    return ((0x68 ^ 0x3D) & ~(0x6F ^ 0x3A)) != 0;
+                }
+            } else {
+                n2 = lIIllIIIIIIll[0];
+            }
+            return n2 != 0;
+        }, item -> item.interact(lIIllIIIIIIlI[lIIllIIIIIIll[0]]), lIIllIIIIIIll[0], lIIllIIIIIIll[0], lIIllIIIIIIll[0]);
+        h[] hArray = new h[lIIllIIIIIIll[12]];
+        hArray[h.lIIllIIIIIIll[0]] = ARDY_CLOAK;
+        hArray[h.lIIllIIIIIIll[3]] = SKILLS_NECKLACE;
+        hArray[h.lIIllIIIIIIll[6]] = HOUSE_TELEPORT;
+        hArray[h.lIIllIIIIIIll[8]] = ECTOPHIAL;
+        hArray[h.lIIllIIIIIIll[10]] = FARMING_CAPE;
+        hArray[h.lIIllIIIIIIll[11]] = CONSTRUCTION_CAPE;
+        $VALUES = hArray;
+    }
+
+    private static boolean lIlIlllIIlllIlI(int n2, int n3) {
+        return n2 == n3;
+    }
+
+    public static h valueOf(String string) {
+        return Enum.valueOf(h.class, string);
+    }
+
+    public static h[] values() {
+        return (h[])$VALUES.clone();
+    }
+
+    private static boolean lIlIlllIIllllII(int n2, int n3) {
+        return n2 >= n3;
+    }
+
+    private static String lIlIlllIIllIllI(String llllllllllllllIllllIIllIIIllllIl, String llllllllllllllIllllIIllIIIlllllI) {
+        try {
+            SecretKeySpec llllllllllllllIllllIIllIIlIIIIlI = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(llllllllllllllIllllIIllIIIlllllI.getBytes(StandardCharsets.UTF_8)), lIIllIIIIIIll[17]), "DES");
+            Cipher llllllllllllllIllllIIllIIlIIIIIl = Cipher.getInstance("DES");
+            llllllllllllllIllllIIllIIlIIIIIl.init(lIIllIIIIIIll[6], llllllllllllllIllllIIllIIlIIIIlI);
+            return new String(llllllllllllllIllllIIllIIlIIIIIl.doFinal(Base64.getDecoder().decode(llllllllllllllIllllIIllIIIllllIl.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception llllllllllllllIllllIIllIIlIIIIII) {
+            llllllllllllllIllllIIllIIlIIIIII.printStackTrace();
+            return null;
+        }
+    }
+
+    private h(Predicate<Item> predicate, Consumer<Item> consumer, boolean bl, boolean bl2, boolean bl3) {
+        this.test = predicate;
+        this.execution = consumer;
+        this.stopping = bl;
+        this.fairy = bl2;
+        this.leaveRoom = bl3;
+    }
+
+    public boolean D() {
+        return this.fairy;
+    }
+
+    private static boolean lIlIlllIIlllllI(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    public boolean E() {
+        return this.leaveRoom;
+    }
+
+    private static void lIlIlllIIlllIII() {
+        lIIllIIIIIIll = new int[24];
+        h.lIIllIIIIIIll[0] = (1 ^ 0x61 ^ (0x11 ^ 0x7F)) & (0x14 ^ 0x2D ^ (0xB0 ^ 0x87) ^ -" ".length());
+        h.lIIllIIIIIIll[1] = -(0xFFFFDF7F & 0x79C3) & (0xFFFFFFFF & 0x7F7F);
+        h.lIIllIIIIIIll[2] = 0xFFFFE67F & 0x3FBE;
+        h.lIIllIIIIIIll[3] = " ".length();
+        h.lIIllIIIIIIll[4] = 0xFFFFE756 & 0x3EFB;
+        h.lIIllIIIIIIll[5] = -(0xFFFFDFFF & 0x79AD) & (0xFFFFFFFF & Short.MAX_VALUE);
+        h.lIIllIIIIIIll[6] = "  ".length();
+        h.lIIllIIIIIIll[7] = 0xFFFFD1BB & 0x3EDF;
+        h.lIIllIIIIIIll[8] = "   ".length();
+        h.lIIllIIIIIIll[9] = -(0xFFFFE5FF & 0x3A33) & (0xFFFFFF7F & 0x3FFF);
+        h.lIIllIIIIIIll[10] = 0xAA ^ 0xAE;
+        h.lIIllIIIIIIll[11] = 0x6A ^ 0x60 ^ (0x34 ^ 0x3B);
+        h.lIIllIIIIIIll[12] = 0x33 ^ 0x15 ^ (4 ^ 0x24);
+        h.lIIllIIIIIIll[13] = -(0xA8 ^ 0xBB) & (0xFFFFFB7F & 0x2FFB);
+        h.lIIllIIIIIIll[14] = 0x72 ^ 0x59 ^ (0x44 ^ 0x68);
+        h.lIIllIIIIIIll[15] = -(0xFFFFC9E1 & 0x7E9F) & (0xFFFFFBC5 & 0x7FFB);
+        h.lIIllIIIIIIll[16] = 0xFFFFF375 & 0x3FCE;
+        h.lIIllIIIIIIll[17] = 0x65 ^ 0x6D;
+        h.lIIllIIIIIIll[18] = 3 ^ 0xA;
+        h.lIIllIIIIIIll[19] = 0x9B ^ 0x91;
+        h.lIIllIIIIIIll[20] = 0xB7 ^ 0xBC;
+        h.lIIllIIIIIIll[21] = 0x66 ^ 0x6A;
+        h.lIIllIIIIIIll[22] = 0xB2 ^ 0xBF;
+        h.lIIllIIIIIIll[23] = 0x3F ^ 0x31;
+    }
+
+    private static boolean lIlIlllIIlllIIl(int n2, int n3) {
+        return n2 != n3;
+    }
+
+    public boolean C() {
+        return this.stopping;
+    }
+}
+

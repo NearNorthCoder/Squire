@@ -1,0 +1,176 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.google.inject.Inject
+ *  com.google.inject.Singleton
+ *  net.runelite.api.TileObject
+ *  net.runelite.api.events.GameTick
+ *  net.runelite.client.eventbus.Subscribe
+ *  net.unethicalite.api.entities.TileObjects
+ *  net.unethicalite.api.events.InventoryChanged
+ *  net.unethicalite.api.events.InventoryChanged$ChangeType
+ */
+package e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.J;
+import gg.squire.sepulchre.SquireSepulchre;
+import gg.squire.sepulchre.SquireSepulchreConfig;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import net.runelite.api.TileObject;
+import net.runelite.api.events.GameTick;
+import net.runelite.client.eventbus.Subscribe;
+import net.unethicalite.api.entities.TileObjects;
+import net.unethicalite.api.events.InventoryChanged;
+
+@Singleton
+public class d {
+    private /* synthetic */ HashMap<TileObject, J> R;
+    private final /* synthetic */ SquireSepulchreConfig P;
+    private final /* synthetic */ SquireSepulchre Q;
+    private static /* synthetic */ int[] lllIIIIlllII;
+    private static /* synthetic */ String[] lllIIIIllIll;
+
+    private static boolean lIIIlIIIllIIIll(int n2) {
+        return n2 == 0;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    @Subscribe(priority=-2.1474836E9f)
+    public void a(GameTick gameTick) {
+        void lllllllllllllllIIlllIIIIlIIIIllI;
+        List list = TileObjects.getAll(tileObject -> {
+            int n2;
+            if (!d.lIIIlIIIllIIIll(tileObject.getName().toLowerCase().contains(lllIIIIllIll[lllIIIIlllII[0]]) ? 1 : 0) || d.lIIIlIIIllIIIIl(tileObject.getName().toLowerCase().contains(lllIIIIllIll[lllIIIIlllII[1]]) ? 1 : 0)) {
+                n2 = lllIIIIlllII[1];
+                "".length();
+                if ("   ".length() == 0) {
+                    return ((6 ^ 0xA ^ (0xF1 ^ 0xAF)) & (0x93 ^ 0xB3 ^ (0xEB ^ 0x99) ^ -" ".length())) != 0;
+                }
+            } else {
+                n2 = lllIIIIlllII[0];
+            }
+            return n2 != 0;
+        });
+        int n2 = lllIIIIlllII[0];
+        Iterator lllllllllllllllIIlllIIIIlIIIIlIl = list.iterator();
+        while (d.lIIIlIIIllIIIIl(lllllllllllllllIIlllIIIIlIIIIlIl.hasNext() ? 1 : 0)) {
+            J lllllllllllllllIIlllIIIIlIIIIIll;
+            d lllllllllllllllIIlllIIIIlIIIlIII;
+            TileObject lllllllllllllllIIlllIIIIlIIIIlII = (TileObject)lllllllllllllllIIlllIIIIlIIIIlIl.next();
+            if (d.lIIIlIIIllIIIlI(lllllllllllllllIIlllIIIIlIIIIlII)) {
+                "".length();
+                if ((2 ^ 6) >= 0) continue;
+                return;
+            }
+            if (d.lIIIlIIIllIIIll(lllllllllllllllIIlllIIIIlIIIlIII.R.containsKey(lllllllllllllllIIlllIIIIlIIIIlII) ? 1 : 0)) {
+                lllllllllllllllIIlllIIIIlIIIIIll = new J(lllllllllllllllIIlllIIIIlIIIIlII);
+                lllllllllllllllIIlllIIIIlIIIIIll.aE();
+                ++lllllllllllllllIIlllIIIIlIIIIllI;
+                lllllllllllllllIIlllIIIIlIIIlIII.R.put(lllllllllllllllIIlllIIIIlIIIIlII, lllllllllllllllIIlllIIIIlIIIIIll);
+                "".length();
+            }
+            lllllllllllllllIIlllIIIIlIIIIIll = lllllllllllllllIIlllIIIIlIIIlIII.R.get(lllllllllllllllIIlllIIIIlIIIIlII);
+            lllllllllllllllIIlllIIIIlIIIIIll.aE();
+            "".length();
+            if ("   ".length() != (0x21 ^ 0x61 ^ (0x5B ^ 0x1F))) continue;
+            return;
+        }
+        if (d.lIIIlIIIllIIIIl((int)lllllllllllllllIIlllIIIIlIIIIllI)) {
+            System.out.println("Added " + (int)lllllllllllllllIIlllIIIIlIIIIllI + " obstacles to the map");
+        }
+    }
+
+    public void q() {
+        this.R.clear();
+    }
+
+    private static void lIIIlIIIlIllllI() {
+        lllIIIIllIll = new String[lllIIIIlllII[2]];
+        d.lllIIIIllIll[d.lllIIIIlllII[0]] = d.lIIIlIIIlIlllIl("IioVExkxYxwGCiE2Cg==", "UCork");
+        d.lllIIIIllIll[d.lllIIIIlllII[1]] = d.lIIIlIIIlIlllIl("Mzw/DQksciUeACwnMw==", "XRVja");
+    }
+
+    @Subscribe
+    public void a(InventoryChanged inventoryChanged) {
+        if (d.lIIIlIIIllIIIII(inventoryChanged.getChangeType(), InventoryChanged.ChangeType.ITEM_ADDED)) {
+            // empty if block
+        }
+    }
+
+    private static boolean lIIIlIIIllIIIlI(Object object) {
+        return object == null;
+    }
+
+    private static boolean lIIIlIIIllIIlII(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static boolean lIIIlIIIllIIIIl(int n2) {
+        return n2 != 0;
+    }
+
+    static {
+        d.lIIIlIIIlIlllll();
+        d.lIIIlIIIlIllllI();
+    }
+
+    public J b(TileObject tileObject) {
+        if (d.lIIIlIIIllIIIIl(this.R.containsKey(tileObject) ? 1 : 0)) {
+            return this.R.get(tileObject);
+        }
+        return null;
+    }
+
+    private static boolean lIIIlIIIllIIIII(Object object, Object object2) {
+        return object == object2;
+    }
+
+    public void r() {
+        this.R.clear();
+    }
+
+    private static void lIIIlIIIlIlllll() {
+        lllIIIIlllII = new int[3];
+        d.lllIIIIlllII[0] = (111 + 133 - 172 + 77 ^ 68 + 21 - 32 + 113) & (19 + 73 - -40 + 14 ^ 40 + 35 - 42 + 140 ^ -" ".length());
+        d.lllIIIIlllII[1] = " ".length();
+        d.lllIIIIlllII[2] = "  ".length();
+    }
+
+    private static String lIIIlIIIlIlllIl(String lllllllllllllllIIlllIIIIIlllIIlI, String lllllllllllllllIIlllIIIIIllIllII) {
+        lllllllllllllllIIlllIIIIIlllIIlI = new String(Base64.getDecoder().decode(lllllllllllllllIIlllIIIIIlllIIlI.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllIIlllIIIIIlllIIII = new StringBuilder();
+        char[] lllllllllllllllIIlllIIIIIllIllll = lllllllllllllllIIlllIIIIIllIllII.toCharArray();
+        int lllllllllllllllIIlllIIIIIllIlllI = lllIIIIlllII[0];
+        char[] lllllllllllllllIIlllIIIIIllIlIII = lllllllllllllllIIlllIIIIIlllIIlI.toCharArray();
+        int lllllllllllllllIIlllIIIIIllIIlll = lllllllllllllllIIlllIIIIIllIlIII.length;
+        int lllllllllllllllIIlllIIIIIllIIllI = lllIIIIlllII[0];
+        while (d.lIIIlIIIllIIlII(lllllllllllllllIIlllIIIIIllIIllI, lllllllllllllllIIlllIIIIIllIIlll)) {
+            char lllllllllllllllIIlllIIIIIlllIIll = lllllllllllllllIIlllIIIIIllIlIII[lllllllllllllllIIlllIIIIIllIIllI];
+            lllllllllllllllIIlllIIIIIlllIIII.append((char)(lllllllllllllllIIlllIIIIIlllIIll ^ lllllllllllllllIIlllIIIIIllIllll[lllllllllllllllIIlllIIIIIllIlllI % lllllllllllllllIIlllIIIIIllIllll.length]));
+            "".length();
+            ++lllllllllllllllIIlllIIIIIllIlllI;
+            ++lllllllllllllllIIlllIIIIIllIIllI;
+            "".length();
+            if (null == null) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllIIlllIIIIIlllIIII);
+    }
+
+    @Inject
+    d(SquireSepulchreConfig squireSepulchreConfig, SquireSepulchre squireSepulchre) {
+        this.R = new HashMap();
+        this.Q = squireSepulchre;
+        this.P = squireSepulchreConfig;
+    }
+}
+

@@ -1,0 +1,194 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  gg.squire.client.plugins.fw.Task
+ *  gg.squire.client.plugins.fw.TaskDesc
+ *  gg.squire.client.util.Log
+ *  javax.inject.Inject
+ *  net.runelite.api.ChatMessageType
+ *  net.runelite.api.NPC
+ *  net.runelite.api.events.ChatMessage
+ *  net.runelite.client.eventbus.Subscribe
+ *  net.unethicalite.api.items.Equipment
+ *  net.unethicalite.api.movement.Movement
+ *  net.unethicalite.api.widgets.Dialog
+ */
+package -.-.u.o.s.q.s.i.e.y.a.i.d.t.n.r.n.u.r.g.f;
+
+import -.-.u.o.s.q.s.i.e.y.a.i.d.t.n.r.n.u.r.g.f.a;
+import gg.squire.client.plugins.fw.Task;
+import gg.squire.client.plugins.fw.TaskDesc;
+import gg.squire.client.util.Log;
+import gg.squire.giantsfoundry.SquireGiantsFoundry;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.NPC;
+import net.runelite.api.events.ChatMessage;
+import net.runelite.client.eventbus.Subscribe;
+import net.unethicalite.api.items.Equipment;
+import net.unethicalite.api.movement.Movement;
+import net.unethicalite.api.widgets.Dialog;
+
+@TaskDesc(name="Resetting Sword", priority=2147483397, register=true, blocking=true)
+public class o
+extends Task {
+    private final /* synthetic */ SquireGiantsFoundry ad;
+    private final /* synthetic */ a ae;
+    private static /* synthetic */ int[] llIlIlIlIIIl;
+    private static /* synthetic */ String[] llIlIlIlIIII;
+
+    private static void lIIIIIllIIIIIlI() {
+        llIlIlIlIIIl = new int[8];
+        o.llIlIlIlIIIl[0] = (0x67 ^ 0x60) & ~(0x50 ^ 0x57);
+        o.llIlIlIlIIIl[1] = " ".length();
+        o.llIlIlIlIIIl[2] = 0xFFFFEFD3 & 0x79AE;
+        o.llIlIlIlIIIl[3] = "  ".length();
+        o.llIlIlIlIIIl[4] = "   ".length();
+        o.llIlIlIlIIIl[5] = 0x70 ^ 0x21 ^ (0xFF ^ 0xAA);
+        o.llIlIlIlIIIl[6] = 0x67 ^ 0x29 ^ (0x5C ^ 0x17);
+        o.llIlIlIlIIIl[7] = 0x95 ^ 0xB6 ^ (4 ^ 0x2F);
+    }
+
+    private static boolean lIIIIIllIIIIlIl(Object object) {
+        return object == null;
+    }
+
+    @Inject
+    public o(SquireGiantsFoundry squireGiantsFoundry, a a2) {
+        this.ad = squireGiantsFoundry;
+        this.ae = a2;
+    }
+
+    private static String lIIIIIlIlllllll(String lllllllllllllllIlIIIIlIllIlIllll, String lllllllllllllllIlIIIIlIllIlIlllI) {
+        lllllllllllllllIlIIIIlIllIlIllll = new String(Base64.getDecoder().decode(lllllllllllllllIlIIIIlIllIlIllll.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllIlIIIIlIllIlIllIl = new StringBuilder();
+        char[] lllllllllllllllIlIIIIlIllIlIllII = lllllllllllllllIlIIIIlIllIlIlllI.toCharArray();
+        int lllllllllllllllIlIIIIlIllIlIlIll = llIlIlIlIIIl[0];
+        char[] lllllllllllllllIlIIIIlIllIlIIlIl = lllllllllllllllIlIIIIlIllIlIllll.toCharArray();
+        int lllllllllllllllIlIIIIlIllIlIIlII = lllllllllllllllIlIIIIlIllIlIIlIl.length;
+        int lllllllllllllllIlIIIIlIllIlIIIll = llIlIlIlIIIl[0];
+        while (o.lIIIIIllIIIIlll(lllllllllllllllIlIIIIlIllIlIIIll, lllllllllllllllIlIIIIlIllIlIIlII)) {
+            char lllllllllllllllIlIIIIlIllIllIIII = lllllllllllllllIlIIIIlIllIlIIlIl[lllllllllllllllIlIIIIlIllIlIIIll];
+            lllllllllllllllIlIIIIlIllIlIllIl.append((char)(lllllllllllllllIlIIIIlIllIllIIII ^ lllllllllllllllIlIIIIlIllIlIllII[lllllllllllllllIlIIIIlIllIlIlIll % lllllllllllllllIlIIIIlIllIlIllII.length]));
+            "".length();
+            ++lllllllllllllllIlIIIIlIllIlIlIll;
+            ++lllllllllllllllIlIIIIlIllIlIIIll;
+            "".length();
+            if ("  ".length() <= (0x15 ^ 0x56 ^ (0x58 ^ 0x1F))) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllIlIIIIlIllIlIllIl);
+    }
+
+    private static boolean lIIIIIllIIIIlII(int n2) {
+        return n2 != 0;
+    }
+
+    private static String lIIIIIlIllllllI(String lllllllllllllllIlIIIIlIllIllllIl, String lllllllllllllllIlIIIIlIllIllllII) {
+        try {
+            SecretKeySpec lllllllllllllllIlIIIIlIlllIIIIlI = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(lllllllllllllllIlIIIIlIllIllllII.getBytes(StandardCharsets.UTF_8)), llIlIlIlIIIl[7]), "DES");
+            Cipher lllllllllllllllIlIIIIlIlllIIIIIl = Cipher.getInstance("DES");
+            lllllllllllllllIlIIIIlIlllIIIIIl.init(llIlIlIlIIIl[3], lllllllllllllllIlIIIIlIlllIIIIlI);
+            return new String(lllllllllllllllIlIIIIlIlllIIIIIl.doFinal(Base64.getDecoder().decode(lllllllllllllllIlIIIIlIllIllllIl.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIlIIIIlIlllIIIIII) {
+            lllllllllllllllIlIIIIlIlllIIIIII.printStackTrace();
+            return null;
+        }
+    }
+
+    private static boolean lIIIIIllIIIIllI(Object object, Object object2) {
+        return object != object2;
+    }
+
+    private static void lIIIIIllIIIIIIl() {
+        llIlIlIlIIII = new String[llIlIlIlIIIl[6]];
+        o.llIlIlIlIIII[o.llIlIlIlIIIl[0]] = o.lIIIIIlIllllllI("QkwX70hw9Zp9Jlc1yC256wknDj6Do2/OyaROWp61ziTDthf+h8DlBg==", "aqHWZ");
+        o.llIlIlIlIIII[o.llIlIlIlIIIl[1]] = o.lIIIIIlIlllllll("FQQbJCIzCAYmdjMJDWElMA4aJQ==", "GahAV");
+        o.llIlIlIlIIII[o.llIlIlIlIIIl[3]] = o.lIIIIIllIIIIIII("ELq7fCak2hA=", "tmqKV");
+        o.llIlIlIlIIII[o.llIlIlIlIIIl[4]] = o.lIIIIIlIlllllll("PD82dgopPTgxCyxwLTlOIzU8Jk4/Pys9ByY3", "HPYVn");
+        o.llIlIlIlIIII[o.llIlIlIlIIIl[5]] = o.lIIIIIlIlllllll("NgkbLRwNDxgvSBIDGDxIEhQZJg9FER88AEUSHi1IFhEZOgxJRgI6EQwIEWgcCkYELRsAElg=", "efvHh");
+    }
+
+    static {
+        o.lIIIIIllIIIIIlI();
+        o.lIIIIIllIIIIIIl();
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    public boolean run() {
+        void var1_1;
+        o lllllllllllllllIlIIIIlIlllIllIIl;
+        if (o.lIIIIIllIIIIIll(this.ad.c() ? 1 : 0)) {
+            return llIlIlIlIIIl[0];
+        }
+        int[] nArray = new int[llIlIlIlIIIl[1]];
+        nArray[o.llIlIlIlIIIl[0]] = llIlIlIlIIIl[2];
+        if (o.lIIIIIllIIIIIll(Equipment.contains((int[])nArray) ? 1 : 0)) {
+            Log.info((String)llIlIlIlIIII[llIlIlIlIIIl[0]]);
+            lllllllllllllllIlIIIIlIlllIllIIl.ad.a(llIlIlIlIIIl[0]);
+            return llIlIlIlIIIl[1];
+        }
+        if (o.lIIIIIllIIIIIll(Movement.shouldWalk() ? 1 : 0)) {
+            return llIlIlIlIIIl[0];
+        }
+        if (o.lIIIIIllIIIIlII(Dialog.canContinue() ? 1 : 0)) {
+            Dialog.continueSpace();
+            return llIlIlIlIIIl[1];
+        }
+        Log.info((String)llIlIlIlIIII[llIlIlIlIIIl[1]]);
+        NPC lllllllllllllllIlIIIIlIlllIllIII = lllllllllllllllIlIIIIlIlllIllIIl.ae.p();
+        if (o.lIIIIIllIIIIlIl(lllllllllllllllIlIIIIlIlllIllIII)) {
+            return llIlIlIlIIIl[0];
+        }
+        var1_1.interact(llIlIlIlIIII[llIlIlIlIIIl[3]]);
+        return llIlIlIlIIIl[1];
+    }
+
+    private static boolean lIIIIIllIIIIlll(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    @Subscribe
+    public void a(ChatMessage chatMessage) {
+        void lllllllllllllllIlIIIIlIlllIlIlII;
+        if (o.lIIIIIllIIIIllI(chatMessage.getType(), ChatMessageType.GAMEMESSAGE)) {
+            return;
+        }
+        if (o.lIIIIIllIIIIlII(lllllllllllllllIlIIIIlIlllIlIlII.getMessage().contains(llIlIlIlIIII[llIlIlIlIIIl[4]]) ? 1 : 0)) {
+            o lllllllllllllllIlIIIIlIlllIlIlIl;
+            Log.info((String)llIlIlIlIIII[llIlIlIlIIIl[5]]);
+            lllllllllllllllIlIIIIlIlllIlIlIl.ad.a(llIlIlIlIIIl[1]);
+        }
+    }
+
+    private static boolean lIIIIIllIIIIIll(int n2) {
+        return n2 == 0;
+    }
+
+    private static String lIIIIIllIIIIIII(String lllllllllllllllIlIIIIlIlllIIlIlI, String lllllllllllllllIlIIIIlIlllIIlIIl) {
+        try {
+            SecretKeySpec lllllllllllllllIlIIIIlIlllIIllll = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(lllllllllllllllIlIIIIlIlllIIlIIl.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher lllllllllllllllIlIIIIlIlllIIlllI = Cipher.getInstance("Blowfish");
+            lllllllllllllllIlIIIIlIlllIIlllI.init(llIlIlIlIIIl[3], lllllllllllllllIlIIIIlIlllIIllll);
+            return new String(lllllllllllllllIlIIIIlIlllIIlllI.doFinal(Base64.getDecoder().decode(lllllllllllllllIlIIIIlIlllIIlIlI.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIlIIIIlIlllIIllIl) {
+            lllllllllllllllIlIIIIlIlllIIllIl.printStackTrace();
+            return null;
+        }
+    }
+}
+

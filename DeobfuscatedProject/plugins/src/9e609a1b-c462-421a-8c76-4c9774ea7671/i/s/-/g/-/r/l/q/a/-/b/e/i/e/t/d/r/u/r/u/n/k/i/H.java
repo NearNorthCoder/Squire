@@ -1,0 +1,521 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.runelite.api.NPC
+ *  net.runelite.api.coords.WorldPoint
+ *  net.runelite.api.widgets.Widget
+ *  net.unethicalite.api.commons.Time
+ *  net.unethicalite.api.entities.NPCs
+ *  net.unethicalite.api.entities.Players
+ *  net.unethicalite.api.items.Bank
+ *  net.unethicalite.api.items.Bank$WithdrawMode
+ *  net.unethicalite.api.items.Equipment
+ *  net.unethicalite.api.items.Inventory
+ *  net.unethicalite.api.movement.Movement
+ *  net.unethicalite.api.movement.pathfinder.model.BankLocation
+ *  net.unethicalite.api.widgets.Dialog
+ */
+package i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i;
+
+import gg.squire.account.AccBuilderRat;
+import i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i.M;
+import i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i.P;
+import i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i.a;
+import i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i.b;
+import i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i.d;
+import i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i.e;
+import i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i.f;
+import i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i.g;
+import i.s.-.g.-.r.l.q.a.-.b.e.i.e.t.d.r.u.r.u.n.k.i.h;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.function.Predicate;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.NPC;
+import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.widgets.Widget;
+import net.unethicalite.api.commons.Time;
+import net.unethicalite.api.entities.NPCs;
+import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.items.Bank;
+import net.unethicalite.api.items.Equipment;
+import net.unethicalite.api.items.Inventory;
+import net.unethicalite.api.movement.Movement;
+import net.unethicalite.api.movement.pathfinder.model.BankLocation;
+import net.unethicalite.api.widgets.Dialog;
+
+public class H
+implements M {
+    static /* synthetic */ int bY;
+    private static /* synthetic */ int[] lIIIlllIIIlIl;
+    static /* synthetic */ int co;
+    public static /* synthetic */ boolean by;
+    static /* synthetic */ boolean cp;
+    public static /* synthetic */ List<d> bA;
+    public static /* synthetic */ int hr;
+    static /* synthetic */ String[] bW;
+    public static /* synthetic */ WorldPoint hs;
+    private static /* synthetic */ String[] lIIIlllIIIIll;
+
+    private static void lIlIIIlllIlIlII() {
+        lIIIlllIIIlIl = new int[38];
+        H.lIIIlllIIIlIl[0] = (0x76 ^ 0x37) & ~(0x7E ^ 0x3F);
+        H.lIIIlllIIIlIl[1] = " ".length();
+        H.lIIIlllIIIlIl[2] = 0x19 ^ 0x2B;
+        H.lIIIlllIIIlIl[3] = "  ".length();
+        H.lIIIlllIIIlIl[4] = 127 + 145 - 228 + 112 + (0xB5 ^ 0xA0) - (123 + 54 - 117 + 111) + (0 + 15 - 6 + 164);
+        H.lIIIlllIIIlIl[5] = "   ".length();
+        H.lIIIlllIIIlIl[6] = 0x56 ^ 0x52;
+        H.lIIIlllIIIlIl[7] = -(0xFFFFCC6E & 0x3FF3) & (0xFFFFBFF9 & 0x5FEF);
+        H.lIIIlllIIIlIl[8] = 0x57 ^ 0x52;
+        H.lIIIlllIIIlIl[9] = -(0xFFFF8C47 & 0x7BB9) & (0xFFFFBFDF & 0x4EFF);
+        H.lIIIlllIIIlIl[10] = 0x89 ^ 0xB3 ^ (0x46 ^ 0x68);
+        H.lIIIlllIIIlIl[11] = 0xBD ^ 0xAF ^ (0x16 ^ 2);
+        H.lIIIlllIIIlIl[12] = 0xFFFFBFCF & 0x5F78;
+        H.lIIIlllIIIlIl[13] = -(0xFFFFCB7B & 0x74AD) & (0xFFFFFFFF & 0x5F6F);
+        H.lIIIlllIIIlIl[14] = 0x66 ^ 0x61;
+        H.lIIIlllIIIlIl[15] = -(0xFFFFF7BD & 0x6877) & (0xFFFFFF7D & Short.MAX_VALUE);
+        H.lIIIlllIIIlIl[16] = 0xAD ^ 0xC5 ^ (0 ^ 0x60);
+        H.lIIIlllIIIlIl[17] = 195 + 204 - 260 + 67 ^ 121 + 152 - 227 + 153;
+        H.lIIIlllIIIlIl[18] = 0x55 ^ 0x5F;
+        H.lIIIlllIIIlIl[19] = 0x8C ^ 0x87;
+        H.lIIIlllIIIlIl[20] = 46 + 52 - 55 + 91 ^ 37 + 118 - 96 + 79;
+        H.lIIIlllIIIlIl[21] = -(0xFFFFFCDF & 0x1765) & (0xFFFFFFFD & 0x1FFE);
+        H.lIIIlllIIIlIl[22] = 0 + 25 - -133 + 10 ^ 4 + 100 - 66 + 127;
+        H.lIIIlllIIIlIl[23] = 0x89 ^ 0x87;
+        H.lIIIlllIIIlIl[24] = 0x4C ^ 0x43;
+        H.lIIIlllIIIlIl[25] = -(0xFFFFBFB4 & 0x68DF) & (0xFFFFBFFF & 0x6FFF);
+        H.lIIIlllIIIlIl[26] = -(0xFFFFB41A & 0x5BF7) & (0xFFFFFEFF & 0x3FDD);
+        H.lIIIlllIIIlIl[27] = 0xFFFFF5AD & 0x6BFA;
+        H.lIIIlllIIIlIl[28] = 0xAA ^ 0x82;
+        H.lIIIlllIIIlIl[29] = -(0xFFFFDEEF & 0x6DBD) & (0xFFFFFFFF & 0x7DFD);
+        H.lIIIlllIIIlIl[30] = 107 + 135 - 71 + 43 ^ 161 + 69 - 101 + 49;
+        H.lIIIlllIIIlIl[31] = 122 + 156 - 156 + 52 ^ 153 + 140 - 246 + 143;
+        H.lIIIlllIIIlIl[32] = 0x26 ^ 0x77 ^ (0x72 ^ 0x36);
+        H.lIIIlllIIIlIl[33] = 0x25 ^ 0x58 ^ (0xC0 ^ 0xAC);
+        H.lIIIlllIIIlIl[34] = -(0xFFFFF75F & 0x7BAB) & (0xFFFFFFFF & 0x7F7F);
+        H.lIIIlllIIIlIl[35] = 0xFFFFDFC8 & 0x2CFF;
+        H.lIIIlllIIIlIl[36] = 0xA1 ^ 0xB3;
+        H.lIIIlllIIIlIl[37] = 0x85 ^ 0x96;
+    }
+
+    @Override
+    public int Y() {
+        try {
+            H.cr();
+            "".length();
+        }
+        catch (Exception exception) {
+            // empty catch block
+        }
+        if (((0x50 ^ 0x55) & ~(0x29 ^ 0x2C)) != ((0x38 ^ 0x3E) & ~(0xB3 ^ 0xB5))) {
+            return (0xD ^ 2) & ~(0x2B ^ 0x24);
+        }
+        return lIIIlllIIIlIl[30];
+    }
+
+    private static boolean lIlIIIlllIlIllI(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static boolean lIlIIIlllIllIIl(int n2) {
+        return n2 > 0;
+    }
+
+    private static void lIlIIIlllIlIIII() {
+        lIIIlllIIIIll = new String[lIIIlllIIIlIl[32]];
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[0]] = H.lIlIIIlllIIllIl("haXyTn+FHUSkYqoONyCMog==", "AQLVc");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[1]] = H.lIlIIIlllIIlllI("Ag04AR0sATJIDDEdPwYJZA0iDQM3SHYbGS0QNQAHKgN2Cg8nD3YcAWQVIw0dMA04Dw==", "DdVhn");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[3]] = H.lIlIIIlllIIllIl("QEDR7QSXBuQ=", "sWmfy");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[5]] = H.lIlIIIlllIIlllI("PjsmCAwRLjkPDFAuP0EJETQ7", "pZPak");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[6]] = H.lIlIIIlllIIllIl("cbqvQlkeC2QlM5+vdFqNIQ==", "KSIUJ");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[8]] = H.lIlIIIlllIIllll("KBf9suEgSNApbrO+r9yfZPlhaouru7m3", "foEwE");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[11]] = H.lIlIIIlllIIlllI("DQ1kCj0/SCkCPCkBKgxvKR00GyMzDTdHbykfLR8sMgEqDG8uB2QpGgMhCiw=", "ZhDkO");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[14]] = H.lIlIIIlllIIlllI("LiFVAxwcZBgLHQotGwVOCjEFEgIQIQZOTgozHBYNES0bBU4NK1UgOyANOyU=", "yDubn");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[16]] = H.lIlIIIlllIIlllI("BQsEcBMkSgEkBjke", "KjrPg");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[17]] = H.lIlIIIlllIIlllI("Mj4XA0YAJBdHIBU+HwIU", "tLrgf");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[18]] = H.lIlIIIlllIIllIl("CQYLEMlFMYIYDdNnduf+Mg==", "XSfeF");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[19]] = H.lIlIIIlllIIllIl("tYDhg3urWGOvBGQOFgDaiA==", "yXlqJ");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[20]] = H.lIlIIIlllIIllll("amB5v6ny9sE=", "RZVmz");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[22]] = H.lIlIIIlllIIllIl("4JKiwDl18jX5nC1fQK8XKBU6H+e8FyGFgF2A/zJHe3Q=", "Djyvc");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[23]] = H.lIlIIIlllIIllIl("3AnnE90Of1D1OT+EEhSDj5Kw5UFe8eas9dQrPZ/XKAU=", "VsRoZ");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[24]] = H.lIlIIIlllIIlllI("Az8Cbw==", "ZZqAQ");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[31]] = H.lIlIIIlllIIllll("NPeUKnLBMHrLqBv1oeffl/oLkZHM+dE5", "iDxuk");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[33]] = H.lIlIIIlllIIllll("0tHs5KQxUCOt1vCrWhiIq6353+1yzuDR", "iHJgp");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[36]] = H.lIlIIIlllIIllIl("Ojr8HTtJACi/po8RXmYJXyPS83XHqiUjpCiCzMz14EM=", "ZNmTz");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[37]] = H.lIlIIIlllIIllll("UzHD0wv2YjYOjrT3bMWVbr7crnoGnaZ8vxcxjwlZ4Sk=", "MkiCn");
+        H.lIIIlllIIIIll[H.lIIIlllIIIlIl[10]] = H.lIlIIIlllIIlllI("PCE5Sw==", "eDJeC");
+    }
+
+    private static boolean lIlIIIlllIllIlI(int n2, int n3) {
+        return n2 > n3;
+    }
+
+    private static void W() {
+        d lllllllllllllllIIIIIllIllIIllIlI;
+        Object lllllllllllllllIIIIIllIllIIllIll;
+        block8: {
+            block7: {
+                int[] nArray = new int[lIIIlllIIIlIl[1]];
+                nArray[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[9];
+                if (!H.lIlIIIlllIlIlIl(Bank.contains((int[])nArray) ? 1 : 0)) break block7;
+                int[] nArray2 = new int[lIIIlllIIIlIl[1]];
+                nArray2[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[9];
+                if (!H.lIlIIIlllIlIlIl(Bank.contains((int[])nArray2) ? 1 : 0)) break block8;
+                int[] nArray3 = new int[lIIIlllIIIlIl[1]];
+                nArray3[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[9];
+                if (!H.lIlIIIlllIlIllI(Bank.getFirst((int[])nArray3).getQuantity(), lIIIlllIIIlIl[10])) break block8;
+            }
+            lllllllllllllllIIIIIllIllIIllIll = new d(lIIIlllIIIlIl[9], lIIIlllIIIlIl[10], lIIIlllIIIlIl[25]);
+            bA.add((d)lllllllllllllllIIIIIllIllIIllIll);
+            "".length();
+        }
+        int[] nArray = new int[lIIIlllIIIlIl[1]];
+        nArray[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[12];
+        if (H.lIlIIIlllIlIlll(Bank.contains((int[])nArray) ? 1 : 0)) {
+            lllllllllllllllIIIIIllIllIIllIll = new d(lIIIlllIIIlIl[12], lIIIlllIIIlIl[18], lIIIlllIIIlIl[25]);
+            bA.add((d)lllllllllllllllIIIIIllIllIIllIll);
+            "".length();
+        }
+        if (H.lIlIIIlllIlIlll(Bank.contains((Predicate)(lllllllllllllllIIIIIllIllIIllIll = item -> item.getName().toLowerCase().contains(lIIIlllIIIIll[lIIIlllIIIlIl[33]]))) ? 1 : 0)) {
+            lllllllllllllllIIIIIllIllIIllIlI = new d(lIIIlllIIIlIl[26], lIIIlllIIIlIl[8], lIIIlllIIIlIl[27]);
+            bA.add(lllllllllllllllIIIIIllIllIIllIlI);
+            "".length();
+        }
+        int[] nArray4 = new int[lIIIlllIIIlIl[1]];
+        nArray4[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[13];
+        if (H.lIlIIIlllIlIlll(Bank.contains((int[])nArray4) ? 1 : 0)) {
+            lllllllllllllllIIIIIllIllIIllIlI = new d(lIIIlllIIIlIl[13], lIIIlllIIIlIl[28], lIIIlllIIIlIl[25]);
+            bA.add(lllllllllllllllIIIIIllIllIIllIlI);
+            "".length();
+        }
+        if (H.lIlIIIlllIlIlll(Bank.contains((int[])f.ba) ? 1 : 0)) {
+            lllllllllllllllIIIIIllIllIIllIlI = new d(lIIIlllIIIlIl[29], lIIIlllIIIlIl[8], h.bv);
+            bA.add(lllllllllllllllIIIIIllIllIIllIlI);
+            "".length();
+        }
+    }
+
+    private static boolean lIlIIIlllIlllII(int n2, int n3) {
+        return n2 != n3;
+    }
+
+    private static boolean lIlIIIlllIllIll(int n2, int n3) {
+        return n2 <= n3;
+    }
+
+    private static String lIlIIIlllIIllIl(String lllllllllllllllIIIIIllIlIllIlIlI, String lllllllllllllllIIIIIllIlIllIIlll) {
+        try {
+            SecretKeySpec lllllllllllllllIIIIIllIlIllIllIl = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(lllllllllllllllIIIIIllIlIllIIlll.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher lllllllllllllllIIIIIllIlIllIllII = Cipher.getInstance("Blowfish");
+            lllllllllllllllIIIIIllIlIllIllII.init(lIIIlllIIIlIl[3], lllllllllllllllIIIIIllIlIllIllIl);
+            return new String(lllllllllllllllIIIIIllIlIllIllII.doFinal(Base64.getDecoder().decode(lllllllllllllllIIIIIllIlIllIlIlI.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIIIIIllIlIllIlIll) {
+            lllllllllllllllIIIIIllIlIllIlIll.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void cr() {
+        block22: {
+            block23: {
+                BankLocation lllllllllllllllIIIIIllIllIlllIlI;
+                block24: {
+                    block26: {
+                        block25: {
+                            if (H.lIlIIIlllIlIlIl(by ? 1 : 0)) {
+                                AccBuilderRat.c = lIIIlllIIIIll[lIIIlllIIIlIl[0]];
+                                b.a(bA);
+                                if (H.lIlIIIlllIlIllI(bA.size(), lIIIlllIIIlIl[1])) {
+                                    System.out.println(lIIIlllIIIIll[lIIIlllIIIlIl[1]]);
+                                    by = lIIIlllIIIlIl[0];
+                                }
+                            }
+                            if (!H.lIlIIIlllIlIlll(by ? 1 : 0)) break block22;
+                            if (H.lIlIIIlllIlIlIl(Inventory.contains((int[])f.ba) ? 1 : 0) && H.lIlIIIlllIlIllI(Movement.getRunEnergy(), lIIIlllIIIlIl[2]) && H.lIlIIIlllIlIlll(Dialog.isOpen() ? 1 : 0)) {
+                                Inventory.getFirst((int[])f.ba).interact(lIIIlllIIIIll[lIIIlllIIIlIl[3]]);
+                                Time.sleepTicks((int)lIIIlllIIIlIl[1]);
+                                "".length();
+                            }
+                            if (!H.lIlIIIlllIlIllI(e.j(lIIIlllIIIlIl[4]), lIIIlllIIIlIl[1])) break block23;
+                            if (!H.lIlIIIlllIlIlll(H.aJ() ? 1 : 0)) break block24;
+                            lllllllllllllllIIIIIllIllIlllIlI = BankLocation.getNearest();
+                            if (H.lIlIIIlllIllIII(lllllllllllllllIIIIIllIllIlllIlI) && H.lIlIIIlllIlIlll(lllllllllllllllIIIIIllIllIlllIlI.getArea().contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) {
+                                AccBuilderRat.c = lIIIlllIIIIll[lIIIlllIIIlIl[5]];
+                                a.a(lllllllllllllllIIIIIllIllIlllIlI);
+                            }
+                            if (!H.lIlIIIlllIllIII(lllllllllllllllIIIIIllIllIlllIlI) || !H.lIlIIIlllIlIlIl(lllllllllllllllIIIIIllIllIlllIlI.getArea().contains(Players.getLocal().getWorldLocation()) ? 1 : 0)) break block24;
+                            if (H.lIlIIIlllIlIlll(Bank.isOpen() ? 1 : 0)) {
+                                AccBuilderRat.c = lIIIlllIIIIll[lIIIlllIIIlIl[6]];
+                                a.a();
+                                Time.sleepUntil(() -> Bank.isOpen(), (int)lIIIlllIIIlIl[7]);
+                                "".length();
+                            }
+                            if (!H.lIlIIIlllIlIlIl(Bank.isOpen() ? 1 : 0)) break block24;
+                            AccBuilderRat.c = lIIIlllIIIIll[lIIIlllIIIlIl[8]];
+                            if (H.lIlIIIlllIllIIl(Inventory.getAll().size())) {
+                                Bank.depositInventory();
+                                Time.sleepTicks((int)lIIIlllIIIlIl[5]);
+                                "".length();
+                            }
+                            if (H.lIlIIIlllIllIIl(Equipment.getAll().size())) {
+                                Bank.depositEquipment();
+                                Time.sleepTicks((int)lIIIlllIIIlIl[3]);
+                                "".length();
+                            }
+                            int[] nArray = new int[lIIIlllIIIlIl[1]];
+                            nArray[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[9];
+                            if (H.lIlIIIlllIlIlIl(Bank.contains((int[])nArray) ? 1 : 0)) {
+                                int[] nArray2 = new int[lIIIlllIIIlIl[1]];
+                                nArray2[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[9];
+                                if (H.lIlIIIlllIlIllI(Bank.getFirst((int[])nArray2).getQuantity(), lIIIlllIIIlIl[10])) {
+                                    H.W();
+                                    System.out.println(lIIIlllIIIIll[lIIIlllIIIlIl[11]]);
+                                    by = lIIIlllIIIlIl[1];
+                                    return;
+                                }
+                            }
+                            int[] nArray3 = new int[lIIIlllIIIlIl[1]];
+                            nArray3[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[9];
+                            if (!H.lIlIIIlllIlIlIl(Bank.contains((int[])nArray3) ? 1 : 0)) break block25;
+                            int[] nArray4 = new int[lIIIlllIIIlIl[1]];
+                            nArray4[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[12];
+                            if (!H.lIlIIIlllIlIlIl(Bank.contains((int[])nArray4) ? 1 : 0)) break block25;
+                            int[] nArray5 = new int[lIIIlllIIIlIl[1]];
+                            nArray5[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[13];
+                            if (!H.lIlIIIlllIlIlll(Bank.contains((int[])nArray5) ? 1 : 0)) break block26;
+                        }
+                        H.W();
+                        System.out.println(lIIIlllIIIIll[lIIIlllIIIlIl[14]]);
+                        by = lIIIlllIIIlIl[1];
+                        return;
+                    }
+                    Bank.withdraw((int)lIIIlllIIIlIl[9], (int)lIIIlllIIIlIl[10], (Bank.WithdrawMode)Bank.WithdrawMode.DEFAULT);
+                    Bank.withdraw((int)lIIIlllIIIlIl[12], (int)lIIIlllIIIlIl[8], (Bank.WithdrawMode)Bank.WithdrawMode.DEFAULT);
+                    Bank.withdraw((int)lIIIlllIIIlIl[15], (int)lIIIlllIIIlIl[8], (Bank.WithdrawMode)Bank.WithdrawMode.DEFAULT);
+                    a.b(f.bk, lIIIlllIIIlIl[1]);
+                }
+                if (H.lIlIIIlllIlIlIl(H.aJ() ? 1 : 0)) {
+                    if (H.lIlIIIlllIllIlI(Players.getLocal().getWorldLocation().distanceTo(hs), lIIIlllIIIlIl[3])) {
+                        if (H.lIlIIIlllIlIllI(bY, lIIIlllIIIlIl[1])) {
+                            e.w();
+                            bY += lIIIlllIIIlIl[1];
+                        }
+                        AccBuilderRat.c = lIIIlllIIIIll[lIIIlllIIIlIl[16]];
+                        Movement.walkTo((WorldPoint)hs);
+                        "".length();
+                    }
+                    if (H.lIlIIIlllIllIll(Players.getLocal().getWorldLocation().distanceTo(hs), lIIIlllIIIlIl[3])) {
+                        String[] stringArray = new String[lIIIlllIIIlIl[1]];
+                        stringArray[H.lIIIlllIIIlIl[0]] = lIIIlllIIIIll[lIIIlllIIIlIl[17]];
+                        lllllllllllllllIIIIIllIllIlllIlI = NPCs.getNearest((String[])stringArray);
+                        if (H.lIlIIIlllIllIII(lllllllllllllllIIIIIllIllIlllIlI) && H.lIlIIIlllIllIlI(lllllllllllllllIIIIIllIllIlllIlI.getWorldLocation().distanceTo(hs), lIIIlllIIIlIl[3])) {
+                            e.w();
+                        }
+                        if (H.lIlIIIlllIlIllI(co, lIIIlllIIIlIl[1])) {
+                            P.lo += lIIIlllIIIlIl[1];
+                            P.d(AccBuilderRat.m);
+                            co += lIIIlllIIIlIl[1];
+                            P.lo = lIIIlllIIIlIl[0];
+                            cp = lIIIlllIIIlIl[0];
+                        }
+                        H.cs();
+                    }
+                }
+            }
+            if (!H.lIlIIIlllIlllII(e.j(lIIIlllIIIlIl[4]), lIIIlllIIIlIl[1]) || H.lIlIIIlllIlllIl(e.j(lIIIlllIIIlIl[4]), lIIIlllIIIlIl[10])) {
+                if (H.lIlIIIlllIlllIl(e.j(lIIIlllIIIlIl[4]), lIIIlllIIIlIl[1])) {
+                    if (H.lIlIIIlllIllIlI(Players.getLocal().getWorldLocation().distanceTo(hs), lIIIlllIIIlIl[3])) {
+                        AccBuilderRat.c = lIIIlllIIIIll[lIIIlllIIIlIl[18]];
+                        Movement.walkTo((WorldPoint)hs);
+                        "".length();
+                        Time.sleepTicks((int)lIIIlllIIIlIl[1]);
+                        "".length();
+                    }
+                    H.cs();
+                }
+                if (H.lIlIIIlllIlllIl(e.j(lIIIlllIIIlIl[4]), lIIIlllIIIlIl[10])) {
+                    H.cs();
+                }
+            }
+            g.a(new String[lIIIlllIIIlIl[0]]);
+        }
+    }
+
+    @Override
+    public boolean X() {
+        return lIIIlllIIIlIl[0];
+    }
+
+    private static boolean lIlIIIlllIllllI(int n2, int n3) {
+        return n2 >= n3;
+    }
+
+    private static void cs() {
+        List lllllllllllllllIIIIIllIllIlIlIll;
+        if (H.lIlIIIlllIlIlll(Dialog.isOpen() ? 1 : 0)) {
+            String[] stringArray = new String[lIIIlllIIIlIl[1]];
+            stringArray[H.lIIIlllIIIlIl[0]] = lIIIlllIIIIll[lIIIlllIIIlIl[19]];
+            List list = NPCs.getAll((String[])stringArray);
+            if (H.lIlIIIlllIllIIl(list.size())) {
+                ((NPC)list.get(lIIIlllIIIlIl[0])).interact(lIIIlllIIIIll[lIIIlllIIIlIl[20]]);
+                Time.sleepUntil(() -> Dialog.isOpen(), (int)lIIIlllIIIlIl[21]);
+                "".length();
+            }
+        }
+        if (H.lIlIIIlllIlIlIl(Dialog.isOpen() ? 1 : 0) && H.lIlIIIlllIlIlIl(Dialog.isViewingOptions() ? 1 : 0) && H.lIlIIIlllIlIlll((lllllllllllllllIIIIIllIllIlIlIll = Dialog.getOptions()).isEmpty() ? 1 : 0)) {
+            int lllllllllllllllIIIIIllIllIlIlIIl = lIIIlllIIIlIl[0];
+            while (H.lIlIIIlllIlIllI(lllllllllllllllIIIIIllIllIlIlIIl, lllllllllllllllIIIIIllIllIlIlIll.size())) {
+                if (H.lIlIIIlllIlIlIl(((Widget)lllllllllllllllIIIIIllIllIlIlIll.get(lllllllllllllllIIIIIllIllIlIlIIl)).getText().equalsIgnoreCase(lIIIlllIIIIll[lIIIlllIIIlIl[22]]) ? 1 : 0)) {
+                    String[] stringArray = new String[lIIIlllIIIlIl[1]];
+                    stringArray[H.lIIIlllIIIlIl[0]] = ((Widget)lllllllllllllllIIIIIllIllIlIlIll.get(lllllllllllllllIIIIIllIllIlIlIIl)).getText();
+                    Dialog.chooseOption((String[])stringArray);
+                    "".length();
+                    "".length();
+                    if ("   ".length() != (0x71 ^ 0x75)) break;
+                    return;
+                }
+                if (H.lIlIIIlllIlIlIl(((Widget)lllllllllllllllIIIIIllIllIlIlIll.get(lllllllllllllllIIIIIllIllIlIlIIl)).getText().equalsIgnoreCase(lIIIlllIIIIll[lIIIlllIIIlIl[23]]) ? 1 : 0)) {
+                    String[] stringArray = new String[lIIIlllIIIlIl[1]];
+                    stringArray[H.lIIIlllIIIlIl[0]] = ((Widget)lllllllllllllllIIIIIllIllIlIlIll.get(lllllllllllllllIIIIIllIllIlIlIIl)).getText();
+                    Dialog.chooseOption((String[])stringArray);
+                    "".length();
+                    "".length();
+                    if ("   ".length() > "  ".length()) break;
+                    return;
+                }
+                if (H.lIlIIIlllIlIlIl(((Widget)lllllllllllllllIIIIIllIllIlIlIll.get(lllllllllllllllIIIIIllIllIlIlIIl)).getText().equalsIgnoreCase(lIIIlllIIIIll[lIIIlllIIIlIl[24]]) ? 1 : 0)) {
+                    String[] stringArray = new String[lIIIlllIIIlIl[1]];
+                    stringArray[H.lIIIlllIIIlIl[0]] = ((Widget)lllllllllllllllIIIIIllIllIlIlIll.get(lllllllllllllllIIIIIllIllIlIlIIl)).getText();
+                    Dialog.chooseOption((String[])stringArray);
+                    "".length();
+                    "".length();
+                    if ("  ".length() != 0) break;
+                    return;
+                }
+                if (H.lIlIIIlllIlIlll(Dialog.isViewingOptions() ? 1 : 0)) {
+                    "".length();
+                    if (" ".length() >= " ".length()) break;
+                    return;
+                }
+                ++lllllllllllllllIIIIIllIllIlIlIIl;
+                "".length();
+                if (null == null) continue;
+                return;
+            }
+        }
+    }
+
+    private static boolean lIlIIIlllIlIlIl(int n2) {
+        return n2 != 0;
+    }
+
+    @Override
+    public String Z() {
+        return lIIIlllIIIIll[lIIIlllIIIlIl[31]];
+    }
+
+    @Override
+    public boolean aa() {
+        boolean bl;
+        if (H.lIlIIIlllIllllI(e.j(lIIIlllIIIlIl[4]), lIIIlllIIIlIl[32])) {
+            bl = lIIIlllIIIlIl[1];
+            "".length();
+            if (" ".length() != " ".length()) {
+                return ((68 + 115 - 178 + 128 ^ 172 + 84 - 178 + 110) & (95 + 86 - 102 + 94 ^ 61 + 103 - 127 + 111 ^ -" ".length())) != 0;
+            }
+        } else {
+            bl = lIIIlllIIIlIl[0];
+        }
+        return bl;
+    }
+
+    private static String lIlIIIlllIIlllI(String lllllllllllllllIIIIIllIlIllllIlI, String lllllllllllllllIIIIIllIlIllllllI) {
+        lllllllllllllllIIIIIllIlIllllIlI = new String(Base64.getDecoder().decode(lllllllllllllllIIIIIllIlIllllIlI.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllIIIIIllIlIlllllIl = new StringBuilder();
+        char[] lllllllllllllllIIIIIllIlIlllllII = lllllllllllllllIIIIIllIlIllllllI.toCharArray();
+        int lllllllllllllllIIIIIllIlIllllIll = lIIIlllIIIlIl[0];
+        char[] lllllllllllllllIIIIIllIlIlllIlIl = lllllllllllllllIIIIIllIlIllllIlI.toCharArray();
+        int lllllllllllllllIIIIIllIlIlllIlII = lllllllllllllllIIIIIllIlIlllIlIl.length;
+        int lllllllllllllllIIIIIllIlIlllIIll = lIIIlllIIIlIl[0];
+        while (H.lIlIIIlllIlIllI(lllllllllllllllIIIIIllIlIlllIIll, lllllllllllllllIIIIIllIlIlllIlII)) {
+            char lllllllllllllllIIIIIllIllIIIIIII = lllllllllllllllIIIIIllIlIlllIlIl[lllllllllllllllIIIIIllIlIlllIIll];
+            lllllllllllllllIIIIIllIlIlllllIl.append((char)(lllllllllllllllIIIIIllIllIIIIIII ^ lllllllllllllllIIIIIllIlIlllllII[lllllllllllllllIIIIIllIlIllllIll % lllllllllllllllIIIIIllIlIlllllII.length]));
+            "".length();
+            ++lllllllllllllllIIIIIllIlIllllIll;
+            ++lllllllllllllllIIIIIllIlIlllIIll;
+            "".length();
+            if (((0x9B ^ 0x8F ^ (0x3F ^ 0x61)) & (201 + 85 - 114 + 31 ^ 68 + 42 - 36 + 55 ^ -" ".length())) <= " ".length()) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllIIIIIllIlIlllllIl);
+    }
+
+    private static boolean lIlIIIlllIlIlll(int n2) {
+        return n2 == 0;
+    }
+
+    private static boolean lIlIIIlllIllIII(Object object) {
+        return object != null;
+    }
+
+    static {
+        H.lIlIIIlllIlIlII();
+        H.lIlIIIlllIlIIII();
+        bA = new ArrayList<d>();
+        hr = lIIIlllIIIlIl[9];
+        hs = new WorldPoint(lIIIlllIIIlIl[34], lIIIlllIIIlIl[35], lIIIlllIIIlIl[0]);
+        String[] stringArray = new String[lIIIlllIIIlIl[5]];
+        stringArray[H.lIIIlllIIIlIl[0]] = lIIIlllIIIIll[lIIIlllIIIlIl[36]];
+        stringArray[H.lIIIlllIIIlIl[1]] = lIIIlllIIIIll[lIIIlllIIIlIl[37]];
+        stringArray[H.lIIIlllIIIlIl[3]] = lIIIlllIIIIll[lIIIlllIIIlIl[10]];
+        bW = stringArray;
+    }
+
+    private static boolean lIlIIIlllIlllIl(int n2, int n3) {
+        return n2 == n3;
+    }
+
+    private static String lIlIIIlllIIllll(String lllllllllllllllIIIIIllIlIlIllIll, String lllllllllllllllIIIIIllIlIlIlllII) {
+        try {
+            SecretKeySpec lllllllllllllllIIIIIllIlIllIIIII = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(lllllllllllllllIIIIIllIlIlIlllII.getBytes(StandardCharsets.UTF_8)), lIIIlllIIIlIl[16]), "DES");
+            Cipher lllllllllllllllIIIIIllIlIlIlllll = Cipher.getInstance("DES");
+            lllllllllllllllIIIIIllIlIlIlllll.init(lIIIlllIIIlIl[3], lllllllllllllllIIIIIllIlIllIIIII);
+            return new String(lllllllllllllllIIIIIllIlIlIlllll.doFinal(Base64.getDecoder().decode(lllllllllllllllIIIIIllIlIlIllIll.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIIIIIllIlIlIllllI) {
+            lllllllllllllllIIIIIllIlIlIllllI.printStackTrace();
+            return null;
+        }
+    }
+
+    /*
+     * Enabled force condition propagation
+     * Lifted jumps to return sites
+     */
+    private static boolean aJ() {
+        int n2;
+        int[] nArray = new int[lIIIlllIIIlIl[1]];
+        nArray[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[9];
+        if (H.lIlIIIlllIlIlIl(Inventory.contains((int[])nArray) ? 1 : 0)) {
+            int[] nArray2 = new int[lIIIlllIIIlIl[1]];
+            nArray2[H.lIIIlllIIIlIl[0]] = lIIIlllIIIlIl[9];
+            if (H.lIlIIIlllIllllI(Inventory.getAll((int[])nArray2).size(), lIIIlllIIIlIl[10])) {
+                n2 = lIIIlllIIIlIl[1];
+                "".length();
+                if (-" ".length() <= "   ".length()) return n2 != 0;
+                return ((0x16 ^ 0xD) & ~(0x98 ^ 0x83)) != 0;
+            }
+        }
+        n2 = lIIIlllIIIlIl[0];
+        return n2 != 0;
+    }
+}
+

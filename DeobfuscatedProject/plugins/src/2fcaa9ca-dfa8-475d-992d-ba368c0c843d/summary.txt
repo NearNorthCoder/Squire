@@ -1,0 +1,16 @@
+Summary for 2fcaa9ca-dfa8-475d-992d-ba368c0c843d.jar
+Decompiled with CFR 0.152
+
+
+e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.n
+----------------------------
+
+a(java.util.List<net.runelite.api.coords.WorldPoint> e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.d )
+  Unable to fully structure code
+
+
+e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.i
+----------------------------
+
+d(java.util.List<net.runelite.api.coords.WorldPoint> )
+  Unable to fully structure code

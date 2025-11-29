@@ -1,0 +1,164 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.google.inject.Inject
+ *  gg.squire.client.plugins.fw.TaskManager
+ *  net.runelite.client.ui.ColorScheme
+ *  net.runelite.client.ui.overlay.OverlayPanel
+ *  net.runelite.client.ui.overlay.OverlayPosition
+ *  net.runelite.client.ui.overlay.components.LineComponent
+ *  net.runelite.client.ui.overlay.components.TitleComponent
+ *  net.unethicalite.api.commons.Time
+ */
+package gg.squire.mta.overlay;
+
+import com.google.inject.Inject;
+import gg.squire.client.plugins.fw.TaskManager;
+import gg.squire.mta.SquireMTA;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import m.u.a.-.e.s.q.t.i.r.c;
+import net.runelite.client.ui.ColorScheme;
+import net.runelite.client.ui.overlay.OverlayPanel;
+import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.components.LineComponent;
+import net.runelite.client.ui.overlay.components.TitleComponent;
+import net.unethicalite.api.commons.Time;
+
+public class InfoBox
+extends OverlayPanel {
+    private static /* synthetic */ String[] lllIlIlIllll;
+    private static /* synthetic */ int[] lllIlIllIIII;
+    private final /* synthetic */ SquireMTA ao;
+    private final /* synthetic */ TaskManager ap;
+
+    private static void lIIIllIIIllIlII() {
+        lllIlIlIllll = new String[lllIlIllIIII[10]];
+        InfoBox.lllIlIlIllll[InfoBox.lllIlIllIIII[1]] = InfoBox.lIIIllIIIllIIIl("Khc/AyYcRgc+FQ==", "yfJjT");
+        InfoBox.lllIlIlIllll[InfoBox.lllIlIllIIII[2]] = InfoBox.lIIIllIIIllIIlI("g2QEsCd6HEj9uftp6TS5gg==", "CIdVH");
+        InfoBox.lllIlIlIllll[InfoBox.lllIlIllIIII[3]] = InfoBox.lIIIllIIIllIIlI("rsoM85rP9D8ZMsUbe9ZW+g==", "CdydY");
+        InfoBox.lllIlIlIllll[InfoBox.lllIlIllIIII[4]] = InfoBox.lIIIllIIIllIIll("DiTj0ZI9ozsXYWcsl6zG/o4mFIzUVS2w", "aTEFl");
+        InfoBox.lllIlIlIllll[InfoBox.lllIlIllIIII[5]] = InfoBox.lIIIllIIIllIIll("2es1dPl8MqMuCBW/jpIIm2lgMNr8raT9", "xoyJS");
+        InfoBox.lllIlIlIllll[InfoBox.lllIlIllIIII[6]] = InfoBox.lIIIllIIIllIIlI("bwuZFB+LFNJLd4TG87ZkqC3414NM/TxO", "vmGCd");
+        InfoBox.lllIlIlIllll[InfoBox.lllIlIllIIII[7]] = InfoBox.lIIIllIIIllIIlI("MCyGlPAHHjscDyx7sL+WJdhwcPyAoVXg", "Esmuu");
+    }
+
+    private static String lIIIllIIIllIIll(String lllllllllllllllIIllIlIlIllIIIlII, String lllllllllllllllIIllIlIlIllIIIIll) {
+        try {
+            SecretKeySpec lllllllllllllllIIllIlIlIllIIIlll = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(lllllllllllllllIIllIlIlIllIIIIll.getBytes(StandardCharsets.UTF_8)), lllIlIllIIII[11]), "DES");
+            Cipher lllllllllllllllIIllIlIlIllIIIllI = Cipher.getInstance("DES");
+            lllllllllllllllIIllIlIlIllIIIllI.init(lllIlIllIIII[3], lllllllllllllllIIllIlIlIllIIIlll);
+            return new String(lllllllllllllllIIllIlIlIllIIIllI.doFinal(Base64.getDecoder().decode(lllllllllllllllIIllIlIlIllIIIlII.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIIllIlIlIllIIIlIl) {
+            lllllllllllllllIIllIlIlIllIIIlIl.printStackTrace();
+            return null;
+        }
+    }
+
+    static {
+        InfoBox.lIIIllIIIllIlIl();
+        InfoBox.lIIIllIIIllIlII();
+    }
+
+    private static void lIIIllIIIllIlIl() {
+        lllIlIllIIII = new int[12];
+        InfoBox.lllIlIllIIII[0] = 0x1B ^ 0x6F ^ (0x2A ^ 0x54);
+        InfoBox.lllIlIllIIII[1] = (9 ^ 0x37 ^ (0 ^ 0x2F)) & (0x49 ^ 0x68 ^ (0xB6 ^ 0x86) ^ -" ".length());
+        InfoBox.lllIlIllIIII[2] = " ".length();
+        InfoBox.lllIlIllIIII[3] = "  ".length();
+        InfoBox.lllIlIllIIII[4] = "   ".length();
+        InfoBox.lllIlIllIIII[5] = 0x10 ^ 0x14;
+        InfoBox.lllIlIllIIII[6] = 103 + 77 - 143 + 152 ^ 50 + 8 - -95 + 31;
+        InfoBox.lllIlIllIIII[7] = 0x4A ^ 0x4C;
+        InfoBox.lllIlIllIIII[8] = 0xFFFFBB42 & 0x45BF;
+        InfoBox.lllIlIllIIII[9] = 0x18 ^ 0x49 ^ (0xFD ^ 0xB8);
+        InfoBox.lllIlIllIIII[10] = 0xBF ^ 0xB8;
+        InfoBox.lllIlIllIIII[11] = 0x34 ^ 0x3C;
+    }
+
+    private static boolean lIIIllIIIllIllI(int n2) {
+        return n2 != 0;
+    }
+
+    @Inject
+    private InfoBox(SquireMTA squireMTA) {
+        this.ao = squireMTA;
+        this.ap = squireMTA.getManager();
+        this.setPosition(OverlayPosition.BOTTOM_LEFT);
+    }
+
+    private static boolean lIIIllIIIllIlll(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static String lIIIllIIIllIIIl(String lllllllllllllllIIllIlIlIlIllIlII, String lllllllllllllllIIllIlIlIlIllIIll) {
+        lllllllllllllllIIllIlIlIlIllIlII = new String(Base64.getDecoder().decode(lllllllllllllllIIllIlIlIlIllIlII.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllIIllIlIlIlIllIIlI = new StringBuilder();
+        char[] lllllllllllllllIIllIlIlIlIllIIIl = lllllllllllllllIIllIlIlIlIllIIll.toCharArray();
+        int lllllllllllllllIIllIlIlIlIllIIII = lllIlIllIIII[1];
+        char[] lllllllllllllllIIllIlIlIlIlIlIlI = lllllllllllllllIIllIlIlIlIllIlII.toCharArray();
+        int lllllllllllllllIIllIlIlIlIlIlIIl = lllllllllllllllIIllIlIlIlIlIlIlI.length;
+        int lllllllllllllllIIllIlIlIlIlIlIII = lllIlIllIIII[1];
+        while (InfoBox.lIIIllIIIllIlll(lllllllllllllllIIllIlIlIlIlIlIII, lllllllllllllllIIllIlIlIlIlIlIIl)) {
+            char lllllllllllllllIIllIlIlIlIllIlIl = lllllllllllllllIIllIlIlIlIlIlIlI[lllllllllllllllIIllIlIlIlIlIlIII];
+            lllllllllllllllIIllIlIlIlIllIIlI.append((char)(lllllllllllllllIIllIlIlIlIllIlIl ^ lllllllllllllllIIllIlIlIlIllIIIl[lllllllllllllllIIllIlIlIlIllIIII % lllllllllllllllIIllIlIlIlIllIIIl.length]));
+            "".length();
+            ++lllllllllllllllIIllIlIlIlIllIIII;
+            ++lllllllllllllllIIllIlIlIlIlIlIII;
+            "".length();
+            if ("  ".length() > 0) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllIIllIlIlIlIllIIlI);
+    }
+
+    public Dimension render(Graphics2D graphics2D) {
+        if (InfoBox.lIIIllIIIllIllI(this.ao.isPaintDisabled() ? 1 : 0)) {
+            return null;
+        }
+        Duration duration = Duration.between(this.ao.getStarted(), Instant.now());
+        this.panelComponent.setBorder(new Rectangle(lllIlIllIIII[0], lllIlIllIIII[0], lllIlIllIIII[0], lllIlIllIIII[0]));
+        this.panelComponent.getChildren().add(TitleComponent.builder().color(ColorScheme.BRAND_ORANGE).text(lllIlIlIllll[lllIlIllIIII[1]]).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllIlIlIllll[lllIlIllIIII[2]]).right(Time.format((Duration)duration)).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllIlIlIllll[lllIlIllIIII[3]]).right(String.valueOf(this.ap.getCurrentTask())).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllIlIlIllll[lllIlIllIIII[4]]).right(this.ao.c(c.ALCHEMY) + "/" + this.ao.d(c.ALCHEMY)).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllIlIlIllll[lllIlIllIIII[5]]).right(this.ao.c(c.ENCHANTMENT) + "/" + this.ao.d(c.ENCHANTMENT)).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllIlIlIllll[lllIlIllIIII[6]]).right(this.ao.c(c.GRAVEYARD) + "/" + this.ao.d(c.GRAVEYARD)).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllIlIlIllll[lllIlIllIIII[7]]).right(this.ao.c(c.TELEKENETIC) + "/" + this.ao.d(c.TELEKENETIC)).build());
+        "".length();
+        int n2 = lllIlIllIIII[8];
+        this.panelComponent.setPreferredSize(new Dimension(n2 + lllIlIllIIII[9], lllIlIllIIII[1]));
+        return super.render(graphics2D);
+    }
+
+    private static String lIIIllIIIllIIlI(String lllllllllllllllIIllIlIlIllIlIIIl, String lllllllllllllllIIllIlIlIllIIlllI) {
+        try {
+            SecretKeySpec lllllllllllllllIIllIlIlIllIlIlII = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(lllllllllllllllIIllIlIlIllIIlllI.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher lllllllllllllllIIllIlIlIllIlIIll = Cipher.getInstance("Blowfish");
+            lllllllllllllllIIllIlIlIllIlIIll.init(lllIlIllIIII[3], lllllllllllllllIIllIlIlIllIlIlII);
+            return new String(lllllllllllllllIIllIlIlIllIlIIll.doFinal(Base64.getDecoder().decode(lllllllllllllllIIllIlIlIllIlIIIl.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIIllIlIlIllIlIIlI) {
+            lllllllllllllllIIllIlIlIllIlIIlI.printStackTrace();
+            return null;
+        }
+    }
+}
+

@@ -1,0 +1,149 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.google.inject.Inject
+ *  net.runelite.client.ui.ColorScheme
+ *  net.runelite.client.ui.overlay.OverlayPanel
+ *  net.runelite.client.ui.overlay.OverlayPosition
+ *  net.runelite.client.ui.overlay.components.LineComponent
+ *  net.runelite.client.ui.overlay.components.TitleComponent
+ */
+package gg.squire.account.overlay;
+
+import com.google.inject.Inject;
+import e.c.l.c.e.e.k.d.-.r.-.t.l.t.o.m.e.k.e.n.i.p.r.b.i.l.-.u.e;
+import gg.squire.account.AccBuilderTempleTrek;
+import gg.squire.account.BuilderConfig;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.client.ui.ColorScheme;
+import net.runelite.client.ui.overlay.OverlayPanel;
+import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.components.LineComponent;
+import net.runelite.client.ui.overlay.components.TitleComponent;
+
+public class BuilderInfoBox
+extends OverlayPanel {
+    private static /* synthetic */ String[] lllllIIIIl;
+    private final /* synthetic */ AccBuilderTempleTrek bn;
+    private static /* synthetic */ int[] lllllIIIlI;
+    private final /* synthetic */ BuilderConfig bo;
+
+    private static String llIlIIlIIIlIl(String lllllllllllllllllIlIIlllIllIIIll, String lllllllllllllllllIlIIlllIllIIlII) {
+        try {
+            SecretKeySpec lllllllllllllllllIlIIlllIllIlIII = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(lllllllllllllllllIlIIlllIllIIlII.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher lllllllllllllllllIlIIlllIllIIlll = Cipher.getInstance("Blowfish");
+            lllllllllllllllllIlIIlllIllIIlll.init(lllllIIIlI[3], lllllllllllllllllIlIIlllIllIlIII);
+            return new String(lllllllllllllllllIlIIlllIllIIlll.doFinal(Base64.getDecoder().decode(lllllllllllllllllIlIIlllIllIIIll.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllllIlIIlllIllIIllI) {
+            lllllllllllllllllIlIIlllIllIIllI.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String llIlIIlIIIlII(String lllllllllllllllllIlIIlllIlIlIllI, String lllllllllllllllllIlIIlllIlIlIlll) {
+        try {
+            SecretKeySpec lllllllllllllllllIlIIlllIlIllIll = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(lllllllllllllllllIlIIlllIlIlIlll.getBytes(StandardCharsets.UTF_8)), lllllIIIlI[10]), "DES");
+            Cipher lllllllllllllllllIlIIlllIlIllIlI = Cipher.getInstance("DES");
+            lllllllllllllllllIlIIlllIlIllIlI.init(lllllIIIlI[3], lllllllllllllllllIlIIlllIlIllIll);
+            return new String(lllllllllllllllllIlIIlllIlIllIlI.doFinal(Base64.getDecoder().decode(lllllllllllllllllIlIIlllIlIlIllI.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllllIlIIlllIlIllIIl) {
+            lllllllllllllllllIlIIlllIlIllIIl.printStackTrace();
+            return null;
+        }
+    }
+
+    static {
+        BuilderInfoBox.llIlIIlIIIlll();
+        BuilderInfoBox.llIlIIlIIIllI();
+    }
+
+    private static String llIlIIlIIIIll(String lllllllllllllllllIlIIlllIlllIlIl, String lllllllllllllllllIlIIlllIlllIlII) {
+        lllllllllllllllllIlIIlllIlllIlIl = new String(Base64.getDecoder().decode(lllllllllllllllllIlIIlllIlllIlIl.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllllIlIIlllIllllIII = new StringBuilder();
+        char[] lllllllllllllllllIlIIlllIlllIlll = lllllllllllllllllIlIIlllIlllIlII.toCharArray();
+        int lllllllllllllllllIlIIlllIlllIllI = lllllIIIlI[1];
+        char[] lllllllllllllllllIlIIlllIlllIIII = lllllllllllllllllIlIIlllIlllIlIl.toCharArray();
+        int lllllllllllllllllIlIIlllIllIllll = lllllllllllllllllIlIIlllIlllIIII.length;
+        int lllllllllllllllllIlIIlllIllIlllI = lllllIIIlI[1];
+        while (BuilderInfoBox.llIlIIlIIlIII(lllllllllllllllllIlIIlllIllIlllI, lllllllllllllllllIlIIlllIllIllll)) {
+            char lllllllllllllllllIlIIlllIllllIll = lllllllllllllllllIlIIlllIlllIIII[lllllllllllllllllIlIIlllIllIlllI];
+            lllllllllllllllllIlIIlllIllllIII.append((char)(lllllllllllllllllIlIIlllIllllIll ^ lllllllllllllllllIlIIlllIlllIlll[lllllllllllllllllIlIIlllIlllIllI % lllllllllllllllllIlIIlllIlllIlll.length]));
+            "".length();
+            ++lllllllllllllllllIlIIlllIlllIllI;
+            ++lllllllllllllllllIlIIlllIllIlllI;
+            "".length();
+            if ((0x2E ^ 0x2A) == (0x61 ^ 0x65)) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllllIlIIlllIllllIII);
+    }
+
+    private static boolean llIlIIlIIlIII(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    private static void llIlIIlIIIlll() {
+        lllllIIIlI = new int[11];
+        BuilderInfoBox.lllllIIIlI[0] = "  ".length() ^ (0x9C ^ 0x94);
+        BuilderInfoBox.lllllIIIlI[1] = (124 + 51 - 117 + 91 ^ 120 + 1 - 12 + 28) & (0x67 ^ 0x7B ^ (0x5F ^ 0x76) & ~(0x96 ^ 0xBF) ^ -" ".length());
+        BuilderInfoBox.lllllIIIlI[2] = " ".length();
+        BuilderInfoBox.lllllIIIlI[3] = "  ".length();
+        BuilderInfoBox.lllllIIIlI[4] = "   ".length();
+        BuilderInfoBox.lllllIIIlI[5] = 0xD ^ 0x3C ^ (0x28 ^ 0x1D);
+        BuilderInfoBox.lllllIIIlI[6] = 0x8E ^ 0x8B;
+        BuilderInfoBox.lllllIIIlI[7] = 0xFFFFF58E & 0xB73;
+        BuilderInfoBox.lllllIIIlI[8] = 0xF1 ^ 0x81 ^ (0x62 ^ 6);
+        BuilderInfoBox.lllllIIIlI[9] = 0x62 ^ 0x3C ^ (0x2B ^ 0x73);
+        BuilderInfoBox.lllllIIIlI[10] = 0x2A ^ 0x22;
+    }
+
+    @Inject
+    private BuilderInfoBox(AccBuilderTempleTrek accBuilderTempleTrek, BuilderConfig builderConfig) {
+        this.bn = accBuilderTempleTrek;
+        this.bo = builderConfig;
+        this.setPosition(OverlayPosition.BOTTOM_LEFT);
+    }
+
+    public Dimension render(Graphics2D graphics2D) {
+        long l2 = System.currentTimeMillis() - AccBuilderTempleTrek.b;
+        double d2 = 0.1;
+        this.panelComponent.setBorder(new Rectangle(lllllIIIlI[0], lllllIIIlI[0], lllllIIIlI[0], lllllIIIlI[0]));
+        this.panelComponent.getChildren().add(TitleComponent.builder().color(ColorScheme.BRAND_ORANGE).text(lllllIIIIl[lllllIIIlI[1]]).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllllIIIIl[lllllIIIlI[2]]).right("1." + d2).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllllIIIIl[lllllIIIlI[3]]).right(e.b(l2)).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllllIIIIl[lllllIIIlI[4]]).right(AccBuilderTempleTrek.c).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllllIIIIl[lllllIIIlI[5]]).right(String.valueOf(AccBuilderTempleTrek.l)).build());
+        "".length();
+        this.panelComponent.getChildren().add(LineComponent.builder().left(lllllIIIIl[lllllIIIlI[6]]).right(String.valueOf(AccBuilderTempleTrek.f)).build());
+        "".length();
+        int n2 = lllllIIIlI[7];
+        this.panelComponent.setPreferredSize(new Dimension(n2 + lllllIIIlI[8], lllllIIIlI[1]));
+        return super.render(graphics2D);
+    }
+
+    private static void llIlIIlIIIllI() {
+        lllllIIIIl = new String[lllllIIIlI[9]];
+        BuilderInfoBox.lllllIIIIl[BuilderInfoBox.lllllIIIlI[1]] = BuilderInfoBox.llIlIIlIIIIll("FzQnKjAhZQYmLzQpNxcwIS5yATctKTYmMA==", "DERCB");
+        BuilderInfoBox.lllllIIIIl[BuilderInfoBox.lllllIIIlI[2]] = BuilderInfoBox.llIlIIlIIIlII("Sn/kDkYAZXk=", "Lmqqk");
+        BuilderInfoBox.lllllIIIIl[BuilderInfoBox.lllllIIIlI[3]] = BuilderInfoBox.llIlIIlIIIlIl("3MjfbFXsB+I=", "PoEqH");
+        BuilderInfoBox.lllllIIIIl[BuilderInfoBox.lllllIIIlI[4]] = BuilderInfoBox.llIlIIlIIIlII("lIj0HupSuSE=", "lNEnj");
+        BuilderInfoBox.lllllIIIIl[BuilderInfoBox.lllllIIIlI[5]] = BuilderInfoBox.llIlIIlIIIIll("AhQiFBcvFXA3ByQSJFw=", "AaPfr");
+        BuilderInfoBox.lllllIIIIl[BuilderInfoBox.lllllIIIlI[6]] = BuilderInfoBox.llIlIIlIIIlII("IdkuCb8r7trwcXtqLf959LhUUSIVv+vn", "nxyFR");
+    }
+}
+

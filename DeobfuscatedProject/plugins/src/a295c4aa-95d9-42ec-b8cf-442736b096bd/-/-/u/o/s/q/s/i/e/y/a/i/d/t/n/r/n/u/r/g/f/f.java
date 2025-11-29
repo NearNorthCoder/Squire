@@ -1,0 +1,385 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  gg.squire.client.util.Log
+ *  net.runelite.api.Client
+ *  net.runelite.api.TileObject
+ *  net.runelite.api.widgets.Widget
+ *  net.unethicalite.api.entities.TileObjects
+ *  net.unethicalite.api.widgets.Widgets
+ *  net.unethicalite.client.Static
+ */
+package -.-.u.o.s.q.s.i.e.y.a.i.d.t.n.r.n.u.r.g.f;
+
+import -.-.u.o.s.q.s.i.e.y.a.i.d.t.n.r.n.u.r.g.f.d;
+import -.-.u.o.s.q.s.i.e.y.a.i.d.t.n.r.n.u.r.g.f.e;
+import gg.squire.client.util.Log;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.Client;
+import net.runelite.api.TileObject;
+import net.runelite.api.widgets.Widget;
+import net.unethicalite.api.entities.TileObjects;
+import net.unethicalite.api.widgets.Widgets;
+import net.unethicalite.client.Static;
+
+public final class f
+extends Enum<f> {
+    public static final /* synthetic */ int MOULD_LIST_PARENT;
+    private static final /* synthetic */ int SELECT_MOULD_TAB_SCRIPT;
+    private final /* synthetic */ int pageVisbility;
+    private final /* synthetic */ int pageSelection;
+    private static final /* synthetic */ int SELECT_MOULD_SCRIPT;
+    private static final /* synthetic */ int SELECT_MOULD_TAB;
+    public static final /* synthetic */ /* enum */ f BLADE;
+    private final /* synthetic */ int selectionVarbit;
+    private static final /* synthetic */ int SWORD_TYPE_1_VARBIT;
+    private static /* synthetic */ int[] llIlIlIllIII;
+    public static final /* synthetic */ /* enum */ f FORTE;
+    private static final /* synthetic */ f[] $VALUES;
+    private static final /* synthetic */ int DISABLED_TEXT_COLOR;
+    private static final /* synthetic */ int SWORD_TYPE_2_VARBIT;
+    public static final /* synthetic */ /* enum */ f TIP;
+    private static final /* synthetic */ int SELECTED_MOULD_TAB;
+    private static final /* synthetic */ Client client;
+    private final /* synthetic */ int pageWidget;
+    private static /* synthetic */ String[] llIlIlIlIlll;
+
+    private static boolean lIIIIIllIIlllll(int n2) {
+        return n2 != 0;
+    }
+
+    private static String lIIIIIllIIlIllI(String lllllllllllllllIlIIIIlIIlllllIll, String lllllllllllllllIlIIIIlIIlllllIlI) {
+        try {
+            SecretKeySpec lllllllllllllllIlIIIIlIIlllllllI = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(lllllllllllllllIlIIIIlIIlllllIlI.getBytes(StandardCharsets.UTF_8)), llIlIlIllIII[20]), "DES");
+            Cipher lllllllllllllllIlIIIIlIIllllllIl = Cipher.getInstance("DES");
+            lllllllllllllllIlIIIIlIIllllllIl.init(llIlIlIllIII[3], lllllllllllllllIlIIIIlIIlllllllI);
+            return new String(lllllllllllllllIlIIIIlIIllllllIl.doFinal(Base64.getDecoder().decode(lllllllllllllllIlIIIIlIIlllllIll.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIlIIIIlIIllllllII) {
+            lllllllllllllllIlIIIIlIIllllllII.printStackTrace();
+            return null;
+        }
+    }
+
+    private static boolean lIIIIIllIlIIIIl(int n2, int n3) {
+        return n2 != n3;
+    }
+
+    public int F() {
+        return this.pageVisbility;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    private static Map<e, Widget> a(Widget[] widgetArray) {
+        Widget[] lllllllllllllllIlIIIIlIlIIIlIIll;
+        LinkedHashMap<e, Widget> linkedHashMap = new LinkedHashMap<e, Widget>();
+        int lllllllllllllllIlIIIIlIlIIIlIIIl = llIlIlIllIII[3];
+        while (f.lIIIIIllIIlllIl(lllllllllllllllIlIIIIlIlIIIlIIIl, lllllllllllllllIlIIIIlIlIIIlIIll.length)) {
+            Widget lllllllllllllllIlIIIIlIlIIIlIIII = lllllllllllllllIlIIIIlIlIIIlIIll[lllllllllllllllIlIIIIlIlIIIlIIIl];
+            e lllllllllllllllIlIIIIlIlIIIIllll = e.b(lllllllllllllllIlIIIIlIlIIIlIIII.getText());
+            if (f.lIIIIIllIIlllII((Object)lllllllllllllllIlIIIIlIlIIIIllll) && f.lIIIIIllIlIIIIl(lllllllllllllllIlIIIIlIlIIIlIIII.getTextColor(), llIlIlIllIII[7])) {
+                void lllllllllllllllIlIIIIlIlIIIlIIlI;
+                lllllllllllllllIlIIIIlIlIIIlIIlI.put(lllllllllllllllIlIIIIlIlIIIIllll, lllllllllllllllIlIIIIlIlIIIlIIII);
+                "".length();
+            }
+            lllllllllllllllIlIIIIlIlIIIlIIIl += 17;
+            "".length();
+            if ((0x83 ^ 0x87) != "   ".length()) continue;
+            return null;
+        }
+        return linkedHashMap;
+    }
+
+    private static String lIIIIIllIIllIII(String lllllllllllllllIlIIIIlIIllIllIIl, String lllllllllllllllIlIIIIlIIllIllIII) {
+        lllllllllllllllIlIIIIlIIllIllIIl = new String(Base64.getDecoder().decode(lllllllllllllllIlIIIIlIIllIllIIl.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        StringBuilder lllllllllllllllIlIIIIlIIllIlllII = new StringBuilder();
+        char[] lllllllllllllllIlIIIIlIIllIllIll = lllllllllllllllIlIIIIlIIllIllIII.toCharArray();
+        int lllllllllllllllIlIIIIlIIllIllIlI = llIlIlIllIII[0];
+        char[] lllllllllllllllIlIIIIlIIllIlIlII = lllllllllllllllIlIIIIlIIllIllIIl.toCharArray();
+        int lllllllllllllllIlIIIIlIIllIlIIll = lllllllllllllllIlIIIIlIIllIlIlII.length;
+        int lllllllllllllllIlIIIIlIIllIlIIlI = llIlIlIllIII[0];
+        while (f.lIIIIIllIIlllIl(lllllllllllllllIlIIIIlIIllIlIIlI, lllllllllllllllIlIIIIlIIllIlIIll)) {
+            char lllllllllllllllIlIIIIlIIllIlllll = lllllllllllllllIlIIIIlIIllIlIlII[lllllllllllllllIlIIIIlIIllIlIIlI];
+            lllllllllllllllIlIIIIlIIllIlllII.append((char)(lllllllllllllllIlIIIIlIIllIlllll ^ lllllllllllllllIlIIIIlIIllIllIll[lllllllllllllllIlIIIIlIIllIllIlI % lllllllllllllllIlIIIIlIIllIllIll.length]));
+            "".length();
+            ++lllllllllllllllIlIIIIlIIllIllIlI;
+            ++lllllllllllllllIlIIIIlIIllIlIIlI;
+            "".length();
+            if (((0x25 ^ 0x68) & ~(0xC2 ^ 0x8F)) == 0) continue;
+            return null;
+        }
+        return String.valueOf(lllllllllllllllIlIIIIlIIllIlllII);
+    }
+
+    private f(int n3, int n4, int n5, int n6) {
+        this.selectionVarbit = n3;
+        this.pageVisbility = n4;
+        this.pageSelection = n5;
+        this.pageWidget = n6;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    public void C() {
+        void var2_2;
+        f lllllllllllllllIlIIIIlIlIIIIIlll;
+        int[] nArray = new int[llIlIlIllIII[2]];
+        nArray[f.llIlIlIllIII[0]] = llIlIlIllIII[9];
+        TileObject tileObject = TileObjects.getNearest((int[])nArray);
+        if (f.lIIIIIllIIllIll(tileObject)) {
+            return;
+        }
+        Widget lllllllllllllllIlIIIIlIlIIIIIlIl = Widgets.fromId((int)lllllllllllllllIlIIIIlIlIIIIIlll.pageWidget);
+        if (f.lIIIIIllIIllIll(lllllllllllllllIlIIIIlIlIIIIIlIl)) {
+            return;
+        }
+        var2_2.interact(llIlIlIlIlll[llIlIlIllIII[10]]);
+        tileObject.interact(llIlIlIlIlll[llIlIlIllIII[11]]);
+    }
+
+    private static boolean lIIIIIllIIllllI(int n2) {
+        return n2 == 0;
+    }
+
+    private static void lIIIIIllIIllIlI() {
+        llIlIlIllIII = new int[28];
+        f.llIlIlIllIII[0] = (2 + 64 - -18 + 47 ^ 30 + 101 - 109 + 112) & (0xA ^ 0x7E ^ (0x33 ^ 0x42) ^ -" ".length());
+        f.llIlIlIllIII[1] = -(0x37 ^ 0x72) & (0xFFFFE1FF & 0x2CE1E4D);
+        f.llIlIlIllIII[2] = " ".length();
+        f.llIlIlIllIII[3] = "  ".length();
+        f.llIlIlIllIII[4] = -" ".length();
+        f.llIlIlIllIII[5] = -(22 + 106 - 108 + 113) & (0xFFFFFED7 & 0x37FF);
+        f.llIlIlIllIII[6] = -"   ".length() & (0xFFFFBED7 & 0x777E);
+        f.llIlIlIllIII[7] = 0xFFFFFFFF & 0x9F9F9F;
+        f.llIlIlIllIII[8] = 0xFFFFB6DF & 0x7F75;
+        f.llIlIlIllIII[9] = 0xFFFFAEFF & 0xFFE9;
+        f.llIlIlIllIII[10] = "   ".length();
+        f.llIlIlIllIII[11] = 0x54 ^ 0x62 ^ (0x1E ^ 0x2C);
+        f.llIlIlIllIII[12] = 0x60 ^ 0x65;
+        f.llIlIlIllIII[13] = 0x7C ^ 0x7A;
+        f.llIlIlIllIII[14] = 0xFFFFFFEF & 0x17DF;
+        f.llIlIlIllIII[15] = 0xFFFFBFDB & 0x57F6;
+        f.llIlIlIllIII[16] = 0xFFFFB4DC & 0x2CE4B2F;
+        f.llIlIlIllIII[17] = 0x5A ^ 0x5D;
+        f.llIlIlIllIII[18] = -(0xFFFFD0A2 & 0x6FFF) & (0xFFFFFFF7 & 0x76FF);
+        f.llIlIlIllIII[19] = 0xFFFFA97D & 0x2CE5697;
+        f.llIlIlIllIII[20] = 0x5A ^ 0x52;
+        f.llIlIlIllIII[21] = -(0xFFFFDAAB & 0x6DDD) & (0xFFFFFEFF & 0x7FDF);
+        f.llIlIlIllIII[22] = 158 + 44 - 201 + 159 ^ 1 + 94 - 67 + 141;
+        f.llIlIlIllIII[23] = 0xFFFFE7F6 & 0x2CE181F;
+        f.llIlIlIllIII[24] = -(0xFFFFCDAF & 0x7BF6) & (0xFFFFFFFF & 0x7FFD);
+        f.llIlIlIllIII[25] = 0x19 ^ 0x42 ^ (0x33 ^ 0x7A);
+        f.llIlIlIllIII[26] = 0xFFFFDB97 & 0x2CE247F;
+        f.llIlIlIllIII[27] = 104 + 125 - 177 + 104 ^ 65 + 109 - 86 + 62;
+    }
+
+    private static boolean lIIIIIllIIllIll(Object object) {
+        return object == null;
+    }
+
+    public int G() {
+        return this.pageSelection;
+    }
+
+    public static f[] values() {
+        return (f[])$VALUES.clone();
+    }
+
+    private static void lIIIIIllIIllIIl() {
+        llIlIlIlIlll = new String[llIlIlIllIII[27]];
+        f.llIlIlIlIlll[f.llIlIlIllIII[0]] = f.lIIIIIllIIlIllI("F/ToLpwXPu93HqnWHKQIfSSE2q7MaIMG", "NBjOY");
+        f.llIlIlIlIlll[f.llIlIlIllIII[2]] = f.lIIIIIllIIlIlll("DB80+O0gF/dAsK7Y5BzkJ1wu1wpv/Jz8reqUGdy8yxI=", "RJLVv");
+        f.llIlIlIlIlll[f.llIlIlIllIII[3]] = f.lIIIIIllIIllIII("BR02HAsi", "VxZyh");
+        f.llIlIlIlIlll[f.llIlIlIllIII[10]] = f.lIIIIIllIIlIlll("aR895/d+hUo=", "kQdtI");
+        f.llIlIlIlIlll[f.llIlIlIllIII[11]] = f.lIIIIIllIIlIllI("MlOVporZgc4=", "InLwq");
+        f.llIlIlIlIlll[f.llIlIlIllIII[12]] = f.lIIIIIllIIlIlll("bSfnZrr+F7O1KfA6maVZ8Bxpmc6KOVjZ", "PUDmZ");
+        f.llIlIlIlIlll[f.llIlIlIllIII[13]] = f.lIIIIIllIIlIlll("iN2axfyJGUY=", "TviWf");
+        f.llIlIlIlIlll[f.llIlIlIllIII[17]] = f.lIIIIIllIIlIllI("SIc/P1KiL24=", "zUzoF");
+        f.llIlIlIlIlll[f.llIlIlIllIII[20]] = f.lIIIIIllIIlIlll("6tGcAse3ivc=", "Fhulx");
+        f.llIlIlIlIlll[f.llIlIlIllIII[22]] = f.lIIIIIllIIlIllI("83aHgvB0KNY=", "Xkpgx");
+    }
+
+    public int E() {
+        return this.selectionVarbit;
+    }
+
+    private static boolean lIIIIIllIIlllII(Object object) {
+        return object != null;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    public static Widget y() {
+        e e2 = f.z();
+        if (f.lIIIIIllIIllIll((Object)e2)) {
+            Log.info((String)llIlIlIlIlll[llIlIlIllIII[0]]);
+            return null;
+        }
+        Widget lllllllllllllllIlIIIIlIlIIllIIlI = client.getWidget(llIlIlIllIII[1]);
+        if (f.lIIIIIllIIllIll(lllllllllllllllIlIIIIlIlIIllIIlI)) {
+            Log.info((String)llIlIlIlIlll[llIlIlIllIII[2]]);
+            return null;
+        }
+        Widget[] lllllllllllllllIlIIIIlIlIIllIIIl = lllllllllllllllIlIIIIlIlIIllIIlI.getDynamicChildren();
+        if (f.lIIIIIllIIlllII(lllllllllllllllIlIIIIlIlIIllIIIl)) {
+            Widget[] lllllllllllllllIlIIIIlIlIIllIIII = lllllllllllllllIlIIIIlIlIIllIIIl;
+            int lllllllllllllllIlIIIIlIlIIlIllll = lllllllllllllllIlIIIIlIlIIllIIII.length;
+            int lllllllllllllllIlIIIIlIlIIlIlllI = llIlIlIllIII[0];
+            while (f.lIIIIIllIIlllIl(lllllllllllllllIlIIIIlIlIIlIlllI, lllllllllllllllIlIIIIlIlIIlIllll)) {
+                void lllllllllllllllIlIIIIlIlIIllIIll;
+                Widget lllllllllllllllIlIIIIlIlIIlIllIl = lllllllllllllllIlIIIIlIlIIllIIII[lllllllllllllllIlIIIIlIlIIlIlllI];
+                String[] stringArray = new String[llIlIlIllIII[2]];
+                stringArray[f.llIlIlIllIII[0]] = llIlIlIlIlll[llIlIlIllIII[3]];
+                if (f.lIIIIIllIIllllI(lllllllllllllllIlIIIIlIlIIlIllIl.hasAction(stringArray) ? 1 : 0)) {
+                    "".length();
+                    if (-" ".length() >= " ".length()) {
+                        return null;
+                    }
+                } else if (f.lIIIIIllIIlllll(lllllllllllllllIlIIIIlIlIIlIllIl.getName().contains(lllllllllllllllIlIIIIlIlIIllIIll.x()) ? 1 : 0)) {
+                    return lllllllllllllllIlIIIIlIlIIlIllIl;
+                }
+                ++lllllllllllllllIlIIIIlIlIIlIlllI;
+                "".length();
+                if (" ".length() >= 0) continue;
+                return null;
+            }
+        }
+        return null;
+    }
+
+    private static String lIIIIIllIIlIlll(String lllllllllllllllIlIIIIlIIlllIlllI, String lllllllllllllllIlIIIIlIIlllIlIll) {
+        try {
+            SecretKeySpec lllllllllllllllIlIIIIlIIllllIIIl = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(lllllllllllllllIlIIIIlIIlllIlIll.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher lllllllllllllllIlIIIIlIIllllIIII = Cipher.getInstance("Blowfish");
+            lllllllllllllllIlIIIIlIIllllIIII.init(llIlIlIllIII[3], lllllllllllllllIlIIIIlIIllllIIIl);
+            return new String(lllllllllllllllIlIIIIlIIllllIIII.doFinal(Base64.getDecoder().decode(lllllllllllllllIlIIIIlIIlllIlllI.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception lllllllllllllllIlIIIIlIIlllIllll) {
+            lllllllllllllllIlIIIIlIIlllIllll.printStackTrace();
+            return null;
+        }
+    }
+
+    public static f valueOf(String string) {
+        return Enum.valueOf(f.class, string);
+    }
+
+    public boolean B() {
+        boolean bl;
+        if (f.lIIIIIllIlIIIlI(client.getVarbitValue(llIlIlIllIII[8]), this.pageVisbility)) {
+            bl = llIlIlIllIII[2];
+            "".length();
+            if ((0x29 ^ 0x42 ^ (0x59 ^ 0x36)) <= " ".length()) {
+                return ((31 + 102 - 92 + 93 ^ 84 + 83 - 89 + 79) & (85 + 111 - 183 + 165 ^ 46 + 107 - 104 + 120 ^ -" ".length())) != 0;
+            }
+        } else {
+            bl = llIlIlIllIII[0];
+        }
+        return bl;
+    }
+
+    private static boolean lIIIIIllIlIIIlI(int n2, int n3) {
+        return n2 == n3;
+    }
+
+    public void D() {
+        Widget widget = f.y();
+        if (!f.lIIIIIllIIlllII(widget) || f.lIIIIIllIlIIIlI(widget.getIndex(), llIlIlIllIII[4])) {
+            Log.info((String)llIlIlIlIlll[llIlIlIllIII[12]]);
+            return;
+        }
+        widget.interact(llIlIlIlIlll[llIlIlIllIII[13]]);
+    }
+
+    private static boolean lIIIIIllIIlllIl(int n2, int n3) {
+        return n2 < n3;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    public static e z() {
+        void lllllllllllllllIlIIIIlIlIIlIIIlI;
+        Widget widget = client.getWidget(llIlIlIllIII[1]);
+        if (!f.lIIIIIllIIlllII(widget) || f.lIIIIIllIIllIll(widget.getChildren())) {
+            return null;
+        }
+        Map<e, Widget> lllllllllllllllIlIIIIlIlIIlIIIIl = f.a(lllllllllllllllIlIIIIlIlIIlIIIlI.getChildren());
+        int lllllllllllllllIlIIIIlIlIIlIIIII = llIlIlIllIII[4];
+        Widget lllllllllllllllIlIIIIlIlIIIlllll = null;
+        d lllllllllllllllIlIIIIlIlIIIllllI = d.a(client.getVarbitValue(llIlIlIllIII[5]));
+        d lllllllllllllllIlIIIIlIlIIIlllIl = d.a(client.getVarbitValue(llIlIlIllIII[6]));
+        Iterator<Map.Entry<e, Widget>> lllllllllllllllIlIIIIlIlIIIlllII = lllllllllllllllIlIIIIlIlIIlIIIIl.entrySet().iterator();
+        while (f.lIIIIIllIIlllll(lllllllllllllllIlIIIIlIlIIIlllII.hasNext() ? 1 : 0)) {
+            Map.Entry<e, Widget> lllllllllllllllIlIIIIlIlIIIllIll = lllllllllllllllIlIIIIlIlIIIlllII.next();
+            e lllllllllllllllIlIIIIlIlIIIllIlI = lllllllllllllllIlIIIIlIlIIIllIll.getKey();
+            int lllllllllllllllIlIIIIlIlIIIllIIl = lllllllllllllllIlIIIIlIlIIIllIlI.a(lllllllllllllllIlIIIIlIlIIIllllI, lllllllllllllllIlIIIIlIlIIIlllIl);
+            if (f.lIIIIIllIlIIIII(lllllllllllllllIlIIIIlIlIIIllIIl, lllllllllllllllIlIIIIlIlIIlIIIII)) {
+                lllllllllllllllIlIIIIlIlIIlIIIII = lllllllllllllllIlIIIIlIlIIIllIIl;
+                lllllllllllllllIlIIIIlIlIIIlllll = lllllllllllllllIlIIIIlIlIIIllIll.getValue();
+            }
+            "".length();
+            if (-" ".length() < (5 ^ 0x45 ^ (0x79 ^ 0x3D))) continue;
+            return null;
+        }
+        if (f.lIIIIIllIIlllII(lllllllllllllllIlIIIIlIlIIIlllll)) {
+            Log.info((String)("Best mould is " + lllllllllllllllIlIIIIlIlIIIlllll.getText()));
+            return e.b(lllllllllllllllIlIIIIlIlIIIlllll.getText());
+        }
+        return null;
+    }
+
+    private static boolean lIIIIIllIlIIIII(int n2, int n3) {
+        return n2 > n3;
+    }
+
+    public boolean A() {
+        boolean bl;
+        if (f.lIIIIIllIIlllll(client.getVarbitValue(this.selectionVarbit))) {
+            bl = llIlIlIllIII[2];
+            "".length();
+            if ("   ".length() < "  ".length()) {
+                return ((134 + 15 - 3 + 0 ^ 50 + 33 - -80 + 7) & (0x91 ^ 0xB2 ^ (0x1C ^ 7) ^ -" ".length())) != 0;
+            }
+        } else {
+            bl = llIlIlIllIII[0];
+        }
+        return bl;
+    }
+
+    static {
+        f.lIIIIIllIIllIlI();
+        f.lIIIIIllIIllIIl();
+        SELECT_MOULD_TAB_SCRIPT = llIlIlIllIII[14];
+        SWORD_TYPE_1_VARBIT = llIlIlIllIII[5];
+        SELECT_MOULD_SCRIPT = llIlIlIllIII[15];
+        SELECT_MOULD_TAB = llIlIlIllIII[16];
+        SWORD_TYPE_2_VARBIT = llIlIlIllIII[6];
+        MOULD_LIST_PARENT = llIlIlIllIII[1];
+        DISABLED_TEXT_COLOR = llIlIlIllIII[7];
+        SELECTED_MOULD_TAB = llIlIlIllIII[8];
+        FORTE = new f(llIlIlIllIII[18], llIlIlIllIII[0], llIlIlIllIII[0], llIlIlIllIII[19]);
+        BLADE = new f(llIlIlIllIII[21], llIlIlIllIII[2], llIlIlIllIII[22], llIlIlIllIII[23]);
+        TIP = new f(llIlIlIllIII[24], llIlIlIllIII[3], llIlIlIllIII[25], llIlIlIllIII[26]);
+        f[] fArray = new f[llIlIlIllIII[10]];
+        fArray[f.llIlIlIllIII[0]] = FORTE;
+        fArray[f.llIlIlIllIII[2]] = BLADE;
+        fArray[f.llIlIlIllIII[3]] = TIP;
+        $VALUES = fArray;
+        client = Static.getClient();
+    }
+}
+

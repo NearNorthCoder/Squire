@@ -1,0 +1,160 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.google.inject.Inject
+ *  com.google.inject.Singleton
+ *  net.runelite.api.Item
+ *  net.runelite.api.TileItem
+ *  net.unethicalite.api.entities.Players
+ *  net.unethicalite.api.entities.TileItems
+ *  net.unethicalite.api.items.Inventory
+ */
+package m.e.a.i.z.m.r.-.q.s.y.u;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import gg.squire.zammy.SquireZammyConfig;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Optional;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import m.e.a.i.z.m.r.-.q.s.y.u.j;
+import m.e.a.i.z.m.r.-.q.s.y.u.l;
+import net.runelite.api.Item;
+import net.runelite.api.TileItem;
+import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.entities.TileItems;
+import net.unethicalite.api.items.Inventory;
+
+@Singleton
+public class i {
+    private static /* synthetic */ int[] lIllIIlIIIlIl;
+    private final /* synthetic */ l s;
+    private static final /* synthetic */ HashMap<String, Integer> r;
+    private final /* synthetic */ SquireZammyConfig t;
+    private static /* synthetic */ String[] lIllIIlIIIlII;
+
+    public Optional<Item> y() {
+        return Inventory.getAll(item -> {
+            int n2;
+            if (i.llIIIlIlllIIIlI(item.getName()) && i.llIIIlIlllIIIll(r.containsKey(item.getName()) ? 1 : 0)) {
+                n2 = lIllIIlIIIlIl[1];
+                "".length();
+                if (null != null) {
+                    return ((0x15 ^ 0x69 ^ (0xC4 ^ 0xB7)) & (0xD ^ 0x1C ^ (0x96 ^ 0x88) ^ -" ".length())) != 0;
+                }
+            } else {
+                n2 = lIllIIlIIIlIl[0];
+            }
+            return n2 != 0;
+        }).stream().filter(item -> {
+            boolean bl;
+            if (i.llIIIlIlllIIIIl(item.getName().equals(lIllIIlIIIlII[lIllIIlIIIlIl[0]]) ? 1 : 0)) {
+                bl = lIllIIlIIIlIl[1];
+                "".length();
+                if (null != null) {
+                    return ((0x37 ^ 0x55 ^ (0x21 ^ 0x49)) & (0x63 ^ 0x7A ^ (0x21 ^ 0x32) ^ -" ".length())) != 0;
+                }
+            } else {
+                bl = lIllIIlIIIlIl[0];
+            }
+            return bl;
+        }).min(Comparator.comparingInt(item -> r.get(item.getName()) * item.getQuantity()));
+    }
+
+    private static boolean llIIIlIlllIIIIl(int n2) {
+        return n2 == 0;
+    }
+
+    private static boolean llIIIlIlllIIIlI(Object object) {
+        return object != null;
+    }
+
+    private static String llIIIlIllIlllIl(String llllllllllllllIllIIlIlIIlllIllll, String llllllllllllllIllIIlIlIIllllIIII) {
+        try {
+            SecretKeySpec llllllllllllllIllIIlIlIIllllIlII = new SecretKeySpec(MessageDigest.getInstance("MD5").digest(llllllllllllllIllIIlIlIIllllIIII.getBytes(StandardCharsets.UTF_8)), "Blowfish");
+            Cipher llllllllllllllIllIIlIlIIllllIIll = Cipher.getInstance("Blowfish");
+            llllllllllllllIllIIlIlIIllllIIll.init(lIllIIlIIIlIl[3], llllllllllllllIllIIlIlIIllllIlII);
+            return new String(llllllllllllllIllIIlIlIIllllIIll.doFinal(Base64.getDecoder().decode(llllllllllllllIllIIlIlIIlllIllll.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception llllllllllllllIllIIlIlIIllllIIlI) {
+            llllllllllllllIllIIlIlIIllllIIlI.printStackTrace();
+            return null;
+        }
+    }
+
+    public int a(TileItem tileItem) {
+        return r.getOrDefault(tileItem.getName(), lIllIIlIIIlIl[0]);
+    }
+
+    private static void llIIIlIllIlllll() {
+        lIllIIlIIIlIl = new int[4];
+        i.lIllIIlIIIlIl[0] = (0x5F ^ 0x66 ^ "   ".length()) & (89 + 167 - 155 + 86 ^ 117 + 65 - 175 + 122 ^ -" ".length());
+        i.lIllIIlIIIlIl[1] = " ".length();
+        i.lIllIIlIIIlIl[2] = -" ".length();
+        i.lIllIIlIIIlIl[3] = "  ".length();
+    }
+
+    public Optional<TileItem> x() {
+        return TileItems.getAll(tileItem -> {
+            int n2;
+            if (i.llIIIlIlllIIIll(this.s.b(tileItem.getWorldLocation()) ? 1 : 0) && i.llIIIlIlllIIIlI(tileItem.getName()) && i.llIIIlIlllIIIll(r.containsKey(tileItem.getName()) ? 1 : 0)) {
+                n2 = lIllIIlIIIlIl[1];
+                "".length();
+                if ("  ".length() <= 0) {
+                    return ((0x7E ^ 0x3B) & ~(0x4F ^ 0xA)) != 0;
+                }
+            } else {
+                n2 = lIllIIlIIIlIl[0];
+            }
+            return n2 != 0;
+        }).stream().max(Comparator.comparingInt(object -> ((TileItem)object).getQuantity() * r.getOrDefault(((TileItem)object).getName(), lIllIIlIIIlIl[2])).thenComparingDouble(object -> -((TileItem)object).getWorldLocation().distanceToHypotenuse(Players.getLocal().getWorldLocation())));
+    }
+
+    public boolean a(Item item, TileItem tileItem) {
+        boolean bl;
+        int n2;
+        int n3 = r.get(item.getName()) * item.getQuantity();
+        if (i.llIIIlIlllIIIII(n3, n2 = r.get(tileItem.getName()) * tileItem.getQuantity())) {
+            bl = lIllIIlIIIlIl[1];
+            "".length();
+            if (-(0xA6 ^ 0xA2) >= 0) {
+                return ((0x6F ^ 0x56) & ~(0xE ^ 0x37)) != 0;
+            }
+        } else {
+            bl = lIllIIlIIIlIl[0];
+        }
+        return bl;
+    }
+
+    @Inject
+    public i(l l2, SquireZammyConfig squireZammyConfig) {
+        this.s = l2;
+        this.t = squireZammyConfig;
+    }
+
+    private static boolean llIIIlIlllIIIll(int n2) {
+        return n2 != 0;
+    }
+
+    static {
+        i.llIIIlIllIlllll();
+        i.llIIIlIllIllllI();
+        r = new j();
+    }
+
+    private static void llIIIlIllIllllI() {
+        lIllIIlIIIlII = new String[lIllIIlIIIlIl[1]];
+        i.lIllIIlIIIlII[i.lIllIIlIIIlIl[0]] = i.llIIIlIllIlllIl("zIiQwyFBe/w=", "GBUxv");
+    }
+
+    private static boolean llIIIlIlllIIIII(int n2, int n3) {
+        return n2 < n3;
+    }
+}
+

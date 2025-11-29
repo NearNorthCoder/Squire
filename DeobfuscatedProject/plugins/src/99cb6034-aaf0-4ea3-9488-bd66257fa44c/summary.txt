@@ -1,0 +1,23 @@
+Summary for 99cb6034-aaf0-4ea3-9488-bd66257fa44c.jar
+Decompiled with CFR 0.152
+
+
+gg.squire.farmer.SquireFarmer
+----------------------------
+
+b(-.m.e.a.u.s.r.r.q.i.r.e.f.o )
+  Unable to fully structure code
+
+
+-.m.e.a.u.s.r.r.q.i.r.e.f.aD
+----------------------------
+
+run()
+  Unable to fully structure code
+
+
+-.m.e.a.u.s.r.r.q.i.r.e.f.e
+----------------------------
+
+n()
+  Unable to fully structure code
