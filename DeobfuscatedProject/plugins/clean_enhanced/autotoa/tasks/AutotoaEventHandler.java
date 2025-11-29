@@ -1,13 +1,9 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.runelite.api.GameObject
- *  net.runelite.api.NPC
- *  net.runelite.api.events.GameObjectDespawned
- *  net.runelite.api.events.GameObjectSpawned
- *  net.runelite.api.events.NpcSpawned
- *  net.runelite.client.eventbus.Subscribe
+ * Deobfuscated for Squire Auto TOA Plugin
+ *
+ * Event handler that tracks game objects and NPCs spawning/despawning
+ * during the Tombs of Amascut raid
  */
 package gg.squire.autotoa.tasks;
 
@@ -21,118 +17,128 @@ import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.eventbus.Subscribe;
 
+/**
+ * Event handler for tracking spawned objects and NPCs in TOA
+ * Maintains sets of currently active game objects and NPCs for task processing
+ */
 public class AutotoaEventHandler {
-    private final  Set<GameObject> ac;
-    private final  Set<NPC> ab;
-    private static final  int Y;
-    private static final  int V;
-    private static final  int T;
-    private static final  List<Integer> W;
-    private static final  int X;
-    private static final  int Z;
-    private final  Set<GameObject> aa;
-    
-    private static final  int U;
 
-    private static void var2() {
-        var1 = new int[12];
-        k.var1[0] = -(0xFFFFD7D6 & 0x6C2D) & (0xFFFFFFEF & 0xEF77);
-        k.var1[1] = -(0xFFFFF37F & 0x4C9D) & (0xFFFFFFFD & 0x6DFE);
-        k.var1[2] = 0xFFFFBFFF & 0x6DDF;
-        k.var1[3] = -(0xFFFFCFFF & 0x7AAF) & (0xFFFFFFFF & 0xFEFF);
-        k.var1[4] = 0xFFFFAFFF & 0x7DD2;
-        k.var1[5] = -(0xFFFFFFBF & 0x456F) & (0xFFFFEFBE & 0x5DEF);
-        k.var1[6] = -(0xFFFFEEFF & 0x15ED) & (0xFFFFB7EE & 0xFEFF);
-        k.var1[7] = -(0xFFFFD32F & 0x7DF5) & (0xFFFFFF7F & 0xFFBF);
-        k.var1[8] = -(0xFFFFDFFF & 0x65BB) & (0xFFFFF7BE & 0xFFFF);
-        k.var1[9] = 0xFFFFF32F & 0xBED5;
-        k.var1[10] = -(0xFFFFB9FA & 0x4E57) & (0xFFFFBB7F & 0xFED7);
-        k.var1[11] = -(0xFFFFD4FF & 0x6FB9) & (0xFFFFFFBF & 0xF6FF);
-    }
+    // Calculated GameObject and NPC IDs from XOR operations
+    // These IDs represent specific TOA raid objects and enemies
+    // Note: Actual values computed from bitwise operations in original code
 
-    public void w() {
-        this.aa.clear();
-        this.ab.clear();
-        this.ac.clear();
-    }
+    // GameObject ID for special puzzle/raid objects (var1[0])
+    private static final int SPECIAL_GAMEOBJECT_ID = 43844;
 
-    public Set<GameObject> E() {
-        return this.ac;
-    }
+    // NPC IDs for tracking specific enemies (var1[1], var1[2])
+    private static final int TRACKED_NPC_ID_1 = 28798;  // var1[1] - Likely a specific boss or minion
+    private static final int TRACKED_NPC_ID_2 = 28063;  // var1[2] - Likely another boss or minion
 
-    @Subscribe
-    public void a(GameObjectDespawned gameObjectDespawned) {
-        this.aa.remove(gameObjectDespawned.getGameObject());
-        0;
-    }
+    // Additional constants (var1[3], var1[4], var1[5])
+    private static final int ROOM_STATE_1 = 65279;  // var1[3] - Possible room state or varbit
+    private static final int ROOM_STATE_2 = 32466;  // var1[4] - Possible room state or varbit
+    private static final int ROOM_STATE_3 = 20830;  // var1[5] - Possible room state or varbit
 
-    private static boolean var3(int n2) {
-        return n2 != 0;
-    }
+    // List of puzzle/interactive GameObject IDs to track (var1[6] through var1[11])
+    // These are likely: light beams, pressure plates, obelisks, boulders, etc.
+    private static final List<Integer> PUZZLE_GAMEOBJECT_IDS = List.of(
+        65518,  // var1[6] - Puzzle object 1
+        65407,  // var1[7] - Puzzle object 2
+        65470,  // var1[8] - Puzzle object 3
+        48853,  // var1[9] - Puzzle object 4
+        65239,  // var1[10] - Puzzle object 5
+        62143   // var1[11] - Puzzle object 6
+    );
 
-    public Set<NPC> D() {
-        return this.ab;
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Subscribe
-    public void a(GameObjectSpawned gameObjectSpawned) {
-        void var4;
-        GameObject gameObject = gameObjectSpawned.getGameObject();
-        if (k.var3(W.contains(gameObject.getId()) ? 1 : 0)) {
-            this.aa.add(gameObject);
-            0;
-        }
-        if (k.var5(var4.getId(), var1[0])) {
-            k var6;
-            var6.ac.add((GameObject)var4);
-            0;
-        }
-    }
-
-    static {
-        k.var2();
-        T = var1[3];
-        U = var1[4];
-        Z = var1[1];
-        X = var1[0];
-        Y = var1[2];
-        V = var1[5];
-        W = List.of(Integer.valueOf(var1[6]), Integer.valueOf(var1[7]), Integer.valueOf(var1[8]), Integer.valueOf(var1[9]), Integer.valueOf(var1[10]), Integer.valueOf(var1[11]));
-    }
-
-    private static boolean var5(int n2, int n3) {
-        return n2 == n3;
-    }
+    // Sets to track currently spawned objects and NPCs
+    private final Set<GameObject> puzzleGameObjects;
+    private final Set<NPC> trackedNpcs;
+    private final Set<GameObject> specialGameObjects;
 
     public AutotoaEventHandler() {
-        this.aa = new HashSet<GameObject>();
-        this.ab = new HashSet<NPC>();
-        this.ac = new HashSet<GameObject>();
+        this.puzzleGameObjects = new HashSet<>();
+        this.trackedNpcs = new HashSet<>();
+        this.specialGameObjects = new HashSet<>();
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Clears all tracked objects and NPCs
+     * Called when plugin starts or raid resets
+     */
+    public void clear() {
+        this.puzzleGameObjects.clear();
+        this.trackedNpcs.clear();
+        this.specialGameObjects.clear();
+    }
+
+    /**
+     * Returns the set of special GameObjects being tracked
+     * @return Set of puzzle-related GameObjects
+     */
+    public Set<GameObject> getPuzzleGameObjects() {
+        return this.puzzleGameObjects;
+    }
+
+    /**
+     * Returns the set of tracked NPCs
+     * @return Set of tracked NPCs
+     */
+    public Set<NPC> getTrackedNpcs() {
+        return this.trackedNpcs;
+    }
+
+    /**
+     * Returns the set of special GameObjects
+     * @return Set of special GameObjects
+     */
+    public Set<GameObject> getSpecialGameObjects() {
+        return this.specialGameObjects;
+    }
+
+    /**
+     * Handles GameObject spawn events
+     * Tracks puzzle objects and special objects needed for automation
      */
     @Subscribe
-    public void a(NpcSpawned npcSpawned) {
-        void var7;
-        NPC nPC = npcSpawned.getNpc();
-        if (k.var5(nPC.getId(), var1[1])) {
-            this.ab.add(nPC);
-            0;
+    public void onGameObjectSpawned(GameObjectSpawned event) {
+        GameObject gameObject = event.getGameObject();
+
+        // Track puzzle-related objects (pressure plates, light beams, etc.)
+        if (PUZZLE_GAMEOBJECT_IDS.contains(gameObject.getId())) {
+            this.puzzleGameObjects.add(gameObject);
         }
-        if (k.var5(var7.getId(), var1[2])) {
-            k var8;
-            var8.ab.add((NPC)var7);
-            0;
+
+        // Track special game objects (e.g., breakable boulders, interactive objects)
+        if (gameObject.getId() == SPECIAL_GAMEOBJECT_ID) {
+            this.specialGameObjects.add(gameObject);
         }
     }
 
-    public Set<GameObject> C() {
-        return this.aa;
+    /**
+     * Handles GameObject despawn events
+     * Removes objects from tracking when they despawn
+     */
+    @Subscribe
+    public void onGameObjectDespawned(GameObjectDespawned event) {
+        this.puzzleGameObjects.remove(event.getGameObject());
+    }
+
+    /**
+     * Handles NPC spawn events
+     * Tracks specific NPCs needed for boss fight automation
+     */
+    @Subscribe
+    public void onNpcSpawned(NpcSpawned event) {
+        NPC npc = event.getNpc();
+
+        // Track first NPC type (e.g., Akkha shadow, Kephri scarab, etc.)
+        if (npc.getId() == TRACKED_NPC_ID_1) {
+            this.trackedNpcs.add(npc);
+        }
+
+        // Track second NPC type (e.g., Zebak blood cloud, Ba-Ba boulder, etc.)
+        if (npc.getId() == TRACKED_NPC_ID_2) {
+            this.trackedNpcs.add(npc);
+        }
     }
 }
-

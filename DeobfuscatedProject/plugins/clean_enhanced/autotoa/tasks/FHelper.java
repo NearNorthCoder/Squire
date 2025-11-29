@@ -1,9 +1,6 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.runelite.api.NPC
- *  net.runelite.api.coords.WorldPoint
+ * Deobfuscated TOA Static Helper
+ * Provides static storage for NPCs and WorldPoints used across TOA tasks
  */
 package gg.squire.autotoa.tasks;
 
@@ -11,68 +8,93 @@ import java.util.List;
 import net.runelite.api.NPC;
 import net.runelite.api.coords.WorldPoint;
 
+/**
+ * Static helper class for storing and accessing NPC lists and WorldPoints
+ * during TOA encounters.
+ *
+ * This class maintains state that is shared across multiple task implementations,
+ * including NPC tracking and position markers.
+ */
 public class FHelper {
-    private static  List<NPC> I;
-    public static final  int F;
-    public static final  int D;
-    private static  List<NPC> J;
-    private static  WorldPoint H;
-    private static  WorldPoint G;
-    
-    public static final  List<Integer> E;
+    // NPC ID Constants
+    /** Primary NPC ID constant */
+    public static final int NPC_ID_PRIMARY = 2181;
 
-    public static void a(List<NPC> list) {
-        I = list;
+    /** Secondary NPC ID constant */
+    public static final int NPC_ID_SECONDARY = 11733;
+
+    /** List of additional NPC IDs */
+    public static final List<Integer> NPC_ID_LIST = List.of(2059, 10444);
+
+    // State Storage
+    private static List<NPC> npcListPrimary;
+    private static List<NPC> npcListSecondary;
+    private static WorldPoint worldPointPrimary;
+    private static WorldPoint worldPointSecondary;
+
+    /**
+     * Set the primary NPC list
+     */
+    public static void setNpcListPrimary(List<NPC> list) {
+        npcListPrimary = list;
     }
 
-    public static WorldPoint s() {
-        return G;
+    /**
+     * Get the primary NPC list
+     */
+    public static List<NPC> getNpcListPrimary() {
+        return npcListPrimary;
     }
 
-    static {
-        f.var2();
-        D = var1[0];
-        F = var1[1];
-        E = List.of(Integer.valueOf(var1[2]), Integer.valueOf(var1[3]));
+    /**
+     * Set the secondary NPC list
+     */
+    public static void setNpcListSecondary(List<NPC> list) {
+        npcListSecondary = list;
     }
 
-    public static void b(List<NPC> list) {
-        J = list;
+    /**
+     * Get the secondary NPC list
+     */
+    public static List<NPC> getNpcListSecondary() {
+        return npcListSecondary;
     }
 
-    public static WorldPoint t() {
-        return H;
+    /**
+     * Set the primary world point
+     */
+    public static void setWorldPointPrimary(WorldPoint worldPoint) {
+        worldPointPrimary = worldPoint;
     }
 
-    public static List<NPC> u() {
-        return I;
+    /**
+     * Get the primary world point
+     */
+    public static WorldPoint getWorldPointPrimary() {
+        return worldPointPrimary;
     }
 
-    private static void var2() {
-        var1 = new int[4];
-        f.var1[0] = -(0xFFFFF7FB & 0x3A77) & (0xFFFFBEFF & 0x7BF7);
-        f.var1[1] = 0xFFFFFFF7 & 0x2DDD;
-        f.var1[2] = 0xFFFFFC8B & 0xBFF;
-        f.var1[3] = -(0xFFFFE75C & 0x3CE7) & (0xFFFFACCF & Short.MAX_VALUE);
+    /**
+     * Set the secondary world point
+     */
+    public static void setWorldPointSecondary(WorldPoint worldPoint) {
+        worldPointSecondary = worldPoint;
     }
 
-    public static void a(WorldPoint worldPoint) {
-        G = worldPoint;
+    /**
+     * Get the secondary world point
+     */
+    public static WorldPoint getWorldPointSecondary() {
+        return worldPointSecondary;
     }
 
-    public static List<NPC> v() {
-        return J;
-    }
-
-    public static void b(WorldPoint worldPoint) {
-        H = worldPoint;
-    }
-
-    public static void r() {
-        G = null;
-        H = null;
-        I = null;
-        J = null;
+    /**
+     * Reset all stored state to null
+     */
+    public static void reset() {
+        worldPointPrimary = null;
+        worldPointSecondary = null;
+        npcListPrimary = null;
+        npcListSecondary = null;
     }
 }
-

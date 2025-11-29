@@ -1,14 +1,6 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.Item
- *  net.runelite.api.Skill
- *  net.unethicalite.api.game.Skills
- *  net.unethicalite.api.items.Inventory
+ * Deobfuscated TOA Cracking Scarab Task
+ * Handles cracking blessed crystal scarabs for prayer restoration
  */
 package gg.squire.autotoa.tasks;
 
@@ -20,76 +12,62 @@ import net.runelite.api.Item;
 import net.runelite.api.Skill;
 import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.items.Inventory;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum12;
 
+/**
+ * Task for cracking blessed crystal scarabs to restore prayer points.
+ *
+ * Scarabs are cracked when:
+ * - At least 28 ticks have passed since last crack
+ * - Prayer has been drained by at least 10 points
+ * - A blessed crystal scarab is available in inventory
+ */
 @TaskDesc(name="Cracking scarab", priority=50)
-public class CrackingScarabTask
-extends AutotoaManager {
-    private final  C cB;
-    private final  SquireAutoTOA cC;
-    private  int cD;
+public class CrackingScarabTask extends AutotoaManager {
+    // Constants
+    private static final int TICK_COOLDOWN = 28;
+    private static final int MIN_PRAYER_DRAINED = 10;
+    private static final String CRACK_ACTION = "Crack";
 
-        catch (Exception var8) {
-            var8.printStackTrace();
-            return null;
-        }
-    }
+    // Dependencies
+    private final C config;
+    private final SquireAutoTOA plugin;
+
+    // State
+    private int lastCrackTick;
 
     @Inject
-    protected CrackingScarabTask(Client client, C c2, SquireAutoTOA squireAutoTOA) {
+    protected CrackingScarabTask(Client client, C config, SquireAutoTOA plugin) {
         super(client);
-        this.cB = c2;
-        this.cC = squireAutoTOA;
+        this.config = config;
+        this.plugin = plugin;
     }
 
-    static {
-        ac.var9();
-        ac.var10();
-    }
-
-    private static void var10() {
-        var1 = new String[var2[3]];
-        ac.var1[ac.var2[1]] = "Crack";
-    }
-
-    /*
-     * WARNING - void declaration
-     */
+    @Override
     public boolean run() {
-        void var1_1;
-        if (ac.var11(this.cu.getTickCount() - this.cD, var2[0])) {
-            return var2[1];
+        // Check if enough ticks have passed since last crack
+        int ticksSinceLastCrack = this.cu.getTickCount() - this.lastCrackTick;
+        if (ticksSinceLastCrack < TICK_COOLDOWN) {
+            return false;
         }
-        if (ac.var11(Skills.getLevel((SkiSkill.PRAYER) - Skills.getBoostedLevel((SkiSkill.PRAYER), var2[2])) {
-            return var2[1];
+
+        // Check if prayer has been drained enough
+        int prayerDrained = Skills.getLevel(Skill.PRAYER) - Skills.getBoostedLevel(Skill.PRAYER);
+        if (prayerDrained < MIN_PRAYER_DRAINED) {
+            return false;
         }
-        Item var12 = Inventory.getFirst(item -> e.BLESSED_CRYSTAL_SCARAB.d(item.getId()));
-        if (ac.var13(var12)) {
-            return var2[1];
+
+        // Find blessed crystal scarab in inventory
+        Item scarab = Inventory.getFirst(item ->
+            e.BLESSED_CRYSTAL_SCARAB.d(item.getId())
+        );
+
+        if (scarab == null) {
+            return false;
         }
-        var1_1.interact(var1[var2[1]]);
-        this.cD = this.cu.getTickCount();
-        return var2[3];
-    }
 
-    private static boolean var11(int n2, int n3) {
-        return n2 < n3;
-    }
-
-    private static boolean var13(Object object) {
-        return object == null;
-    }
-
-    private static void var9() {
-        var2 = new int[6];
-        ac.var2[0] = 0x7A ^ 0x31 ^ (0x1C ^ 0x7F);
-        ac.var2[1] = (0x48 ^ 0x5F) & ~(0x1B ^ 0xC);
-        ac.var2[2] = 0xB ^ 0x4D ^ (0xA ^ 0x46);
-        ac.var2[3] = 1;
-        ac.var2[4] = 0x67 ^ 0x49 ^ (0xA6 ^ 0x80);
-        ac.var2[5] = 2;
+        // Crack the scarab
+        scarab.interact(CRACK_ACTION);
+        this.lastCrackTick = this.cu.getTickCount();
+        return true;
     }
 }
-

@@ -1,18 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.EquipmentInventorySlot
- *  net.runelite.api.Item
- *  net.runelite.api.Skill
- *  net.unethicalite.api.game.Skills
- *  net.unethicalite.api.game.Vars
- *  net.unethicalite.api.items.Equipment
- *  net.unethicalite.api.items.Inventory
- */
 package gg.squire.autotoa.tasks;
 
 import com.google.inject.Inject;
@@ -26,115 +11,102 @@ import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.game.Vars;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.GameEnum11;
 
+/**
+ * Automatically drinks combat potions when player stats drop below optimal levels.
+ *
+ * Game Mechanics:
+ * - Combat stats (Attack, Strength, Defence, Ranged, Magic) boost by different amounts
+ * - Super combat potions: +5 + 15% of level for melee stats
+ * - Ranging potions: +4 + 10% of level for Ranged
+ * - Magic potions: +4 for Magic
+ * - Potion effects decay over time (approximately 1 level per minute)
+ * - There's a cooldown between drinking doses (varbit 14376)
+ *
+ * Strategy:
+ * - Monitor combat stats and compare to base + boost
+ * - When stats drop to 50% of max boost, drink another dose
+ * - Check potion cooldown before attempting to drink
+ * - Select appropriate potion based on equipped weapon style
+ */
 @TaskDesc(name="Drinking potion", priority=200)
-public class DrinkingPotionTask
-extends AutotoaManager {
-    private final  C cI;
+public class DrinkingPotionTask extends AutotoaManager {
 
-    private final  SquireAutoTOA cJ;
+    // Varbit for potion drinking cooldown (prevents spam-drinking)
+    private static final int POTION_COOLDOWN_VARBIT = 14376;
 
-    private static boolean var3(int n2, int n3) {
-        return n2 >= n3;
-    }
-
-    private static boolean var4(int n2) {
-        return n2 == 0;
-    }
-
-    private static boolean var5(int n2) {
-        return n2 > 0;
-    }
-
-    private static boolean var6(Object object) {
-        return object != null;
-    }
-
-    private static void var7() {
-        var1 = new String[var2[2]];
-        af.var1[af.var2[0]] = "Drink";
-    }
-
-    static {
-        af.var8();
-        af.var7();
-    }
-
-        catch (Exception var14) {
-            var14.printStackTrace();
-            return null;
-        }
-    }
-
-    public boolean run() {
-        af var15;
-        if (af.var16(this.cJ.e() ? 1 : 0)) {
-            return var2[0];
-        }
-        if (af.var4(var15.bc() ? 1 : 0)) {
-            return var2[0];
-        }
-        if (af.var5(Vars.getBit((int)var2[1]))) {
-            return var2[0];
-        }
-        if (af.var4(var15.cI.am() ? 1 : 0)) {
-            return var2[0];
-        }
-        Item var17 = Equipment.fromSlot((EquipmentInventorySlot)EquipmentInventorySlot.WEAPON);
-        a[] var18 = a.a(var17);
-        int var19 = var18.length;
-        int var20 = var2[0];
-        while (af.var21(var20, var19)) {
-            a var22 = var18[var20];
-            Skill[] var23 = var22.m();
-            int var24 = var23.length;
-            int var25 = var2[0];
-            while (af.var21(var25, var24)) {
-                Item var26;
-                Skill var27 = var23[var25];
-                int var28 = (int)(0.5 * (double)var22.a(var27));
-                if (af.var3(Skills.getLevel((Skivar27) + var28, Skills.getBoostedLevel((Skivar27)) && af.var6(var26 = Inventory.getFirst(item -> item.getName().startsWith(var22.l())))) {
-                    var26.interact(var1[var2[0]]);
-                    var15.cI.ao();
-                    return var2[2];
-                }
-                ++var25;
-                0;
-                if ((86 + 52 - 39 + 70 ^ 22 + 94 - -37 + 20) > 0) continue;
-                return ((124 + 113 - 98 + 22 ^ 50 + 107 - 78 + 69) & (0xA7 ^ 0x85 ^ (0x21 ^ 0x36) ^ -1)) != 0;
-            }
-            ++var20;
-            0;
-            
-            return ((0x24 ^ 0x7D) & ~(0xDB ^ 0x82)) != 0;
-        }
-        return var2[0];
-    }
+    private final C potionManager;          // Manages potion state
+    private final SquireAutoTOA pluginMain;  // Main plugin reference
 
     @Inject
-    protected DrinkingPotionTask(Client client, C c2, SquireAutoTOA squireAutoTOA) {
+    protected DrinkingPotionTask(Client client, C potionManager, SquireAutoTOA pluginMain) {
         super(client);
-        this.cI = c2;
-        this.cJ = squireAutoTOA;
+        this.potionManager = potionManager;
+        this.pluginMain = pluginMain;
     }
 
-    private static void var8() {
-        var2 = new int[4];
-        af.var2[0] = (3 ^ 0x46) & ~(0x60 ^ 0x25);
-        af.var2[1] = -(0xFFFFCFD7 & 0x743B) & (0xFFFFFEBA & 0x7D5F);
-        af.var2[2] = 1;
-        af.var2[3] = 2;
-    }
+    @Override
+    public boolean run() {
+        // Don't drink potions if plugin is paused
+        if (this.pluginMain.e()) {
+            return false;
+        }
 
-    private static boolean var21(int n2, int n3) {
-        return n2 < n3;
-    }
+        // Don't drink if not in combat area
+        if (!this.bc()) {
+            return false;
+        }
 
-    private static boolean var16(int n2) {
-        return n2 != 0;
+        // Check if on potion cooldown
+        if (Vars.getBit(POTION_COOLDOWN_VARBIT) > 0) {
+            return false;  // Still on cooldown
+        }
+
+        // Check if potion manager is ready
+        if (!this.potionManager.am()) {
+            return false;
+        }
+
+        // Get currently equipped weapon to determine which potions to check
+        Item equippedWeapon = Equipment.fromSlot(EquipmentInventorySlot.WEAPON);
+
+        // Get all applicable potion types for this weapon
+        a[] potionTypes = a.a(equippedWeapon);
+
+        // Check each potion type to see if we need to drink
+        for (a potionType : potionTypes) {
+            Skill[] affectedSkills = potionType.m();
+
+            for (Skill skill : affectedSkills) {
+                // Calculate the boost amount this potion provides
+                int baseLevel = Skills.getLevel(skill);
+                int maxBoost = potionType.a(skill);
+                int currentLevel = Skills.getBoostedLevel(skill);
+
+                // Drink potion if current level is at or below 50% of max boost
+                // This ensures we maintain high combat stats throughout the fight
+                int drinkThreshold = baseLevel + (maxBoost / 2);
+
+                if (currentLevel <= drinkThreshold) {
+                    // Find the potion in inventory
+                    String potionNamePrefix = potionType.l();
+                    Item potion = Inventory.getFirst(item ->
+                        item.getName().startsWith(potionNamePrefix)
+                    );
+
+                    if (potion != null) {
+                        // Drink the potion
+                        potion.interact("Drink");
+
+                        // Notify potion manager
+                        this.potionManager.ao();
+
+                        return true;  // Task executed successfully
+                    }
+                }
+            }
+        }
+
+        return false;  // No potions needed
     }
 }
-

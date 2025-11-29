@@ -1,27 +1,5 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.plugins.fw.TaskDesc
- *  gg.squire.client.util.Log
- *  javax.inject.Inject
- *  net.runelite.api.Actor
- *  net.runelite.api.ChatMessageType
- *  net.runelite.api.Client
- *  net.runelite.api.Item
- *  net.runelite.api.NPC
- *  net.runelite.api.Point
- *  net.runelite.api.TileItem
- *  net.runelite.api.TileObject
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.api.events.ChatMessage
- *  net.runelite.client.eventbus.Subscribe
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.entities.TileItems
- *  net.unethicalite.api.entities.TileObjects
- *  net.unethicalite.api.items.Inventory
- *  net.unethicalite.api.movement.Movement
  */
 package gg.squire.autotoa.tasks;
 
@@ -47,236 +25,149 @@ import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.WardenPhaseManager;
 
 @TaskDesc(name="Running water", priority=50, register=true)
-public class RunningWaterTask
-extends AutotoaManager {
-    
-    private  boolean hz;
-    private  Point hx;
-    private  int hy;
-    private static final  int hv;
-    private static final  int hu;
-    
-    private static final  int hw;
+public class RunningWaterTask extends AutotoaManager {
 
-    static {
-        bZ.var3();
-        bZ.var4();
-        hw = var1[9];
-        hu = var1[10];
-        hv = var1[11];
-    }
+    private static final Point START_POSITION = new Point(40, 45);
+    private static final int WATER_CONTAINER_ID = 26815; // TOA water container
+    private static final String WATERFALL_NAME = "Waterfall";
+    private static final String FILL_ACTION = "Fill";
+    private static final String TAKE_ACTION = "Take";
 
-    private static String var5(String var6, String var7) {
-        var6 = new String(Base64.getDecoder().decode(var6.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var8 = new StringBuilder();
-        char[] var9 = var7.toCharArray();
-        int var10 = var1[2];
-        char[] var11 = var6.toCharArray();
-        int var12 = var11.length;
-        int var13 = var1[2];
-        while (bZ.var14(var13, var12)) {
-            char var15 = var11[var13];
-            var8.append((char)(var15 ^ var9[var10 % var9.length]));
-            0;
-            ++var10;
-            ++var13;
-            0;
-            if ((14 + 7 - -56 + 58 ^ 92 + 124 - 134 + 48) > 0) continue;
-            return null;
-        }
-        return String.valueOf(var8);
-    }
+    private static final String WALKING_TO_START_LOG = "Walking to start";
+    private static final String CONTAINER_FILLED_MESSAGE = "You fill your container.";
+    private static final String CONTAINER_EMPTIED_MESSAGE = "You empty a";
 
-    @Override
-    public boolean bl() {
-        bZ var16;
-        int[] nArray = new int[var1[3]];
-        nArray[bZ.var1[2]] = var1[4];
-        if (bZ.var17(Inventory.contains((int[])nArray) ? 1 : 0)) {
-            this.hy = var1[2];
-            return this.cJ();
-        }
-        WorldPoint var18 = var16.a(var16.hx);
-        if (bZ.var17(var18.equals((Object)Players.getLocal().getWorldLocation()) ? 1 : 0) && bZ.var17(var16.hy)) {
-            Log.info((String)var2[var1[2]]);
-            Movement.setDestination((WorldPoint)var18);
-            return var1[3];
-        }
-        if (bZ.var19(var18.equals((Object)Players.getLocal().getWorldLocation()) ? 1 : 0)) {
-            var16.hy = var1[3];
-        }
-        if (bZ.var17(var16.hz)) {
-            return var16.cI();
-        }
-        return this.cH();
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    private boolean cH() {
-        void var2_2;
-        int[] nArray = new int[var1[3]];
-        nArray[bZ.var1[2]] = this.aX();
-        NPC nPC = NPCs.getNearest((int[])nArray);
-        if (bZ.var20(nPC)) {
-            return var1[2];
-        }
-        int[] nArray2 = new int[var1[3]];
-        nArray2[bZ.var1[2]] = var1[4];
-        Item var21 = Inventory.getFirst((int[])nArray2);
-        if (bZ.var20(var21)) {
-            return var1[2];
-        }
-        var2_2.useOn((Actor)nPC);
-        return var1[3];
-    }
-
-    private boolean cJ() {
-        TileObject tileObject = this.cK();
-        if (bZ.var20(tileObject)) {
-            return var1[2];
-        }
-        if (bZ.var19(Inventory.isFull() ? 1 : 0)) {
-            bZ var22;
-            var22.bh();
-            return var1[3];
-        }
-        int[] nArray = new int[var1[3]];
-        nArray[bZ.var1[2]] = var1[4];
-        TileItem var23 = TileItems.getNearest((int[])nArray);
-        if (bZ.var24(var23)) {
-            var23.interact(var2[var1[6]]);
-            return var1[3];
-        }
-        return var1[2];
-    }
-
-    private static boolean var25(Object object, Object object2) {
-        return object != object2;
-    }
-
-    private TileObject cK() {
-        return TileObjects.getNearest(tileObject -> {
-            int n2;
-            if (bZ.var19(tileObject.getName().equals(var2[var1[7]]) ? 1 : 0)) {
-                String[] stringArray = new String[var1[3]];
-                stringArray[bZ.var1[2]] = var2[var1[8]];
-                if (bZ.var19(tileObject.hasAction(stringArray) ? 1 : 0)) {
-                    n2 = var1[3];
-                    0;
-                    if (1 >= -1) return n2 != 0;
-                    return ((84 + 201 - 140 + 91 ^ 0 + 45 - -28 + 90) & (64 + 117 - 74 + 35 ^ 2 + 141 - 66 + 116 ^ -1)) != 0;
-                }
-            }
-            n2 = var1[2];
-            return n2 != 0;
-        });
-    }
-
-    private static boolean var14(int n2, int n3) {
-        return n2 < n3;
-    }
-
-    private static boolean var17(int n2) {
-        return n2 == 0;
-    }
-
-    private static void var4() {
-        var2 = new String[var1[12]];
-        bZ.var2[bZ.var1[2]] = "Walking to start";
-        bZ.var2[bZ.var1[3]] = "You fill your container.";
-        bZ.var2[bZ.var1[5]] = "You empty a";
-        bZ.var2[bZ.var1[6]] = "Take";
-        bZ.var2[bZ.var1[7]] = "Waterfall";
-        bZ.var2[bZ.var1[8]] = "Fill";
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    @Subscribe
-    public void a(ChatMessage chatMessage) {
-        void var26;
-        if (bZ.var25(chatMessage.getType(), ChatMessageType.GAMEMESSAGE)) {
-            return;
-        }
-        String var27 = var26.getMessage();
-        if (bZ.var19(var27.contains(var2[var1[3]]) ? 1 : 0)) {
-            var28.hz = var1[3];
-            0;
-            if (3 <= ((0xB6 ^ 0x81) & ~(0x3D ^ 0xA))) {
-                return;
-            }
-        } else if (bZ.var19(var27.contains(var2[var1[5]]) ? 1 : 0)) {
-            var28.hz = var1[2];
-        }
-    }
+    private boolean containerIsFilled;
+    private final Point startPoint;
+    private int hasReachedStart;
 
     @Inject
-    protected RunningWaterTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
-        this.hx = new Point(var1[0], var1[1]);
-        this.hy = var1[2];
+    protected RunningWaterTask(Client client, WardenPhaseManager wardenManager, TOAConfig config) {
+        super(client, wardenManager, config);
+        this.startPoint = START_POSITION;
+        this.hasReachedStart = 0;
     }
 
-    private static boolean var24(Object object) {
-        return object != null;
+    @Override
+    public boolean execute() {
+        // Check if we already have a filled water container
+        if (!Inventory.contains(WATER_CONTAINER_ID)) {
+            this.hasReachedStart = 0;
+            return collectWaterContainer();
+        }
+
+        WorldPoint startLocation = getWorldPoint(this.startPoint);
+
+        // Move to start position if not there yet
+        if (!startLocation.equals(Players.getLocal().getWorldLocation()) && this.hasReachedStart == 0) {
+            Log.info(WALKING_TO_START_LOG);
+            Movement.setDestination(startLocation);
+            return true;
+        }
+
+        // Mark that we've reached the start position
+        if (startLocation.equals(Players.getLocal().getWorldLocation())) {
+            this.hasReachedStart = 1;
+        }
+
+        // If container is filled, pour it on Zebak
+        if (this.containerIsFilled) {
+            return pourWaterOnZebak();
+        }
+
+        // Otherwise, fill the container at waterfall
+        return fillWaterContainer();
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Collects a water container from the ground or returns false if none available
      */
-    private boolean cI() {
-        void var2_2;
-        TileObject tileObject = this.cK();
-        if (bZ.var20(tileObject)) {
-            return var1[2];
+    private boolean collectWaterContainer() {
+        TileObject waterfall = getWaterfall();
+        if (waterfall == null) {
+            return false;
         }
-        int[] nArray = new int[var1[3]];
-        nArray[bZ.var1[2]] = var1[4];
-        Item var29 = Inventory.getFirst((int[])nArray);
-        if (bZ.var20(var29)) {
-            return var1[2];
+
+        // If inventory is full, make space
+        if (Inventory.isFull()) {
+            this.dropNonEssentialItem();
+            return true;
         }
-        var2_2.useOn(tileObject);
-        return var1[3];
+
+        // Pick up water container from ground
+        TileItem waterContainer = TileItems.getNearest(WATER_CONTAINER_ID);
+        if (waterContainer != null) {
+            waterContainer.interact(TAKE_ACTION);
+            return true;
+        }
+
+        return false;
     }
 
-    private static boolean var20(Object object) {
-        return object == null;
+    /**
+     * Pours water from container onto Zebak NPC
+     */
+    private boolean pourWaterOnZebak() {
+        NPC zebak = NPCs.getNearest(this.getZebakId());
+        if (zebak == null) {
+            return false;
+        }
+
+        Item waterContainer = Inventory.getFirst(WATER_CONTAINER_ID);
+        if (waterContainer == null) {
+            return false;
+        }
+
+        waterContainer.useOn(zebak);
+        return true;
     }
 
-    private static void var3() {
-        var1 = new int[14];
-        bZ.var1[0] = 0xB5 ^ 0x9D;
-        bZ.var1[1] = 0x44 ^ 0x69;
-        bZ.var1[2] = (0xAF ^ 0xC4 ^ (0x59 ^ 0x7F)) & (0x6C ^ 0x76 ^ (0x5F ^ 8) ^ -1);
-        bZ.var1[3] = 1;
-        bZ.var1[4] = -(0xFFFFD7BF & 0x2D61) & (0xFFFFEFFF & 0x7FBF);
-        bZ.var1[5] = 2;
-        bZ.var1[6] = 3;
-        bZ.var1[7] = 0x57 ^ 0x53;
-        bZ.var1[8] = 0x2E ^ 0x2B;
-        bZ.var1[9] = -(0xFFFFF7A5 & 0x4EFF) & (0xFFFFFFFF & 0xF7FF);
-        bZ.var1[10] = 0xFFFFF1EF & 0xBF77;
-        bZ.var1[11] = -(0xFFFFAEB3 & 0x536D) & (0xFFFFFF7B & 0x27FF);
-        bZ.var1[12] = 0xCC ^ 0xC4 ^ (0x24 ^ 0x2A);
-        bZ.var1[13] = 0x2F ^ 0x27;
+    /**
+     * Fills the water container at the waterfall
+     */
+    private boolean fillWaterContainer() {
+        TileObject waterfall = getWaterfall();
+        if (waterfall == null) {
+            return false;
+        }
+
+        Item waterContainer = Inventory.getFirst(WATER_CONTAINER_ID);
+        if (waterContainer == null) {
+            return false;
+        }
+
+        waterContainer.useOn(waterfall);
+        return true;
     }
 
-    private static boolean var19(int n2) {
-        return n2 != 0;
+    /**
+     * Finds the waterfall object to fill containers
+     */
+    private TileObject getWaterfall() {
+        return TileObjects.getNearest(tileObject ->
+            tileObject.getName().equals(WATERFALL_NAME)
+            && tileObject.hasAction(FILL_ACTION)
+        );
     }
 
-        catch (Exception var35) {
-            var35.printStackTrace();
-            return null;
+    /**
+     * Listens for chat messages to detect when container is filled or emptied
+     */
+    @Subscribe
+    public void onChatMessage(ChatMessage chatMessage) {
+        if (chatMessage.getType() != ChatMessageType.GAMEMESSAGE) {
+            return;
+        }
+
+        String message = chatMessage.getMessage();
+
+        if (message.contains(CONTAINER_FILLED_MESSAGE)) {
+            this.containerIsFilled = true;
+        } else if (message.contains(CONTAINER_EMPTIED_MESSAGE)) {
+            this.containerIsFilled = false;
         }
     }
 }
-

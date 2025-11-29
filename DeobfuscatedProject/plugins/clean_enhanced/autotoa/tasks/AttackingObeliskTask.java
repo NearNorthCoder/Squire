@@ -1,19 +1,5 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.NPC
- *  net.runelite.api.TileObject
- *  net.runelite.client.config.ConfigStorageBox
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.entities.TileObjects
- *  net.unethicalite.api.game.Combat
- *  net.unethicalite.api.items.Equipment
  */
 package gg.squire.autotoa.tasks;
 
@@ -31,131 +17,74 @@ import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.items.Equipment;
 import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
+import gg.squire.autotoa.tasks.WardenPhaseManager;
 
 @TaskDesc(name="Attacking Obelisk", priority=50)
-public class AttackingObeliskTask
-extends AutotoaManager {
+public class AttackingObeliskTask extends AutotoaManager {
 
-    private static void var3() {
-        var1 = new String[var2[4]];
-        bv.var1[bv.var2[1]] = "Obelisk";
-        bv.var1[bv.var2[0]] = "Attack";
-    }
+    private static final String OBELISK_NAME = "Obelisk";
+    private static final String ATTACK_ACTION = "Attack";
+    private static final int MIN_SPEC_ENERGY = 50;
+    private static final int KERIS_ITEM_ID = 27227; // Keris partisan of breaching
 
-    private static boolean var4(int n2) {
-        return n2 != 0;
-    }
+    private final WardenPhaseManager wardenPhaseManager;
 
-        catch (Exception var10) {
-            var10.printStackTrace();
-            return null;
-        }
+    @Inject
+    protected AttackingObeliskTask(Client client, WardenPhaseManager wardenManager, TOAConfig config) {
+        super(client, wardenManager, config);
+        this.wardenPhaseManager = wardenManager;
     }
 
     @Override
-    public ConfigStorageBox<EquipmentSetup> bs() {
+    public ConfigStorageBox<EquipmentSetup> getDefaultGear() {
         return null;
     }
 
-    /*
-     * Enabled force condition propagation
-     * Lifted jumps to return sites
+    @Override
+    public ConfigStorageBox<EquipmentSetup> getSpecialGear() {
+        return this.config.obeliskGear();
+    }
+
+    /**
+     * Checks if we should use special attack on the obelisk
+     * Special attack should be used when we have enough energy and Keris equipped
      */
     @Override
-    public boolean bq() {
-        int n2;
-        block3: {
-            block2: {
-                if (!bv.var11(Combat.getSpecEnergy(), var2[2])) break block2;
-                int[] nArray = new int[var2[0]];
-                nArray[bv.var2[1]] = var2[3];
-                if (!bv.var12(Equipment.contains((int[])nArray) ? 1 : 0)) break block3;
-            }
-            n2 = var2[0];
-            0;
-            if (((0xD5 ^ 0x97) & ~(5 ^ 0x47)) == 0) return n2 != 0;
-            return ((0xB9 ^ 0x96) & ~(0x18 ^ 0x37)) != 0;
+    public boolean shouldUseSpecialAttack() {
+        // Check if we have enough special attack energy and Keris equipped
+        if (Combat.getSpecEnergy() >= MIN_SPEC_ENERGY
+            && Equipment.contains(KERIS_ITEM_ID)) {
+            return true;
         }
-        n2 = var2[1];
-        return n2 != 0;
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    public boolean bl() {
-        TileObject var13;
-        void var14;
-        bv var15;
-        String[] stringArray = new String[var2[0]];
-        stringArray[bv.var2[1]] = var1[var2[1]];
-        NPC nPC = NPCs.getNearest((String[])stringArray);
-        if (bv.var16(nPC)) {
-            return var2[1];
-        }
-        if (bv.var4(var15.aY.g() ? 1 : 0)) {
-            return var2[1];
-        }
-        var15.a((NPC)var14, var2[0]);
-        0;
-        if (bv.var17(var15.bg(), var2[0]) && bv.var12(var14.getWorldArea().isInMeleeDistance(Players.getLocal().getWorldLocation()) ? 1 : 0) && bv.var18(var13 = TileObjects.getNearest(tileObject -> fH.contains(tileObject.getId())))) {
-            return var2[1];
-        }
-        nPC.interact(var1[var2[0]]);
-        return var2[0];
-    }
-
-        catch (Exception var24) {
-            var24.printStackTrace();
-            return null;
-        }
-    }
-
-    private static boolean var18(Object object) {
-        return object != null;
-    }
-
-    private static boolean var12(int n2) {
-        return n2 == 0;
-    }
-
-    private static boolean var17(int n2, int n3) {
-        return n2 == n3;
-    }
-
-    @Inject
-    protected AttackingObeliskTask(Client client, z z2, TOAConfig tOAConfig) {
-        super(client, z2, tOAConfig);
+        return false;
     }
 
     @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
-        return this.cW.obeliskGear();
-    }
+    public boolean execute() {
+        NPC obelisk = NPCs.getNearest(OBELISK_NAME);
 
-    private static void var25() {
-        var2 = new int[6];
-        bv.var2[0] = 1;
-        bv.var2[1] = (0x2B ^ 0x48) & ~(0xC5 ^ 0xA6);
-        bv.var2[2] = 133 + 188 - 293 + 193 ^ 37 + 2 - -28 + 118;
-        bv.var2[3] = -(0xFFFFD3DD & 0x3EA3) & (0xFFFFF7FF & 0x7FF7);
-        bv.var2[4] = 2;
-        bv.var2[5] = 8 + 64 - 22 + 106 ^ 139 + 132 - 189 + 66;
-    }
+        if (obelisk == null) {
+            return false;
+        }
 
-    private static boolean var11(int n2, int n3) {
-        return n2 >= n3;
-    }
+        // Don't attack if currently in combat animation
+        if (this.wardenPhaseManager.isInCombatAnimation()) {
+            return false;
+        }
 
-    static {
-        bv.var25();
-        bv.var3();
-    }
+        // Attempt special attack if conditions are met
+        this.attemptSpecialAttack(obelisk, true);
 
-    private static boolean var16(Object object) {
-        return object == null;
+        // Check if we're in melee distance and there's a core object nearby
+        if (this.getCurrentTarget() == obelisk
+            && obelisk.getWorldArea().isInMeleeDistance(Players.getLocal().getWorldLocation())
+            && TileObjects.getNearest(tileObject ->
+                WardenPhaseManager.CORE_OBJECT_IDS.contains(tileObject.getId())) != null) {
+            return false;
+        }
+
+        // Attack the obelisk
+        obelisk.interact(ATTACK_ACTION);
+        return true;
     }
 }
-

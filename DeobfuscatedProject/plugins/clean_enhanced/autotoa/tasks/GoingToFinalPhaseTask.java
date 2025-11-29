@@ -1,20 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.NPC
- *  net.runelite.api.TileItem
- *  net.runelite.client.config.ConfigStorageBox
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.TileItems
- *  net.unethicalite.api.game.Combat
- *  net.unethicalite.api.game.Prices
- *  net.unethicalite.api.items.Inventory
- *  net.unethicalite.api.movement.Reachable
- */
 package gg.squire.autotoa.tasks;
 
 import com.google.inject.Inject;
@@ -31,114 +14,93 @@ import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.game.Prices;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Reachable;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+/**
+ * Handles transition to the Wardens final phase in Tombs of Amascut.
+ *
+ * Game Mechanics:
+ * - During the Wardens boss fight, there are multiple phases
+ * - When transitioning to final phase, Wardens perform specific animations
+ * - Items/supplies may drop on the ground during phase transitions
+ * - Low health (below threshold) requires caution before picking up items
+ *
+ * Strategy:
+ * 1. Detect Warden animation changes signaling phase transition
+ * 2. Wait for safe moment (not during specific attack animations)
+ * 3. Pick up valuable items from ground if inventory has space
+ * 4. Prioritize high-value tradeable items
+ * 5. Don't pick up items if health is critically low
+ */
 @TaskDesc(name="Going to final phase", priority=1000, blocking=true)
-public class GoingToFinalPhaseTask
-extends AutotoaManager {
-    private static final  int gm;
+public class GoingToFinalPhaseTask extends AutotoaManager {
 
-    private static final  int gl;
+    // Warden animation IDs
+    private static final int WARDEN_PHASE_ANIMATION_1 = 9662;   // First transition animation
+    private static final int WARDEN_PHASE_ANIMATION_2 = 11755;  // Second transition animation
 
-    private static void var3() {
-        var1 = new int[8];
-        bE.var1[0] = -(0xFFFFF9EF & 0x5E51) & (0xFFFFFDFE & Short.MAX_VALUE);
-        bE.var1[1] = (0xBD ^ 0x89) & ~(0x3A ^ 0xE);
-        bE.var1[2] = -(0xFFFFF38F & 0x1E75) & (0xFFFFFFFF & 0x3FEF);
-        bE.var1[3] = 0x3A ^ 0x67 ^ (0x45 ^ 0x2F);
-        bE.var1[4] = 1;
-        bE.var1[5] = -1 & (0xFFFFFFFF & Integer.MAX_VALUE);
-        bE.var1[6] = 0x41 ^ 0x49;
-        bE.var1[7] = 2;
-    }
+    // Health threshold for safe item pickup
+    private static final int LOW_HEALTH_THRESHOLD = 7;  // Don't pick up items below this HP
 
-    private static void var4() {
-        var2 = new String[var1[4]];
-        bE.var2[bE.var1[1]] = "Take";
-    }
-
-    static {
-        bE.var3();
-        bE.var4();
-        gl = var1[0];
-        gm = var1[2];
-    }
-
-    private static boolean var5(Object object) {
-        return object != null;
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    public boolean bl() {
-        void var2_2;
-        bE var6;
-        NPC nPC = this.co();
-        if (bE.var5(nPC) && bE.var7(nPC.getAnimation(), var1[0])) {
-            return var1[1];
-        }
-        if (bE.var7(var6.aX(), var1[2])) {
-            return var1[1];
-        }
-        if (bE.var8(Combat.getCurrentHealth(), var1[3]) && bE.var9(var6.ba() ? 1 : 0)) {
-            return var1[4];
-        }
-        if (bE.var9(Inventory.isFull() ? 1 : 0)) {
-            return var1[1];
-        }
-        TileItem var10 = TileItems.getAll().stream().filter(Reachable::isInteractable).max(Comparator.comparingInt(tileItem -> {
-            int n2;
-            if (bE.var9(tileItem.isTradable() ? 1 : 0)) {
-                n2 = Prices.getItemPrice((int)tileItem.getId());
-                0;
-                if (((0x5B ^ 0x27 ^ (0xC1 ^ 0x92)) & (0x32 ^ 0x49 ^ (0x39 ^ 0x6D) ^ -1)) != 0) {
-                    return (0xEF ^ 0xC2 ^ (0x7F ^ 0x56)) & (71 + 20 - 11 + 83 ^ 10 + 165 - 165 + 157 ^ -1);
-                }
-            } else {
-                n2 = var1[5];
-            }
-            return n2;
-        })).orElse(null);
-        if (bE.var11(var10)) {
-            return var1[1];
-        }
-        var2_2.interact(var2[var1[1]]);
-        return var1[4];
-    }
-
-    private static boolean var8(int n2, int n3) {
-        return n2 < n3;
-    }
-
-    private static boolean var11(Object object) {
-        return object == null;
-    }
-
-    @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
-        return null;
-    }
-
-    private static boolean var9(int n2) {
-        return n2 != 0;
-    }
+    // Item price constants
+    private static final int DEFAULT_ITEM_PRICE = -1;  // Price for non-tradeable items
 
     @Inject
     protected GoingToFinalPhaseTask(Client client, z z2, TOAConfig tOAConfig) {
         super(client, z2, tOAConfig);
     }
 
-    private static boolean var7(int n2, int n3) {
-        return n2 != n3;
+    @Override
+    public boolean bl() {
+        // Main task execution logic
+
+        // Check if Warden is performing phase transition animation
+        NPC warden = this.co();  // Get Warden NPC
+
+        if (warden != null && warden.getAnimation() == WARDEN_PHASE_ANIMATION_1) {
+            // Warden is transitioning - don't act yet
+            return false;
+        }
+
+        // Check if we're in the correct phase
+        if (this.aX() == WARDEN_PHASE_ANIMATION_2) {
+            // Already in final phase
+            return false;
+        }
+
+        // Don't pick up items if health is too low and we can't eat
+        if (Combat.getCurrentHealth() < LOW_HEALTH_THRESHOLD && !this.ba()) {
+            return true;  // Focus on survival, not looting
+        }
+
+        // Don't pick up items if inventory is full
+        if (Inventory.isFull()) {
+            return false;
+        }
+
+        // Find the most valuable item on the ground
+        TileItem valuableItem = TileItems.getAll().stream()
+            .filter(Reachable::isInteractable)
+            .max(Comparator.comparingInt(item -> {
+                if (item.isTradable()) {
+                    return Prices.getItemPrice(item.getId());
+                } else {
+                    return DEFAULT_ITEM_PRICE;
+                }
+            }))
+            .orElse(null);
+
+        if (valuableItem == null) {
+            // No items to pick up
+            return false;
+        }
+
+        // Pick up the valuable item
+        valuableItem.interact("Take");
+        return true;
     }
 
-        catch (Exception var17) {
-            var17.printStackTrace();
-            return null;
-        }
+    @Override
+    public ConfigStorageBox<EquipmentSetup> br() {
+        return null;  // No special equipment setup needed
     }
 }
-
