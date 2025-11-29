@@ -1,30 +1,7 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  net.runelite.api.Client
- *  net.runelite.api.Perspective
- *  net.runelite.api.Point
- *  net.runelite.api.coords.LocalPoint
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.client.ui.FontManager
- *  net.runelite.client.ui.overlay.Overlay
- *  net.runelite.client.ui.overlay.OverlayLayer
- *  net.runelite.client.ui.overlay.OverlayPosition
- *  net.runelite.client.ui.overlay.OverlayPriority
- *  net.runelite.client.ui.overlay.OverlayUtil
- */
 package gg.squire.autotoa.tasks;
 
 import com.google.inject.Inject;
 import gg.squire.autotoa.TOAConfig;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.Shape;
 import net.runelite.api.Client;
 import net.runelite.api.Perspective;
 import net.runelite.api.Point;
@@ -37,224 +14,405 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
-public abstract class AutotoaTaskBase
-extends Overlay {
-    @Inject
-    protected  Client ai;
-    protected final  TOAConfig bV;
+import java.awt.*;
 
-    private static boolean var2(int n2, int n3) {
-        return n2 < n3;
-    }
+/**
+ * Base overlay class for rendering TOA (Tombs of Amascut) task visualizations.
+ *
+ * <p>This abstract class provides common rendering utilities for drawing tiles,
+ * polygons, and text on the game overlay. It handles the complex mathematics
+ * of converting between world coordinates, local coordinates, and screen
+ * coordinates.
+ *
+ * <p>Key rendering capabilities:
+ * <ul>
+ *   <li>Tile highlighting with custom colors and transparency</li>
+ *   <li>Polygon rendering with stroke and fill options</li>
+ *   <li>Text rendering with shadow effects</li>
+ *   <li>Height-based perspective calculations</li>
+ *   <li>Distance-based render culling</li>
+ * </ul>
+ *
+ * <p>All subclasses must implement the Overlay render method to display
+ * their specific task information.
+ *
+ * @author Squire Deobfuscation Team
+ */
+public abstract class ToaOverlayBase extends Overlay {
 
-    /*
-     * WARNING - void declaration
+    // ========== Rendering Constants ==========
+
+    /** Bit shift amount for tile coordinate calculations (divides by 128) */
+    private static final int TILE_COORDINATE_SHIFT = 7;
+
+    /** Tile coordinate mask for sub-tile positioning (127 in binary) */
+    private static final int TILE_COORDINATE_MASK = 127;
+
+    /** Tile size in local coordinate units (128 units per tile) */
+    private static final int TILE_SIZE = 128;
+
+    /** Maximum render distance in tiles - tiles beyond this won't be rendered */
+    private static final int MAX_RENDER_DISTANCE = 32;
+
+    /** Scene size in tiles (104x104 grid) */
+    private static final int SCENE_SIZE = 104;
+
+    /** Default text size for overlay rendering */
+    private static final int DEFAULT_TEXT_SIZE = 12;
+
+    /** Default stroke width for polygon outlines */
+    private static final int DEFAULT_STROKE_WIDTH = 2;
+
+    /** Default fill transparency for tile highlighting */
+    private static final int DEFAULT_FILL_ALPHA = 50;
+
+    /** Default stroke width for highlighted tiles */
+    private static final int DEFAULT_TILE_STROKE = 1;
+
+    /** Constant for tile edge calculations */
+    private static final int TILE_EDGE_OFFSET = 0;
+
+    // ========== Injected Dependencies ==========
+
+    /**
+     * The RuneLite client instance for accessing game state.
      */
-    protected void a(Graphics2D graphics2D, WorldPoint worldPoint, Color color, int n2, int n3, int n4) {
-        void var9_9;
-        void var3;
-        S var4;
-        WorldPoint worldPoint2 = this.ai.getLocalPlayer().getWorldLocation();
-        if (S.var5(worldPoint.distanceTo(worldPoint2), var1[8])) {
-            return;
-        }
-        LocalPoint var6 = LocalPoint.fromWorld((Client)var4.ai, (WorldPoint)var3);
-        if (S.var7(var6)) {
-            return;
-        }
-        Polygon var8 = Perspective.getCanvasTilePoly((Client)var4.ai, (LocalPoint)var6);
-        if (S.var7(var8)) {
-            return;
-        }
-        graphics2D.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), n3));
-        graphics2D.setStroke(new BasicStroke(n2));
-        graphics2D.draw((Shape)var9_9);
-        graphics2D.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), n4));
-        graphics2D.fill((Shape)var9_9);
-    }
-
-    public static Polygon a(Client client, LocalPoint localPoint, int n2, boolean bl2) {
-        return S.a(client, localPoint, n2, var1[1], bl2);
-    }
-
-    public void a(Graphics2D graphics2D, String string, Color color, Point point) {
-        if (S.var9(point)) {
-            graphics2D.setFont(new Font(FontManager.getRunescapeSmallFont().toString(), var1[1], var1[9]));
-            Point point2 = new Point(point.getX(), point.getY());
-            Point point3 = new Point(point.getX() + var1[0], point.getY() + var1[0]);
-            OverlayUtil.renderTextLocation((Graphics2D)graphics2D, (Point)point3, (String)string, (Color)Color.BLACK);
-            OverlayUtil.renderTextLocation((Graphics2D)graphics2D, (Point)point2, (String)string, (Color)color);
-        }
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    public static Polygon a(Client client, LocalPoint localPoint, int n2, int n3, boolean bl2) {
-        void var21_21;
-        void var20_20;
-        void var19_19;
-        void var18_18;
-        void var10;
-        Client var11;
-        int var12;
-        int var13;
-        int var14;
-        int var15;
-        void var16;
-        int n4 = client.getPlane();
-        if (S.var17(bl2)) {
-            int n5 = localPoint.getX() - n2 * (var1[2] + n3) / var1[3];
-            int n6 = localPoint.getY() - n2 * (var1[2] + n3) / var1[3];
-            int n7 = localPoint.getX() + n2 * (var1[2] + n3) / var1[3];
-            int n8 = localPoint.getY() + n2 * (var1[2] + n3) / var1[3];
-            0;
-            if (((0xE4 ^ 0xA3 ^ (0x41 ^ 9)) & (73 + 1 - 71 + 133 ^ 89 + 11 - 3 + 38 ^ -1)) != 0) {
-                return null;
-            }
-        } else {
-            void var18;
-            void var19;
-            var15 = var16.getX() - (var1[2] + var19) / var1[3];
-            var14 = var16.getY() - (var1[2] + var19) / var1[3];
-            var13 = var16.getX() - (var1[2] + var19) / var1[3] + var18 * (var1[2] + var19);
-            var12 = var16.getY() - (var1[2] + var19) / var1[3] + var18 * (var1[2] + var19);
-        }
-        byte[][][] var20 = var11.getTileSettings();
-        int var21 = var16.getSceneX();
-        int var22 = var16.getSceneY();
-        if (!S.var23(var21) || !S.var23(var22) || !S.var2(var21, var1[4]) || S.var5(var22, var1[4])) {
-            return null;
-        }
-        void var24 = var10;
-        if (S.var2((int)var10, var1[5]) && S.var25(var20[var1[0]][var21][var22] & var1[3], var1[3])) {
-            var24 = var10 + var1[0];
-        }
-        int var26 = S.a(var11, var15, var14, (int)var24);
-        int var27 = S.a(var11, var13, var14, (int)var24);
-        int var28 = S.a(var11, var13, var12, (int)var24);
-        int var29 = S.a(var11, var15, var12, (int)var24);
-        Point var30 = Perspective.localToCanvas((Client)var11, (int)var15, (int)var14, (int)var26);
-        Point var31 = Perspective.localToCanvas((Client)var11, (int)var13, (int)var14, (int)var27);
-        Point var32 = Perspective.localToCanvas((Client)var11, (int)var13, (int)var12, (int)var28);
-        Point var33 = Perspective.localToCanvas((Client)var11, (int)var15, (int)var12, (int)var29);
-        if (!S.var9(var30) || !S.var9(var31) || !S.var9(var32) || S.var7(var33)) {
-            return null;
-        }
-        Polygon polygon = new Polygon();
-        polygon.addPoint(var18_18.getX(), var18_18.getY());
-        polygon.addPoint(var19_19.getX(), var19_19.getY());
-        polygon.addPoint(var20_20.getX(), var20_20.getY());
-        polygon.addPoint(var21_21.getX(), var21_21.getY());
-        return polygon;
-    }
-
-    static {
-        S.var34();
-    }
-
-    protected void a(Graphics2D graphics2D, Color color, Polygon polygon, int n2, int n3) {
-        if (S.var9(polygon)) {
-            graphics2D.setColor(color);
-            graphics2D.setStroke(new BasicStroke(n2));
-            graphics2D.draw(polygon);
-            graphics2D.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), n3));
-            graphics2D.fill(polygon);
-        }
-    }
-
-    private static int a(Client client, int n2, int n3, int n4) {
-        int n5 = n2 >> var1[6];
-        int n6 = n3 >> var1[6];
-        if (S.var23(n5) && S.var23(n6) && S.var2(n5, var1[4]) && S.var2(n6, var1[4])) {
-            int[][][] nArray = client.getTileHeights();
-            int n7 = n2 & var1[7];
-            int n8 = n3 & var1[7];
-            int n9 = n7 * nArray[n4][n5 + var1[0]][n6] + (var1[2] - n7) * nArray[n4][n5][n6] >> var1[6];
-            int n10 = nArray[n4][n5][n6 + var1[0]] * (var1[2] - n7) + n7 * nArray[n4][n5 + var1[0]][n6 + var1[0]] >> var1[6];
-            return (var1[2] - n8) * n9 + n8 * n10 >> var1[6];
-        }
-        return var1[1];
-    }
-
     @Inject
-    protected AutotoaTaskBase(TOAConfig tOAConfig) {
-        this.bV = tOAConfig;
+    protected Client client;
+
+    /**
+     * The TOA plugin configuration.
+     */
+    protected final TOAConfig config;
+
+    // ========== Constructor ==========
+
+    /**
+     * Creates a new TOA overlay with the specified configuration.
+     *
+     * @param config The TOA plugin configuration
+     */
+    @Inject
+    protected ToaOverlayBase(TOAConfig config) {
+        this.config = config;
         this.setPosition(OverlayPosition.DYNAMIC);
         this.setPriority(OverlayPriority.HIGH);
         this.setLayer(OverlayLayer.ABOVE_SCENE);
     }
 
-    private static boolean var7(Object object) {
-        return object == null;
-    }
+    // ========== World Point Rendering ==========
 
-    protected void a(Graphics2D graphics2D, Color color, Polygon polygon) {
-        this.a(graphics2D, color, polygon, var1[3]);
-    }
-
-    private static boolean var25(int n2, int n3) {
-        return n2 == n3;
-    }
-
-    private static boolean var17(int n2) {
-        return n2 != 0;
-    }
-
-    private static boolean var5(int n2, int n3) {
-        return n2 >= n3;
-    }
-
-    private static boolean var23(int n2) {
-        return n2 >= 0;
-    }
-
-    public static Polygon a(Client client, LocalPoint localPoint, int n2, int n3) {
-        return S.a(client, localPoint, n2, n3, var1[0]);
-    }
-
-    protected void a(Graphics2D graphics2D, Color color, Polygon polygon, int n2) {
-        if (S.var9(polygon)) {
-            graphics2D.setColor(color);
-            graphics2D.setStroke(new BasicStroke(n2));
-            graphics2D.draw(polygon);
-        }
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Renders a tile at the specified world point with custom styling.
+     *
+     * <p>This method handles distance culling - tiles beyond MAX_RENDER_DISTANCE
+     * from the player will not be rendered for performance.
+     *
+     * @param graphics The graphics context to draw on
+     * @param worldPoint The world location to highlight
+     * @param color The base color for the tile
+     * @param strokeWidth The width of the tile border
+     * @param strokeAlpha The transparency of the border (0-255)
+     * @param fillAlpha The transparency of the fill (0-255)
      */
-    protected void a(Graphics2D graphics2D, Color color, LocalPoint localPoint) {
-        void var4_4;
-        void var35;
-        S var36;
-        if (S.var7(localPoint)) {
+    protected void renderTile(Graphics2D graphics, WorldPoint worldPoint, Color color,
+                             int strokeWidth, int strokeAlpha, int fillAlpha) {
+        WorldPoint playerLocation = this.client.getLocalPlayer().getWorldLocation();
+
+        // Distance culling - don't render distant tiles
+        if (worldPoint.distanceTo(playerLocation) >= MAX_RENDER_DISTANCE) {
             return;
         }
-        Polygon var37 = Perspective.getCanvasTilePoly((Client)var36.ai, (LocalPoint)var35);
-        if (S.var7(var37)) {
+
+        LocalPoint localPoint = LocalPoint.fromWorld(this.client, worldPoint);
+        if (localPoint == null) {
             return;
         }
-        this.a(graphics2D, color, (Polygon)var4_4, var1[0], var1[10]);
+
+        Polygon tilePoly = Perspective.getCanvasTilePoly(this.client, localPoint);
+        if (tilePoly == null) {
+            return;
+        }
+
+        // Draw the tile with stroke
+        graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), strokeAlpha));
+        graphics.setStroke(new BasicStroke(strokeWidth));
+        graphics.draw(tilePoly);
+
+        // Fill the tile with transparency
+        graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), fillAlpha));
+        graphics.fill(tilePoly);
     }
 
-    private static void var34() {
-        var1 = new int[11];
-        S.var1[0] = 1;
-        S.var1[1] = (0x6B ^ 0x74) & ~(0x29 ^ 0x36);
-        S.var1[2] = (0x6D ^ 0x19) + (0x44 ^ 0x24) - (14 + 4 - -1 + 109) + (0xA6 ^ 0x8A);
-        S.var1[3] = 2;
-        S.var1[4] = 7 + 26 - -115 + 105 ^ 79 + 138 - 68 + 0;
-        S.var1[5] = 3;
-        S.var1[6] = 0x88 ^ 0x8F;
-        S.var1[7] = 1 + (0x65 ^ 0x5D) - (0xEF ^ 0xC3) + (0xEA ^ 0x98);
-        S.var1[8] = 0xB0 ^ 0x90;
-        S.var1[9] = 0x43 ^ 0x4F;
-        S.var1[10] = 72 + 145 - 76 + 102 ^ 183 + 39 - 161 + 132;
+    /**
+     * Renders a tile at the specified local point with default styling.
+     *
+     * @param graphics The graphics context to draw on
+     * @param color The color for the tile
+     * @param localPoint The local point to highlight
+     */
+    protected void renderTile(Graphics2D graphics, Color color, LocalPoint localPoint) {
+        if (localPoint == null) {
+            return;
+        }
+
+        Polygon tilePoly = Perspective.getCanvasTilePoly(this.client, localPoint);
+        if (tilePoly == null) {
+            return;
+        }
+
+        renderPolygon(graphics, color, tilePoly, DEFAULT_TILE_STROKE, DEFAULT_FILL_ALPHA);
     }
 
-    private static boolean var9(Object object) {
-        return object != null;
+    // ========== Polygon Rendering ==========
+
+    /**
+     * Renders a polygon with stroke and fill.
+     *
+     * @param graphics The graphics context
+     * @param color The base color
+     * @param polygon The polygon to render
+     * @param strokeWidth The border width
+     * @param fillAlpha The fill transparency (0-255)
+     */
+    protected void renderPolygon(Graphics2D graphics, Color color, Polygon polygon,
+                                int strokeWidth, int fillAlpha) {
+        if (polygon == null) {
+            return;
+        }
+
+        graphics.setColor(color);
+        graphics.setStroke(new BasicStroke(strokeWidth));
+        graphics.draw(polygon);
+
+        graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), fillAlpha));
+        graphics.fill(polygon);
+    }
+
+    /**
+     * Renders a polygon outline only.
+     *
+     * @param graphics The graphics context
+     * @param color The color for the outline
+     * @param polygon The polygon to render
+     * @param strokeWidth The border width
+     */
+    protected void renderPolygon(Graphics2D graphics, Color color, Polygon polygon, int strokeWidth) {
+        if (polygon == null) {
+            return;
+        }
+
+        graphics.setColor(color);
+        graphics.setStroke(new BasicStroke(strokeWidth));
+        graphics.draw(polygon);
+    }
+
+    /**
+     * Renders a polygon with default stroke width.
+     *
+     * @param graphics The graphics context
+     * @param color The outline color
+     * @param polygon The polygon to render
+     */
+    protected void renderPolygon(Graphics2D graphics, Color color, Polygon polygon) {
+        renderPolygon(graphics, color, polygon, DEFAULT_STROKE_WIDTH);
+    }
+
+    // ========== Text Rendering ==========
+
+    /**
+     * Renders text at the specified screen position with a shadow effect.
+     *
+     * @param graphics The graphics context
+     * @param text The text to render
+     * @param color The text color
+     * @param position The screen position for the text
+     */
+    public void renderText(Graphics2D graphics, String text, Color color, Point position) {
+        if (position == null) {
+            return;
+        }
+
+        graphics.setFont(new Font(FontManager.getRunescapeSmallFont().toString(),
+                                 Font.PLAIN, DEFAULT_TEXT_SIZE));
+
+        // Draw shadow slightly offset
+        Point shadowPos = new Point(position.getX(), position.getY());
+        Point mainPos = new Point(position.getX() + 1, position.getY() + 1);
+
+        OverlayUtil.renderTextLocation(graphics, mainPos, text, Color.BLACK);
+        OverlayUtil.renderTextLocation(graphics, shadowPos, text, color);
+    }
+
+    // ========== Tile Polygon Creation ==========
+
+    /**
+     * Creates a polygon representing a tile at the specified local point.
+     *
+     * <p>Simplified version using default border settings.
+     *
+     * @param client The client instance
+     * @param localPoint The center point of the tile
+     * @param tileCount Number of tiles for the polygon size
+     * @param useCenterOffset If true, use center offset positioning
+     * @return The tile polygon, or null if not on screen
+     */
+    public static Polygon createTilePolygon(Client client, LocalPoint localPoint,
+                                           int tileCount, boolean useCenterOffset) {
+        return createTilePolygon(client, localPoint, tileCount, TILE_EDGE_OFFSET, useCenterOffset);
+    }
+
+    /**
+     * Creates a polygon representing a tile at the specified local point.
+     *
+     * <p>Basic version with default parameters.
+     *
+     * @param client The client instance
+     * @param localPoint The center point of the tile
+     * @param tileCount Number of tiles for the polygon size
+     * @return The tile polygon, or null if not on screen
+     */
+    public static Polygon createTilePolygon(Client client, LocalPoint localPoint, int tileCount) {
+        return createTilePolygon(client, localPoint, tileCount, TILE_EDGE_OFFSET, false);
+    }
+
+    /**
+     * Creates a polygon representing multiple tiles at the specified local point.
+     *
+     * <p>This is the core method for creating accurate tile polygons with
+     * perspective correction. It handles:
+     * <ul>
+     *   <li>Tile height calculations based on terrain</li>
+     *   <li>Multi-tile area support</li>
+     *   <li>Perspective transformation to screen coordinates</li>
+     *   <li>Plane transitions (bridges, upper floors)</li>
+     * </ul>
+     *
+     * @param client The client instance for coordinate conversions
+     * @param localPoint The center point of the tile area
+     * @param tileCount The number of tiles in each direction (1 = 1x1, 2 = 2x2, etc.)
+     * @param borderOffset Additional pixel offset for tile borders
+     * @param useCenterOffset If true, center the polygon; if false, start from corner
+     * @return A polygon representing the tile(s), or null if not renderable
+     */
+    public static Polygon createTilePolygon(Client client, LocalPoint localPoint,
+                                          int tileCount, int borderOffset, boolean useCenterOffset) {
+        int plane = client.getPlane();
+
+        // Calculate the bounds of the tile area
+        int minX, minY, maxX, maxY;
+
+        if (useCenterOffset) {
+            // Center the area around the local point
+            int halfSize = tileCount * (TILE_SIZE + borderOffset) / 2;
+            minX = localPoint.getX() - halfSize;
+            minY = localPoint.getY() - halfSize;
+            maxX = localPoint.getX() + halfSize;
+            maxY = localPoint.getY() + halfSize;
+        } else {
+            // Start from the corner
+            int offset = (TILE_SIZE + borderOffset) / 2;
+            minX = localPoint.getX() - offset;
+            minY = localPoint.getY() - offset;
+            maxX = minX + tileCount * (TILE_SIZE + borderOffset);
+            maxY = minY + tileCount * (TILE_SIZE + borderOffset);
+        }
+
+        // Get tile settings for plane detection
+        byte[][][] tileSettings = client.getTileSettings();
+        int sceneX = localPoint.getSceneX();
+        int sceneY = localPoint.getSceneY();
+
+        // Validate scene coordinates
+        if (sceneX < 0 || sceneY < 0 || sceneX >= SCENE_SIZE || sceneY >= SCENE_SIZE) {
+            return null;
+        }
+
+        // Check for plane transitions (bridges, upper floors)
+        int heightPlane = plane;
+        if (plane < 3 && (tileSettings[1][sceneX][sceneY] & 2) == 2) {
+            heightPlane = plane + 1;
+        }
+
+        // Get heights at each corner for perspective
+        int swHeight = getTileHeight(client, minX, minY, heightPlane);
+        int seHeight = getTileHeight(client, maxX, minY, heightPlane);
+        int neHeight = getTileHeight(client, maxX, maxY, heightPlane);
+        int nwHeight = getTileHeight(client, minX, maxY, heightPlane);
+
+        // Convert to screen coordinates
+        Point swPoint = Perspective.localToCanvas(client, minX, minY, swHeight);
+        Point sePoint = Perspective.localToCanvas(client, maxX, minY, seHeight);
+        Point nePoint = Perspective.localToCanvas(client, maxX, maxY, neHeight);
+        Point nwPoint = Perspective.localToCanvas(client, minX, maxY, nwHeight);
+
+        // Verify all points are on screen
+        if (swPoint == null || sePoint == null || nePoint == null || nwPoint == null) {
+            return null;
+        }
+
+        // Create the polygon
+        Polygon polygon = new Polygon();
+        polygon.addPoint(swPoint.getX(), swPoint.getY());
+        polygon.addPoint(sePoint.getX(), sePoint.getY());
+        polygon.addPoint(nePoint.getX(), nePoint.getY());
+        polygon.addPoint(nwPoint.getX(), nwPoint.getY());
+
+        return polygon;
+    }
+
+    // ========== Height Calculation ==========
+
+    /**
+     * Calculates the height at a specific local coordinate.
+     *
+     * <p>This method performs bilinear interpolation to get smooth height
+     * values between tile corners. It's essential for accurate perspective
+     * rendering on sloped terrain.
+     *
+     * <p>The algorithm:
+     * <ol>
+     *   <li>Find the four tile corners surrounding the point</li>
+     *   <li>Get their heights from the tile height map</li>
+     *   <li>Interpolate in X direction for both Y values</li>
+     *   <li>Interpolate in Y direction for final height</li>
+     * </ol>
+     *
+     * @param client The client instance
+     * @param localX The local X coordinate
+     * @param localY The local Y coordinate
+     * @param plane The plane (height level) to check
+     * @return The interpolated height at this position, or 0 if out of bounds
+     */
+    private static int getTileHeight(Client client, int localX, int localY, int plane) {
+        // Convert local coordinates to tile coordinates
+        int tileX = localX >> TILE_COORDINATE_SHIFT;
+        int tileY = localY >> TILE_COORDINATE_SHIFT;
+
+        // Validate bounds
+        if (tileX < 0 || tileY < 0 || tileX >= SCENE_SIZE || tileY >= SCENE_SIZE) {
+            return 0;
+        }
+
+        // Get height map
+        int[][][] tileHeights = client.getTileHeights();
+
+        // Get sub-tile position for interpolation
+        int subX = localX & TILE_COORDINATE_MASK;
+        int subY = localY & TILE_COORDINATE_MASK;
+
+        // Interpolate between tile corners
+        // Get heights at the four corners of the current tile
+        int heightSW = tileHeights[plane][tileX][tileY];
+        int heightSE = tileHeights[plane][tileX + 1][tileY];
+        int heightNW = tileHeights[plane][tileX][tileY + 1];
+        int heightNE = tileHeights[plane][tileX + 1][tileY + 1];
+
+        // Interpolate in X direction for both Y positions
+        int heightS = (subX * heightSE + (TILE_SIZE - subX) * heightSW) >> TILE_COORDINATE_SHIFT;
+        int heightN = ((TILE_SIZE - subX) * heightNW + subX * heightNE) >> TILE_COORDINATE_SHIFT;
+
+        // Interpolate in Y direction for final height
+        return ((TILE_SIZE - subY) * heightS + subY * heightN) >> TILE_COORDINATE_SHIFT;
     }
 }
-

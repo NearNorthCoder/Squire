@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  gg.squire.client.plugins.fw.TaskDesc
  *  javax.inject.Inject
@@ -28,130 +28,121 @@ import gg.squire.autotoa.tasks.AutotoaManager;
 import gg.squire.autotoa.tasks.FHelper;
 import gg.squire.autotoa.tasks.GameEnum10;
 
+/**
+ * Handles prayer switching for Zebak boss fight.
+ *
+ * Attack Patterns:
+ * - Magic attack: Projectile ID 18565, use Protect from Magic
+ * - Ranged attacks: Any projectile in FHelper.RANGED_PROJECTILE_IDS, use Protect from Missiles
+ * - Blood cloud: Graphic ID 1401, causes damage zone that requires Protect from Magic
+ *   Blood cloud lasts for 2 ticks, then returns to normal prayer
+ * - Low health phase: When Zebak is below 25% HP and blood cloud is active,
+ *   prioritize Protect from Magic for the blood cloud damage
+ */
 @TaskDesc(name="Handling zebak prayers", priority=0x7FFFFFFF, register=true)
 public class HandlingZebakPrayersTask
 extends AutotoaManager {
-    private  Prayer dE;
-    private static final  int hg;
-    private  int hh;
+    // NPC IDs
+    private static final int ZEBAK_NPC_ID = 11730;
+    private static final int ZEBAK_VARIANT_NPC_ID = 11732;
 
-    private static boolean var2(int n2, int n3) {
-        return n2 == n3;
-    }
+    // Projectile and Graphics IDs
+    private static final int MAGIC_PROJECTILE_ID = 18565;
+    private static final int BLOOD_CLOUD_GRAPHIC_ID = 1401;
 
-    /*
-     * WARNING - void declaration
-     */
-    @Subscribe
-    public void a(ProjectileSpawned projectileSpawned) {
-        void var3;
-        if (bW.var2(projectileSpawned.getProjectile().getId(), var1[4])) {
-            this.dE = Prayer.PROTECT_FROM_MAGIC;
-            0;
-            if (-3 >= 0) {
-                return;
-            }
-        } else if (bW.var4(f.E.contains(var3.getProjectile().getId()) ? 1 : 0)) {
-            var5.dE = Prayer.PROTECT_FROM_MISSILES;
-        }
-    }
+    // Health threshold for blood cloud priority
+    private static final int HEALTH_PERCENTAGE_MAX = 100;
+    private static final int LOW_HEALTH_THRESHOLD = 25;
 
-    @Subscribe
-    public void b(GraphicsObjectCreated graphicsObjectCreated) {
-        if (bW.var2(graphicsObjectCreated.getGraphicsObject().getId(), var1[5])) {
-            this.hh = Static.getClient().getTickCount() + var1[6];
-        }
-    }
+    // Tick delay for blood cloud
+    private static final int BLOOD_CLOUD_TICK_DELAY = 2;
 
-    @Override
-    public v aT() {
-        return v.FLICK;
-    }
+    // Priority
+    private static final int TASK_PRIORITY = 15700;
 
-    private static boolean var6(int n2, int n3) {
-        return n2 != n3;
-    }
+    // Current prayer to protect against attack
+    private Prayer currentProtectionPrayer;
 
-    private static boolean var7(Object object) {
-        return object == null;
-    }
-
-    private static boolean var4(int n2) {
-        return n2 != 0;
-    }
-
-    @Override
-    public int aO() {
-        return var1[2];
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    public List<Prayer> aN() {
-        bW var8;
-        void var9;
-        NPC nPC = this.cm.b();
-        if (bW.var7(nPC)) {
-            return List.of(this.aQ(), this.dE);
-        }
-        int var10 = var9.getHealthRatio() * var1[0] / var9.getHealthScale();
-        if (bW.var2(Static.getClient().getTickCount(), var8.hh) && bW.var11(var10, var1[1])) {
-            return List.of(var8.aQ(), Prayer.PROTECT_FROM_MAGIC);
-        }
-        return List.of(this.aQ(), this.dE);
-    }
-
-    private static void var12() {
-        var1 = new int[10];
-        bW.var1[0] = 0x33 ^ 0x57;
-        bW.var1[1] = 0xFC ^ 0xBF ^ (0x4A ^ 0x10);
-        bW.var1[2] = 0xFFFFFF55 & 0x3DFE;
-        bW.var1[3] = 1;
-        bW.var1[4] = -(0xFFFF83BD & 0x7F5B) & (0xFFFFBB9D & 0x4FFF);
-        bW.var1[5] = 0xFFFFF5FB & 0xB7D;
-        bW.var1[6] = 2;
-        bW.var1[7] = 0xFFFFAFFB & 0x7DD6;
-        bW.var1[8] = 0xFFFFBFFE & 0x6DD5;
-        bW.var1[9] = (0x54 ^ 0x16 ^ (0xCA ^ 0x8E)) & (165 + 161 - 300 + 170 ^ 156 + 62 - 170 + 146 ^ -1);
-    }
-
-    private static boolean var11(int n2, int n3) {
-        return n2 > n3;
-    }
-
-    @Override
-    public boolean aS() {
-        return var1[3];
-    }
-
-    static {
-        bW.var12();
-        hg = var1[5];
-    }
-
-    @Override
-    public boolean aL() {
-        return this.cm.a((NPC nPC) -> {
-            boolean bl2;
-            if (!bW.var6(nPC.getId(), var1[7]) || bW.var2(nPC.getId(), var1[8])) {
-                bl2 = var1[3];
-                0;
-                if (-1 >= ((0x98 ^ 0xBD) & ~(0x95 ^ 0xB0))) {
-                    return ((0x77 ^ 0x16) & ~(0x7B ^ 0x1A)) != 0;
-                }
-            } else {
-                bl2 = var1[9];
-            }
-            return bl2;
-        });
-    }
+    // Tick when blood cloud will end
+    private int bloodCloudTickEnd;
 
     @Inject
     public HandlingZebakPrayersTask(SquireAutoTOA squireAutoTOA, TOAConfig tOAConfig) {
         super(squireAutoTOA, tOAConfig);
-        this.dE = Prayer.PROTECT_FROM_MISSILES;
+        this.currentProtectionPrayer = Prayer.PROTECT_FROM_MISSILES;
+    }
+
+    @Override
+    public boolean isInCorrectRegion() {
+        return this.cm.a((NPC npc) -> {
+            if (npc.getId() != ZEBAK_NPC_ID || npc.getId() == ZEBAK_VARIANT_NPC_ID) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    /**
+     * Detects Zebak's attack type based on projectile.
+     * - Magic projectile (18565): Use Protect from Magic
+     * - Ranged projectiles: Use Protect from Missiles
+     */
+    @Subscribe
+    public void onProjectileSpawned(ProjectileSpawned projectileSpawned) {
+        if (projectileSpawned.getProjectile().getId() == MAGIC_PROJECTILE_ID) {
+            this.currentProtectionPrayer = Prayer.PROTECT_FROM_MAGIC;
+        } else if (FHelper.RANGED_PROJECTILE_IDS.contains(projectileSpawned.getProjectile().getId())) {
+            this.currentProtectionPrayer = Prayer.PROTECT_FROM_MISSILES;
+        }
+    }
+
+    /**
+     * Detects when blood cloud appears (Graphic ID 1401).
+     * Blood cloud deals magic damage and lasts for 2 ticks.
+     */
+    @Subscribe
+    public void onGraphicsObjectCreated(GraphicsObjectCreated graphicsObjectCreated) {
+        if (graphicsObjectCreated.getGraphicsObject().getId() == BLOOD_CLOUD_GRAPHIC_ID) {
+            this.bloodCloudTickEnd = Static.getClient().getTickCount() + BLOOD_CLOUD_TICK_DELAY;
+        }
+    }
+
+    /**
+     * Determines which prayers to use based on current situation:
+     * 1. If blood cloud is active and Zebak is below 25% HP, prioritize Protect from Magic
+     * 2. Otherwise, use the current protection prayer based on projectiles
+     */
+    @Override
+    public List<Prayer> getPrayersToActivate() {
+        NPC zebak = this.cm.b();
+        if (zebak == null) {
+            return List.of(this.getOffensivePrayer(), this.currentProtectionPrayer);
+        }
+
+        // Calculate Zebak's current health percentage
+        int healthPercentage = zebak.getHealthRatio() * HEALTH_PERCENTAGE_MAX / zebak.getHealthScale();
+
+        // If blood cloud is active and health is below threshold, use Protect from Magic
+        if (Static.getClient().getTickCount() == this.bloodCloudTickEnd && healthPercentage > LOW_HEALTH_THRESHOLD) {
+            return List.of(this.getOffensivePrayer(), Prayer.PROTECT_FROM_MAGIC);
+        }
+
+        return List.of(this.getOffensivePrayer(), this.currentProtectionPrayer);
+    }
+
+    @Override
+    public int getPriority() {
+        return TASK_PRIORITY;
+    }
+
+    @Override
+    public GameEnum10 getPrayerMode() {
+        return GameEnum10.FLICK;
     }
 }
-

@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  com.google.inject.Inject
  *  gg.squire.client.plugins.fw.TaskDesc
@@ -33,167 +33,116 @@ import net.unethicalite.client.Static;
 import gg.squire.autotoa.tasks.AutotoaManager;
 import gg.squire.autotoa.tasks.GameEnum10;
 
+/**
+ * Handles prayer switching for Ba-Ba boss fight.
+ *
+ * Attack Patterns:
+ * - Ba-Ba (NPC ID 11780): Main boss, use Protect from Melee when engaged
+ * - Baboon adds: When present, override to protect from their ranged attacks
+ * - Boulder (Graphic ID 2111): When boulder lands on Ba-Ba, use Protect from Missiles
+ *   for 5 ticks to avoid falling rocks
+ * - Falling rocks deal ranged damage, so protect from missiles during boulder phase
+ */
 @TaskDesc(name="Handling baba prayers", priority=0x7FFFFFFF, register=true)
 public class HandlingBabaPrayersTask
 extends AutotoaManager {
-    private  int dF;
+    // NPC IDs
+    private static final int BABA_NPC_ID = 11780;
+    private static final String BABA_NAME = "Ba-Ba";
+    private static final String BABOON_NAME = "Baboon";
 
-    private static boolean var3(Object object) {
-        return object != null;
-    }
+    // Graphics IDs
+    private static final int BOULDER_GRAPHIC_ID = 2111;
 
-    @Override
-    public boolean aS() {
-        return var2[1];
-    }
+    // Region IDs for Ba-Ba room
+    private static final int REGION_ID_1 = 11778;
+    private static final int REGION_ID_2 = 11811;
 
-    private static boolean var4(int n2) {
-        return n2 != 0;
-    }
+    // Priority
+    private static final int TASK_PRIORITY = 15188;
 
-    private static boolean var5(int n2, int n3) {
-        return n2 < n3;
-    }
+    // Tick delay for boulder falling rocks
+    private static final int BOULDER_TICK_DELAY = 5;
 
-    private static boolean var6(int n2, int n3) {
-        return n2 == n3;
-    }
-
-    @Override
-    public List<Prayer> aN() {
-        aH var7;
-        String[] stringArray = new String[var2[1]];
-        stringArray[aH.var2[0]] = var1[var2[0]];
-        NPC nPC = NPCs.getNearest((String[])stringArray);
-        if (aH.var3(nPC) && aH.var6(nPC.getId(), var2[2])) {
-            return List.of(this.aQ());
-        }
-        String[] stringArray2 = new String[var2[1]];
-        stringArray2[aH.var2[0]] = var1[var2[1]];
-        NPC var8 = NPCs.getNearest((String[])stringArray2);
-        if (aH.var9(var7.dF, Static.getClient().getTickCount()) && aH.var3(var8)) {
-            return List.of(Prayer.PROTECT_FROM_MISSILES, var7.aQ());
-        }
-        return List.of(Prayer.PROTECT_FROM_MELEE, this.aQ());
-    }
-
-    private static void var10() {
-        var2 = new int[11];
-        aH.var2[0] = (116 + 48 - 22 + 40 ^ 121 + 79 - 100 + 37) & (0x39 ^ 0x73 ^ (0xDD ^ 0xA8) ^ -1);
-        aH.var2[1] = 1;
-        aH.var2[2] = 0xFFFFAFF7 & 0x7E0C;
-        aH.var2[3] = 0xFFFFFB77 & 0x3FDC;
-        aH.var2[4] = 3;
-        aH.var2[5] = -(0xFFFFB5F9 & 0x5A57) & (0xFFFFBF73 & 0x7EDE);
-        aH.var2[6] = -(0xFFFF9CED & 0x735B) & (0xFFFFFF6B & 0x3EDF);
-        aH.var2[7] = 2;
-        aH.var2[8] = -(0xFFFFEE07 & 0x35F9) & (0xFFFFEDBF & 0x3E7F);
-        aH.var2[9] = 0x55 ^ 0x50;
-        aH.var2[10] = 0x14 ^ 0x1C;
-    }
+    // Tick when boulder falling rocks will hit
+    private int boulderRocksTickEnd;
 
     @Inject
     public HandlingBabaPrayersTask(SquireAutoTOA squireAutoTOA, TOAConfig tOAConfig) {
         super(squireAutoTOA, tOAConfig);
-        this.dF = var2[0];
-    }
-
-    static {
-        aH.var10();
-        aH.var11();
-    }
-
-    private static boolean var9(int n2, int n3) {
-        return n2 > n3;
+        this.boulderRocksTickEnd = 0;
     }
 
     @Override
-    public v aT() {
-        return v.FLICK;
-    }
-
-        catch (Exception var17) {
-            var17.printStackTrace();
-            return null;
-        }
-    }
-
-    private static boolean var18(int n2, int n3) {
-        return n2 != n3;
+    public boolean isInCorrectRegion() {
+        int[] regionIds = new int[3];
+        regionIds[0] = REGION_ID_1;
+        regionIds[1] = REGION_ID_2;
+        regionIds[2] = BABA_NPC_ID;
+        return this.cm.a(regionIds);
     }
 
     @Override
-    public boolean aL() {
-        int[] nArray = new int[var2[4]];
-        nArray[aH.var2[0]] = var2[5];
-        nArray[aH.var2[1]] = var2[6];
-        nArray[aH.var2[7]] = var2[2];
-        return this.cm.a(nArray);
+    public boolean isValid() {
+        return true;
     }
 
-    private static boolean var19(Object object) {
-        return object == null;
-    }
-
-    private static String var20(String var21, String var22) {
-        var21 = new String(Base64.getDecoder().decode(var21.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var23 = new StringBuilder();
-        char[] var24 = var22.toCharArray();
-        int var25 = var2[0];
-        char[] var26 = var21.toCharArray();
-        int var27 = var26.length;
-        int var28 = var2[0];
-        while (aH.var5(var28, var27)) {
-            char var29 = var26[var28];
-            var23.append((char)(var29 ^ var24[var25 % var24.length]));
-            0;
-            ++var25;
-            ++var28;
-            0;
-            if (3 != ((0xA8 ^ 0xBF ^ (0x63 ^ 0x7A)) & (0xA9 ^ 0x97 ^ (0x98 ^ 0xA8) ^ -1) & ((0xA ^ 0x2C ^ (0xA1 ^ 0xAD)) & (0x8E ^ 0xA7 ^ 3 ^ -1) ^ -1))) continue;
-            return null;
-        }
-        return String.valueOf(var23);
-    }
-
-    @Override
-    public int aO() {
-        return var2[3];
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Determines which prayers to use based on current situation:
+     * 1. If Ba-Ba is in monkey form (transformed), use offensive prayer only
+     * 2. If boulder rocks are active (within tick window), use Protect from Missiles + offensive
+     * 3. Otherwise, use Protect from Melee + offensive (default for Ba-Ba)
      */
-    public void b(GraphicsObjectCreated graphicsObjectCreated) {
-        void var30;
+    @Override
+    public List<Prayer> getPrayersToActivate() {
+        // Check if Ba-Ba is transformed into monkey form
+        NPC baba = NPCs.getNearest(BABA_NAME);
+        if (baba != null && baba.getId() == BABA_NPC_ID) {
+            return List.of(this.getOffensivePrayer());
+        }
+
+        // Check if baboons are present
+        NPC baboon = NPCs.getNearest(BABOON_NAME);
+        if (Static.getClient().getTickCount() > this.boulderRocksTickEnd && baboon != null) {
+            return List.of(Prayer.PROTECT_FROM_MISSILES, this.getOffensivePrayer());
+        }
+
+        // Default: Protect from Melee for Ba-Ba
+        return List.of(Prayer.PROTECT_FROM_MELEE, this.getOffensivePrayer());
+    }
+
+    /**
+     * Detects when a boulder lands on Ba-Ba, triggering falling rocks.
+     * The falling rocks deal ranged damage, so we need to protect from missiles
+     * for the next 5 ticks.
+     */
+    public void onGraphicsObjectCreated(GraphicsObjectCreated graphicsObjectCreated) {
         GraphicsObject graphicsObject = graphicsObjectCreated.getGraphicsObject();
-        if (aH.var18(graphicsObjectCreated.getGraphicsObject().getId(), var2[8])) {
+        if (graphicsObject.getId() != BOULDER_GRAPHIC_ID) {
             return;
         }
-        LocalPoint var31 = var30.getLocation();
-        WorldPoint var32 = WorldPoint.fromLocal((Client)Static.getClient(), (LocalPoint)var31);
-        String[] stringArray = new String[var2[1]];
-        stringArray[aH.var2[0]] = var1[var2[7]];
-        NPC var33 = NPCs.getNearest((String[])stringArray);
-        if (aH.var19(var33)) {
+
+        LocalPoint location = graphicsObject.getLocation();
+        WorldPoint worldPoint = WorldPoint.fromLocal(Static.getClient(), location);
+
+        NPC baba = NPCs.getNearest(BABA_NAME);
+        if (baba == null) {
             return;
         }
-        if (aH.var4(var33.getWorldArea().contains(var32) ? 1 : 0)) {
-            var34.dF = Static.getClient().getTickCount() + var2[9];
+
+        // If boulder lands on Ba-Ba, set tick end for falling rocks
+        if (baba.getWorldArea().contains(worldPoint)) {
+            this.boulderRocksTickEnd = Static.getClient().getTickCount() + BOULDER_TICK_DELAY;
         }
     }
 
-        catch (Exception var40) {
-            var40.printStackTrace();
-            return null;
-        }
+    @Override
+    public int getPriority() {
+        return TASK_PRIORITY;
     }
 
-    private static void var11() {
-        var1 = new String[var2[4]];
-        aH.var1[aH.var2[0]] = "Ba-Ba";
-        aH.var1[aH.var2[1]] = "Baboon";
-        aH.var1[aH.var2[7]] = "Ba-Ba";
+    @Override
+    public GameEnum10 getPrayerMode() {
+        return GameEnum10.FLICK;
     }
 }
-

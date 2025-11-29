@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  com.google.inject.Inject
  *  gg.squire.client.plugins.fw.TaskDesc
@@ -29,126 +29,107 @@ import net.runelite.client.eventbus.Subscribe;
 import gg.squire.autotoa.tasks.AutotoaManager;
 import gg.squire.autotoa.tasks.GameEnum10;
 
+/**
+ * Handles prayer switching for Elidinis' Warden Phase 3.
+ *
+ * Attack Patterns:
+ * - Animation 9777: Alternates between magic and ranged (opposite of current prayer)
+ * - Animation 9772: Ranged attack, use Protect from Missiles
+ * - Animation 9774: Magic attack, use Protect from Magic
+ * - NPC ID 11777: Elidinis spawns initially, use Protect from Missiles as default
+ */
 @TaskDesc(name="Handling Elidinis P3 Prayers", priority=0x7FFFFFFF, register=true)
 public class HandlingElidinisP3PrayersTask
 extends AutotoaManager {
-    private  Prayer dE;
+    // NPC and Animation IDs
+    private static final int ELIDINIS_WARDEN_NPC_ID = 11777;
+    private static final int ALTERNATE_ATTACK_ANIMATION_ID = 9777;
+    private static final int RANGED_ATTACK_ANIMATION_ID = 9772;
+    private static final int MAGIC_ATTACK_ANIMATION_ID = 9774;
 
-    /*
-     * WARNING - void declaration
-     */
-    @Subscribe
-    public void a(AnimationChanged animationChanged) {
-        void var2;
-        Actor actor = animationChanged.getActor();
-        if (aF.var3(actor instanceof Player)) {
-            return;
-        }
-        if (aF.var4(var2.getAnimation(), var1[6])) {
-            Prayer prayer;
-            aF var5;
-            if (aF.var6(var5.dE, Prayer.PROTECT_FROM_MISSILES)) {
-                prayer = Prayer.PROTECT_FROM_MAGIC;
-                0;
-                if (((0x25 ^ 0xD) & ~(0x6C ^ 0x44)) < -1) {
-                    return;
-                }
-            } else {
-                prayer = Prayer.PROTECT_FROM_MISSILES;
-            }
-            var5.dE = prayer;
-            0;
-            if (-1 != -1) {
-                return;
-            }
-        } else if (aF.var4(var2.getAnimation(), var1[7])) {
-            var5.dE = Prayer.PROTECT_FROM_MISSILES;
-            0;
-            if (2 <= -1) {
-                return;
-            }
-        } else if (aF.var4(var2.getAnimation(), var1[8])) {
-            var5.dE = Prayer.PROTECT_FROM_MAGIC;
-        }
-    }
+    // Region IDs for Elidinis room
+    private static final int REGION_ID_1 = 11761;
+    private static final int REGION_ID_2 = 11763;
 
-    private static void var7() {
-        var1 = new int[10];
-        aF.var1[0] = -(0xFFFFF3EF & 0x4CB9) & (0xFFFFFDFE & 0x7FF9);
-        aF.var1[1] = 2;
-        aF.var1[2] = (0 ^ 0x22) & ~(0x78 ^ 0x5A);
-        aF.var1[3] = -1 & (0xFFFFEDF7 & 0x3FF9);
-        aF.var1[4] = 1;
-        aF.var1[5] = -(0xFFFFE01D & 0x5FEB) & (0xFFFFFFFF & 0x6DFB);
-        aF.var1[6] = 0xFFFFA635 & 0x7FFB;
-        aF.var1[7] = -(0xFFFFF3FE & 0x1D55) & (0xFFFFF7FF & 0x3F7F);
-        aF.var1[8] = 0xFFFFBE3E & 0x67EF;
-        aF.var1[9] = 0xFFFFFF0F & 0x2EF1;
-    }
+    // Priority
+    private static final int TASK_PRIORITY = 15696;
 
-    @Subscribe
-    public void a(NpcSpawned npcSpawned) {
-        NPC nPC = npcSpawned.getNpc();
-        if (aF.var4(nPC.getId(), var1[9])) {
-            this.dE = Prayer.PROTECT_FROM_MISSILES;
-        }
-    }
-
-    private static boolean var8(Object object) {
-        return object == null;
-    }
-
-    @Override
-    public List<Prayer> aN() {
-        if (aF.var8(this.dE)) {
-            return List.of(this.aQ());
-        }
-        return List.of(this.aQ(), this.dE);
-    }
-
-    private static boolean var3(int n2) {
-        return n2 != 0;
-    }
-
-    @Override
-    public boolean aS() {
-        return this.aL();
-    }
-
-    @Override
-    public int aO() {
-        return var1[0];
-    }
-
-    @Override
-    public v aT() {
-        return v.FLICK;
-    }
+    // Current prayer to protect against attack
+    private Prayer currentProtectionPrayer;
 
     @Inject
     public HandlingElidinisP3PrayersTask(SquireAutoTOA squireAutoTOA, TOAConfig tOAConfig) {
         super(squireAutoTOA, tOAConfig);
-        this.dE = null;
-    }
-
-    private static boolean var4(int n2, int n3) {
-        return n2 == n3;
+        this.currentProtectionPrayer = null;
     }
 
     @Override
-    public boolean aL() {
-        int[] nArray = new int[var1[1]];
-        nArray[aF.var1[2]] = var1[3];
-        nArray[aF.var1[4]] = var1[5];
-        return this.cm.a(nArray);
+    public boolean isInCorrectRegion() {
+        int[] regionIds = new int[2];
+        regionIds[0] = REGION_ID_1;
+        regionIds[1] = REGION_ID_2;
+        return this.cm.a(regionIds);
     }
 
-    private static boolean var6(Object object, Object object2) {
-        return object == object2;
+    @Override
+    public boolean isValid() {
+        return this.isInCorrectRegion();
     }
 
-    static {
-        aF.var7();
+    /**
+     * Detects Elidinis' Warden attack type based on animation.
+     * - Alternate attack (9777): Switches to opposite of current prayer
+     * - Ranged attack (9772): Switches to Protect from Missiles
+     * - Magic attack (9774): Switches to Protect from Magic
+     */
+    @Subscribe
+    public void onAnimationChanged(AnimationChanged animationChanged) {
+        Actor actor = animationChanged.getActor();
+        if (actor instanceof Player) {
+            return;
+        }
+
+        if (actor.getAnimation() == ALTERNATE_ATTACK_ANIMATION_ID) {
+            Prayer prayer;
+            if (this.currentProtectionPrayer == Prayer.PROTECT_FROM_MISSILES) {
+                prayer = Prayer.PROTECT_FROM_MAGIC;
+            } else {
+                prayer = Prayer.PROTECT_FROM_MISSILES;
+            }
+            this.currentProtectionPrayer = prayer;
+        } else if (actor.getAnimation() == RANGED_ATTACK_ANIMATION_ID) {
+            this.currentProtectionPrayer = Prayer.PROTECT_FROM_MISSILES;
+        } else if (actor.getAnimation() == MAGIC_ATTACK_ANIMATION_ID) {
+            this.currentProtectionPrayer = Prayer.PROTECT_FROM_MAGIC;
+        }
+    }
+
+    /**
+     * When Elidinis spawns, default to Protect from Missiles.
+     */
+    @Subscribe
+    public void onNpcSpawned(NpcSpawned npcSpawned) {
+        NPC npc = npcSpawned.getNpc();
+        if (npc.getId() == ELIDINIS_WARDEN_NPC_ID) {
+            this.currentProtectionPrayer = Prayer.PROTECT_FROM_MISSILES;
+        }
+    }
+
+    @Override
+    public List<Prayer> getPrayersToActivate() {
+        if (this.currentProtectionPrayer == null) {
+            return List.of(this.getOffensivePrayer());
+        }
+        return List.of(this.getOffensivePrayer(), this.currentProtectionPrayer);
+    }
+
+    @Override
+    public int getPriority() {
+        return TASK_PRIORITY;
+    }
+
+    @Override
+    public GameEnum10 getPrayerMode() {
+        return GameEnum10.FLICK;
     }
 }
-

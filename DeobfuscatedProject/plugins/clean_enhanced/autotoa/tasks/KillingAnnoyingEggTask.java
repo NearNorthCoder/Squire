@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  gg.squire.client.plugins.fw.TaskDesc
  *  javax.inject.Inject
@@ -34,169 +34,132 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+/**
+ * Task: Kill Akkha's Annoying Egg
+ *
+ * Mechanics:
+ * - During the Akkha boss fight, an egg spawns at a specific location (27, 36)
+ * - The egg must be killed using a Keris weapon for maximum efficiency
+ * - This task handles finding the egg, positioning correctly, and attacking it
+ * - Must stand in melee distance and on safe tiles to attack
+ *
+ * Attack Pattern:
+ * 1. Detect if egg mechanic is active (bV check)
+ * 2. Find egg NPC at specific location (27, 36)
+ * 3. Check if egg is alive and attackable
+ * 4. Navigate to safe melee tiles around the egg
+ * 5. Equip Keris weapon if available
+ * 6. Attack the egg
+ *
+ * NPC Details:
+ * - Egg NPC ID: 28096 (0x6DC0)
+ * - Spawn location: Point(27, 36)
+ * - Must be within 1 tile (offset -2) to be safe
+ * - Must be in melee distance (offset 1) to attack
+ */
 @TaskDesc(name="Killing annoying egg", priority=20, register=true, blocking=true)
-public class KillingAnnoyingEggTask
-extends AutotoaManager {
+public class KillingAnnoyingEggTask extends AutotoaManager {
 
-    private static final  int eM;
-    private static final  Point eL;
+    // NPC ID for the egg
+    private static final int EGG_NPC_ID = 28096; // 0x6DC0 - Akkha's egg
 
-    private static void var3() {
-        var1 = new String[var2[8]];
-        bg.var1[bg.var2[1]] = "Wield";
-        bg.var1[bg.var2[3]] = "Attack";
-        bg.var1[bg.var2[2]] = "keris";
-        bg.var1[bg.var2[4]] = "egg";
-        bg.var1[bg.var2[0]] = "Attack";
-    }
+    // Egg spawn location
+    private static final Point EGG_LOCATION = new Point(27, 36);
 
-    /*
-     * WARNING - void declaration
-     */
-    @Override
-    protected boolean bL() {
-        void var2_2;
-        bg var4;
-        if (!bg.var5(bg.bV() ? 1 : 0) || bg.var6(this.bR() ? 1 : 0)) {
-            var4.sleep(var2[0]);
-            return var2[1];
-        }
-        WorldPoint var7 = var4.a(eL);
-        NPC var8 = NPCs.getAll(nPC -> {
-            int n2;
-            if (bg.var6(nPC.getName().toLowerCase().contains(var1[var2[4]]) ? 1 : 0)) {
-                String[] stringArray = new String[var2[3]];
-                stringArray[bg.var2[1]] = var1[var2[0]];
-                if (bg.var6(nPC.hasAction(stringArray) ? 1 : 0) && bg.var6(nPC.getWorldLocation().equals((Object)var7) ? 1 : 0) && bg.var9(nPC.getId(), var2[5]) && bg.var5(nPC.isDead() ? 1 : 0)) {
-                    n2 = var2[3];
-                    0;
-                    if (1 > 0) return n2 != 0;
-                    return ((0xD ^ 0x16) & ~(0x18 ^ 3)) != 0;
-                }
-            }
-            n2 = var2[1];
-            return n2 != 0;
-        }).stream().findFirst().orElse(null);
-        if (bg.var10(var8)) {
-            return var2[1];
-        }
-        if (bg.var5(var8.getWorldArea().offset(var2[2]).contains((Locatable)Players.getLocal()) ? 1 : 0)) {
-            return var2[1];
-        }
-        Set<WorldPoint> var11 = var4.bU();
-        WorldArea var12 = var8.getWorldArea().offset(var2[3]);
-        if (bg.var6(var11.stream().anyMatch(worldPoint -> var8.getWorldArea().offset(var2[3]).contains(worldPoint)) ? 1 : 0)) {
-            WorldPoint var13 = var12.toWorldPointList().stream().filter(worldPoint -> worldPoint.toWorldArea().isInMeleeDistance(var8.getWorldLocation())).filter(worldPoint -> {
-                boolean bl2;
-                if (bg.var5(var11.contains(worldPoint) ? 1 : 0)) {
-                    bl2 = var2[3];
-                    0;
-                    if ((0x4B ^ 0x53 ^ (0x6D ^ 0x71)) <= 2) {
-                        return ((0x6F ^ 0x27 ^ (0xF7 ^ 0x9A)) & (28 + 65 - 38 + 99 ^ 27 + 126 - 20 + 58 ^ -1)) != 0;
-                    }
-                } else {
-                    bl2 = var2[1];
-                }
-                return bl2;
-            }).findFirst().orElse(null);
-            if (bg.var10(var13)) {
-                return var2[1];
-            }
-            Movement.setDestination((WorldPoint)var13);
-            return var2[1];
-        }
-        var4.bp();
-        Item var13 = Inventory.getFirst(item -> item.getName().toLowerCase().contains(var1[var2[2]]));
-        if (bg.var14(var13)) {
-            var13.interact(var1[var2[1]]);
-        }
-        var2_2.interact(var1[var2[3]]);
-        return var2[3];
-    }
+    // Area offsets for positioning
+    private static final int SAFE_AREA_OFFSET = -2; // Must be outside this offset
+    private static final int MELEE_AREA_OFFSET = 1;  // Must be within this offset to attack
 
-        catch (Exception var20) {
-            var20.printStackTrace();
-            return null;
-        }
-    }
+    // Timing
+    private static final int TASK_SLEEP_DURATION = 0;
 
-    private static boolean var21(int n2, int n3) {
-        return n2 < n3;
-    }
-
-    private static String var22(String var23, String var24) {
-        var23 = new String(Base64.getDecoder().decode(var23.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var25 = new StringBuilder();
-        char[] var26 = var24.toCharArray();
-        int var27 = var2[1];
-        char[] var28 = var23.toCharArray();
-        int var29 = var28.length;
-        int var30 = var2[1];
-        while (bg.var21(var30, var29)) {
-            char var31 = var28[var30];
-            var25.append((char)(var31 ^ var26[var27 % var26.length]));
-            0;
-            ++var27;
-            ++var30;
-            0;
-            if (1 == 1) continue;
-            return null;
-        }
-        return String.valueOf(var25);
-    }
+    // Item/action strings
+    private static final String ACTION_WIELD = "Wield";
+    private static final String ACTION_ATTACK = "Attack";
+    private static final String ITEM_NAME_KERIS = "keris";
+    private static final String NPC_NAME_EGG = "egg";
 
     @Inject
     public KillingAnnoyingEggTask(Client client, z z2, TOAConfig tOAConfig) {
         super(client, z2, tOAConfig);
     }
 
-    private static void var32() {
-        var2 = new int[10];
-        bg.var2[0] = 0x67 ^ 0xC ^ (0x65 ^ 0xA);
-        bg.var2[1] = (0x94 ^ 0xBE) & ~(0x12 ^ 0x38);
-        bg.var2[2] = 2;
-        bg.var2[3] = 1;
-        bg.var2[4] = 3;
-        bg.var2[5] = -(0xFFFFE137 & 0x5EEF) & (0xFFFFFFF6 & 0x6DFF);
-        bg.var2[6] = 0x6D ^ 0x72;
-        bg.var2[7] = 0x6B ^ 0x34 ^ (0x25 ^ 0x5E);
-        bg.var2[8] = 0x84 ^ 0x81;
-        bg.var2[9] = 0x17 ^ 0x1F;
-    }
-
-    private static boolean var14(Object object) {
-        return object != null;
-    }
-
-    private static boolean var5(int n2) {
-        return n2 == 0;
-    }
-
-    private static boolean var9(int n2, int n3) {
-        return n2 == n3;
-    }
-
-    private static boolean var10(Object object) {
-        return object == null;
-    }
-
-    private static boolean var6(int n2) {
-        return n2 != 0;
-    }
-
-    static {
-        bg.var32();
-        bg.var3();
-        eM = var2[5];
-        eL = new Point(var2[6], var2[7]);
-    }
-
-        catch (Exception var38) {
-            var38.printStackTrace();
-            return null;
+    @Override
+    protected boolean bL() {
+        // Check if egg mechanic is active and we should kill it
+        if (!bV() || bR()) {
+            sleep(TASK_SLEEP_DURATION);
+            return true;
         }
+
+        // Get egg spawn location
+        WorldPoint eggWorldLocation = a(EGG_LOCATION);
+
+        // Find the egg NPC
+        NPC eggNPC = NPCs.getAll(npc -> {
+            // Filter for egg NPCs at the correct location
+            if (npc.getName().toLowerCase().contains(NPC_NAME_EGG)
+                    && npc.hasAction(ACTION_ATTACK)
+                    && npc.getWorldLocation().equals(eggWorldLocation)
+                    && npc.getId() == EGG_NPC_ID
+                    && !npc.isDead()) {
+                return true;
+            }
+            return false;
+        }).stream().findFirst().orElse(null);
+
+        if (eggNPC == null) {
+            return true;
+        }
+
+        // Check if we're too close (in danger zone)
+        if (!eggNPC.getWorldArea().offset(SAFE_AREA_OFFSET).contains(Players.getLocal())) {
+            return true;
+        }
+
+        // Get safe tiles around player
+        Set<WorldPoint> safeTiles = bU();
+
+        // Get melee attack range around egg
+        WorldArea meleeRange = eggNPC.getWorldArea().offset(MELEE_AREA_OFFSET);
+
+        // Find a safe tile in melee range to stand on
+        if (safeTiles.stream().anyMatch(tile -> eggNPC.getWorldArea().offset(MELEE_AREA_OFFSET).contains(tile))) {
+            WorldPoint targetTile = meleeRange.toWorldPointList()
+                    .stream()
+                    .filter(tile -> tile.toWorldArea().isInMeleeDistance(eggNPC.getWorldLocation()))
+                    .filter(tile -> {
+                        // Only move to safe tiles
+                        if (!safeTiles.contains(tile)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
+                    .findFirst()
+                    .orElse(null);
+
+            if (targetTile == null) {
+                return true;
+            }
+
+            // Move to the target tile
+            Movement.setDestination(targetTile);
+            return true;
+        }
+
+        // Prepare for attack
+        bp();
+
+        // Equip Keris weapon for bonus damage
+        Item kerisWeapon = Inventory.getFirst(item -> item.getName().toLowerCase().contains(ITEM_NAME_KERIS));
+        if (kerisWeapon != null) {
+            kerisWeapon.interact(ACTION_WIELD);
+        }
+
+        // Attack the egg
+        eggNPC.interact(ACTION_ATTACK);
+        return true;
     }
 }
-

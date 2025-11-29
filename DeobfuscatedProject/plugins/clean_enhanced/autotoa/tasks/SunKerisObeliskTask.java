@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  com.google.inject.Inject
  *  gg.squire.client.plugins.fw.TaskDesc
@@ -35,277 +35,221 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Prayers;
 import gg.squire.autotoa.tasks.AutotoaManager;
 import gg.squire.autotoa.tasks.GameEnum12;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
+/**
+ * Task: Use Sun Keris Special Attack on Obelisk Projectile
+ *
+ * Mechanics:
+ * - During the Het puzzle, obelisks shoot projectiles at the player
+ * - The Keris partisan of the sun's special attack can destroy these projectiles
+ * - This task detects incoming obelisk projectiles and uses the spec at the right time
+ * - Handles prayer restoration and health management during the mechanic
+ *
+ * Attack Pattern:
+ * 1. Monitor for obelisk projectiles (IDs: 18590, 18621)
+ * 2. Check projectile remaining cycles (between 5 and 70 ticks)
+ * 3. Equip Keris partisan of the sun (ID: 27291)
+ * 4. Activate special attack to destroy projectile
+ * 5. Restore prayer if needed using tears/potions
+ *
+ * Prayer/Varbit Values:
+ * - Shadow varbit: 23423 (0x5D7F) - shadow puzzle state
+ * - Overly draining varbit: 11112 (0x2B68) - high drain state
+ * - Normal prayer varbit: 500 (0x1F4) - standard prayer level
+ * - High drain prayer: 1000 (0x3E8) - increased drain
+ *
+ * Health Thresholds:
+ * - Minimum health for spec: 30 HP
+ * - Tick eat threshold: 45 HP
+ */
 @TaskDesc(name="Sun Keris (OBELISK)", priority=2500, blocking=true)
-public class SunKerisObeliskTask
-extends AutotoaManager {
-    
-    private static final  int fM;
-    
-    private static final  int fN;
+public class SunKerisObeliskTask extends AutotoaManager {
 
-    @Override
-    public boolean bl() {
-        int var3;
-        int n2;
-        bz var4;
-        if (bz.var5(this.cl() ? 1 : 0)) {
-            this.aY.c(var1[0]);
-            return var1[0];
-        }
-        if (bz.var6(Prayers.getPoints(), var1[1])) {
-            Item var7 = Inventory.getFirst(item -> {
-                int n2;
-                if (!bz.var5(q.-.t.a.o.u.i.-.o.u.t.e.s.a.r.e.TEARS_OF_ELIDINIS.d(item.getId()) ? 1 : 0) || !bz.var5(item.getName().contains(var2[var1[19]]) ? 1 : 0) || !bz.var5(item.getName().contains(var2[var1[17]]) ? 1 : 0) || bz.var8(item.getName().contains(var2[var1[20]]) ? 1 : 0)) {
-                    n2 = var1[2];
-                    0;
-                    if (2 > 2) {
-                        return ((0x3D ^ 0x11 ^ (1 ^ 0x18)) & (0xEE ^ 0xC4 ^ (4 ^ 0x1B) ^ -1)) != 0;
-                    }
-                } else {
-                    n2 = var1[0];
-                }
-                return n2 != 0;
-            });
-            if (bz.var9(var7)) {
-                return var1[0];
-            }
-            var7.interact(var2[var1[0]]);
-            return var1[2];
-        }
-        if (bz.var5(var4.aZ() ? 1 : 0) && bz.var8(var4.aq() ? 1 : 0) && bz.var10(var4.aY(), var1[2])) {
-            int[] nArray = new int[var1[3]];
-            nArray[bz.var1[0]] = var1[4];
-            nArray[bz.var1[2]] = var1[5];
-            Item var7 = Inventory.getFirst((int[])nArray);
-            if (bz.var11(var7)) {
-                var7.interact(var2[var1[2]]);
-            }
-        }
-        if (bz.var5(var4.ck() ? 1 : 0)) {
-            return var1[0];
-        }
-        if (bz.var10(Combat.getCurrentHealth(), var4.cj())) {
-            return var1[0];
-        }
-        int var7 = Vars.getVarp((int)var1[6]);
-        if (bz.var8(var4.aZ() ? 1 : 0)) {
-            n2 = var1[7];
-            0;
-            if (((9 ^ 0x1A ^ (0x44 ^ 0xE)) & (0x24 ^ 0x35 ^ (0xFC ^ 0xB4) ^ -1)) != 0) {
-                return ((104 + 62 - 73 + 107 ^ 92 + 93 - 159 + 108) & (0x27 ^ 0x60 ^ (0xCA ^ 0xC3) ^ -1)) != 0;
-            }
-        } else {
-            n2 = var3 = var1[8];
-        }
-        if (bz.var8(var4.cW.overlyDraining() ? 1 : 0)) {
-            int n3;
-            if (bz.var8(var4.aZ() ? 1 : 0)) {
-                n3 = var1[9];
-                0;
-                if (((0xA9 ^ 0xB1 ^ (0x10 ^ 0x68)) & (0x1C ^ 0x3F ^ (0x17 ^ 0x54) ^ -1)) >= ((0x8E ^ 0xA6) & ~(0x6F ^ 0x47) ^ (0x71 ^ 0x75))) {
-                    return ((8 + 154 - -10 + 23 ^ 60 + 25 - -13 + 50) & (37 + 177 - 171 + 208 ^ 5 + 112 - 93 + 148 ^ -1)) != 0;
-                }
-            } else {
-                n3 = var3 = var1[10];
-            }
-        }
-        if (bz.var6(var7, var3)) {
-            var4.aY.c();
-            return var1[0];
-        }
-        var4.aY.c(var1[2]);
-        Item var12 = Equipment.fromSlot((EquipmentInventorySlot)EquipmentInventorySlot.WEAPON);
-        if (!bz.var11(var12) || bz.var13(var12.getId(), var1[11])) {
-            int[] nArray = new int[var1[2]];
-            nArray[bz.var1[0]] = var1[11];
-            Item var14 = Inventory.getFirst((int[])nArray);
-            if (bz.var9(var14)) {
-                return var1[0];
-            }
-            var14.interact(var2[var1[3]]);
-        }
-        Combat.toggleSpec();
-        this.aY.c(var1[0]);
-        return var1[0];
-    }
+    // Projectile IDs for obelisk attacks
+    private static final int OBELISK_PROJECTILE_1 = 18590; // 0x489E - First projectile variant
+    private static final int OBELISK_PROJECTILE_2 = 18621; // 0x48BD - Second projectile variant
 
-    private static void var15() {
-        var1 = new int[22];
-        bz.var1[0] = (0x60 ^ 0x3C) & ~(0x4B ^ 0x17);
-        bz.var1[1] = 0x68 ^ 0x5B;
-        bz.var1[2] = 1;
-        bz.var1[3] = 2;
-        bz.var1[4] = -(0xFFFFD5BB & 0x3F77) & (0xFFFFFFFF & Short.MAX_VALUE);
-        bz.var1[5] = -(0xE6 ^ 0xC7) & (0xFFFFFEEB & 0x6BFF);
-        bz.var1[6] = 0xFFFFB3EE & 0x4D3D;
-        bz.var1[7] = 0xFFFFA377 & 0x5DFF;
-        bz.var1[8] = -(0xFFFFA76A & 0x5997) & (0xFFFFC7EF & 0x3BFF);
-        bz.var1[9] = 0xFFFFC1F5 & 0x3FFE;
-        bz.var1[10] = 0xFFFF87FD & 0x7BEA;
-        bz.var1[11] = 0xFFFFFF9F & 0x6AFB;
-        bz.var1[12] = -(0xFFFF974B & 0x7FF6) & (0xFFFFBFFF & 0x5FFF);
-        bz.var1[13] = -(0xFFFFCE63 & 0x779F) & (0xFFFFCEBF & Short.MAX_VALUE);
-        bz.var1[14] = 0x2D ^ 0x33;
-        bz.var1[15] = 0x7E ^ 0x59 ^ (0xAB ^ 0xA1);
-        bz.var1[16] = 0xC2 ^ 0x84;
-        bz.var1[17] = 0xD ^ 8;
-        bz.var1[18] = 3;
-        bz.var1[19] = 0x78 ^ 0x7C;
-        bz.var1[20] = 0xAB ^ 0xAD;
-        bz.var1[21] = 0xBE ^ 0xB9;
-    }
+    // Item IDs
+    private static final int KERIS_PARTISAN_SUN = 27291; // 0x6A9B - Keris partisan of the sun
+    private static final int SALT_DEPOSIT = 19081; // Salt for prayer restore
+    private static final int TEARS_OF_ELIDINIS = 27339; // Prayer restore item
 
-    private static boolean var6(int n2, int n3) {
-        return n2 < n3;
-    }
+    // Prayer/health thresholds
+    private static final int LOW_PRAYER_THRESHOLD = 51;
+    private static final int MIN_HEALTH_FOR_SPEC = 30;
+    private static final int TICK_EAT_HEALTH_THRESHOLD = 45;
 
-    private boolean ck() {
-        int[] nArray = new int[var1[3]];
-        nArray[bz.var1[0]] = var1[12];
-        nArray[bz.var1[2]] = var1[13];
-        Projectile projectile2 = Projectiles.getAll((int[])nArray).stream().filter(projectile -> {
-            boolean bl2;
-            if (!bz.var13(projectile.getId(), var1[12]) || bz.var16(projectile.getId(), var1[13])) {
-                bl2 = var1[2];
-                0;
-                if (((0x1E ^ 0x3B) & ~(0x57 ^ 0x72)) >= 2) {
-                    return ((0x2F ^ 0x29) & ~(0xA8 ^ 0xAE)) != 0;
-                }
-            } else {
-                bl2 = var1[0];
-            }
-            return bl2;
-        }).min(Comparator.comparingInt(Projectile::getRemainingCycles)).orElse(null);
-        if (bz.var11(projectile2) && bz.var6(projectile2.getRemainingCycles(), var1[16]) && bz.var10(projectile2.getRemainingCycles(), var1[17])) {
-            Object[] objectArray = new Object[var1[3]];
-            objectArray[bz.var1[0]] = projectile2.getId();
-            objectArray[bz.var1[2]] = projectile2.getRemainingCycles();
-            Log.info((String)var2[var1[18]], (Object[])objectArray);
-            return var1[2];
-        }
-        return var1[0];
-    }
+    // Projectile timing thresholds (in game ticks)
+    private static final int MAX_PROJECTILE_CYCLES = 70; // Must be less than this
+    private static final int MIN_PROJECTILE_CYCLES = 5;  // Must be greater than this
 
-    private static boolean var13(int n2, int n3) {
-        return n2 != n3;
-    }
+    // Varbit IDs for different puzzle states
+    private static final int VARBIT_SHADOW_PUZZLE = 23423;       // 0x5D7F
+    private static final int VARBIT_OVERLY_DRAINING = 11112;     // 0x2B68 - High drain mode
+    private static final int VARBIT_NORMAL_PRAYER = 500;         // 0x1F4
+    private static final int VARBIT_HIGH_DRAIN_PRAYER = 1000;    // 0x3E8
 
-    private static boolean var9(Object object) {
-        return object == null;
-    }
+    // Varbit values for different states
+    private static final int VARBIT_SHADOW_VALUE = 19461;        // Shadow puzzle active
+    private static final int VARBIT_NORMAL_VALUE = 4412;         // Normal state
 
-    private static boolean var8(int n2) {
-        return n2 != 0;
-    }
-
-    private static String var17(String var18, String var19) {
-        var18 = new String(Base64.getDecoder().decode(var18.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var20 = new StringBuilder();
-        char[] var21 = var19.toCharArray();
-        int var22 = var1[0];
-        char[] var23 = var18.toCharArray();
-        int var24 = var23.length;
-        int var25 = var1[0];
-        while (bz.var6(var25, var24)) {
-            char var26 = var23[var25];
-            var20.append((char)(var26 ^ var21[var22 % var21.length]));
-            0;
-            ++var22;
-            ++var25;
-            0;
-            if (2 != -1) continue;
-            return null;
-        }
-        return String.valueOf(var20);
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    private int cj() {
-        void var27;
-        int[] nArray = new int[var1[3]];
-        nArray[bz.var1[0]] = var1[12];
-        nArray[bz.var1[2]] = var1[13];
-        Projectile projectile = Projectiles.getNearest((int[])nArray);
-        if (bz.var9(projectile)) {
-            return var1[2];
-        }
-        if (bz.var16(var27.getId(), var1[13])) {
-            return var1[14];
-        }
-        return var1[15];
-    }
-
-    private static boolean var11(Object object) {
-        return object != null;
-    }
-
-        catch (Exception var33) {
-            var33.printStackTrace();
-            return null;
-        }
-    }
-
-    static {
-        bz.var15();
-        bz.var34();
-        fM = var1[12];
-        fN = var1[13];
-    }
-
-    /*
-     * Enabled force condition propagation
-     * Lifted jumps to return sites
-     */
-    private boolean cl() {
-        int n2;
-        block3: {
-            block2: {
-                int[] nArray = new int[var1[2]];
-                nArray[bz.var1[0]] = var1[11];
-                if (!bz.var5(Equipment.contains((int[])nArray) ? 1 : 0)) break block2;
-                int[] nArray2 = new int[var1[2]];
-                nArray2[bz.var1[0]] = var1[11];
-                if (!bz.var8(Inventory.contains((int[])nArray2) ? 1 : 0)) break block3;
-            }
-            n2 = var1[2];
-            0;
-            if (-1 <= 2) return n2 != 0;
-            return ((9 ^ 6) & ~(0x97 ^ 0x98) & ~((0x16 ^ 0x4D) & ~(0x5F ^ 4))) != 0;
-        }
-        n2 = var1[0];
-        return n2 != 0;
-    }
+    // Item interaction strings
+    private static final String ACTION_DRINK = "Drink";
+    private static final String ACTION_WIELD = "Wield";
+    private static final String LOG_TICK_EAT = "Should tick eat now: {} {} {}";
+    private static final String ITEM_NAME_RESTORE = "restore";
+    private static final String ITEM_NAME_PRAYER = "Prayer";
+    private static final String ITEM_NAME_SANFEW = "Sanfew";
 
     @Inject
     protected SunKerisObeliskTask(Client client, z z2, TOAConfig tOAConfig) {
         super(client, z2, tOAConfig);
     }
 
-    private static boolean var10(int n2, int n3) {
-        return n2 > n3;
+    @Override
+    public boolean bl() {
+        // Check if we don't have keris or in inventory
+        if (cl()) {
+            this.aY.c(false);
+            return false;
+        }
+
+        // Restore prayer if needed
+        if (Prayers.getPoints() < LOW_PRAYER_THRESHOLD) {
+            Item prayerRestore = Inventory.getFirst(item -> {
+                // Check for tears of elidinis and prayer restore potions
+                if (!q.-.t.a.o.u.i.-.o.u.t.e.s.a.r.e.TEARS_OF_ELIDINIS.d(item.getId())
+                        || !item.getName().contains(ITEM_NAME_RESTORE)
+                        || !item.getName().contains(ITEM_NAME_PRAYER)
+                        || item.getName().contains(ITEM_NAME_SANFEW)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+            if (prayerRestore == null) {
+                return false;
+            }
+            prayerRestore.interact(ACTION_DRINK);
+            return true;
+        }
+
+        // Handle salt/tears usage for prayer
+        if (aZ() && !aq() && aY() > 1) {
+            Item saltOrTears = Inventory.getFirst(SALT_DEPOSIT, TEARS_OF_ELIDINIS);
+            if (saltOrTears != null) {
+                saltOrTears.interact(ACTION_DRINK);
+            }
+        }
+
+        // Check if we should tick eat based on incoming projectile
+        if (ck()) {
+            return false;
+        }
+
+        // Don't spec if health too low
+        if (Combat.getCurrentHealth() > cj()) {
+            return false;
+        }
+
+        // Determine which varbit to check based on puzzle state
+        int currentVarbit = Vars.getVarp(VARBIT_NORMAL_VALUE);
+        int targetVarbit;
+        if (aZ()) {
+            targetVarbit = VARBIT_SHADOW_VALUE;
+        } else {
+            targetVarbit = VARBIT_OVERLY_DRAINING;
+        }
+
+        // Adjust target based on draining config
+        if (cW.overlyDraining()) {
+            int adjustedTarget;
+            if (aZ()) {
+                adjustedTarget = VARBIT_SHADOW_PUZZLE;
+            } else {
+                adjustedTarget = VARBIT_HIGH_DRAIN_PRAYER;
+            }
+            targetVarbit = adjustedTarget;
+        }
+
+        // Check if varbit matches expected state
+        if (currentVarbit < targetVarbit) {
+            aY.c();
+            return false;
+        }
+
+        aY.c(true);
+
+        // Equip keris if not equipped
+        Item equippedWeapon = Equipment.fromSlot(EquipmentInventorySlot.WEAPON);
+        if (equippedWeapon == null || equippedWeapon.getId() != KERIS_PARTISAN_SUN) {
+            Item kerisInInventory = Inventory.getFirst(KERIS_PARTISAN_SUN);
+            if (kerisInInventory == null) {
+                return false;
+            }
+            kerisInInventory.interact(ACTION_WIELD);
+        }
+
+        // Activate special attack
+        Combat.toggleSpec();
+        this.aY.c(false);
+        return false;
     }
 
-    private static boolean var5(int n2) {
-        return n2 == 0;
+    /**
+     * Check if we should tick eat based on incoming projectile timing
+     * @return true if dangerous projectile is incoming and we should eat
+     */
+    private boolean ck() {
+        Projectile nearestObeliskProjectile = Projectiles.getAll(OBELISK_PROJECTILE_1, OBELISK_PROJECTILE_2)
+                .stream()
+                .filter(projectile -> {
+                    // Filter to only the exact projectile IDs we care about
+                    if (projectile.getId() != OBELISK_PROJECTILE_1 || projectile.getId() == OBELISK_PROJECTILE_2) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })
+                .min(Comparator.comparingInt(Projectile::getRemainingCycles))
+                .orElse(null);
+
+        // Check if projectile is in the danger window
+        if (nearestObeliskProjectile != null
+                && nearestObeliskProjectile.getRemainingCycles() < MAX_PROJECTILE_CYCLES
+                && nearestObeliskProjectile.getRemainingCycles() > MIN_PROJECTILE_CYCLES) {
+            Log.info(LOG_TICK_EAT, nearestObeliskProjectile.getId(), nearestObeliskProjectile.getRemainingCycles());
+            return true;
+        }
+        return false;
     }
 
-    private static boolean var16(int n2, int n3) {
-        return n2 == n3;
+    /**
+     * Get health threshold for using spec based on projectile type
+     * @return health value to maintain
+     */
+    private int cj() {
+        Projectile nearestProjectile = Projectiles.getNearest(OBELISK_PROJECTILE_1, OBELISK_PROJECTILE_2);
+        if (nearestProjectile == null) {
+            return 1;
+        }
+
+        // Different health requirements based on projectile variant
+        if (nearestProjectile.getId() == OBELISK_PROJECTILE_2) {
+            return MIN_HEALTH_FOR_SPEC;
+        }
+        return TICK_EAT_HEALTH_THRESHOLD;
     }
 
-    private static void var34() {
-        var2 = new String[var1[21]];
-        bz.var2[bz.var1[0]] = "Drink";
-        bz.var2[bz.var1[2]] = "Drink";
-        bz.var2[bz.var1[3]] = "Wield";
-        bz.var2[bz.var1[18]] = "Should tick eat now: {} {} {}";
-        bz.var2[bz.var1[19]] = "restore";
-        bz.var2[bz.var1[17]] = "Prayer";
-        bz.var2[bz.var1[20]] = "Sanfew";
+    /**
+     * Check if player has Keris available (equipped or in inventory)
+     * @return true if keris not available
+     */
+    private boolean cl() {
+        if (!Equipment.contains(KERIS_PARTISAN_SUN) && !Inventory.contains(KERIS_PARTISAN_SUN)) {
+            return true;
+        }
+        return false;
     }
 }
-
