@@ -1,20 +1,6 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.Locatable
- *  net.runelite.api.NPC
- *  net.runelite.api.coords.Angle
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.client.config.ConfigStorageBox
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
+ * Deobfuscated TOA Akkha Attack Task
+ * Handles attacking Akkha during the fight
  */
 package gg.squire.autotoa.tasks;
 
@@ -37,9 +23,6 @@ import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
-import gg.squire.autotoa.tasks.AutotoaManager;
 
 @TaskDesc(name="Attacking Akkha")
 public class AttackingAkkhaTask
