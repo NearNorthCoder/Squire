@@ -29,7 +29,7 @@ import net.unethicalite.api.widgets.Tabs;
  * the Ancient spellbook equipped, as it's required for TOA raids.
  */
 @TaskDesc(name="Entering TOA")
-public class EnteringToaTask extends ck {
+public class EnteringToaTask extends TOAConfigurableTask {
 
     // Game object ID for the TOA entrance
     // Calculated from: -(0xFFFFD575 & 0x6BEB) & (0xFFFFF569 & 0xFFFF)
@@ -51,7 +51,7 @@ public class EnteringToaTask extends ck {
     }
 
     @Override
-    public boolean bl() {
+    public boolean validate() {
         // Find the TOA entrance object
         TileObject toaEntrance = TileObjects.getNearest(TOA_ENTRANCE_OBJECT_ID);
         if (toaEntrance == null) {

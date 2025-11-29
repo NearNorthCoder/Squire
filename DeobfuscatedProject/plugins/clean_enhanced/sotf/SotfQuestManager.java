@@ -13,7 +13,8 @@ import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.game.Vars;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.quests.QuestVarbits;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.*;
+import gg.squire.sotf.framework.QuestStep;
+import gg.squire.sotf.framework.GameStateUtil;
 
 /**
  * Main quest orchestrator for Secrets of the North (SOTF).
@@ -47,7 +48,7 @@ import o.c.k.i.-.l.o.f.-.n.c.t.e.s.*;
  *
  * @author Squire Plugin System
  */
-public class SotfQuestManager implements ac {
+public class SotfQuestManager implements QuestStep {
 
     /**
      * Current quest or task name being executed
@@ -57,7 +58,7 @@ public class SotfQuestManager implements ac {
     /**
      * List of all quest tasks/steps to be completed in sequence
      */
-    public static List<ac> subTasks;
+    public static List<QuestStep> subTasks;
 
     /**
      * Whether the task list has been initialized
@@ -230,7 +231,7 @@ public class SotfQuestManager implements ac {
         }
 
         // Build skill training task groups (can be shuffled)
-        List<ac> thievingTasks = Arrays.asList(
+        List<QuestStep> thievingTasks = Arrays.asList(
             new P(),
             new Z(),
             new W(),
@@ -238,7 +239,7 @@ public class SotfQuestManager implements ac {
             new T()
         );
 
-        List<ac> combatTasks = Arrays.asList(
+        List<QuestStep> combatTasks = Arrays.asList(
             new M(),
             new A(),
             new R(),
@@ -246,13 +247,13 @@ public class SotfQuestManager implements ac {
             new H()
         );
 
-        List<ac> gatheringTasks = Arrays.asList(
+        List<QuestStep> gatheringTasks = Arrays.asList(
             new G(),
             new ak(),
             new w()
         );
 
-        List<ac> craftingTasks = Arrays.asList(
+        List<QuestStep> craftingTasks = Arrays.asList(
             new at(),
             new ad(),
             new af(),
@@ -261,12 +262,12 @@ public class SotfQuestManager implements ac {
             new an()
         );
 
-        List<ac> magicTasks = Arrays.asList(
+        List<QuestStep> magicTasks = Arrays.asList(
             new ag(),
             new D()
         );
 
-        List<ac> rangedTasks = Arrays.asList(
+        List<QuestStep> rangedTasks = Arrays.asList(
             new aj(),
             new ai(),
             new w(),
@@ -274,7 +275,7 @@ public class SotfQuestManager implements ac {
             new y()
         );
 
-        List<ac> questTasks = Arrays.asList(
+        List<QuestStep> questTasks = Arrays.asList(
             new aq(),
             new ar()
         );
@@ -308,8 +309,8 @@ public class SotfQuestManager implements ac {
             if (initialized) {
                 Collections.shuffle(subTasks);
             }
-            System.out.println("Switching to : " + subTasks.get(0).ag());
-            questName = subTasks.get(0).ag();
+            System.out.println("Switching to : " + subTasks.get(0).getName());
+            questName = subTasks.get(0).getName();
         }
     }
 
@@ -325,14 +326,14 @@ public class SotfQuestManager implements ac {
             }
 
             // Check if current task is complete
-            if (subTasks.get(0).ah()) {
+            if (subTasks.get(0).isComplete()) {
                 AccBuilderSotf.f += 1;
-                System.out.println("Achieved " + subTasks.get(0).ag() + " goal");
+                System.out.println("Achieved " + subTasks.get(0).getName() + " goal");
                 subTasks.remove(0);
 
                 if (!subTasks.isEmpty()) {
-                    System.out.println("Switching to : " + subTasks.get(0).ag());
-                    questName = subTasks.get(0).ag();
+                    System.out.println("Switching to : " + subTasks.get(0).getName());
+                    questName = subTasks.get(0).getName();
                 }
 
                 if (subTasks.isEmpty()) {
@@ -344,20 +345,20 @@ public class SotfQuestManager implements ac {
 
             if (Game.getState() == GameState.LOGGED_IN) {
                 // Disable GE warnings if needed
-                while (e.z()) {
+                while (GameStateUtil.isGrandExchangeWarningEnabled()) {
                     AccBuilderSotf.c = "Disabling GE warning";
-                    e.A();
+                    GameStateUtil.disableGrandExchangeWarning();
                     Time.sleepTicks(1);
                 }
 
                 // Execute current task
-                AccBuilderSotf.l = subTasks.get(0).ag();
-                int sleepDuration = subTasks.get(0).af();
+                AccBuilderSotf.l = subTasks.get(0).getName();
+                int sleepDuration = subTasks.get(0).execute();
                 Time.sleep(sleepDuration);
-                Time.sleep(e.c(49, 80));
+                Time.sleep(GameStateUtil.randomRange(49, 80));
             }
 
-            e.G();
+            GameStateUtil.handleDeath();
         }
 
         // Fallback: Train skills if not all requirements met but tasks initialized

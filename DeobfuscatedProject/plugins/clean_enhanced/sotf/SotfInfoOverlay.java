@@ -8,7 +8,7 @@ import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
+import gg.squire.sotf.framework.GameStateUtil;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -59,7 +59,7 @@ public class SotfInfoOverlay extends OverlayPanel {
         this.panelComponent.getChildren().add(
             LineComponent.builder()
                 .left("Runtime")
-                .right(e.b(runtime))
+                .right(GameStateUtil.formatTime(runtime))
                 .build()
         );
 
