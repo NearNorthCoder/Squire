@@ -22,4 +22,5 @@ Thumbs.db
 net/
 build/
 decompiled/
+deobfuscated_src/
 tools/
