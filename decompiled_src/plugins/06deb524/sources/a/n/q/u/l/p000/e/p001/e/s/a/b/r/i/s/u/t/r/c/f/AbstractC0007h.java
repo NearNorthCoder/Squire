@@ -1,0 +1,171 @@
+package a.n.q.u.l.p000.e.p001.e.s.a.b.r.i.s.u.t.r.c.f;
+
+import gg.squire.minigames.SquireBlastFurnace;
+import net.runelite.api.widgets.WidgetInfo;
+/* renamed from: a.n.q.u.l.-.e.-.e.s.a.b.r.i.s.u.t.r.c.f.h  reason: invalid package and case insensitive filesystem */
+/* loaded from: 06deb524-30dc-422a-b422-0bec548b1d10.jar:a/n/q/u/l/-/e/-/e/s/a/b/r/i/s/u/t/r/c/f/h.class */
+public abstract class AbstractC0007h {
+    protected final /* synthetic */ w G;
+    protected final /* synthetic */ w J;
+    protected final /* synthetic */ w V;
+    protected final /* synthetic */ w X;
+    protected final /* synthetic */ w P;
+    protected final /* synthetic */ w ac;
+    protected final /* synthetic */ w O;
+    protected final /* synthetic */ w H;
+    protected final /* synthetic */ w K;
+    protected final /* synthetic */ w T;
+    protected final /* synthetic */ w Y;
+    protected final /* synthetic */ w R;
+    protected final /* synthetic */ w Z;
+    protected final /* synthetic */ w U;
+    protected final /* synthetic */ w F;
+    protected final /* synthetic */ w L;
+    protected final /* synthetic */ w W;
+    protected final /* synthetic */ w M;
+    protected final /* synthetic */ w Q;
+    protected final /* synthetic */ w ab;
+    protected final /* synthetic */ w S;
+    protected final /* synthetic */ w E;
+    private static /* synthetic */ int[] lIIlllIIlIII;
+    protected final /* synthetic */ w N;
+    protected final /* synthetic */ w I;
+    protected final /* synthetic */ w aa;
+
+    private static void llIlIIIIIIllII() {
+        lIIlllIIlIII = new int[28];
+        lIIlllIIlIII[0] = "  ".length();
+        lIIlllIIlIII[1] = (117 ^ 20) & ((33 ^ 64) ^ (-1));
+        lIIlllIIlIII[2] = (-16645) & 28663;
+        lIIlllIIlIII[3] = " ".length();
+        lIIlllIIlIII[4] = (-((-21219) & 29427)) & (-71) & 32758;
+        lIIlllIIlIII[5] = (-((-1281) & 30507)) & (-1041) & 30719;
+        lIIlllIIlIII[6] = (-((-8511) & 11647)) & (-4099) & 7678;
+        lIIlllIIlIII[7] = (-14854) & 15293;
+        lIIlllIIlIII[8] = (-((-623) & 32367)) & (-1) & 32191;
+        lIIlllIIlIII[9] = (-31285) & 31733;
+        lIIlllIIlIII[10] = (-9261) & 9711;
+        lIIlllIIlIII[11] = (-26961) & 28540;
+        lIIlllIIlIII[12] = (-((-27011) & 32675)) & (-1) & 32695;
+        lIIlllIIlIII[13] = (-18661) & 19436;
+        lIIlllIIlIII[14] = (-((-17393) & 19445)) & (-4153) & 15999;
+        lIIlllIIlIII[15] = (-((-32261) & 32527)) & (-18610) & 28671;
+        lIIlllIIlIII[16] = (-1046) & 14325;
+        lIIlllIIlIII[17] = 90 ^ 95;
+        lIIlllIIlIII[18] = ((151 + 169) - 215) + 124;
+        lIIlllIIlIII[19] = (-2177) & 14807;
+        lIIlllIIlIII[20] = (-((-26437) & 28495)) & (-18049) & 32735;
+        lIIlllIIlIII[21] = "   ".length();
+        lIIlllIIlIII[22] = (-2189) & 14815;
+        lIIlllIIlIII[23] = 162 ^ 166;
+        lIIlllIIlIII[24] = (-1193) & 13817;
+        lIIlllIIlIII[25] = (-4193) & 13292;
+        lIIlllIIlIII[26] = (-5509) & 32215;
+        lIIlllIIlIII[27] = (-19467) & 28558;
+    }
+
+    public abstract String g();
+
+    public AbstractC0007h() {
+        String str = I.aQ;
+        int[] iArr = new int[lIIlllIIlIII[0]];
+        iArr[lIIlllIIlIII[1]] = lIIlllIIlIII[2];
+        iArr[lIIlllIIlIII[3]] = lIIlllIIlIII[4];
+        this.E = new v(str, iArr);
+        String str2 = I.aR;
+        int[] iArr2 = new int[lIIlllIIlIII[0]];
+        iArr2[lIIlllIIlIII[1]] = lIIlllIIlIII[2];
+        iArr2[lIIlllIIlIII[3]] = lIIlllIIlIII[4];
+        this.F = new v(str2, iArr2);
+        String str3 = I.aS;
+        int[] iArr3 = new int[lIIlllIIlIII[0]];
+        iArr3[lIIlllIIlIII[1]] = lIIlllIIlIII[2];
+        iArr3[lIIlllIIlIII[3]] = lIIlllIIlIII[4];
+        this.G = new v(str3, iArr3);
+        String str4 = I.aT;
+        int[] iArr4 = new int[lIIlllIIlIII[0]];
+        iArr4[lIIlllIIlIII[1]] = lIIlllIIlIII[2];
+        iArr4[lIIlllIIlIII[3]] = lIIlllIIlIII[4];
+        this.H = new C0020u(str4, iArr4);
+        String str5 = I.aU;
+        int[] iArr5 = new int[lIIlllIIlIII[3]];
+        iArr5[lIIlllIIlIII[1]] = lIIlllIIlIII[5];
+        this.I = new C0020u(str5, iArr5);
+        String str6 = I.aV;
+        int[] iArr6 = new int[lIIlllIIlIII[3]];
+        iArr6[lIIlllIIlIII[1]] = lIIlllIIlIII[6];
+        this.J = new C0020u(str6, iArr6);
+        String str7 = I.aW;
+        int[] iArr7 = new int[lIIlllIIlIII[3]];
+        iArr7[lIIlllIIlIII[1]] = lIIlllIIlIII[7];
+        this.K = new C0020u(str7, iArr7);
+        String str8 = I.aX;
+        int[] iArr8 = new int[lIIlllIIlIII[3]];
+        iArr8[lIIlllIIlIII[1]] = lIIlllIIlIII[8];
+        this.L = new C0020u(str8, iArr8);
+        String str9 = I.aY;
+        int[] iArr9 = new int[lIIlllIIlIII[3]];
+        iArr9[lIIlllIIlIII[1]] = lIIlllIIlIII[9];
+        this.M = new C0020u(str9, iArr9);
+        String str10 = I.aZ;
+        int[] iArr10 = new int[lIIlllIIlIII[3]];
+        iArr10[lIIlllIIlIII[1]] = lIIlllIIlIII[10];
+        this.N = new C0020u(str10, iArr10);
+        String str11 = I.bc;
+        int[] iArr11 = new int[lIIlllIIlIII[0]];
+        iArr11[lIIlllIIlIII[1]] = lIIlllIIlIII[11];
+        iArr11[lIIlllIIlIII[3]] = lIIlllIIlIII[12];
+        this.O = new C0020u(str11, iArr11);
+        String str12 = I.bd;
+        int[] iArr12 = new int[lIIlllIIlIII[0]];
+        iArr12[lIIlllIIlIII[1]] = lIIlllIIlIII[11];
+        iArr12[lIIlllIIlIII[3]] = lIIlllIIlIII[12];
+        this.P = new v(str12, iArr12);
+        String str13 = I.be;
+        int[] iArr13 = new int[lIIlllIIlIII[3]];
+        iArr13[lIIlllIIlIII[1]] = lIIlllIIlIII[13];
+        this.Q = new C0020u(str13, iArr13);
+        String str14 = I.bf;
+        int[] iArr14 = new int[lIIlllIIlIII[3]];
+        iArr14[lIIlllIIlIII[1]] = lIIlllIIlIII[13];
+        this.R = new v(str14, iArr14);
+        String str15 = I.bg;
+        int[] iArr15 = new int[lIIlllIIlIII[0]];
+        iArr15[lIIlllIIlIII[1]] = lIIlllIIlIII[14];
+        iArr15[lIIlllIIlIII[3]] = lIIlllIIlIII[15];
+        this.S = new C0020u(str15, iArr15);
+        String str16 = I.bh;
+        int[] iArr16 = new int[lIIlllIIlIII[3]];
+        iArr16[lIIlllIIlIII[1]] = lIIlllIIlIII[16];
+        this.T = new C0020u(str16, iArr16);
+        String str17 = I.bi;
+        int[] iArr17 = new int[lIIlllIIlIII[0]];
+        iArr17[lIIlllIIlIII[1]] = lIIlllIIlIII[14];
+        iArr17[lIIlllIIlIII[3]] = lIIlllIIlIII[15];
+        this.U = new v(str17, iArr17);
+        String str18 = I.bj;
+        int[] iArr18 = new int[lIIlllIIlIII[3]];
+        iArr18[lIIlllIIlIII[1]] = lIIlllIIlIII[16];
+        this.V = new v(str18, iArr18);
+        this.W = new v(I.ba, A.N());
+        String str19 = I.bb;
+        int[] iArr19 = new int[lIIlllIIlIII[17]];
+        iArr19[lIIlllIIlIII[1]] = lIIlllIIlIII[18];
+        iArr19[lIIlllIIlIII[3]] = lIIlllIIlIII[19];
+        iArr19[lIIlllIIlIII[0]] = lIIlllIIlIII[20];
+        iArr19[lIIlllIIlIII[21]] = lIIlllIIlIII[22];
+        iArr19[lIIlllIIlIII[23]] = lIIlllIIlIII[24];
+        this.X = new v(str19, iArr19);
+        this.Y = new z(I.bk, WidgetInfo.BANK_DEPOSIT_INVENTORY);
+        this.Z = new x(I.bl, lIIlllIIlIII[25]);
+        this.aa = new x(I.bm, lIIlllIIlIII[26]);
+        this.ab = new x(I.bn, lIIlllIIlIII[27]);
+        this.ac = new y(I.bo, SquireBlastFurnace.d);
+    }
+
+    static {
+        llIlIIIIIIllII();
+    }
+
+    public abstract w a(C0014o c0014o);
+}

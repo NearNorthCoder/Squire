@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'com.squire.agent'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // ByteBuddy for bytecode manipulation
+    implementation 'net.bytebuddy:byte-buddy:1.14.11'
+    implementation 'net.bytebuddy:byte-buddy-agent:1.14.11'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Premain-Class': 'com.squire.agent.SquireCipherAgent',
+            'Agent-Class': 'com.squire.agent.SquireCipherAgent',
+            'Can-Redefine-Classes': 'true',
+            'Can-Retransform-Classes': 'true',
+            'Boot-Class-Path': 'squire-cipher-agent.jar'
+        )
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('squire-cipher-agent')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+
+    manifest {
+        inheritFrom jar.manifest
+    }
+}
+
+tasks.build.dependsOn shadowJar
