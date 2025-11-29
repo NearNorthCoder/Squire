@@ -7,6 +7,7 @@ import net.runelite.launcher.Launcher;
 import net.runelite.launcher.SquireSplashScreen;
 import net.runelite.launcher.beans.BootstrapMode;
 import net.runelite.launcher.beans.SignedBsMode;
+import net.runelite.launcher.logging.PluginDownloadLogger;
 import okhttp3.*;
 
 import javax.swing.SwingUtilities;
@@ -14,10 +15,15 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.LinkedHashMap;
 
 /**
  * PATCHED S3Utils - Logs all API calls and responses for debugging.
  * This captures the authentication headers and signed URL responses.
+ *
+ * KEY FINDING: getBootstrapMode(String auth) is NEVER CALLED!
+ * The launcher only calls getBootstrapModes() (plural), which hits the Lambda URL.
+ * The GetBootloadJars API endpoint appears to be dead code.
  */
 public class S3Utils {
 
@@ -29,6 +35,8 @@ public class S3Utils {
 
     static {
         initApiLog();
+        // Initialize the dedicated plugin download logger
+        PluginDownloadLogger.initialize();
     }
 
     private static void initApiLog() {
@@ -139,11 +147,14 @@ public class S3Utils {
 
     /**
      * PATCHED: Logs getBootstrapModes calls
+     * THIS IS THE METHOD THAT'S ACTUALLY CALLED BY THE LAUNCHER!
+     * (Not getBootstrapMode - that's dead code)
      */
     public static Map<String, BootstrapMode> getBootstrapModes() {
         logApi("");
         logApi("╔═══════════════════════════════════════════════════════════════════════════════");
-        logApi("║ [API CALL] getBootstrapModes");
+        logApi("║ [API CALL] getBootstrapModes (Lambda URL)");
+        logApi("║ NOTE: This is the ACTIVE method - getBootstrapMode() is NEVER CALLED!");
         logApi("╚═══════════════════════════════════════════════════════════════════════════════");
 
         try {
@@ -153,8 +164,10 @@ public class S3Utils {
             String auth = Launcher.getSquireAuth();
             logApi("║ Auth from Launcher: " + auth);
 
-            // This method is more complex, keeping original logic
-            // but adding logging throughout
+            // Log to dedicated plugin logger
+            Map<String, String> headers = new LinkedHashMap<>();
+            headers.put("auth", auth);
+            PluginDownloadLogger.logApiCall("getBootstrapModes (Lambda)", LAMBDA_URL, headers);
 
             Request request = new Request.Builder()
                     .url(LAMBDA_URL)
@@ -168,24 +181,33 @@ public class S3Utils {
                 ResponseBody body = response.body();
 
                 if (!response.isSuccessful() || body == null) {
-                    logApi("║ ERROR: getBootstrapModes failed");
+                    logApi("║ ERROR: getBootstrapModes failed - Status: " + response.code());
+                    PluginDownloadLogger.logApiResponse("getBootstrapModes", response.code(), "FAILED - No body or unsuccessful");
                     return Collections.emptyMap();
                 }
 
                 String json = body.string();
                 logApi("║ Response: " + json.substring(0, Math.min(500, json.length())));
 
+                // Log full response to plugin logger
+                PluginDownloadLogger.logApiResponse("getBootstrapModes", response.code(), json);
+
                 List<LinkedTreeMap> codes = new Gson().fromJson(json, List.class);
                 Map<String, BootstrapMode> result = new HashMap<>();
 
+                logApi("║ ");
+                logApi("║ AVAILABLE BOOTSTRAP MODES:");
                 for (LinkedTreeMap ltm : codes) {
                     String label = ltm.get("label").toString().toLowerCase();
                     String code = ltm.get("code").toString();
                     String bootstrapUrl = String.format(BOOTSTRAP_URL, code);
                     result.put(label, new BootstrapMode(label, bootstrapUrl));
-                    logApi("║ Mode: " + label + " -> " + bootstrapUrl);
+                    logApi("║   • " + label + " -> " + bootstrapUrl);
                 }
 
+                logApi("║ ");
+                logApi("║ NEXT STEP: Launcher will fetch bootstrap JSON from one of these URLs");
+                logApi("║ The bootstrap JSON contains artifact URLs (some may be signed S3 URLs)");
                 logApi("╚═══════════════════════════════════════════════════════════════════════════════");
                 return result;
 
