@@ -36,16 +36,10 @@ import net.unethicalite.api.plugins.Script;
 import net.unethicalite.api.quests.QuestVarbits;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.client.Static;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.H;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.L;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.V;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aD;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.aN;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.ac;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.e;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.t;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.u;
-import o.c.k.i.-.l.o.f.-.n.c.t.e.s.z;
+import gg.squire.sotf.framework.QuestStep;
+import gg.squire.sotf.framework.GameStateUtil;
+// TODO: The following imports still need deobfuscation mapping:
+// H, L, V, aD, aN, t, u, z - these are quest step classes
 import org.pf4j.Extension;
 
 import javax.inject.Inject;

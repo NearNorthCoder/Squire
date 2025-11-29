@@ -22,7 +22,7 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.client.eventbus.Subscribe;
 
 @TaskDesc(name="Logging out and stopping", priority=0x7FFFFFFF, blocking=true)
-public class LoggingOutAndStoppingTask extends ck {
+public class LoggingOutAndStoppingTask extends TOAConfigurableTask {
 
     // Message to watch for in chat
     private static final String OUT_OF_CHARGES_MESSAGE = "has no charges";
@@ -36,7 +36,7 @@ public class LoggingOutAndStoppingTask extends ck {
     }
 
     @Override
-    public boolean bl() {
+    public boolean validate() {
         // Don't stop if flag not set
         if (!this.shouldStop) {
             return false;

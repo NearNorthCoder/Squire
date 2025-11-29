@@ -26,7 +26,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Dialog;
 
 @TaskDesc(name="Recharging trident", priority=1000, blocking=true, register=true)
-public class RechargingTridentTask extends ck {
+public class RechargingTridentTask extends TOAConfigurableTask {
 
     // Constants - Item IDs
     private static final int ZULRAH_SCALES_ID = 31104; // 0x7980
@@ -57,7 +57,7 @@ public class RechargingTridentTask extends ck {
     }
 
     @Override
-    public boolean bl() {
+    public boolean validate() {
         // Don't recharge if already done
         if (this.recharged) {
             return false;
