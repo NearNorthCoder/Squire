@@ -1,0 +1,160 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  gg.squire.client.plugins.fw.TaskDesc
+ *  javax.inject.Inject
+ *  net.runelite.api.Locatable
+ *  net.runelite.api.Player
+ *  net.runelite.api.TileObject
+ *  net.runelite.api.coords.WorldPoint
+ *  net.unethicalite.api.coords.RectangularArea
+ *  net.unethicalite.api.entities.Players
+ *  net.unethicalite.api.entities.TileObjects
+ *  net.unethicalite.api.game.Vars
+ *  net.unethicalite.api.movement.Movement
+ *  net.unethicalite.api.movement.Reachable
+ */
+package m.e.i.q.u.r.-.n.s.e.r.i;
+
+import gg.squire.client.plugins.fw.TaskDesc;
+import gg.squire.mining.SquireMiner;
+import gg.squire.mining.SquireMinerConfig;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
+import m.e.i.q.u.r.-.n.s.e.r.i.C_Unknown;
+import m.e.i.q.u.r.-.n.s.e.r.i.T_Unknown;
+import m.e.i.q.u.r.-.n.s.e.r.i.DEnum;
+import net.runelite.api.Locatable;
+import net.runelite.api.Player;
+import net.runelite.api.TileObject;
+import net.runelite.api.coords.WorldPoint;
+import net.unethicalite.api.coords.RectangularArea;
+import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.entities.TileObjects;
+import net.unethicalite.api.game.Vars;
+import net.unethicalite.api.movement.Movement;
+import net.unethicalite.api.movement.Reachable;
+
+/* TASK: Walking to veins -> WalkingtoveinsTask */
+@TaskDesc(name="Walking to veins", priority=10, blocking=true)
+public class WalkingToVeinsTask
+extends C_Unknown {
+    private static /* synthetic */ String[] llllllIIIIII;
+    private static /* synthetic */ int[] llllllIIIIIl;
+    private static final /* synthetic */ RectangularArea ac;
+
+    @Inject
+    public F(SquireMinerConfig squireMinerConfig, SquireMiner squireMiner, T t2) {
+        super(squireMinerConfig, squireMiner, t2);
+    }
+
+    static {
+        F.lIIlIlIIIIlIIIl();
+        F.lIIlIlIIIIlIIII();
+        ac = new RectangularArea(llllllIIIIIl[8], llllllIIIIIl[9], llllllIIIIIl[10], llllllIIIIIl[11]);
+    }
+
+    private static boolean lIIlIlIIIIlIlll(Object object, Object object2) {
+        return object == object2;
+    }
+
+    private static boolean lIIlIlIIIIlIlII(int n2) {
+        return n2 != 0;
+    }
+
+    private static void lIIlIlIIIIlIIIl() {
+        llllllIIIIIl = new int[13];
+        F.llllllIIIIIl[0] = (0x4E ^ 0x15 ^ (0x37 ^ 0x57)) & (0xC5 ^ 0xAA ^ (0x27 ^ 0x73) ^ -1);
+        F.llllllIIIIIl[1] = 127 + 0 - 6 + 64 ^ 112 + 65 - 40 + 45;
+        F.llllllIIIIIl[2] = 156 + 47 - 36 + 16 ^ 44 + 19 - -10 + 96;
+        F.llllllIIIIIl[3] = -(0xFFFFF7FF & 0x7B99) & (0xFFFFFBFF & 0x7FBE);
+        F.llllllIIIIIl[4] = 1;
+        F.llllllIIIIIl[5] = -(0xFFFFD65B & 0x3DAF) & (0xFFFFDEFE & 0x7F6F);
+        F.llllllIIIIIl[6] = 0xC2 ^ 0xC6;
+        F.llllllIIIIIl[7] = 2;
+        F.llllllIIIIIl[8] = 0xFFFFEFFE & 0x1E9D;
+        F.llllllIIIIIl[9] = -(0xFFFFBC5F & 0x63B6) & (0xFFFFB67F & 0x7FBD);
+        F.llllllIIIIIl[10] = -(0xFFFFFBFF & 0x4511) & (0xFFFFDFBF & 0x6FFF);
+        F.llllllIIIIIl[11] = 0xFFFFDFFE & 0x361D;
+        F.llllllIIIIIl[12] = 0x1B ^ 0x68 ^ (0x55 ^ 0x2E);
+    }
+
+    private static boolean lIIlIlIIIIlIllI(int n2, int n3) {
+        return n2 > n3;
+    }
+
+    private static boolean lIIlIlIIIIlIIll(int n2) {
+        return n2 == 0;
+    }
+
+    private static String lIIlIlIIIIIllll(String var7, String var6) {
+        try {
+            SecretKeySpec var8 = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(var6.getBytes(StandardCharsets.UTF_8)), llllllIIIIIl[12]), "DES");
+            Cipher var4 = Cipher.getInstance("DES");
+            var4.init(llllllIIIIIl[7], var8);
+            return new String(var4.doFinal(Base64.getDecoder().decode(var7.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception var9) {
+            var9.printStackTrace();
+            return null;
+        }
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    @Override
+    public boolean t() {
+        void var3;
+        F var1;
+        Player player = Players.getLocal();
+        if (!F.lIIlIlIIIIlIIlI(player) || !F.lIIlIlIIIIlIIll(player.isAnimating() ? 1 : 0) || F.lIIlIlIIIIlIlII(this.Z.I() ? 1 : 0)) {
+            return llllllIIIIIl[0];
+        }
+        if (!F.lIIlIlIIIIlIIll(var1.Z.G() ? 1 : 0) || F.lIIlIlIIIIlIlII(var1.Z.F() ? 1 : 0)) {
+            return llllllIIIIIl[0];
+        }
+        TileObject var2 = var1.u();
+        if (F.lIIlIlIIIIlIIlI(var2) && F.lIIlIlIIIIlIlIl(var2.getWorldLocation().distanceTo((Locatable)var3), llllllIIIIIl[1]) && F.lIIlIlIIIIlIlII(Reachable.isInteractable((Locatable)var2) ? 1 : 0)) {
+            return llllllIIIIIl[0];
+        }
+        if (F.lIIlIlIIIIlIIll(Movement.shouldWalk() ? 1 : 0)) {
+            return llllllIIIIIl[0];
+        }
+        if (F.lIIlIlIIIIlIIll(Movement.isRunEnabled() ? 1 : 0) && F.lIIlIlIIIIlIllI(Movement.getRunEnergy(), llllllIIIIIl[2])) {
+            Movement.toggleRun();
+        }
+        if (F.lIIlIlIIIIlIlll((Object)var1.X.mlmArea(), (Object)d.UPPER_FLOOR) && (!F.lIIlIlIIIIlIIll(ac.contains((Locatable)var3) ? 1 : 0) || F.lIIlIlIIIIlIIll(Vars.getBit((int)llllllIIIIIl[3])))) {
+            int[] nArray = new int[llllllIIIIIl[4]];
+            nArray[F.llllllIIIIIl[0]] = llllllIIIIIl[5];
+            TileObject var5 = TileObjects.getNearest((int[])nArray);
+            var5.interact(llllllIIIIII[llllllIIIIIl[0]]);
+            var1.sleep(llllllIIIIIl[6]);
+            return llllllIIIIIl[4];
+        }
+        Movement.walkTo((WorldPoint)this.X.mlmArea().g()[llllllIIIIIl[0]]);
+        0;
+        this.sleep(llllllIIIIIl[7]);
+        return llllllIIIIIl[4];
+    }
+
+    private static boolean lIIlIlIIIIlIlIl(int n2, int n3) {
+        return n2 <= n3;
+    }
+
+    private static boolean lIIlIlIIIIlIIlI(Object object) {
+        return object != null;
+    }
+
+    private static void lIIlIlIIIIlIIII() {
+        llllllIIIIII = new String[llllllIIIIIl[4]];
+        F.llllllIIIIII[F.llllllIIIIIl[0]] = F."Climb";
+    }
+}
+

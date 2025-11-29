@@ -1,0 +1,446 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.google.inject.Inject
+ *  com.google.inject.Provides
+ *  gg.squire.api.InventorySetup
+ *  gg.squire.client.plugins.SquirePlugin
+ *  net.runelite.api.Client
+ *  net.runelite.api.coords.WorldArea
+ *  net.runelite.api.coords.WorldPoint
+ *  net.runelite.client.config.ConfigManager
+ *  net.runelite.client.eventbus.EventBus
+ *  net.runelite.client.eventbus.Subscribe
+ *  net.runelite.client.events.ConfigChanged
+ *  net.runelite.client.plugins.PluginDescriptor
+ *  net.runelite.client.ui.overlay.Overlay
+ *  net.runelite.client.ui.overlay.OverlayManager
+ *  net.unethicalite.api.coords.RegionPoint
+ *  net.unethicalite.client.Static
+ */
+package gg.squire.sepulchre;
+
+import com.google.inject.Inject;
+import com.google.inject.Provides;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.M_Unknown;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.BankingTask;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.EatingFoodTask;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.EnterSepulchreTask;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.FinishingFloorTask;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.LootHandlerTask;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.ObstacleHandlerTask;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.StaminaHandlerTask;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.OpeningHallowedSacksTask;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.b_Unknown;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.d_Unknown;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.QEnum;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.WEnum;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.XEnum;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.YEnum;
+import e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.ZEnum;
+import gg.squire.api.InventorySetup;
+import gg.squire.client.plugins.SquirePlugin;
+import gg.squire.sepulchre.SquireSepulchreConfig;
+import gg.squire.sepulchre.overlay.SquireSepulchreInfoBox;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import net.runelite.api.Client;
+import net.runelite.api.coords.WorldArea;
+import net.runelite.api.coords.WorldPoint;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.ui.overlay.OverlayManager;
+import net.unethicalite.api.coords.RegionPoint;
+import net.unethicalite.client.Static;
+
+@PluginDescriptor(name="Squire Hallowed Sepulchre", description="Runs laps in Hallowed Sepulchre.", enabledByDefault=false, tags={"hallowed", "sepulchre", "agility"})
+public class SquireSepulchre
+extends SquirePlugin {
+    @Inject
+    private /* synthetic */ EventBus i;
+    /* synthetic */ List<WorldPoint> c;
+    /* synthetic */ int a;
+    private /* synthetic */ InventorySetup g;
+    /* synthetic */ List<WorldPoint> f;
+    /* synthetic */ String name;
+    /* synthetic */ WorldPoint e;
+    @Inject
+    private /* synthetic */ SquireSepulchreConfig m;
+    private static /* synthetic */ String[] lllIIIllIIll;
+    /* synthetic */ boolean b;
+    private static /* synthetic */ int[] lllIIIllIlII;
+    @Inject
+    private /* synthetic */ M l;
+    /* synthetic */ WorldPoint d;
+    @Inject
+    private /* synthetic */ OverlayManager j;
+    @Inject
+    private /* synthetic */ d h;
+    @Inject
+    private /* synthetic */ SquireSepulchreInfoBox k;
+
+    public boolean e() {
+        return this.b;
+    }
+
+    public void a(String string) {
+        this.name = string;
+    }
+
+    private static boolean lIIIlIIlIlllIIl(int n2, int n3) {
+        return n2 != n3;
+    }
+
+    /*
+     * WARNING - void declaration
+     */
+    private void b() {
+        x var13;
+        q var5;
+        w var14;
+        SquireSepulchre var2;
+        void var1;
+        this.j().add(item -> {
+            boolean bl;
+            if (!SquireSepulchre.lIIIlIIlIlllIIl(item.getId(), lllIIIllIlII[28]) || SquireSepulchre.lIIIlIIlIlllIlI(item.getId(), lllIIIllIlII[29])) {
+                bl = lllIIIllIlII[1];
+                0;
+                if (1 <= 0) {
+                    return false;
+                }
+            } else {
+                bl = lllIIIllIlII[0];
+            }
+            return bl;
+        }, this.m.stamina());
+        0;
+        y y2 = this.m.planks();
+        if (SquireSepulchre.lIIIlIIlIllIllI((Object)y2, (Object)y.REGULAR_STEEL)) {
+            this.j().add(lllIIIllIlII[9], lllIIIllIlII[7]);
+            0;
+            this.j().add(lllIIIllIlII[10]);
+            0;
+        }
+        if (SquireSepulchre.lIIIlIIlIllIllI(var1, (Object)y.OAK_MITHRIL)) {
+            var2.j().add(lllIIIllIlII[11], lllIIIllIlII[7]);
+            0;
+            var2.j().add(lllIIIllIlII[12]);
+            0;
+        }
+        if (SquireSepulchre.lIIIlIIlIllIllI(var1, (Object)y.TEAK_ADAMANT)) {
+            var2.j().add(lllIIIllIlII[13], lllIIIllIlII[7]);
+            0;
+            var2.j().add(lllIIIllIlII[14]);
+            0;
+        }
+        if (SquireSepulchre.lIIIlIIlIllIllI(var1, (Object)y.MAHOGANY_RUNE)) {
+            var2.j().add(lllIIIllIlII[15], lllIIIllIlII[7]);
+            0;
+            var2.j().add(lllIIIllIlII[16]);
+            0;
+        }
+        if (SquireSepulchre.lIIIlIIlIllIllI((Object)(var14 = var2.m.hammer()), (Object)w.HAMMER)) {
+            var2.j().add(lllIIIllIlII[17], lllIIIllIlII[1]);
+            0;
+            var2.j().add(lllIIIllIlII[18], lllIIIllIlII[1]);
+            0;
+        }
+        if (SquireSepulchre.lIIIlIIlIllIllI((Object)var14, (Object)w.HALLOWED_HAMMER)) {
+            var2.j().add(lllIIIllIlII[19], lllIIIllIlII[1]);
+            0;
+            var2.j().add(lllIIIllIlII[18], lllIIIllIlII[1]);
+            0;
+        }
+        var2.j().add(lllIIIllIlII[20], var2.m.dust());
+        0;
+        z var12 = var2.m.portal();
+        if (SquireSepulchre.lIIIlIIlIllIlll((Object)var12, (Object)z.NONE)) {
+            var2.j().add(lllIIIllIlII[21]);
+            0;
+            if (SquireSepulchre.lIIIlIIlIllIllI((Object)var12, (Object)z.LV1_ENCHANT)) {
+                var2.j().add(lllIIIllIlII[22]);
+                0;
+                0;
+                if (((178 + 125 - 214 + 94 ^ 143 + 145 - 210 + 68) & (108 + 179 - 204 + 107 ^ 26 + 6 - -73 + 50 ^ -1)) != 0) {
+                    return;
+                }
+            } else if (SquireSepulchre.lIIIlIIlIllIllI((Object)var12, (Object)z.LV2_ENCHANT)) {
+                var2.j().add(lllIIIllIlII[23]);
+                0;
+                0;
+                if (3 > 3) {
+                    return;
+                }
+            } else if (SquireSepulchre.lIIIlIIlIllIllI((Object)var12, (Object)z.LV3_ENCHANT)) {
+                var2.j().add(lllIIIllIlII[24]);
+                0;
+                0;
+                if ((0x6F ^ 0x6B) <= 3) {
+                    return;
+                }
+            } else if (SquireSepulchre.lIIIlIIlIllIllI((Object)var12, (Object)z.LV4_ENCHANT)) {
+                var2.j().add(lllIIIllIlII[25]);
+                0;
+                0;
+                if (((116 + 64 - 61 + 38 ^ 12 + 124 - 83 + 85) & (0x7E ^ 0x3B ^ (0x42 ^ 0x10) ^ -1)) < -1) {
+                    return;
+                }
+            } else if (SquireSepulchre.lIIIlIIlIllIllI((Object)var12, (Object)z.LV5_ENCHANT)) {
+                var2.j().add(lllIIIllIlII[25]);
+                0;
+                var2.j().add(lllIIIllIlII[22]);
+                0;
+                0;
+                
+                }
+            } else if (SquireSepulchre.lIIIlIIlIllIllI((Object)var12, (Object)z.LV6_ENCHANT)) {
+                var2.j().add(lllIIIllIlII[25]);
+                0;
+                var2.j().add(lllIIIllIlII[24]);
+                0;
+            }
+        }
+        if (SquireSepulchre.lIIIlIIlIlllIII((Object)(var5 = var2.m.food()))) {
+            var2.j().add(var5.V(), var2.m.foodAmount());
+            0;
+        }
+        if (SquireSepulchre.lIIIlIIlIllIllI((Object)(var13 = var2.m.lockpick()), (Object)x.STRANGE_LOCKPICK)) {
+            var2.j().add(lllIIIllIlII[26], lllIIIllIlII[1]);
+            0;
+        }
+        if (SquireSepulchre.lIIIlIIlIllIllI((Object)var13, (Object)x.LOCKPICK)) {
+            var2.j().add(lllIIIllIlII[27], lllIIIllIlII[1]);
+            0;
+        }
+    }
+
+    @Subscribe
+    public void a(ConfigChanged configChanged) {
+        this.a(new InventorySetup());
+        this.b();
+    }
+
+    protected void onStart() {
+        this.h.q();
+        this.i.register((Object)this.h);
+        this.j.add((Overlay)this.k);
+        0;
+        this.j.add((Overlay)this.l);
+        0;
+        this.a(new InventorySetup());
+        this.b();
+    }
+
+    private static boolean lIIIlIIlIlllIII(Object object) {
+        return object != null;
+    }
+
+    public void b(WorldPoint worldPoint) {
+        this.e = worldPoint;
+    }
+
+    public List<WorldPoint> i() {
+        return this.f;
+    }
+
+    public void a(List<WorldArea> list) {
+        this.f.clear();
+        Iterator<WorldArea> var7 = list.iterator();
+        while (SquireSepulchre.lIIIlIIlIllIlIl(var7.hasNext() ? 1 : 0)) {
+            SquireSepulchre var3;
+            WorldArea var4 = var7.next();
+            var3.f.addAll(var4.toWorldPointList());
+            0;
+            0;
+            if ((0x67 ^ 0x53 ^ (0x77 ^ 0x47)) > 3) continue;
+            return;
+        }
+    }
+
+    public void b(List<WorldPoint> list) {
+        this.c = list;
+    }
+
+    public InventorySetup j() {
+        return this.g;
+    }
+
+    public int c() {
+        return Static.getClient().getVarbitValue(e.q.u.d.w.s.p.e.e.c.s.h.i.-.l.r.-.r.l.a.o.h.u.l.e.b_Unknown.O);
+    }
+
+    public void a(InventorySetup inventorySetup) {
+        this.g = inventorySetup;
+    }
+
+    static {
+        SquireSepulchre.lIIIlIIlIllIIll();
+        SquireSepulchre.lIIIlIIlIllIIlI();
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    protected Class<?>[] tasks() {
+        Class[] classArray = new Class[lllIIIllIlII[2]];
+        classArray[SquireSepulchre.lllIIIllIlII[0]] = U.class;
+        classArray[SquireSepulchre.lllIIIllIlII[1]] = N.class;
+        classArray[SquireSepulchre.lllIIIllIlII[3]] = R.class;
+        classArray[SquireSepulchre.lllIIIllIlII[4]] = T.class;
+        classArray[SquireSepulchre.lllIIIllIlII[5]] = O.class;
+        classArray[SquireSepulchre.lllIIIllIlII[6]] = P.class;
+        classArray[SquireSepulchre.lllIIIllIlII[7]] = Q.class;
+        classArray[SquireSepulchre.lllIIIllIlII[8]] = S.class;
+        return classArray;
+    }
+
+    public SquireSepulchre() {
+        this.a = lllIIIllIlII[0];
+        this.b = lllIIIllIlII[1];
+        this.c = new ArrayList<WorldPoint>();
+        this.d = new WorldPoint(lllIIIllIlII[0], lllIIIllIlII[0], lllIIIllIlII[0]);
+        this.e = new WorldPoint(lllIIIllIlII[0], lllIIIllIlII[0], lllIIIllIlII[0]);
+        this.f = new ArrayList<WorldPoint>();
+        this.name = lllIIIllIIll[lllIIIllIlII[0]];
+    }
+
+    public WorldPoint g() {
+        return this.d;
+    }
+
+    private static boolean lIIIlIIlIlllIlI(int n2, int n3) {
+        return n2 == n3;
+    }
+
+    private static void lIIIlIIlIllIIlI() {
+        lllIIIllIIll = new String[lllIIIllIlII[1]];
+        SquireSepulchre.lllIIIllIIll[SquireSepulchre.lllIIIllIlII[0]] = SquireSepulchre."";
+    }
+
+    private static String lIIIlIIlIllIIIl(String var6, String var8) {
+        try {
+            SecretKeySpec var9 = new SecretKeySpec(Arrays.copyOf(MessageDigest.getInstance("MD5").digest(var8.getBytes(StandardCharsets.UTF_8)), lllIIIllIlII[2]), "DES");
+            Cipher var10 = Cipher.getInstance("DES");
+            var10.init(lllIIIllIlII[3], var9);
+            return new String(var10.doFinal(Base64.getDecoder().decode(var6.getBytes(StandardCharsets.UTF_8))), StandardCharsets.UTF_8);
+        }
+        catch (Exception var11) {
+            var11.printStackTrace();
+            return null;
+        }
+    }
+
+    private static boolean lIIIlIIlIllIllI(Object object, Object object2) {
+        return object == object2;
+    }
+
+    public static WorldPoint a(RegionPoint regionPoint) {
+        if (SquireSepulchre.lIIIlIIlIllIlII(regionPoint)) {
+            return null;
+        }
+        WorldPoint worldPoint2 = regionPoint.toWorld();
+        Client client = Static.getClient();
+        Collection collection = WorldPoint.toLocalInstance((Client)client, (WorldPoint)worldPoint2);
+        return collection.stream().min(Comparator.comparingInt(worldPoint -> worldPoint.distanceTo(new WorldPoint(client.getBaseX(), client.getBaseY(), client.getPlane())))).orElse(worldPoint2);
+    }
+
+    @Provides
+    SquireSepulchreConfig a(ConfigManager configManager) {
+        return (SquireSepulchreConfig)configManager.getConfig(SquireSepulchreConfig.class);
+    }
+
+    private static void lIIIlIIlIllIIll() {
+        lllIIIllIlII = new int[30];
+        SquireSepulchre.lllIIIllIlII[0] = (0xBC ^ 0xA7) & ~(0xD ^ 0x16);
+        SquireSepulchre.lllIIIllIlII[1] = 1;
+        SquireSepulchre.lllIIIllIlII[2] = 0x10 ^ 0x18;
+        SquireSepulchre.lllIIIllIlII[3] = 2;
+        SquireSepulchre.lllIIIllIlII[4] = 3;
+        SquireSepulchre.lllIIIllIlII[5] = 0x88 ^ 0x8C;
+        SquireSepulchre.lllIIIllIlII[6] = 0x3E ^ 0x3B;
+        SquireSepulchre.lllIIIllIlII[7] = 101 + 104 - 99 + 71 ^ 138 + 77 - 207 + 175;
+        SquireSepulchre.lllIIIllIlII[8] = 0x6A ^ 0x6D;
+        SquireSepulchre.lllIIIllIlII[9] = 0xFFFF87DA & 0x7BE5;
+        SquireSepulchre.lllIIIllIlII[10] = 0xFFFFF653 & 0xFAF;
+        SquireSepulchre.lllIIIllIlII[11] = 0xFFFFB3CE & 0x6E7B;
+        SquireSepulchre.lllIIIllIlII[12] = -(0xFFFFDC2F & 0x6FFA) & (0xFFFFDEFF & Short.MAX_VALUE);
+        SquireSepulchre.lllIIIllIlII[13] = 0xFFFFFA7E & 0x27CD;
+        SquireSepulchre.lllIIIllIlII[14] = -(0xFFFFF767 & 0xCB9) & (0xFFFFBFF7 & 0x56FF);
+        SquireSepulchre.lllIIIllIlII[15] = 0xFFFFB2DF & 0x6F6E;
+        SquireSepulchre.lllIIIllIlII[16] = -(0xFFFFC92F & 0x37D7) & (0xFFFF93FF & 0x7FDE);
+        SquireSepulchre.lllIIIllIlII[17] = 0xFFFFBD2B & 0x4BFF;
+        SquireSepulchre.lllIIIllIlII[18] = 0xFFFFAFFB & 0x725E;
+        SquireSepulchre.lllIIIllIlII[19] = -(0xFFFF8DC5 & 0x767B) & (0xFFFFEDDF & 0x76F7);
+        SquireSepulchre.lllIIIllIlII[20] = 0xFFFFFEFF & 0xDFD;
+        SquireSepulchre.lllIIIllIlII[21] = -(0xFFFFF5CF & 0x5B32) & (0xFFFFDB3D & 0x77F7);
+        SquireSepulchre.lllIIIllIlII[22] = 0xFFFFEAEF & 0x173B;
+        SquireSepulchre.lllIIIllIlII[23] = -(0xFFFFF733 & 0x19CE) & (0xFFFFF7BF & 0x1B6D);
+        SquireSepulchre.lllIIIllIlII[24] = -(0xFFFFB7DF & 0x6DA6) & (0xFFFFEFEF & 0x37BF);
+        SquireSepulchre.lllIIIllIlII[25] = -(0xFFFFF1D3 & 0x4EBF) & (0xFFFFF2FF & 0x4FBF);
+        SquireSepulchre.lllIIIllIlII[26] = 0xFFFFF0F4 & 0x6FAF;
+        SquireSepulchre.lllIIIllIlII[27] = 0xFFFFBDF7 & 0x47FB;
+        SquireSepulchre.lllIIIllIlII[28] = -(0xFFFFE63F & 0x1FE3) & (0xFFFFB77F & 0x7FF3);
+        SquireSepulchre.lllIIIllIlII[29] = 0xFFFFB3D7 & 0x7D7B;
+    }
+
+    private static boolean lIIIlIIlIllIlII(Object object) {
+        return object == null;
+    }
+
+    public WorldPoint h() {
+        return this.e;
+    }
+
+    private static boolean lIIIlIIlIllIlIl(int n2) {
+        return n2 != 0;
+    }
+
+    public List<WorldPoint> f() {
+        return this.c;
+    }
+
+    public z a() {
+        return this.m.portal();
+    }
+
+    public void a(WorldPoint worldPoint) {
+        this.d = worldPoint;
+    }
+
+    public void a(boolean bl) {
+        this.b = bl;
+    }
+
+    private static boolean lIIIlIIlIllIlll(Object object, Object object2) {
+        return object != object2;
+    }
+
+    public int d() {
+        return this.a;
+    }
+
+    protected void onStop() {
+        this.h.r();
+        this.i.unregister((Object)this.h);
+        this.j.remove((Overlay)this.k);
+        0;
+        this.j.remove((Overlay)this.l);
+        0;
+    }
+}
+
