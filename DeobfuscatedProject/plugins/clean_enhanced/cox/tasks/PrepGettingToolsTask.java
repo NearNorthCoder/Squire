@@ -1,19 +1,5 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.TileObject
- *  net.runelite.api.coords.WorldPoint
- *  net.unethicalite.api.entities.TileObjects
- *  net.unethicalite.api.items.Inventory
- *  net.unethicalite.api.movement.Movement
- */
 package gg.squire.cox.tasks;
 
-import gg.squire.cox.tasks.CoxManager;
 import com.google.inject.Inject;
 import gg.squire.client.plugins.fw.TaskDesc;
 import gg.squire.cox.SquireChambersConfig;
@@ -25,99 +11,72 @@ import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 
+/**
+ * Task for collecting farming tools during Chambers of Xeric preparation.
+ *
+ * This task retrieves the necessary farming tools from the tool storage:
+ * - Seed dibber: For planting seeds in farming patches
+ * - Spade: For digging and preparing soil
+ * - Secateurs: For pruning and harvesting herbs efficiently
+ *
+ * These tools are essential for the farming preparation phase.
+ */
 @TaskDesc(name="Prep Getting Tools", priority=21003, blocking=true)
-public class PrepGettingToolsTask
-extends CoxManager {
-    
-    private final  int eh = 7603;
-    
-    private final  int eg = 29742;
+public class PrepGettingToolsTask extends CoxManager {
+
+    // Item IDs
+    private static final int SEED_DIBBER = 5343;
+    private static final int SPADE = 952;
+    private static final int SECATEURS = 5329;
+    private static final int TOOL_STORAGE = 29776;
 
     @Inject
-    protected PrepGettingToolsTask(SquireChambersPlugin squireChambersPlugin, SquireChambersConfig squireChambersConfig, Client client) {
-        super(squireChambersPlugin, squireChambersConfig, client);
-        this.eg = 0;
-        this.eh = 1;
+    protected PrepGettingToolsTask(SquireChambersPlugin plugin, SquireChambersConfig config, Client client) {
+        super(plugin, config, client);
     }
 
-    /*
-     * WARNING - void declaration
-     */
     @Override
-    public boolean dY() {
-        void var1_1;
-        if ((this.cq() >= this.el)) {
-            return 2;
+    public boolean validate() {
+        // Check if we already have all tools
+        if (getRestorePotionCount() >= this.config.restorePotionCount()) {
+            return false;
         }
-        int[] nArray = new int[3];
-        nArray[2] = 4;
-        if ((Inventory.contains((int[] != 0)nArray) ? 1 : 0)) {
-            int[] nArray2 = new int[3];
-            nArray2[2] = 5;
-            if ((Inventory.contains((int[] != 0)nArray2) ? 1 : 0)) {
-                return 2;
-            }
+
+        // We need at least one tool
+        if (Inventory.contains(SEED_DIBBER) && Inventory.contains(SPADE)) {
+            return false;
         }
-        int[] nArray3 = new int[3];
-        nArray3[2] = 6;
-        TileObject var3 = TileObjects.getNearest((int[])nArray3);
-        if var3 == null {
-            bb var4;
-            System.out.println(var1[2]);
-            Movement.setDestination((WorldPoint)var4.ak.bq.dx(7).dy(7));
-            return 3;
-        }
-        int[] nArray4 = new int[3];
-        nArray4[2] = 4;
-        if ((Inventory.contains((int[] == 0)nArray4) ? 1 : 0)) {
-            System.out.println(var1[3]);
-            var3.interact(var1[8]);
-            return 3;
-        }
-        int[] nArray5 = new int[3];
-        nArray5[2] = 9;
-        if ((Inventory.contains((int[] == 0)nArray5) ? 1 : 0)) {
-            System.out.println(var1[var2[10]]);
-            var3.interact(var1[var2[11]]);
-            return 3;
-        }
-        System.out.println(var1[var2[12]]);
-        var1_1.interact(var1[var2[13]]);
-        return 3;
+
+        return true;
     }
 
-        catch (Exception var10) {
-            var10.printStackTrace();
-            return null;
-        }
-    }
+    @Override
+    public int execute() {
+        TileObject toolStorage = TileObjects.getNearest(TOOL_STORAGE);
 
-    private static String var11(String var12, String var13) {
-        var12 = new String(Base64.getDecoder().decode(var12.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var14 = new StringBuilder();
-        char[] var15 = var13.toCharArray();
-        int var16 = 2;
-        char[] var17 = var12.toCharArray();
-        int var18 = var17.length;
-        int var19 = 2;
-        while (var19 < var18) {
-            char var20 = var17[var19];
-            var14.append((char)(var20 ^ var15[var16 % var15.length]));
-            0;
-            ++var16;
-            ++var19;
-            0;
-            
-            return null;
+        if (toolStorage == null) {
+            System.out.println("Can't find tool storage");
+            Movement.setDestination(this.currentRoom.location.dx(7).dy(7));
+            return -1;
         }
-        return String.valueOf(var14);
-    }
 
-        catch (Exception var26) {
-            var26.printStackTrace();
-            return null;
+        // Take seed dibber if we don't have it
+        if (!Inventory.contains(SEED_DIBBER)) {
+            System.out.println("Taking seed dibber");
+            toolStorage.interact("Take-seed-dibber");
+            return -1;
         }
-    }
 
+        // Take spade if we don't have it
+        if (!Inventory.contains(SPADE)) {
+            System.out.println("Taking spade");
+            toolStorage.interact("Take-spade");
+            return -1;
+        }
+
+        // Take secateurs if we don't have them
+        System.out.println("Taking secateurs");
+        toolStorage.interact("Take-secateurs");
+        return -1;
+    }
 }
-

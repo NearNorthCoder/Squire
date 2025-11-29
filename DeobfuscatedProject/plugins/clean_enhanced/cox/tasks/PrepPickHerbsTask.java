@@ -1,17 +1,5 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.TileObject
- *  net.unethicalite.api.entities.TileObjects
- *  net.unethicalite.api.items.Inventory
- */
 package gg.squire.cox.tasks;
 
-import gg.squire.cox.tasks.CoxManager;
 import com.google.inject.Inject;
 import gg.squire.client.plugins.fw.TaskDesc;
 import gg.squire.cox.SquireChambersConfig;
@@ -21,74 +9,67 @@ import net.runelite.api.TileObject;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.items.Inventory;
 
+/**
+ * Task for picking herbs from farming patches during Chambers of Xeric preparation.
+ *
+ * After seeds have been planted and grown, this task harvests the herbs from the
+ * farming patches. The herbs (Noxifer, Golpar, Buchu) are used to make potions
+ * including overloads, Xeric's aid, and revitalisation potions.
+ */
 @TaskDesc(name="Prep Pick Herbs", priority=21000, blocking=true)
-public class PrepPickHerbsTask
-extends CoxManager {
+public class PrepPickHerbsTask extends CoxManager {
 
-    /*
-     * WARNING - void declaration
-     */
+    // Item IDs
+    private static final int[] HERBS = {20889, 20891, 20887}; // Noxifer, Golpar, Buchu herbs
+    private static final int GROWN_FARMING_PATCH = 29732; // Patch with grown herbs
+
+    @Inject
+    protected PrepPickHerbsTask(SquireChambersPlugin plugin, SquireChambersConfig config, Client client) {
+        super(plugin, config, client);
+    }
+
     @Override
-    public boolean dY() {
-        void var1_1;
-        be var3;
-        int[] nArray = new int[0];
-        nArray[1] = 2;
-        if ((Inventory.contains((int[] != 0)nArray) ? 1 : 0)) {
-            return 1;
+    public boolean validate() {
+        // Don't pick if we already have herbs
+        if (Inventory.contains(HERBS)) {
+            return false;
         }
-        int[] nArray2 = new int[0];
-        nArray2[1] = em;
-        TileObject var4 = TileObjects.getNearest((int[])nArray2);
-        if ((var3.eh() < var3.ed())) {
-            return 1;
+
+        // Find a farming patch with grown herbs
+        TileObject grownPatch = TileObjects.getNearest(GROWN_FARMING_PATCH);
+        if (grownPatch == null) {
+            return false;
         }
-        if var4 == null {
-            return 1;
+
+        // Check herb count and patch progress
+        if (getHerbCount() < getRequiredHerbCount()) {
+            return false;
         }
-        if (!(Inventory.isFull( == 0) ? 1 : 0) || (var3.eg() <= var3.ek())) {
-            return 1;
+
+        // Don't pick if inventory is full and we still need more patches
+        if (Inventory.isFull() && getPatchesRemaining() > getMinPatchesRequired()) {
+            return false;
         }
-        if ((var3.bS.isAnimating( != 0) ? 1 : 0)) {
-            System.out.println(var2[1]);
+
+        return true;
+    }
+
+    @Override
+    public int execute() {
+        TileObject grownPatch = TileObjects.getNearest(GROWN_FARMING_PATCH);
+        if (grownPatch == null) {
+            return -1;
+        }
+
+        // Wait if player is already animating (picking)
+        if (this.player.isAnimating()) {
+            System.out.println("Already picking herbs...");
             return 0;
         }
-        var1_1.interact(var2[0]);
+
+        // Pick the herbs
+        grownPatch.interact("Pick");
         this.sleep(3);
         return 0;
     }
-
-    @Inject
-    protected PrepPickHerbsTask(SquireChambersPlugin squireChambersPlugin, SquireChambersConfig squireChambersConfig, Client client) {
-        super(squireChambersPlugin, squireChambersConfig, client);
-    }
-
-    private static String var5(String var6, String var7) {
-        var6 = new String(Base64.getDecoder().decode(var6.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var8 = new StringBuilder();
-        char[] var9 = var7.toCharArray();
-        int var10 = 1;
-        char[] var11 = var6.toCharArray();
-        int var12 = var11.length;
-        int var13 = 1;
-        while (var13 < var12) {
-            char var14 = var11[var13];
-            var8.append((char)(var14 ^ var9[var10 % var9.length]));
-            0;
-            ++var10;
-            ++var13;
-            0;
-            if (-1 != 1) continue;
-            return null;
-        }
-        return String.valueOf(var8);
-    }
-
-        catch (Exception var20) {
-            var20.printStackTrace();
-            return null;
-        }
-    }
-
 }
-

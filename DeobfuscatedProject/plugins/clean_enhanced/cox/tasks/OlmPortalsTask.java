@@ -1,19 +1,9 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.Prayer
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.widgets.Prayers
+ * Deobfuscated Great Olm Portals Task
+ * Handles navigating to portal locations during the Great Olm fight
  */
 package gg.squire.cox.tasks;
 
-import gg.squire.cox.tasks.CoxManager;
 import com.google.inject.Inject;
 import gg.squire.client.plugins.fw.TaskDesc;
 import gg.squire.cox.SquireChambersConfig;
@@ -27,58 +17,79 @@ import net.runelite.client.plugins.squire.equipment.EquipmentSetup;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.widgets.Prayers;
 
-@TaskDesc(name="Olm Portals", priority=25000, blocking=true)
-public class OlmPortalsTask
-extends CoxManager {
-
-    static {
-        aP.var2();
-    }
-
-    @Override
-    public EquipmentSetup cj() {
-        return null;
-    }
+/**
+ * Task for handling portal teleports during the Great Olm fight.
+ *
+ * Great Olm portal mechanics:
+ * - During certain phases, Olm summons portals around the arena
+ * - Players can be teleported through these portals
+ * - Must navigate to safe positions near portals
+ * - Portals appear during transition phases
+ * - Proper positioning prevents being teleported to dangerous areas
+ */
+@TaskDesc(name = "Olm Portals", priority = 25000, blocking = true)
+public class OlmPortalsTask extends CoxManager {
 
     @Inject
-    protected OlmPortalsTask(SquireChambersPlugin squireChambersPlugin, SquireChambersConfig squireChambersConfig, Client client) {
-        super(squireChambersPlugin, squireChambersConfig, client);
+    protected OlmPortalsTask(SquireChambersPlugin plugin, SquireChambersConfig config, Client client) {
+        super(plugin, config, client);
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Main execution method for the portals task
      */
     @Override
-    public boolean cg() {
-        void var1_1;
-        aP var3;
-        if ((this.ct( == 0) ? 1 : 0)) {
-            return 0;
+    public boolean execute() {
+        // Check if Olm fight is active
+        if (!isOlmActive()) {
+            return false;
         }
-        List<WorldPoint> var4 = var3.ed.ao();
-        if ((var3.ed.ao( != 0).isEmpty() ? 1 : 0)) {
-            return 0;
+
+        // Get portal positions from Olm tracker
+        List<WorldPoint> portalPositions = olmTracker.getPortalPositions();
+
+        // If no portals are active, nothing to do
+        if (olmTracker.getPortalPositions().isEmpty()) {
+            return false;
         }
-        if ((var3.bS.getWorldLocation( != 0).equals((Object)var4.get(0)) ? 1 : 0)) {
-            return 1;
+
+        // If already at first portal position, we're done
+        if (localPlayer.getWorldLocation().equals(portalPositions.get(0))) {
+            return true;
         }
-        Movement.setDestination((WorldPoint)((WorldPoint)var1_1.get(0)));
-        return 1;
+
+        // Move to first portal position
+        Movement.setDestination(portalPositions.get(0));
+        return true;
     }
 
+    /**
+     * Gets the required prayers for the portals phase
+     */
     @Override
-    public List<Prayer> ci() {
-        ArrayList<Prayer> arrayList = new ArrayList<Prayer>();
-        Prayer prayer = this.ed.aE();
-        if prayer == null {
-            prayer = Prayer.PROTECT_FROM_MAGIC;
+    public List<Prayer> getPrayers() {
+        ArrayList<Prayer> prayers = new ArrayList<>();
+
+        // Get defensive prayer from Olm tracker
+        Prayer defensivePrayer = olmTracker.getDefensivePrayer();
+        if (defensivePrayer == null) {
+            defensivePrayer = Prayer.PROTECT_FROM_MAGIC;
         }
-        List list = Prayers.getOffensive();
-        arrayList.add(prayer);
-        0;
-        arrayList.addAll(list);
-        0;
-        return arrayList;
+
+        // Add offensive prayers
+        List<Prayer> offensivePrayers = Prayers.getOffensive();
+        prayers.add(defensivePrayer);
+        prayers.addAll(offensivePrayers);
+
+        return prayers;
+    }
+
+    /**
+     * Gets the equipment setup for portals phase
+     * No specific gear required, returns null
+     */
+    @Override
+    public EquipmentSetup getGear() {
+        return null;
     }
 }
-

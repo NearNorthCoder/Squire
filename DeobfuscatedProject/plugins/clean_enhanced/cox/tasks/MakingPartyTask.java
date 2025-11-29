@@ -25,7 +25,7 @@ import net.unethicalite.api.widgets.Widgets;
 
 @TaskDesc(name="Making party", priority=2147483547, blocking=true)
 public class MakingPartyTask
-extends az {
+extends CoxTask {
     
     private final  SquireChambersPlugin dy;
     private final  SquireChambersConfig dz;

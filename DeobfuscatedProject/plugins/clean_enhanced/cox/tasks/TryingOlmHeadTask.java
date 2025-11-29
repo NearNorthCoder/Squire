@@ -1,25 +1,9 @@
 /*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.GraphicsObject
- *  net.runelite.api.NPC
- *  net.runelite.api.Prayer
- *  net.runelite.api.coords.LocalPoint
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
- *  net.unethicalite.api.widgets.Prayers
+ * Deobfuscated Attacking Olm Head Task
+ * Handles attacking the Great Olm's head during the final phase
  */
 package gg.squire.cox.tasks;
 
-import gg.squire.cox.tasks.CoxManager;
-import gg.squire.cox.tasks.CoxManager;
 import com.google.inject.Inject;
 import gg.squire.client.plugins.fw.TaskDesc;
 import gg.squire.cox.SquireChambersConfig;
@@ -40,151 +24,167 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.widgets.Prayers;
 
-@TaskDesc(name="Trying Olm HEAD", priority=21000, blocking=true)
-public class TryingOlmHeadTask
-extends CoxManager {
+/**
+ * Task for attacking the Great Olm's head during the final phase.
+ *
+ * Great Olm head mechanics:
+ * - The head becomes attackable only after both hands are disabled
+ * - Head fires auto-attacks and special attacks at players
+ * - Falling crystals appear as graphics objects on the ground
+ * - Players must avoid crystal impact zones (2x2 area)
+ * - Positioning is critical to maximize DPS while avoiding damage
+ * - Head turns to face different directions during the fight
+ * - Final phase determines raid success/failure
+ */
+@TaskDesc(name = "Trying Olm HEAD", priority = 21000, blocking = true)
+public class TryingOlmHeadTask extends CoxManager {
 
-    @Override
-    public EquipmentSetup cj() {
-        return s.bc();
-    }
-
-    private  boolean e(List list, WorldPoint worldPoint) {
-        int n2;
-        if ((Reachable.isWalkable(WorldPointworldPoint) ? 1 : 0) && (this.ed.ap( == 0).contains(worldPoint) ? 1 : 0) && (list.contains(worldPoint == 0) ? 1 : 0)) {
-            n2 = 0;
-            0;
-            if (-1 != -1) {
-                return ((0x50 ^ 0x19) & ~(0x8E ^ 0xC7)) != 0;
-            }
-        } else {
-            n2 = 1;
-        }
-        return n2 != 0;
-    }
-
-        catch (Exception var8) {
-            var8.printStackTrace();
-            return null;
-        }
-    }
-
-        catch (Exception var14) {
-            var14.printStackTrace();
-            return null;
-        }
-    }
-
-    private  boolean f(List list, WorldPoint worldPoint) {
-        int n2;
-        if ((Reachable.isWalkable(WorldPointworldPoint) ? 1 : 0) && (this.ed.ap( == 0).contains(worldPoint) ? 1 : 0) && (list.contains(worldPoint == 0) ? 1 : 0)) {
-            n2 = 0;
-            0;
-            if (1 < 0) {
-                return ((0x56 ^ 0x43) & ~(0x84 ^ 0x91)) != 0;
-            }
-        } else {
-            n2 = 1;
-        }
-        return n2 != 0;
-    }
-
-    @Override
-    public boolean cg() {
-        GraphicsObject var15;
-        Object var16;
-        aL var17;
-        if ((this.ct( == 0) ? 1 : 0)) {
-            if ((Prayers.anyActive( != 0) ? 1 : 0)) {
-                Prayers.disableAll();
-                return 0;
-            }
-            return 1;
-        }
-        if ((var17.ed.at( == 0) ? 1 : 0)) {
-            return 1;
-        }
-        if (!(var17.ds( == 0) ? 1 : 0) || (var17.du( != 0) ? 1 : 0)) {
-            return 1;
-        }
-        var17.cm();
-        NPC var18 = NPCs.getNearest(nPC -> {
-            int n2;
-            if ((nPC.getName( != 0).equals(var2[3]) ? 1 : 0)) {
-                String[] stringArray = new String[0];
-                stringArray[1] = var2[4];
-                if ((nPC.hasActionstringArray)) {
-                    n2 = 0;
-                    0;
-                    if (-2 < 0) return n2 != 0;
-                    return ((0x1A ^ 0x33 ^ (0xEB ^ 0x8E)) & (106 + 173 - 111 + 61 ^ 91 + 164 - 99 + 13 ^ -1)) != 0;
-                }
-            }
-            n2 = 1;
-            return n2 != 0;
-        });
-        if var18 == null {
-            return 1;
-        }
-        List<WorldPoint> var19 = var17.dH();
-        System.out.println("Turn: " + var17.dI() + " | " + var17.ed.az() + " | direction: " + var17.ed.am());
-        if ((var17.dI( != 0) ? 1 : 0) && (!(((String == 0)(var16 = var17.k(1))).equals(var2[1]) ? 1 : 0) || ((StringlllllllllllllllIllIIlIlIIIIlIllI).equals(var2[0]) ? 1 : 0))) {
-            var19 = var17.m((String)var16);
-        }
-        var16 = new ArrayList();
-        Iterator var20 = var17.ec.getGraphicsObjects().iterator();
-        while ((var20.hasNext( != 0) ? 1 : 0)) {
-            var15 = (GraphicsObject)var20.next();
-            if ((var15.getId() == 2)) {
-                WorldPoint var21 = WorldPoint.fromLocal((Client)var17.ec, (LocalPoint)var15.getLocation());
-                List var22 = var21.createWorldArea(0).toWorldPointList();
-                var16.addAll(var22);
-                0;
-            }
-            0;
-            if ((0x31 ^ 0x35) != 0) continue;
-            return ((0x53 ^ 0x44) & ~(0x1C ^ 0xB)) != 0;
-        }
-        if ((var19.contains(var17.bS.getWorldLocation( == 0)) ? 1 : 0)) {
-            var20 = var19.stream().filter(arg_0 -> var17.f((List)var16, arg_0)).min(Comparator.comparingDouble(worldPoint -> worldPoint.distanceTo2DHypotenuse(this.bS.getWorldLocation()))).orElse(null);
-            if ((Movement.getDestination( != null)) && (Movement.getDestination( != 0).equals((Object)var20) ? 1 : 0)) {
-                var15 = var17.bS.getWorldLocation().createWorldArea(3).toWorldPointList().stream().filter(arg_0 -> var17.e((List)var16, arg_0)).min(Comparator.comparingDouble(arg_0 -> aL.c((WorldPoint)var20, arg_0)).thenComparingDouble(object -> var18.getWorldArea().distanceTo((WorldPoint)object))).orElse(null);
-                if (!var15 != null || (var15.getWorldX() == var20.getWorldX())) {
-                    return 1;
-                }
-                Movement.setDestination((WorldPoint)var15);
-                return 0;
-            }
-            Movement.setDestination((WorldPoint)var20);
-            return 0;
-        }
-        this.dr();
-        0;
-        return 0;
-    }
-
-    private static  double c(WorldPoint worldPoint, Object object) {
-        return ((WorldPoint)object).distanceTo2DHypotenuse(worldPoint);
-    }
-
-    @Override
-    public List<Prayer> ci() {
-        ArrayList<Prayer> arrayList = new ArrayList<Prayer>();
-        Prayer prayer = this.ed.aE();
-        if prayer == null {
-            prayer = Prayer.PROTECT_FROM_MAGIC;
-        }
-        List list = Prayers.getOffensive();
-        arrayList.add(prayer);
-        0;
-        arrayList.addAll(list);
-        0;
-        return arrayList;
-    }
+    /** Graphics object ID for falling crystals */
+    private static final int FALLING_CRYSTAL_GRAPHICS_ID = 1357;
 
     @Inject
-    protected TryingOlmHeadTask(SquireChambersPlugin squireChambersPlugin, SquireChambersConfig squireChambersConfig, Client client) {
-        super(squireChambersPlugin, squireChambersConfig, client);
+    protected TryingOlmHeadTask(SquireChambersPlugin plugin, SquireChambersConfig config, Client client) {
+        super(plugin, config, client);
+    }
+
+    /**
+     * Main execution method for attacking Olm head
+     */
+    @Override
+    public boolean execute() {
+        // If not in Olm fight, disable prayers
+        if (!isOlmActive()) {
+            if (Prayers.anyActive()) {
+                Prayers.disableAll();
+                return false;
+            }
+            return true;
+        }
+
+        // Check if head phase is active (both hands must be down)
+        if (!olmTracker.isHeadPhaseActive()) {
+            return true;
+        }
+
+        // Check if should wait or if mage hand is active
+        if (!isMeleeHandActive() || isMageHandAttackable()) {
+            return true;
+        }
+
+        // Update prayers
+        updatePrayers();
+
+        // Find the Olm head NPC
+        NPC olmHead = NPCs.getNearest(npc ->
+            npc.getName().equals("Great Olm") && npc.hasAction("Attack")
+        );
+
+        if (olmHead == null) {
+            return true;
+        }
+
+        // Get safe tiles for head phase
+        List<WorldPoint> safeTiles = getMeleePositions();
+
+        System.out.println("Turn: " + getCurrentTurn() + " | " + olmTracker.getOlmPhase() + " | direction: " + olmTracker.getOlmDirection());
+
+        // Adjust safe tiles based on current turn and direction
+        if (isActiveTurn()) {
+            String direction = getDirectionForTurn(1);
+
+            if (direction.equals("SOUTH") || direction.equals("ATTACK")) {
+                safeTiles = getTilesForDirection(direction);
+            }
+        }
+
+        // Get list of dangerous tiles from falling crystals
+        List<WorldPoint> dangerousTiles = new ArrayList<>();
+        Iterator<GraphicsObject> graphicsIterator = client.getGraphicsObjects().iterator();
+
+        while (graphicsIterator.hasNext()) {
+            GraphicsObject graphicsObject = graphicsIterator.next();
+
+            // Check if this is a falling crystal
+            if (graphicsObject.getId() == FALLING_CRYSTAL_GRAPHICS_ID) {
+                WorldPoint crystalLocation = WorldPoint.fromLocal(client, graphicsObject.getLocation());
+
+                // Add 3x3 area around crystal as dangerous
+                List<WorldPoint> impactArea = crystalLocation.createWorldArea(1).toWorldPointList();
+                dangerousTiles.addAll(impactArea);
+            }
+        }
+
+        // If not on a safe tile, move to one
+        if (!safeTiles.contains(localPlayer.getWorldLocation())) {
+            WorldPoint targetTile = safeTiles.stream()
+                .filter(worldPoint -> isSafeTile(dangerousTiles, worldPoint))
+                .min(Comparator.comparingDouble(worldPoint -> worldPoint.distanceTo2DHypotenuse(localPlayer.getWorldLocation())))
+                .orElse(null);
+
+            // If already moving to target, check if we should fine-tune position
+            if (Movement.getDestination() != null && Movement.getDestination().equals(targetTile)) {
+                // Look for better position in 3x3 area around player
+                WorldPoint betterPosition = localPlayer.getWorldLocation()
+                    .createWorldArea(3)
+                    .toWorldPointList()
+                    .stream()
+                    .filter(worldPoint -> isSafeTile(dangerousTiles, worldPoint))
+                    .min(Comparator.comparingDouble(worldPoint -> worldPoint.distanceTo2DHypotenuse(targetTile))
+                        .thenComparingDouble(worldPoint -> olmHead.getWorldArea().distanceTo(worldPoint)))
+                    .orElse(null);
+
+                if (betterPosition != null && betterPosition.getWorldX() != targetTile.getWorldX()) {
+                    return true;
+                }
+
+                Movement.setDestination(betterPosition);
+                return false;
+            }
+
+            Movement.setDestination(targetTile);
+            return false;
+        }
+
+        // Attack the head
+        attackOlmHead();
+        return false;
+    }
+
+    /**
+     * Checks if a tile is safe (walkable, not dangerous, not in danger tiles)
+     */
+    private boolean isSafeTile(List<WorldPoint> dangerTiles, WorldPoint worldPoint) {
+        return Reachable.isWalkable(worldPoint)
+            && !olmTracker.getDangerTiles().contains(worldPoint)
+            && !dangerTiles.contains(worldPoint);
+    }
+
+    /**
+     * Gets the required prayers for the head phase
+     */
+    @Override
+    public List<Prayer> getPrayers() {
+        ArrayList<Prayer> prayers = new ArrayList<>();
+
+        // Get defensive prayer from Olm tracker
+        Prayer defensivePrayer = olmTracker.getDefensivePrayer();
+        if (defensivePrayer == null) {
+            defensivePrayer = Prayer.PROTECT_FROM_MAGIC;
+        }
+
+        // Add offensive prayers
+        List<Prayer> offensivePrayers = Prayers.getOffensive();
+        prayers.add(defensivePrayer);
+        prayers.addAll(offensivePrayers);
+
+        return prayers;
+    }
+
+    /**
+     * Gets the equipment setup for attacking the head
+     */
+    @Override
+    public EquipmentSetup getGear() {
+        return plugin.getHeadGear();
     }
 }
-

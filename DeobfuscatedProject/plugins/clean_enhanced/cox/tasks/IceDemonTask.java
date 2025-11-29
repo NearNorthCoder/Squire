@@ -1,35 +1,23 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.inject.Inject
- *  gg.squire.client.plugins.fw.TaskDesc
- *  net.runelite.api.Client
- *  net.runelite.api.Locatable
- *  net.runelite.api.NPC
- *  net.runelite.api.Prayer
- *  net.runelite.api.Projectile
- *  net.runelite.api.Skill
- *  net.runelite.api.TileObject
- *  net.runelite.api.coords.LocalPoint
- *  net.runelite.api.coords.WorldArea
- *  net.runelite.api.coords.WorldPoint
- *  net.runelite.client.plugins.squire.equipment.EquipmentSetup
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Projectiles
- *  net.unethicalite.api.entities.TileObjects
- *  net.unethicalite.api.game.Skills
- *  net.unethicalite.api.items.Inventory
- *  net.unethicalite.api.movement.Movement
- *  net.unethicalite.api.movement.Reachable
- *  net.unethicalite.api.widgets.Prayers
+/**
+ * Ice Demon Task - Handles the Ice Demon boss room in Chambers of Xeric
+ *
+ * Boss Mechanics:
+ * - Ice Demon is immune to damage unless braziers are lit with kindling
+ * - Demon shoots ice barrage projectiles that must be dodged
+ * - Kindling must be collected from kindling piles around the room
+ * - Braziers must be fed with kindling to keep them burning
+ * - As the demon takes damage, more kindling is required
+ * - Protect from Missiles prayer reduces damage from ice attacks
+ *
+ * Strategy:
+ * - Collect kindling from kindling piles
+ * - Feed braziers to keep them burning (need 4 total kindling)
+ * - Attack the demon while avoiding ice barrage projectiles
+ * - Dodge by moving to tiles not targeted by projectiles
+ * - Use Protect from Missiles when attacking
  */
 package gg.squire.cox.tasks;
 
-import gg.squire.cox.tasks.GameEnum8;
-import gg.squire.cox.tasks.CoxManager;
-import gg.squire.cox.tasks.NHelper;
-import gg.squire.cox.tasks.CoxManager;
 import com.google.inject.Inject;
 import gg.squire.client.plugins.fw.TaskDesc;
 import gg.squire.cox.SquireChambersConfig;
@@ -57,363 +45,375 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.widgets.Prayers;
 
-@TaskDesc(name="Ice Demon", priority=10000, blocking=true)
-public class IceDemonTask
-extends CoxManager {
-    private final  int eo = 29742;
-    private  n al;
-    private  n ak;
-    
-    private final  int ep = 7603;
-    private final  int eq = 1324;
-    private  int am;
+@TaskDesc(name = "Ice Demon", priority = 10000, blocking = true)
+public class IceDemonTask extends CoxTaskBase {
 
-    @Override
-    public boolean ch() {
-        boolean bl2;
-        this.ak = this.co.L();
-        this.am = this.co.N();
-        this.al = this.co.M();
-        if (((Object)this.ak.bw == (Object)this.ak.bw2)N.ICE_DEMON)) {
-            bl2 = 7;
-            0;
-            if (2 < ((226 + 138 - 174 + 41 ^ 115 + 20 - 86 + 121) & (0x5A ^ 0x4F ^ (0x3B ^ 0x63) ^ -1))) {
-                return ((79 + 106 - 72 + 29 ^ 137 + 56 - 83 + 75) & (0xE1 ^ 0xBD ^ (0xEA ^ 0x81) ^ -1)) != 0;
-            }
-        } else {
-            bl2 = 8;
-        }
-        return bl2;
-    }
+    /** Current room information */
+    private NHelper currentRoom;
+
+    /** Next room information */
+    private NHelper nextRoom;
+
+    /** Current room index */
+    private int roomIndex;
+
+    /** Projectile ID for ice barrage attack */
+    private static final int ICE_BARRAGE_PROJECTILE_ID = 1324;
+
+    /** NPC name for Ice Demon */
+    private static final String ICE_DEMON_NAME = "Ice demon";
+
+    /** NPC name for Ice Demon's weaker form */
+    private static final String FROZEN_ICE_DEMON_NAME = "Frozen";
+
+    /** Object name for kindling pile */
+    private static final String KINDLING_PILE_NAME = "Kindling";
+
+    /** Object name for brazier */
+    private static final String BRAZIER_NAME = "Brazier";
+
+    /** Item name for kindling */
+    private static final String KINDLING_ITEM_NAME = "Kindling";
+
+    /** Item ID for kindling */
+    private static final int KINDLING_ITEM_ID = 20706;
+
+    /** Action for taking items */
+    private static final String TAKE_ACTION = "Take";
+
+    /** Action for lighting brazier */
+    private static final String LIGHT_ACTION = "Light";
+
+    /** Action for attacking */
+    private static final String ATTACK_ACTION = "Attack";
+
+    /** Passage/entrance object name */
+    private static final String PASSAGE_NAME = "Passage";
+
+    /** Enter action */
+    private static final String ENTER_ACTION = "Enter";
+
+    /** Maximum kindling to keep in inventory */
+    private static final int MAX_KINDLING = 10;
 
     @Inject
-    protected IceDemonTask(SquireChambersPlugin squireChambersPlugin, SquireChambersConfig squireChambersConfig, Client client) {
-        super(squireChambersPlugin, squireChambersConfig, client);
-        this.am = 0;
-        this.eo = 1;
-        this.ep = 2;
-        this.eq = 3;
+    protected IceDemonTask(SquireChambersPlugin plugin, SquireChambersConfig config, Client client) {
+        super(plugin, config, client);
+        this.roomIndex = 0;
     }
 
-    /*
-     * WARNING - void declaration
+    /**
+     * Check if this task should be active
+     * @return true if we're in the Ice Demon room
      */
     @Override
-    public List<Prayer> ci() {
-        ArrayList<Prayer> arrayList = new ArrayList<Prayer>();
-        NPC nPC2 = NPCs.getNearest(nPC -> nPC.getName().contains(var2[var1[31]]));
-        NPC nPC3 = NPCs.getNearest(nPC -> nPC.getName().contains(var2[var1[30]]));
-        if (nPC2 == null && nPC3 != null) {
-            void var3;
-            arrayList.addAll(Prayers.getOffensive());
-            0;
-            arrayList.add(Prayer.PROTECT_FROM_MISSILES);
-            0;
-            return var3;
+    public boolean shouldExecute() {
+        this.currentRoom = this.coxManager.getCurrentRoom();
+        this.roomIndex = this.coxManager.getRoomIndex();
+        this.nextRoom = this.coxManager.getNextRoom();
+        return this.currentRoom.getRoomType() == RoomType.ICE_DEMON;
+    }
+
+    @Override
+    public EquipmentSetup getEquipmentSetup() {
+        return EquipmentManager.getEquipmentForRoom(RoomType.ICE_DEMON);
+    }
+
+    /**
+     * Get prayers to use during Ice Demon fight
+     * @return List of prayers including Protect from Missiles and offensive prayers
+     */
+    @Override
+    public List&lt;Prayer&gt; getPrayersToActivate() {
+        ArrayList&lt;Prayer&gt; prayers = new ArrayList&lt;&gt;();
+
+        // Find ice demon NPC
+        NPC iceDemon = NPCs.getNearest(npc -&gt;
+            npc.getName() != null &amp;&amp;
+            npc.getName().contains(ICE_DEMON_NAME)
+        );
+
+        // Find frozen ice demon (weaker form)
+        NPC frozenDemon = NPCs.getNearest(npc -&gt;
+            npc.getName() != null &amp;&amp;
+            npc.getName().contains(FROZEN_ICE_DEMON_NAME)
+        );
+
+        // Only pray when ice demon is active (not frozen)
+        if (iceDemon == null &amp;&amp; frozenDemon != null) {
+            prayers.addAll(Prayers.getOffensive());
+            prayers.add(Prayer.PROTECT_FROM_MISSILES);
+            return prayers;
         }
+
         return null;
     }
 
-    private boolean ex() {
-        if ((Inventory.contains(item -> {
-            int n2;
-            if ((item.getName( == 0 != 0).contains(var2[var1[25]]) ? 1 : 0) && (item.getName( == 0).contains(var2[var1[26]]) ? 1 : 0) && (item.getId() != var1[27])) {
-                n2 = 7;
-                0;
-                if null != null {
-                    return ((0x5E ^ 0x1F ^ (0x1C ^ 0x19)) & (0x33 ^ 0x47 ^ (0x77 ^ 0x47) ^ -1)) != 0;
-                }
-            } else {
-                n2 = 8;
-            }
-            return n2 != 0;
-        }) ? 1 : 0)) {
-            if ((Inventory.isFull( != 0) ? 1 : 0)) {
-                this.co.x();
-                0;
-                return 7;
-            }
-            TileObject var4 = TileObjects.getNearest(tileObject -> {
-                int n2;
-                if ((tileObject.getName( != 0).contains(var2[var1[24]]) ? 1 : 0)) {
-                    String[] stringArray = new String[7];
-                    stringArray[8] = var2[var1[14]];
-                    if ((tileObject.hasActionstringArray)) {
-                        n2 = 7;
-                        0;
-                        if null == null return n2 != 0;
-                        return ((0xF9 ^ 0xBB) & ~(0x5E ^ 0x1C)) != 0;
-                    }
-                }
-                n2 = 8;
-                return n2 != 0;
-            });
-            if var4 == null {
-                return 8;
-            }
-            var4.interact(var2[var1[20]]);
-            return 7;
-        }
-        String[] stringArray = new String[7];
-        stringArray[8] = var2[var1[21]];
-        if ((Inventory.contains((String[] == 0)stringArray) ? 1 : 0)) {
-            if ((Inventory.isFull( != 0) ? 1 : 0)) {
-                bj var5;
-                var5.co.x();
-                0;
-                return 7;
-            }
-            TileObject var4 = TileObjects.getNearest(tileObject -> {
-                int n2;
-                if ((tileObject.getName( != 0).contains(var2[var1[22]]) ? 1 : 0)) {
-                    String[] stringArray = new String[7];
-                    stringArray[8] = var2[var1[23]];
-                    if ((tileObject.hasActionstringArray)) {
-                        n2 = 7;
-                        0;
-                        if (1 <= 2) return n2 != 0;
-                        return ((0xF2 ^ 0xAD) & ~(0xD0 ^ 0x8F)) != 0;
-                    }
-                }
-                n2 = 8;
-                return n2 != 0;
-            });
-            if var4 == null {
-                return 8;
-            }
-            var4.interact(var2[var1[19]]);
-            return 7;
-        }
-        return 8;
-    }
-
-        catch (Exception var11) {
-            var11.printStackTrace();
-            return null;
-        }
-    }
-
-        catch (Exception var17) {
-            var17.printStackTrace();
-            return null;
-        }
-    }
-
-    private TileObject cR() {
-        return TileObjects.getNearest(tileObject -> {
-            int n2;
-            if ((tileObject.getName( != 0).equals(var2[var1[28]]) ? 1 : 0)) {
-                String[] stringArray = new String[7];
-                stringArray[8] = var2[var1[29]];
-                if ((tileObject.hasActionstringArray) && (this.ak.a(LocatabletileObject) ? 1 : 0)) {
-                    n2 = 7;
-                    0;
-                    if (((135 + 79 - 141 + 67 ^ 154 + 172 - 152 + 8) & (0x13 ^ 0x15 ^ (0x86 ^ 0xBA) ^ -1)) < 1) return n2 != 0;
-                    return ((78 + 84 - 144 + 180 ^ 19 + 144 - 47 + 31) & (64 + 87 - 38 + 36 ^ 130 + 73 - 196 + 185 ^ -1)) != 0;
-                }
-            }
-            n2 = 8;
-            return n2 != 0;
-        });
-    }
-
-    /*
-     * WARNING - void declaration
-     */
-    private boolean cS() {
-        void var1_1;
-        bj var18;
-        if ((Reachable.isWalkable(WorldPointthis.ak.bt) ? 1 : 0)) {
-            if ((Movement.getDestination( != null)) && (Movement.getDestination( != 0).equals((Object)this.al.bt) ? 1 : 0)) {
-                return 8;
-            }
-            Movement.setDestination((WorldPoint)var18.al.bs);
-            return 7;
-        }
-        TileObject var19 = var18.cR();
-        if var19 == null {
-            Movement.setDestination((WorldPoint)var18.ak.bq.dx(var1[14]).dy(var1[14]));
-            return 7;
-        }
-        if (!(var18.bS.isMoving( == 0) ? 1 : 0) || (var18.bS.isAnimating( != 0) ? 1 : 0)) {
-            return 8;
-        }
-        var1_1.interact(var2[6]);
-        return 7;
-    }
-
-    private static String var20(String var21, String var22) {
-        var21 = new String(Base64.getDecoder().decode(var21.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var23 = new StringBuilder();
-        char[] var24 = var22.toCharArray();
-        int var25 = 8;
-        char[] var26 = var21.toCharArray();
-        int var27 = var26.length;
-        int var28 = 8;
-        while (var28 < var27) {
-            char var29 = var26[var28];
-            var23.append((char)(var29 ^ var24[var25 % var24.length]));
-            0;
-            ++var25;
-            ++var28;
-            0;
-            if (2 == 2) continue;
-            return null;
-        }
-        return String.valueOf(var23);
-    }
-
-    /*
-     * WARNING - void declaration
+    /**
+     * Execute the main Ice Demon task logic
+     * @return true if task executed successfully
      */
     @Override
-    public boolean cg() {
-        void var30;
-        bj var31;
-        void var32;
-        void var33;
-        NPC nPC2 = NPCs.getNearest(nPC -> nPC.getName().contains(var2[var1[11]]));
-        NPC nPC3 = NPCs.getNearest(nPC -> nPC.getName().contains(var2[var1[36]]));
-        int n2 = 4 - this.co.K() + (5 - Skills.getLevel((SkiSkill.WOODCUTTING)) / 6;
-        if ((n2 > 0) && (this.ex( != 0) ? 1 : 0)) {
-            return 7;
+    public boolean execute() {
+        NPC iceDemon = NPCs.getNearest(npc -&gt;
+            npc.getName() != null &amp;&amp;
+            npc.getName().contains(ICE_DEMON_NAME)
+        );
+
+        NPC frozenDemon = NPCs.getNearest(npc -&gt;
+            npc.getName() != null &amp;&amp;
+            npc.getName().contains(FROZEN_ICE_DEMON_NAME)
+        );
+
+        // Calculate how much kindling we need
+        int currentKindling = this.coxManager.getBraziersLit();
+        int woodcuttingLevel = Skills.getLevel(Skill.WOODCUTTING);
+        int kindlingNeeded = 4 - currentKindling + (50 - woodcuttingLevel) / 10;
+
+        // Collect kindling if needed
+        if (kindlingNeeded &gt; 0 &amp;&amp; collectKindling()) {
+            return true;
         }
-        if (var33 == null && var32 == null) {
-            return var31.cS();
+
+        // If both demons are null, navigate to next room
+        if (iceDemon == null &amp;&amp; frozenDemon == null) {
+            return navigateToNextRoom();
         }
-        if (var32 != null && (var32.isDead( != 0) ? 1 : 0)) {
-            System.out.println(var2[8]);
-            var31.co.g(5);
+
+        // If frozen demon died, reset kindling state
+        if (frozenDemon != null &amp;&amp; frozenDemon.isDead()) {
+            System.out.println("Ice demon defeated!");
+            this.coxManager.resetBrazierCount();
         }
-        if var33 == null {
-            Projectile var34 = Projectiles.getNearest(projectile -> {
-                int n2;
-                if ((projectile.getId() == 3) && (this.bS.getWorldLocation( != 0).createWorldArea(7).toWorldPointList().contains(WorldPoint.fromLocal((Client)this.cq, (LocalPoint)projectile.getTarget())) ? 1 : 0)) {
-                    n2 = 7;
-                    0;
-                    if null != null {
-                        return ((0x34 ^ 0x60) & ~(0x1E ^ 0x4A)) != 0;
-                    }
-                } else {
-                    n2 = 8;
-                }
-                return n2 != 0;
-            });
-            if var34 == null {
-                if ((var31.bS.getInteracting( != null)) && (var31.bS.getInteracting( != 0).getName().contains(var2[7]) ? 1 : 0)) {
-                    return 8;
-                }
-                var32.interact(var2[9]);
-                return 7;
+
+        // Attack frozen demon when it appears
+        if (iceDemon == null) {
+            // Check for incoming ice barrage projectiles
+            Projectile iceBarrage = Projectiles.getNearest(projectile -&gt;
+                projectile.getId() == ICE_BARRAGE_PROJECTILE_ID &amp;&amp;
+                this.localPlayer.getWorldLocation()
+                    .createWorldArea(1)
+                    .toWorldPointList()
+                    .contains(WorldPoint.fromLocal(this.client, projectile.getTarget()))
+            );
+
+            // If projectile targeting us, dodge to safespot
+            if (iceBarrage != null) {
+                System.out.println(WorldPoint.fromLocal(this.client, iceBarrage.getTarget()));
+                System.out.println(this.localPlayer.getWorldLocation());
+                Movement.setDestination(findSafespotFromProjectiles());
+                return true;
             }
-            System.out.println(WorldPoint.fromLocal((Client)var31.cq, (LocalPoint)var34.getTarget()));
-            System.out.println(var31.bS.getWorldLocation());
-            Movement.setDestination((WorldPoint)var31.cX());
-            return 7;
+
+            // Attack the frozen demon
+            if (this.localPlayer.getInteracting() != null &amp;&amp;
+                this.localPlayer.getInteracting().getName() != null &amp;&amp;
+                this.localPlayer.getInteracting().getName().contains(ICE_DEMON_NAME)) {
+                return true;
+            }
+
+            frozenDemon.interact(ATTACK_ACTION);
+            return true;
         }
-        if (((int > 0)var30)) {
-            TileObject lllllllllllllllIllIlllllIlIIlIll2;
-            int[] nArray = new int[7];
-            nArray[8] = var1[10];
-            int var34 = Inventory.getCount((boolean)7, (int[])nArray);
-            if (!(var34 < (int)var30) || (var34 >= var1[11])) {
-                TileObject lllllllllllllllIllIlllllIlIIlIll2 = TileObjects.getNearest(tileObject -> {
-                    int n2;
-                    if ((tileObject.getName( != 0).contains(var2[var1[34]]) ? 1 : 0)) {
-                        String[] stringArray = new String[7];
-                        stringArray[8] = var2[var1[35]];
-                        if ((tileObject.hasActionstringArray)) {
-                            n2 = 7;
-                            0;
-                            if (-2 <= 0) return n2 != 0;
-                            return ((0x1D ^ 0x58 ^ (0x4C ^ 0x1B)) & (0x54 ^ 5 ^ (0x27 ^ 0x64) ^ -1)) != 0;
-                        }
-                    }
-                    n2 = 8;
-                    return n2 != 0;
-                });
-                if lllllllllllllllIllIlllllIlIIlIll2 == null {
-                    return 8;
+
+        // Light braziers when ice demon is active
+        if (kindlingNeeded &gt; 0) {
+            int kindlingCount = Inventory.getCount(true, KINDLING_ITEM_ID);
+
+            if (kindlingCount &lt; kindlingNeeded || kindlingCount &gt;= MAX_KINDLING) {
+                TileObject brazier = TileObjects.getNearest(tileObject -&gt;
+                    tileObject.getName() != null &amp;&amp;
+                    tileObject.getName().contains(BRAZIER_NAME) &amp;&amp;
+                    tileObject.hasAction(LIGHT_ACTION)
+                );
+
+                if (brazier == null) {
+                    return true;
                 }
-                if (!(var31.bS.isMoving( == 0) ? 1 : 0) || (var31.bS.isAnimating( != 0) ? 1 : 0)) {
-                    return 8;
+
+                if (this.localPlayer.isMoving() || this.localPlayer.isAnimating()) {
+                    return true;
                 }
-                lllllllllllllllIllIlllllIlIIlIll2.interact(var2[var1[12]]);
-                return 7;
+
+                brazier.interact(LIGHT_ACTION);
+                return true;
             }
-            if ((Inventory.isFull( != 0) ? 1 : 0)) {
-                int[] nArray2 = new int[7];
-                nArray2[8] = var1[10];
-                if ((Inventory.contains((int[] == 0)nArray2) ? 1 : 0)) {
-                    var31.co.x();
-                    0;
-                    return 7;
+
+            // Collect more kindling if we don't have enough
+            if (Inventory.isFull()) {
+                int[] kindlingIds = {KINDLING_ITEM_ID};
+                if (!Inventory.contains(kindlingIds)) {
+                    this.coxManager.dropLowestValueItem();
+                    return true;
                 }
             }
-            if ((lllllllllllllllIllIlllllIlIIlIll2 = TileObjects.getNearest(tileObject -> {
-                int n2;
-                if ((tileObject.getName( == null != 0).contains(var2[var1[32]]) ? 1 : 0)) {
-                    String[] stringArray = new String[7];
-                    stringArray[8] = var2[var1[33]];
-                    if ((tileObject.hasActionstringArray)) {
-                        n2 = 7;
-                        0;
-                        if (3 > 2) return n2 != 0;
-                        return ((0xA6 ^ 0xAA ^ (0x4D ^ 9)) & (7 + 31 - 1 + 215 ^ 23 + 167 - 123 + 113 ^ -1)) != 0;
-                    }
-                }
-                n2 = 8;
-                return n2 != 0;
-            }))) {
-                return 8;
+
+            TileObject kindlingPile = TileObjects.getNearest(tileObject -&gt;
+                tileObject.getName() != null &amp;&amp;
+                tileObject.getName().contains(KINDLING_PILE_NAME) &amp;&amp;
+                tileObject.hasAction(TAKE_ACTION)
+            );
+
+            if (kindlingPile == null) {
+                return true;
             }
-            if (!(var31.bS.isMoving( == 0) ? 1 : 0) || (var31.bS.isAnimating( != 0) ? 1 : 0)) {
-                return 8;
+
+            if (this.localPlayer.isMoving() || this.localPlayer.isAnimating()) {
+                return true;
             }
-            lllllllllllllllIllIlllllIlIIlIll2.interact(var2[var1[13]]);
+
+            kindlingPile.interact(TAKE_ACTION);
         }
-        return 7;
+
+        return true;
     }
 
-    private WorldPoint cX() {
-        System.out.println(var2[var1[15]]);
-        String[] stringArray = new String[7];
-        stringArray[8] = var2[var1[16]];
-        NPC nPC = NPCs.getNearest((String[])stringArray);
-        List list = new WorldArea(nPC.getWorldLocation().dx(var1[17]).dy(var1[17]), var1[15], var1[15]).toWorldPointList();
-        List list2 = new WorldArea(nPC.getWorldLocation().dx(var1[18]).dy(var1[18]), var1[19], var1[19]).toWorldPointList();
-        list2.removeIf(worldPoint -> list.contains(worldPoint));
-        0;
-        WorldPoint worldPoint2 = list2.stream().filter(worldPoint -> {
-            int n2;
-            if ((Reachable.isWalkable(WorldPointworldPoint) ? 1 : 0) && (Projectiles.getNearest(projectile -> {
-                int n2;
-                if ((projectile.getId( != null) == 3) && (worldPoint.createWorldArea(7 == 0).contains(WorldPoint.fromLocal((Client)this.cq, (LocalPoint)projectile.getTarget())) ? 1 : 0)) {
-                    n2 = 7;
-                    0;
-                    if (3 < 1) {
-                        return ((0x29 ^ 0x6F) & ~(0x2D ^ 0x6B)) != 0;
-                    }
-                } else {
-                    n2 = 8;
-                }
-                return n2 != 0;
-            }))) {
-                n2 = 7;
-                0;
-                
-            } else {
-                n2 = 8;
+    /**
+     * Collect kindling from kindling piles
+     * @return true if collection is in progress
+     */
+    private boolean collectKindling() {
+        // Check for regular kindling in inventory
+        if (Inventory.contains(item -&gt;
+            item.getName() != null &amp;&amp;
+            item.getName().contains(KINDLING_ITEM_NAME) &amp;&amp;
+            !item.getName().contains("Twisted") &amp;&amp;
+            item.getId() != KINDLING_ITEM_ID
+        )) {
+            if (Inventory.isFull()) {
+                this.coxManager.dropLowestValueItem();
+                return true;
             }
-            return n2 != 0;
-        }).min(Comparator.comparingInt(worldPoint -> worldPoint.distanceTo((Locatable)this.bS))).orElse(null);
-        System.out.println("Safespot: " + String.valueOf(worldPoint2) + " | player: " + String.valueOf(this.bS.getWorldLocation()));
-        return worldPoint2;
+
+            TileObject kindlingPile = TileObjects.getNearest(tileObject -&gt;
+                tileObject.getName() != null &amp;&amp;
+                tileObject.getName().contains(KINDLING_PILE_NAME) &amp;&amp;
+                tileObject.hasAction(TAKE_ACTION)
+            );
+
+            if (kindlingPile == null) {
+                return false;
+            }
+
+            kindlingPile.interact(TAKE_ACTION);
+            return true;
+        }
+
+        // Check for twisted kindling
+        String[] twistedKindling = {KINDLING_ITEM_NAME};
+        if (Inventory.contains(twistedKindling)) {
+            if (Inventory.isFull()) {
+                this.coxManager.dropLowestValueItem();
+                return true;
+            }
+
+            TileObject twistedPile = TileObjects.getNearest(tileObject -&gt;
+                tileObject.getName() != null &amp;&amp;
+                tileObject.getName().contains("Twisted") &amp;&amp;
+                tileObject.hasAction(TAKE_ACTION)
+            );
+
+            if (twistedPile == null) {
+                return false;
+            }
+
+            twistedPile.interact(TAKE_ACTION);
+            return true;
+        }
+
+        return false;
     }
 
-    @Override
-    public EquipmentSetup cj() {
-        return s.b(s.e(N.ICE_DEMON));
+    /**
+     * Find a safe spot away from ice barrage projectiles
+     * @return WorldPoint representing a safe location
+     */
+    private WorldPoint findSafespotFromProjectiles() {
+        System.out.println("Finding safespot from projectiles");
+
+        String[] iceDemonNames = {ICE_DEMON_NAME};
+        NPC iceDemon = NPCs.getNearest(iceDemonNames);
+
+        // Create areas to check - inner danger zone and outer safe zone
+        List&lt;WorldPoint&gt; innerArea = new WorldArea(
+            iceDemon.getWorldLocation().dx(-2).dy(-2),
+            5,
+            5
+        ).toWorldPointList();
+
+        List&lt;WorldPoint&gt; outerArea = new WorldArea(
+            iceDemon.getWorldLocation().dx(-3).dy(-3),
+            7,
+            7
+        ).toWorldPointList();
+
+        // Remove inner area from outer area to get safe zone
+        outerArea.removeIf(innerArea::contains);
+
+        // Find best safespot - walkable and not targeted by projectiles
+        WorldPoint safespot = outerArea.stream()
+            .filter(point -&gt; {
+                if (!Reachable.isWalkable(point)) {
+                    return false;
+                }
+
+                // Check if any projectile is targeting this point
+                Projectile targetingProjectile = Projectiles.getNearest(projectile -&gt;
+                    projectile.getId() == ICE_BARRAGE_PROJECTILE_ID &amp;&amp;
+                    point.createWorldArea(1).contains(
+                        WorldPoint.fromLocal(this.client, projectile.getTarget())
+                    )
+                );
+
+                return targetingProjectile == null;
+            })
+            .min(Comparator.comparingInt(point -&gt;
+                point.distanceTo((Locatable) this.localPlayer)
+            ))
+            .orElse(null);
+
+        System.out.println("Safespot: " + safespot + " | player: " + this.localPlayer.getWorldLocation());
+        return safespot;
+    }
+
+    /**
+     * Navigate to the next room via passage
+     * @return true if navigation was successful
+     */
+    private boolean navigateToNextRoom() {
+        if (Reachable.isWalkable(this.currentRoom.getExitLocation())) {
+            if (Movement.getDestination() != null &amp;&amp;
+                Movement.getDestination().equals(this.nextRoom.getExitLocation())) {
+                return true;
+            }
+            Movement.setDestination(this.nextRoom.getEntryLocation());
+            return true;
+        }
+
+        TileObject passage = findPassage();
+        if (passage == null) {
+            Movement.setDestination(this.currentRoom.getCenterLocation().dx(4).dy(4));
+            return true;
+        }
+
+        if (this.localPlayer.isMoving() || this.localPlayer.isAnimating()) {
+            return true;
+        }
+
+        passage.interact(ENTER_ACTION);
+        return true;
+    }
+
+    /**
+     * Find the passage object to enter the next room
+     * @return TileObject representing the passage, or null if not found
+     */
+    private TileObject findPassage() {
+        return TileObjects.getNearest(tileObject -&gt;
+            tileObject.getName() != null &amp;&amp;
+            tileObject.getName().equals(PASSAGE_NAME) &amp;&amp;
+            tileObject.hasAction(ENTER_ACTION) &amp;&amp;
+            this.currentRoom.contains((Locatable) tileObject)
+        );
     }
 }
-
