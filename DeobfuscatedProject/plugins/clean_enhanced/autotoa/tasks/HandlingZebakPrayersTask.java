@@ -74,7 +74,7 @@ extends KephriManager {
 
     @Override
     public boolean isInCorrectRegion() {
-        return this.cm.a((NPC npc) -> {
+        return this.regionHelper.isNpcPresent((NPC npc) -> {
             if (npc.getId() != ZEBAK_NPC_ID || npc.getId() == ZEBAK_VARIANT_NPC_ID) {
                 return true;
             } else {
@@ -120,7 +120,7 @@ extends KephriManager {
      */
     @Override
     public List<Prayer> getPrayersToActivate() {
-        NPC zebak = this.cm.b();
+        NPC zebak = this.regionHelper.getTargetNpc();
         if (zebak == null) {
             return List.of(this.getOffensivePrayer(), this.currentProtectionPrayer);
         }

@@ -232,52 +232,52 @@ public class SotfQuestManager implements QuestStep {
 
         // Build skill training task groups (can be shuffled)
         List<QuestStep> thievingTasks = Arrays.asList(
-            new P(),
-            new Z(),
-            new W(),
-            new V(),
-            new T()
+            new PickpocketMenTask(),
+            new PickpocketFarmersTask(),
+            new PickpocketWarriorsTask(),
+            new StallThievingTask(),
+            new PickpocketMasterFarmersTask()
         );
 
         List<QuestStep> combatTasks = Arrays.asList(
-            new M(),
-            new A(),
-            new R(),
-            new aa(),
-            new H()
+            new MeleeCombatTask(),
+            new AttackTrainingTask(),
+            new RangedCombatTask(),
+            new AdvancedCombatTask(),
+            new HealthTrainingTask()
         );
 
         List<QuestStep> gatheringTasks = Arrays.asList(
-            new G(),
-            new ak(),
-            new w()
+            new GatheringResourcesTask(),
+            new AlternateGatheringTask(),
+            new WoodcuttingGatheringTask()
         );
 
         List<QuestStep> craftingTasks = Arrays.asList(
-            new at(),
-            new ad(),
-            new af(),
-            new ao(),
-            new E(),
-            new an()
+            new CraftingLeatherTask(),
+            new CraftingJewelryTask(),
+            new CraftingFlaxTask(),
+            new CraftingGlassTask(),
+            new CraftingPotteryTask(),
+            new CraftingGemsTask()
         );
 
         List<QuestStep> magicTasks = Arrays.asList(
-            new ag(),
-            new D()
+            new MagicTrainingTask(),
+            new MagicEnchantingTask()
         );
 
         List<QuestStep> rangedTasks = Arrays.asList(
-            new aj(),
-            new ai(),
-            new w(),
-            new au(),
-            new y()
+            new RangedBasicTask(),
+            new RangedIntermediateTask(),
+            new RangedEquipmentTask(),
+            new RangedAdvancedTask(),
+            new RangedQuestlineTask()
         );
 
         List<QuestStep> questTasks = Arrays.asList(
-            new aq(),
-            new ar()
+            new PrerequisiteQuestTask(),
+            new TempleTrekQuestTask()
         );
 
         // Shuffle skill training groups to add variety
@@ -291,17 +291,17 @@ public class SotfQuestManager implements QuestStep {
 
         // Add all tasks in proper sequence
         subTasks.addAll(thievingTasks);
-        subTasks.add(new O());
+        subTasks.add(new AgilityCheckpointTask());
         subTasks.addAll(combatTasks);
-        subTasks.add(new U());
-        subTasks.add(new ah());
+        subTasks.add(new CombatCheckpointTask());
+        subTasks.add(new ConstructionCheckpointTask());
         subTasks.addAll(gatheringTasks);
         subTasks.addAll(craftingTasks);
         subTasks.addAll(magicTasks);
         subTasks.addAll(rangedTasks);
         subTasks.addAll(questTasks);
-        subTasks.add(new v());
-        subTasks.add(new L());
+        subTasks.add(new TasteOfHopeQuestTask());
+        subTasks.add(new SinsOfTheFatherQuestTask());
 
         currentStep += 1;
 
@@ -376,14 +376,14 @@ public class SotfQuestManager implements QuestStep {
         // Thieving training
         if (Skills.getLevel(Skill.THIEVING) < THIEVING_REQUIREMENT) {
             AccBuilderSotf.l = "Thieving";
-            aE.gm();
+            ThievingTrainer.train();
         }
 
         // Agility training
         if (Skills.getLevel(Skill.THIEVING) >= THIEVING_REQUIREMENT
             && Skills.getLevel(Skill.AGILITY) < AGILITY_REQUIREMENT) {
             AccBuilderSotf.l = "Agility";
-            av.eA();
+            AgilityTrainer.train();
         }
 
         // Construction training
@@ -391,7 +391,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.AGILITY) >= AGILITY_REQUIREMENT
             && Skills.getLevel(Skill.CONSTRUCTION) < CONSTRUCTION_REQUIREMENT) {
             AccBuilderSotf.l = "Construction";
-            aw.eH();
+            ConstructionTrainer.train();
         }
 
         // Mining training
@@ -400,7 +400,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.CONSTRUCTION) >= CONSTRUCTION_REQUIREMENT
             && Skills.getLevel(Skill.MINING) < MINING_REQUIREMENT) {
             AccBuilderSotf.l = "Mining";
-            aC.fQ();
+            MiningTrainer.train();
         }
 
         // Crafting training
@@ -410,7 +410,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.MINING) >= MINING_REQUIREMENT
             && Skills.getLevel(Skill.CRAFTING) < CRAFTING_REQUIREMENT) {
             AccBuilderSotf.l = "Crafting";
-            ay.fi();
+            CraftingTrainer.train();
         }
 
         // Woodcutting training
@@ -421,7 +421,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.CRAFTING) >= CRAFTING_REQUIREMENT
             && Skills.getLevel(Skill.WOODCUTTING) < WOODCUTTING_REQUIREMENT) {
             AccBuilderSotf.l = "Woodcutting";
-            aF.gs();
+            WoodcuttingTrainer.train();
         }
 
         // Magic training
@@ -433,7 +433,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.WOODCUTTING) >= WOODCUTTING_REQUIREMENT
             && Skills.getLevel(Skill.MAGIC) < MAGIC_REQUIREMENT) {
             AccBuilderSotf.l = "Magic training";
-            m.ak();
+            MagicTrainer.train();
         }
 
         // Herblore training
@@ -446,7 +446,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.MAGIC) >= MAGIC_REQUIREMENT
             && Skills.getLevel(Skill.HERBLORE) < HERBLORE_REQUIREMENT) {
             AccBuilderSotf.l = "Herblore";
-            aB.fL();
+            HerbloreTrainer.train();
         }
 
         // Fletching training
@@ -460,7 +460,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.HERBLORE) >= HERBLORE_REQUIREMENT
             && Skills.getLevel(Skill.FLETCHING) < FLETCHING_REQUIREMENT) {
             AccBuilderSotf.l = "Fletching";
-            aA.fv();
+            FletchingTrainer.train();
         }
 
         // Ranged training (basic level)
@@ -475,7 +475,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.FLETCHING) >= FLETCHING_REQUIREMENT
             && Skills.getLevel(Skill.RANGED) < RANGED_REQUIREMENT) {
             AccBuilderSotf.l = "Range training";
-            n.aA();
+            RangedTrainer.train();
         }
 
         // Animal Magnetism quest
@@ -491,7 +491,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.RANGED) >= RANGED_REQUIREMENT
             && Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) < ANIMAL_MAGNETISM_COMPLETE) {
             AccBuilderSotf.l = "Animal magnetism";
-            w.bf();
+            AnimalMagnetismQuest.execute();
         }
 
         // Ranged training (advanced level)
@@ -508,7 +508,7 @@ public class SotfQuestManager implements QuestStep {
             && Skills.getLevel(Skill.RANGED) < RANGED_ADVANCED_REQUIREMENT
             && Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == ANIMAL_MAGNETISM_COMPLETE) {
             AccBuilderSotf.l = "Range training";
-            n.aA();
+            RangedTrainer.train();
         }
 
         // Darkness of Hallowvale questline
@@ -530,7 +530,7 @@ public class SotfQuestManager implements QuestStep {
                 || !Inventory.contains(TOME_OF_EXPERIENCE_2)
                 || !Inventory.contains(TOME_OF_EXPERIENCE_1)) {
                 AccBuilderSotf.l = "Darkness of Hallowvale questline";
-                y.bl();
+                DarknessOfHallowvaleQuest.execute();
             }
         }
 
@@ -553,8 +553,8 @@ public class SotfQuestManager implements QuestStep {
                 || !Inventory.contains(TOME_OF_EXPERIENCE_1)
                 || Skills.getLevel(Skill.SLAYER) < SLAYER_REQUIREMENT) {
                 AccBuilderSotf.l = "Temple Trek";
-                ar.t("xp");
-                ar.gb();
+                TempleTrekQuest.setMode("xp");
+                TempleTrekQuest.execute();
             }
         }
 
@@ -580,7 +580,7 @@ public class SotfQuestManager implements QuestStep {
                 if (Vars.getBit(QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId()) < A_TASTE_OF_HOPE_COMPLETE
                     || !Inventory.contains(TOME_OF_EXPERIENCE)) {
                     AccBuilderSotf.l = "A Taste of Hope";
-                    v.aZ();
+                    TasteOfHopeQuest.execute();
                 }
             }
         }
@@ -608,7 +608,7 @@ public class SotfQuestManager implements QuestStep {
                 if (Inventory.contains(TOME_OF_EXPERIENCE)
                     && Vars.getBit(QuestVarbits.QUEST_SINS_OF_THE_FATHER.getId()) < SINS_OF_THE_FATHER_COMPLETE) {
                     AccBuilderSotf.l = "Sins of the Father";
-                    L.cB();
+                    SinsOfTheFatherQuest.execute();
                 }
             }
         }

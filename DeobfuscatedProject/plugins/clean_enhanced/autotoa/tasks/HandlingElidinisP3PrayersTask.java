@@ -68,7 +68,7 @@ extends KephriManager {
         int[] regionIds = new int[2];
         regionIds[0] = REGION_ID_1;
         regionIds[1] = REGION_ID_2;
-        return this.cm.a(regionIds);
+        return this.regionHelper.isInRegions(regionIds);
     }
 
     @Override

@@ -17,6 +17,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Production;
+import gg.squire.sotf.framework.QuestStep;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
  * Trains cooking at Castle Wars from level 1 to 75.
  * Cooks shrimp (1-5), sardines (5-30), and trout (30+).
  */
-public class CookingStep implements QuestStepInterface {
+public class CookingStep implements QuestStep {
 
     // Item IDs
     private static final int RAW_SHRIMP_ID = 317;
@@ -246,7 +247,12 @@ public class CookingStep implements QuestStepInterface {
     }
 
     @Override
-    public String getStepName() {
+    public boolean arePrerequisitesMet() {
+        return true;
+    }
+
+    @Override
+    public String getName() {
         return "Cooking";
     }
 
@@ -259,10 +265,5 @@ public class CookingStep implements QuestStepInterface {
     @Override
     public boolean isComplete() {
         return Skills.getLevel(Skill.COOKING) >= TARGET_LEVEL;
-    }
-
-    @Override
-    public boolean shouldExecute() {
-        return false;
     }
 }

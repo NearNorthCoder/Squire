@@ -31,10 +31,10 @@ public class DrinkingBrewTask extends KephriManager {
     private static final int HP_THRESHOLD_HIGH = 80;
 
     private final SquireAutoTOA plugin;
-    private final C consumableManager;
+    private final ConsumableManager consumableManager;
 
     @Inject
-    protected DrinkingBrewTask(Client client, C consumableManager, SquireAutoTOA plugin) {
+    protected DrinkingBrewTask(Client client, ConsumableManager consumableManager, SquireAutoTOA plugin) {
         super(client);
         this.consumableManager = consumableManager;
         this.plugin = plugin;
@@ -77,7 +77,7 @@ public class DrinkingBrewTask extends KephriManager {
         }
 
         // Or if consumable manager says to use brew
-        if (this.consumableManager.ap()) {
+        if (this.consumableManager.isBrewAvailable()) {
             shouldDrink = true;
         }
 
@@ -87,13 +87,13 @@ public class DrinkingBrewTask extends KephriManager {
         }
 
         // Final check with consumable manager
-        if (!this.consumableManager.am() || !shouldDrink) {
+        if (!this.consumableManager.canConsumeItem() || !shouldDrink) {
             return false;
         }
 
         // Drink the brew
         brew.interact("Drink");
-        this.consumableManager.ao();
+        this.consumableManager.recordConsumption();
         return true;
     }
 }

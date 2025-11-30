@@ -79,7 +79,7 @@ extends KephriManager {
         regionIds[0] = REGION_ID_1;
         regionIds[1] = REGION_ID_2;
         regionIds[2] = BABA_NPC_ID;
-        return this.cm.a(regionIds);
+        return this.regionHelper.isInRegions(regionIds);
     }
 
     @Override

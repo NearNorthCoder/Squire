@@ -29,11 +29,11 @@ public class DrinkingAmbrosiaTask extends KephriManager {
     private static final int HP_THRESHOLD_DEFAULT = 37;
     private static final int HP_THRESHOLD_BOSS_FIGHT = 54;
 
-    private final C consumableManager;
+    private final ConsumableManager consumableManager;
     private final SquireAutoTOA plugin;
 
     @Inject
-    protected DrinkingAmbrosiaTask(Client client, C consumableManager, SquireAutoTOA plugin) {
+    protected DrinkingAmbrosiaTask(Client client, ConsumableManager consumableManager, SquireAutoTOA plugin) {
         super(client);
         this.consumableManager = consumableManager;
         this.plugin = plugin;
@@ -52,7 +52,7 @@ public class DrinkingAmbrosiaTask extends KephriManager {
         }
 
         // Don't drink if consumable manager doesn't allow it
-        if (!this.consumableManager.am()) {
+        if (!this.consumableManager.canConsumeItem()) {
             return false;
         }
 
@@ -86,7 +86,7 @@ public class DrinkingAmbrosiaTask extends KephriManager {
 
         // Drink the ambrosia
         ambrosia.interact("Drink");
-        this.consumableManager.ao();
+        this.consumableManager.recordConsumption();
         return true;
     }
 }
