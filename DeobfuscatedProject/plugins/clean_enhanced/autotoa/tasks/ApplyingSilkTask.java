@@ -44,12 +44,12 @@ public class ApplyingSilkTask extends KephriManager {
     @Override
     public boolean run() {
         // Don't apply if plugin is paused
-        if (this.plugin.e()) {
+        if (this.plugin.isPaused()) {
             return false;
         }
 
         // Don't apply if not in special weapon mode
-        if (!aq()) {
+        if (!isInSpecialWeaponMode()) {
             return false;
         }
 

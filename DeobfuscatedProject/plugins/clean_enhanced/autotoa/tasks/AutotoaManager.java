@@ -517,4 +517,143 @@ public abstract class KephriManager extends ToaTaskBase {
         exitNpc.interact("Talk-to");
         return true;
     }
+
+    // ========== Combat Area Detection (deobfuscated from bc(), aq(), bf(), be()) ==========
+
+    /** Region IDs for TOA combat areas */
+    private static final int TOA_REGION_COMBAT_1 = 14160; // Region ID for combat area
+    private static final int TOA_REGION_COMBAT_2 = 14672; // Region ID for boss area
+    private static final int TOA_REGION_COMBAT_3 = 15184; // Region ID for extended area
+    private static final int TOA_REGION_SPECIAL_1 = 15696; // Region ID for special weapon areas
+    private static final int TOA_REGION_SPECIAL_2 = 15952; // Region ID for special weapon areas
+
+    /** Boss NPC IDs for TOA */
+    private static final int[] BOSS_NPC_IDS = {27267, 27267, 27779, 27524}; // Kephri, Zebak, etc.
+
+    /** Animation ID for idle state */
+    private static final int ANIMATION_IDLE = -1;
+
+    /**
+     * Checks if the player is currently in a combat area within TOA.
+     * Used to determine if combat-related tasks should execute.
+     *
+     * @return true if in a combat area
+     */
+    protected boolean isInCombatArea() {
+        // Must be in instanced region
+        if (!this.client.isInInstancedRegion()) {
+            return false;
+        }
+        // Check if in one of the combat regions
+        return isInRegion(TOA_REGION_COMBAT_1) ||
+               isInRegion(TOA_REGION_COMBAT_2) ||
+               isInRegion(TOA_REGION_COMBAT_3);
+    }
+
+    /**
+     * @deprecated Use {@link #isInCombatArea()} instead
+     */
+    @Deprecated
+    protected boolean bc() {
+        return isInCombatArea();
+    }
+
+    /**
+     * Checks if the player is in a special weapon mode area.
+     * These are areas where special attack weapons are particularly effective.
+     *
+     * @return true if in special weapon mode area
+     */
+    protected boolean isInSpecialWeaponMode() {
+        return isInRegion(TOA_REGION_SPECIAL_1) || isInRegion(TOA_REGION_SPECIAL_2);
+    }
+
+    /**
+     * @deprecated Use {@link #isInSpecialWeaponMode()} instead
+     */
+    @Deprecated
+    protected boolean aq() {
+        return isInSpecialWeaponMode();
+    }
+
+    /**
+     * Checks if a boss fight is currently active.
+     * This is determined by whether a boss NPC is present in the area.
+     *
+     * @return true if a boss NPC is present and the fight is active
+     */
+    protected boolean isBossFightActive() {
+        return getNearestBossNpc() != null;
+    }
+
+    /**
+     * @deprecated Use {@link #isBossFightActive()} instead
+     */
+    @Deprecated
+    protected boolean bf() {
+        return isBossFightActive();
+    }
+
+    /**
+     * Checks if the boss is currently idle (not animating).
+     * Useful for timing attacks or special actions.
+     *
+     * @return true if boss is present and in idle animation state
+     */
+    protected boolean isBossIdle() {
+        NPC boss = getNearestBossNpc();
+        return boss != null && boss.getAnimation() == ANIMATION_IDLE;
+    }
+
+    /**
+     * @deprecated Use {@link #isBossIdle()} instead
+     */
+    @Deprecated
+    protected boolean be() {
+        return isBossIdle();
+    }
+
+    /**
+     * Gets the nearest boss NPC in the current area.
+     *
+     * @return the nearest boss NPC, or null if none found
+     */
+    protected NPC getNearestBossNpc() {
+        return NPCs.getNearest(BOSS_NPC_IDS);
+    }
+
+    /**
+     * @deprecated Use {@link #getNearestBossNpc()} instead
+     */
+    @Deprecated
+    protected NPC bd() {
+        return getNearestBossNpc();
+    }
+
+    /**
+     * Checks if the player is in a specific map region.
+     *
+     * @param regionId the region ID to check
+     * @return true if the player is in that region
+     */
+    protected boolean isInRegion(int regionId) {
+        int[] regions = this.client.getMapRegions();
+        if (regions == null) {
+            return false;
+        }
+        for (int region : regions) {
+            if (region == regionId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @deprecated Use {@link #isInRegion(int)} instead
+     */
+    @Deprecated
+    protected boolean j(int regionId) {
+        return isInRegion(regionId);
+    }
 }

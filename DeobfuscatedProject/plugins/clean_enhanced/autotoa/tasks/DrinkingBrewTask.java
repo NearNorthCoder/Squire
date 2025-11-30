@@ -43,7 +43,7 @@ public class DrinkingBrewTask extends KephriManager {
     @Override
     public boolean run() {
         // Don't drink if plugin is paused
-        if (this.plugin.e()) {
+        if (this.plugin.isPaused()) {
             return false;
         }
 
@@ -58,7 +58,7 @@ public class DrinkingBrewTask extends KephriManager {
         }
 
         // Check if we have a special weapon (Dragon warhammer) and enough resources
-        if (!aq()) {
+        if (!isInSpecialWeaponMode()) {
             Item dragonWarhammer = Inventory.getFirst(DRAGON_WARHAMMER_ID);
             // Don't drink brew if we have DWH with enough spec energy and HP
             if (dragonWarhammer != null &&
@@ -72,7 +72,7 @@ public class DrinkingBrewTask extends KephriManager {
         boolean shouldDrink = false;
 
         // In boss fight phase
-        if (bf()) {
+        if (isBossFightActive()) {
             shouldDrink = true;
         }
 

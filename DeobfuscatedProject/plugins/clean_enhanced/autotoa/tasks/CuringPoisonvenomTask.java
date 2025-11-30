@@ -37,8 +37,8 @@ public class CuringPoisonvenomTask extends KephriManager {
 
     @Override
     public boolean run() {
-        // Don't cure if paused or currently in combat
-        if (this.plugin.e() || bc()) {
+        // Don't cure if paused or currently in combat area
+        if (this.plugin.isPaused() || isInCombatArea()) {
             return false;
         }
 

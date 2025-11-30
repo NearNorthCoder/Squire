@@ -42,12 +42,12 @@ public class DrinkingAmbrosiaTask extends KephriManager {
     @Override
     public boolean run() {
         // Don't drink if plugin is paused
-        if (this.plugin.e()) {
+        if (this.plugin.isPaused()) {
             return false;
         }
 
         // Don't drink if not in special weapon mode
-        if (!aq()) {
+        if (!isInSpecialWeaponMode()) {
             return false;
         }
 
@@ -65,7 +65,7 @@ public class DrinkingAmbrosiaTask extends KephriManager {
         }
 
         // If in boss fight phase, use higher threshold
-        if (bf()) {
+        if (isBossFightActive()) {
             healthThreshold = HP_THRESHOLD_BOSS_FIGHT;
         }
 

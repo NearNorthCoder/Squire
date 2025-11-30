@@ -48,12 +48,12 @@ public class DrinkingPotionTask extends KephriManager {
     @Override
     public boolean run() {
         // Don't drink potions if plugin is paused
-        if (this.pluginMain.e()) {
+        if (this.pluginMain.isPaused()) {
             return false;
         }
 
         // Don't drink if not in combat area
-        if (!this.bc()) {
+        if (!isInCombatArea()) {
             return false;
         }
 

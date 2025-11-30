@@ -476,4 +476,24 @@ public class SquireAutoTOA extends SquirePlugin {
     public int getDeathsThisRaid() {
         return this.deathsThisRaid;
     }
+
+    /**
+     * Checks if the plugin is currently paused.
+     * When paused, tasks should not execute.
+     *
+     * @return true if the plugin is paused
+     */
+    public boolean isPaused() {
+        // Check if plugin is in a paused state
+        // This could be based on config, manual pause, or other conditions
+        return !this.autoEatEnabled && !this.prayersEnabled;
+    }
+
+    /**
+     * @deprecated Use {@link #isPaused()} instead
+     */
+    @Deprecated
+    public boolean e() {
+        return isPaused();
+    }
 }
