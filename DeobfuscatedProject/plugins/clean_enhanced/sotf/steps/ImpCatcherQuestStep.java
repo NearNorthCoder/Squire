@@ -267,44 +267,44 @@ public class ImpCatcherQuestStep implements QuestStep {
         // Check beads
         if (!Bank.contains(RED_BEAD_ID)) {
             System.out.println("Adding red bead to buy list");
-            itemsToBuy.add(new d(RED_BEAD_ID, 1, RED_BEAD_PRICE));
+            itemsToBuy.add(new ShopItem(RED_BEAD_ID, 1, RED_BEAD_PRICE));
         }
 
         if (!Bank.contains(YELLOW_BEAD_ID)) {
             System.out.println("Adding yellow bead to buy list");
-            itemsToBuy.add(new d(YELLOW_BEAD_ID, 1, YELLOW_BEAD_PRICE));
+            itemsToBuy.add(new ShopItem(YELLOW_BEAD_ID, 1, YELLOW_BEAD_PRICE));
         }
 
         if (!Bank.contains(BLACK_BEAD_ID)) {
             System.out.println("Adding black bead to buy list");
-            itemsToBuy.add(new d(BLACK_BEAD_ID, 1, YELLOW_BEAD_PRICE));
+            itemsToBuy.add(new ShopItem(BLACK_BEAD_ID, 1, YELLOW_BEAD_PRICE));
         }
 
         if (!Bank.contains(WHITE_BEAD_ID)) {
             System.out.println("Adding white bead to buy list");
-            itemsToBuy.add(new d(WHITE_BEAD_ID, 1, YELLOW_BEAD_PRICE));
+            itemsToBuy.add(new ShopItem(WHITE_BEAD_ID, 1, YELLOW_BEAD_PRICE));
         }
 
         // Check food
         if (!Bank.contains(LOBSTER_ID)) {
             System.out.println("Adding lobster to buy list");
-            itemsToBuy.add(new d(LOBSTER_ID, LOBSTER_MIN_QUANTITY, LOBSTER_PRICE));
+            itemsToBuy.add(new ShopItem(LOBSTER_ID, LOBSTER_MIN_QUANTITY, LOBSTER_PRICE));
         }
 
         if (Bank.contains(LOBSTER_ID) && Bank.getFirst(LOBSTER_ID).getQuantity() < TABLET_QUANTITY) {
             System.out.println("Adding lobster to buy list");
-            itemsToBuy.add(new d(LOBSTER_ID, LOBSTER_BUY_QUANTITY, LOBSTER_PRICE));
+            itemsToBuy.add(new ShopItem(LOBSTER_ID, LOBSTER_BUY_QUANTITY, LOBSTER_PRICE));
         }
 
         // Check cheese
         if (!Bank.contains(CHEESE_ID)) {
             System.out.println("Adding cheese to buy list");
-            itemsToBuy.add(new d(CHEESE_ID, CHEESE_QUANTITY, CHEESE_PRICE));
+            itemsToBuy.add(new ShopItem(CHEESE_ID, CHEESE_QUANTITY, CHEESE_PRICE));
         }
 
         if (Bank.contains(CHEESE_ID) && Bank.getFirst(CHEESE_ID).getQuantity() < CHEESE_QUANTITY) {
             System.out.println("Adding cheese to buy list");
-            itemsToBuy.add(new d(CHEESE_ID, CHEESE_QUANTITY, CHEESE_PRICE));
+            itemsToBuy.add(new ShopItem(CHEESE_ID, CHEESE_QUANTITY, CHEESE_PRICE));
         }
 
         // Check ring of wealth
@@ -312,74 +312,74 @@ public class ImpCatcherQuestStep implements QuestStep {
             item.getName().toLowerCase().contains("ring of wealth (");
         if (!Bank.contains(wealthPredicate)) {
             System.out.println("Adding wealth to buy list");
-            itemsToBuy.add(new d(WEALTH_RING_PRICE, WEALTH_RING_QUANTITY, RUNE_PRICE));
+            itemsToBuy.add(new ShopItem(WEALTH_RING_PRICE, WEALTH_RING_QUANTITY, RUNE_PRICE));
         }
 
         // Check Varrock teleports
         if (Bank.contains(VARROCK_TELEPORT_ID) &&
             Bank.getFirst(VARROCK_TELEPORT_ID).getQuantity() < TABLET_QUANTITY) {
             System.out.println("Adding varrock tabs to buy list");
-            itemsToBuy.add(new d(VARROCK_TELEPORT_ID, LOBSTER_BUY_QUANTITY, VARROCK_TAB_PRICE));
+            itemsToBuy.add(new ShopItem(VARROCK_TELEPORT_ID, LOBSTER_BUY_QUANTITY, VARROCK_TAB_PRICE));
         }
 
         // Check Falador teleports
         if (!Bank.contains(FALADOR_TELEPORT_ID)) {
             System.out.println("Adding fally tabs to buy list");
-            itemsToBuy.add(new d(FALADOR_TELEPORT_ID, TABLET_QUANTITY, VARROCK_TAB_PRICE));
+            itemsToBuy.add(new ShopItem(FALADOR_TELEPORT_ID, TABLET_QUANTITY, VARROCK_TAB_PRICE));
         }
 
         if (Bank.contains(FALADOR_TELEPORT_ID) &&
             Bank.getFirst(FALADOR_TELEPORT_ID).getQuantity() < TABLET_QUANTITY) {
             System.out.println("Adding fally tabs to buy list");
-            itemsToBuy.add(new d(FALADOR_TELEPORT_ID, TABLET_QUANTITY, VARROCK_TAB_PRICE));
+            itemsToBuy.add(new ShopItem(FALADOR_TELEPORT_ID, TABLET_QUANTITY, VARROCK_TAB_PRICE));
         }
 
         // Check stamina potions
         if (!Bank.contains(STAMINA_POTION_ID)) {
             System.out.println("Adding staminas to buy list");
-            itemsToBuy.add(new d(STAMINA_POTION_ID, CHEESE_QUANTITY, j.cf));
+            itemsToBuy.add(new ShopItem(STAMINA_POTION_ID, CHEESE_QUANTITY, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Check runes
         if (Bank.contains(AIR_RUNE_ID) && Bank.getFirst(AIR_RUNE_ID).getQuantity() < RUNE_COUNT_REQUIRED) {
             System.out.println("Adding mind runes to buy list");
-            itemsToBuy.add(new d(AIR_RUNE_ID, RUNE_BUY_QUANTITY, 7));
+            itemsToBuy.add(new ShopItem(AIR_RUNE_ID, RUNE_BUY_QUANTITY, 7));
         }
 
         if (Bank.contains(AIR_RUNE_ID) && Bank.getFirst(AIR_RUNE_ID).getQuantity() < RUNE_COUNT_REQUIRED) {
             System.out.println("Adding air runes to buy list");
-            itemsToBuy.add(new d(AIR_RUNE_ID, RUNE_BUY_QUANTITY, 7));
+            itemsToBuy.add(new ShopItem(AIR_RUNE_ID, RUNE_BUY_QUANTITY, 7));
         }
 
         if (Bank.contains(WATER_RUNE_ID) && Bank.getFirst(WATER_RUNE_ID).getQuantity() < RUNE_COUNT_REQUIRED) {
             System.out.println("Adding water runes to buy list");
-            itemsToBuy.add(new d(WATER_RUNE_ID, RUNE_BUY_QUANTITY, 7));
+            itemsToBuy.add(new ShopItem(WATER_RUNE_ID, RUNE_BUY_QUANTITY, 7));
         }
 
         if (Bank.contains(EARTH_RUNE_ID) && Bank.getFirst(EARTH_RUNE_ID).getQuantity() < RUNE_COUNT_REQUIRED) {
             System.out.println("Adding earth runes to buy list");
-            itemsToBuy.add(new d(EARTH_RUNE_ID, RUNE_BUY_QUANTITY, 7));
+            itemsToBuy.add(new ShopItem(EARTH_RUNE_ID, RUNE_BUY_QUANTITY, 7));
         }
 
         // Add missing runes if not present
         if (!Bank.contains(AIR_RUNE_ID)) {
             System.out.println("Adding air runes to buy list");
-            itemsToBuy.add(new d(AIR_RUNE_ID, RUNE_BUY_QUANTITY, 7));
+            itemsToBuy.add(new ShopItem(AIR_RUNE_ID, RUNE_BUY_QUANTITY, 7));
         }
 
         if (!Bank.contains(WATER_RUNE_ID)) {
             System.out.println("Adding water runes to buy list");
-            itemsToBuy.add(new d(WATER_RUNE_ID, RUNE_BUY_QUANTITY, 7));
+            itemsToBuy.add(new ShopItem(WATER_RUNE_ID, RUNE_BUY_QUANTITY, 7));
         }
 
         if (!Bank.contains(EARTH_RUNE_ID)) {
             System.out.println("Adding earth runes to buy list");
-            itemsToBuy.add(new d(EARTH_RUNE_ID, RUNE_BUY_QUANTITY, 7));
+            itemsToBuy.add(new ShopItem(EARTH_RUNE_ID, RUNE_BUY_QUANTITY, 7));
         }
 
         if (!Bank.contains(MIND_RUNE_ID)) {
             System.out.println("Adding mind runes to buy list");
-            itemsToBuy.add(new d(MIND_RUNE_ID, RUNE_BUY_QUANTITY, 7));
+            itemsToBuy.add(new ShopItem(MIND_RUNE_ID, RUNE_BUY_QUANTITY, 7));
         }
     }
 

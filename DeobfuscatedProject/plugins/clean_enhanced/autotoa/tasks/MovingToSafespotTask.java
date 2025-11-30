@@ -104,7 +104,7 @@ public class MovingToSafespotTask extends KephriManager {
      * sets a cooldown timer and designates an appropriate safe spot.
      */
     @Subscribe
-    public void b(GraphicsObjectCreated graphicsObjectCreated) {
+    public void onGraphicsObjectCreated(GraphicsObjectCreated graphicsObjectCreated) {
         // Ignore if we're already on cooldown
         if (this.cooldownTicksRemaining > this.client.getTickCount()) {
             return;
@@ -112,7 +112,7 @@ public class MovingToSafespotTask extends KephriManager {
 
         int graphicsId = graphicsObjectCreated.getGraphicsObject().getId();
         WorldPoint graphicsLocation = WorldPoint.fromLocal(
-            this.cu,
+            this.client,
             graphicsObjectCreated.getGraphicsObject().getLocation()
         );
 

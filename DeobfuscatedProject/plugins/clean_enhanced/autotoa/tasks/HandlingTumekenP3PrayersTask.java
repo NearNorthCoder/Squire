@@ -26,7 +26,7 @@ import net.runelite.api.events.ProjectileSpawned;
 import net.runelite.client.eventbus.Subscribe;
 import gg.squire.autotoa.tasks.KephriManager;
 import gg.squire.autotoa.tasks.FHelper;
-import gg.squire.autotoa.tasks.GameEnum10;
+import gg.squire.autotoa.tasks.PrayerMode;
 
 /**
  * Handles prayer switching for Tumeken's Warden Phase 3.
@@ -122,7 +122,7 @@ extends KephriManager {
     }
 
     @Override
-    public GameEnum10 getPrayerMode() {
-        return GameEnum10.FLICK;
+    public PrayerMode getPrayerMode() {
+        return PrayerMode.FLICK;
     }
 }

@@ -642,39 +642,39 @@ public class AgilityTraining1to50Step implements QuestStep {
      */
     public static void buildShoppingList() {
         if (!Bank.contains(STEEL_PLATELEGS_ID)) {
-            itemsToBuy.add(new d(STEEL_PLATELEGS_ID, 1, 12286));
+            itemsToBuy.add(new ShopItem(STEEL_PLATELEGS_ID, 1, 12286));
         }
         if (!Bank.contains(LEATHER_GLOVES_ID)) {
-            itemsToBuy.add(new d(LEATHER_GLOVES_ID, 2, 30334));
+            itemsToBuy.add(new ShopItem(LEATHER_GLOVES_ID, 2, 30334));
         }
         if (!Bank.contains(IRON_CROSSBOW_ID)) {
-            itemsToBuy.add(new d(IRON_CROSSBOW_ID, 2, 30334));
+            itemsToBuy.add(new ShopItem(IRON_CROSSBOW_ID, 2, 30334));
         }
         if (!Bank.contains(COINS_ID)) {
-            itemsToBuy.add(new d(COINS_ID, 10, 6070));
+            itemsToBuy.add(new ShopItem(COINS_ID, 10, 6070));
         }
         if (!Bank.contains(SUMMER_PIE_ID)) {
-            itemsToBuy.add(new d(SUMMER_PIE_ID, 10, 29150));
+            itemsToBuy.add(new ShopItem(SUMMER_PIE_ID, 10, 29150));
         }
         if (!Bank.contains(LEATHER_BOOTS_ID)) {
-            itemsToBuy.add(new d(LEATHER_BOOTS_ID, 10, 29150));
+            itemsToBuy.add(new ShopItem(LEATHER_BOOTS_ID, 10, 29150));
         }
         if (!Bank.contains(STEEL_PLATEBODY_ID)) {
-            itemsToBuy.add(new d(STEEL_PLATEBODY_ID, 10, 29150));
+            itemsToBuy.add(new ShopItem(STEEL_PLATEBODY_ID, 10, 29150));
         }
         if (!Bank.contains(SUMMER_PIE_ID) ||
             (Bank.contains(SUMMER_PIE_ID) && Bank.getFirst(SUMMER_PIE_ID).getQuantity() < 10)) {
-            itemsToBuy.add(new d(staminaPotionId, 60, 12190));
+            itemsToBuy.add(new ShopItem(staminaPotionId, 60, 12190));
         }
         if (!Bank.contains(IRON_CROSSBOW_ID) ||
             (Bank.contains(IRON_CROSSBOW_ID) && Bank.getFirst(IRON_CROSSBOW_ID).getQuantity() < 10)) {
-            itemsToBuy.add(new d(IRON_CROSSBOW_ID, 10, 26366));
+            itemsToBuy.add(new ShopItem(IRON_CROSSBOW_ID, 10, 26366));
         }
         if (!Bank.contains(11865)) {
-            itemsToBuy.add(new d(11865, 1, 32607));
+            itemsToBuy.add(new ShopItem(11865, 1, 32607));
         }
         if (!Bank.contains(TEAM_CAPE_ID)) {
-            itemsToBuy.add(new d(TEAM_CAPE_ID, 20, j.cf));
+            itemsToBuy.add(new ShopItem(TEAM_CAPE_ID, 20, Constants.DEFAULT_GE_TIMEOUT));
         }
     }
 }

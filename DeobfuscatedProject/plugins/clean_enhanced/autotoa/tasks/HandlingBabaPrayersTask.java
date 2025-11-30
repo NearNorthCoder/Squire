@@ -31,7 +31,7 @@ import net.runelite.api.events.GraphicsObjectCreated;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.client.Static;
 import gg.squire.autotoa.tasks.KephriManager;
-import gg.squire.autotoa.tasks.GameEnum10;
+import gg.squire.autotoa.tasks.PrayerMode;
 
 /**
  * Handles prayer switching for Ba-Ba boss fight.
@@ -142,7 +142,7 @@ extends KephriManager {
     }
 
     @Override
-    public GameEnum10 getPrayerMode() {
-        return GameEnum10.FLICK;
+    public PrayerMode getPrayerMode() {
+        return PrayerMode.FLICK;
     }
 }

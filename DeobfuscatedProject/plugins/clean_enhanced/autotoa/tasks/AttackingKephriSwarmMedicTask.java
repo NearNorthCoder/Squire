@@ -65,7 +65,7 @@ public class AttackingKephriSwarmMedicTask extends KephriManager {
 
     @Inject
     protected AttackingKephriSwarmMedicTask(Client client, ToaPlugin plugin, TOAConfig config) {
-        super(client, plugin, config, bi.ATTACK);
+        super(client, plugin, config, KephriPhase.ATTACK);
         this.healedSwarms = new HashSet<>();
     }
 

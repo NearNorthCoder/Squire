@@ -729,19 +729,19 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
     public static void setupBuyingList() {
         // Check and add basic supplies
         if (!Bank.contains(24400)) {
-            ITEMS_TO_BUY.add(new d(24400, 40, 19094));
+            ITEMS_TO_BUY.add(new ShopItem(24400, 40, 19094));
         }
         if (!Bank.contains(24442)) {
-            ITEMS_TO_BUY.add(new d(24442, 5, 19094));
+            ITEMS_TO_BUY.add(new ShopItem(24442, 5, 19094));
         }
         if (!Bank.contains(LEATHER_BOOTS)) {
-            ITEMS_TO_BUY.add(new d(LEATHER_BOOTS, 1, 43016));
+            ITEMS_TO_BUY.add(new ShopItem(LEATHER_BOOTS, 1, 43016));
         }
         if (!Bank.contains(LEATHER_VAMBRACES)) {
-            ITEMS_TO_BUY.add(new d(LEATHER_VAMBRACES, 1, 25579));
+            ITEMS_TO_BUY.add(new ShopItem(LEATHER_VAMBRACES, 1, 25579));
         }
         if (!Bank.contains(COOKED_MEAT)) {
-            ITEMS_TO_BUY.add(new d(COOKED_MEAT, 100, 24560));
+            ITEMS_TO_BUY.add(new ShopItem(COOKED_MEAT, 100, 24560));
         }
 
         // Check and add armor for low-mid levels
@@ -749,32 +749,32 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
             || (Skills.getLevel(Skill.ATTACK) >= TARGET_DEFENCE_LEVEL && Skills.getLevel(Skill.DEFENCE) < TARGET_DEFENCE_LEVEL)) {
 
             if (!Bank.contains(IRON_PLATEBODY)) {
-                ITEMS_TO_BUY.add(new d(IRON_PLATEBODY, 1, 32476));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_PLATEBODY, 1, 32476));
             }
             if (!Bank.contains(IRON_PLATELEGS)) {
-                ITEMS_TO_BUY.add(new d(IRON_PLATELEGS, 1, 32476));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_PLATELEGS, 1, 32476));
             }
             if (!Bank.contains(IRON_KITESHIELD)) {
-                ITEMS_TO_BUY.add(new d(IRON_KITESHIELD, 1, 32476));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_KITESHIELD, 1, 32476));
             }
             if (!Bank.contains(IRON_FULL_HELM)) {
-                ITEMS_TO_BUY.add(new d(IRON_FULL_HELM, 1, 32476));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_FULL_HELM, 1, 32476));
             }
         }
 
         // Check and add armor for high levels (60+ Defence)
         if (Skills.getLevel(Skill.DEFENCE) < TARGET_DEFENCE_LEVEL && Skills.getLevel(Skill.ATTACK) >= TARGET_DEFENCE_LEVEL) {
             if (!Bank.contains(IRON_PLATEBODY)) {
-                ITEMS_TO_BUY.add(new d(IRON_PLATEBODY, 1, 32476));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_PLATEBODY, 1, 32476));
             }
             if (!Bank.contains(IRON_PLATELEGS)) {
-                ITEMS_TO_BUY.add(new d(IRON_PLATELEGS, 1, 32476));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_PLATELEGS, 1, 32476));
             }
             if (!Bank.contains(IRON_KITESHIELD)) {
-                ITEMS_TO_BUY.add(new d(IRON_KITESHIELD, 1, 32476));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_KITESHIELD, 1, 32476));
             }
             if (!Bank.contains(IRON_FULL_HELM)) {
-                ITEMS_TO_BUY.add(new d(IRON_FULL_HELM, 1, 32476));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_FULL_HELM, 1, 32476));
             }
         }
 
@@ -784,35 +784,35 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
             && Skills.getLevel(Skill.STRENGTH) >= TARGET_DEFENCE_LEVEL) {
 
             if (!Bank.contains(RUNE_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(RUNE_SCIMITAR, 1, GameStateUtil.randomRange(61420, 637433)));
+                ITEMS_TO_BUY.add(new ShopItem(RUNE_SCIMITAR, 1, GameStateUtil.randomRange(61420, 637433)));
             }
             if (!Bank.contains(IRON_PLATEBODY)) {
-                ITEMS_TO_BUY.add(new d(IRON_PLATEBODY, 1, GameStateUtil.randomRange(174008, 187386)));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_PLATEBODY, 1, GameStateUtil.randomRange(174008, 187386)));
             }
             if (!Bank.contains(STEEL_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(STEEL_SCIMITAR, 1, GameStateUtil.randomRange(515992, 950239)));
+                ITEMS_TO_BUY.add(new ShopItem(STEEL_SCIMITAR, 1, GameStateUtil.randomRange(515992, 950239)));
             }
             if (!Bank.contains(AMULET_OF_STRENGTH)) {
-                ITEMS_TO_BUY.add(new d(AMULET_OF_STRENGTH, 1, GameStateUtil.randomRange(515992, 950239)));
+                ITEMS_TO_BUY.add(new ShopItem(AMULET_OF_STRENGTH, 1, GameStateUtil.randomRange(515992, 950239)));
             }
             if (!Bank.contains(ADAMANT_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(ADAMANT_SCIMITAR, 1, GameStateUtil.randomRange(1490880, 1503231)));
+                ITEMS_TO_BUY.add(new ShopItem(ADAMANT_SCIMITAR, 1, GameStateUtil.randomRange(1490880, 1503231)));
             }
             if (!Bank.contains(MITHRIL_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(MITHRIL_SCIMITAR, 1, GameStateUtil.randomRange(1118192, 1259221)));
+                ITEMS_TO_BUY.add(new ShopItem(MITHRIL_SCIMITAR, 1, GameStateUtil.randomRange(1118192, 1259221)));
             }
             if (!Bank.contains(IRON_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(IRON_SCIMITAR, 1, GameStateUtil.randomRange(700340, 719860)));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_SCIMITAR, 1, GameStateUtil.randomRange(700340, 719860)));
             }
             if (!Bank.contains(AMULET_OF_POWER)) {
-                ITEMS_TO_BUY.add(new d(AMULET_OF_POWER, 1, GameStateUtil.randomRange(3047410, 3063794)));
+                ITEMS_TO_BUY.add(new ShopItem(AMULET_OF_POWER, 1, GameStateUtil.randomRange(3047410, 3063794)));
             }
         }
 
         // Check and add weapons for high attack levels
         if (Skills.getLevel(Skill.ATTACK) >= LEVEL_40) {
             if (!Bank.contains(IRON_SCIMITAR)) {
-                ITEMS_TO_BUY.add(new d(IRON_SCIMITAR, 1, 25579));
+                ITEMS_TO_BUY.add(new ShopItem(IRON_SCIMITAR, 1, 25579));
             }
         }
 
@@ -820,7 +820,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
         if (!Bank.contains(BRONZE_SCIMITAR)
             && Skills.getLevel(Skill.ATTACK) < LEVEL_40
             && Skills.getLevel(Skill.ATTACK) >= LEVEL_30) {
-            ITEMS_TO_BUY.add(new d(BRONZE_SCIMITAR, 1, 32476));
+            ITEMS_TO_BUY.add(new ShopItem(BRONZE_SCIMITAR, 1, 32476));
         }
     }
 }

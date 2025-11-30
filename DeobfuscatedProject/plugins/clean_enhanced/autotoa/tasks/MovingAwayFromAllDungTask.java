@@ -52,7 +52,7 @@ public class MovingAwayFromAllDungTask extends KephriManager {
 
     @Inject
     protected MovingAwayFromAllDungTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
-        super(client, plugin, tOAConfig, bi.ATTACK);
+        super(client, plugin, tOAConfig, KephriPhase.ATTACK);
         this.moveAwayCounter = 0;
     }
 
@@ -62,13 +62,13 @@ public class MovingAwayFromAllDungTask extends KephriManager {
     }
 
     @Override
-    protected boolean bL() {
+    protected boolean shouldExecute() {
         Player localPlayer = this.client.getLocalPlayer();
         if (localPlayer == null) {
             return false;
         }
 
-        NPC targetNPC = this.bO();
+        NPC targetNPC = this.getTargetNPC();
 
         // Track when the boss performs dung attack animation
         if (targetNPC.getAnimation() == DUNG_ATTACK_ANIMATION) {
@@ -87,25 +87,25 @@ public class MovingAwayFromAllDungTask extends KephriManager {
         }
 
         // First try to use predefined cycle points if available
-        WorldPoint cycleSafeSpot = this.bX();
+        WorldPoint cycleSafeSpot = this.getNextCyclePoint();
 
         if (cycleSafeSpot == null) {
             // No cycle point available, calculate best escape position
-            List<TileObject> allDungObjects = this.bM();
+            List<TileObject> allDungObjects = this.getAllDungObjects();
 
             cycleSafeSpot = targetNPC.getWorldArea()
                 .offset(NPC_AREA_OFFSET)
                 .toWorldPointList()
                 .stream()
                 // Must be reasonably close to boss (within 3 tiles)
-                .filter(worldPoint -> this.bO().getWorldLocation().distanceTo(worldPoint) > MIN_DISTANCE_FROM_BOSS)
+                .filter(worldPoint -> this.getTargetNPC().getWorldLocation().distanceTo(worldPoint) > MIN_DISTANCE_FROM_BOSS)
                 // Must not be in melee distance of any dung object
                 .filter(worldPoint -> allDungObjects.stream().noneMatch(dung ->
                     dung.getWorldLocation().toWorldArea().isInMeleeDistance(worldPoint)))
                 // Must be walkable
                 .filter(Reachable::isWalkable)
                 // Prefer positions that minimize total distance to all dung objects
-                .max(Comparator.comparingInt(this::v))
+                .max(Comparator.comparingInt(this::calculateSafetyScore))
                 .orElse(null);
         }
 
@@ -126,8 +126,8 @@ public class MovingAwayFromAllDungTask extends KephriManager {
      * @param worldPoint The position to evaluate
      * @return Distance score (higher is safer), or MAX_VALUE if no dung nearby
      */
-    private int v(WorldPoint worldPoint) {
-        NPC targetNPC = this.bO();
+    private int calculateSafetyScore(WorldPoint worldPoint) {
+        NPC targetNPC = this.getTargetNPC();
 
         // Find the nearest dung object in melee range of the boss
         TileObject nearestDungToNPC = TileObjects.getNearest(worldPoint, tileObject ->
@@ -158,26 +158,26 @@ public class MovingAwayFromAllDungTask extends KephriManager {
 
     /**
      * Checks predefined cycle points to find the next safe position.
-     * Cycles through the eN list of positions, moving to the next point
+     * Cycles through the CYCLE_SAFE_SPOTS list of positions, moving to the next point
      * in sequence from the player's current location.
      *
      * @return Next safe cycle point, or null if none available
      */
-    private WorldPoint bX() {
+    private WorldPoint getNextCyclePoint() {
         int minDistance = Integer.MAX_VALUE;
         Point closestCyclePoint = null;
 
         // Find the cycle point we're currently at or closest to
-        Iterator<Point> iterator = eN.iterator();
+        Iterator<Point> iterator = CYCLE_SAFE_SPOTS.iterator();
         while (iterator.hasNext()) {
             Point cyclePoint = iterator.next();
-            WorldPoint cycleWorld = this.a(cyclePoint);
+            WorldPoint cycleWorld = this.localToWorld(cyclePoint);
             WorldPoint playerLocation = Players.getLocal().getWorldLocation();
 
             // If we're exactly at a cycle point, move to the next one
             if (playerLocation.equals(cycleWorld)) {
-                int nextIndex = (eN.indexOf(cyclePoint) + 1) % eN.size();
-                return this.a(eN.get(nextIndex));
+                int nextIndex = (CYCLE_SAFE_SPOTS.indexOf(cyclePoint) + 1) % CYCLE_SAFE_SPOTS.size();
+                return this.localToWorld(CYCLE_SAFE_SPOTS.get(nextIndex));
             }
 
             // Track the closest cycle point
@@ -193,8 +193,8 @@ public class MovingAwayFromAllDungTask extends KephriManager {
             return null;
         }
 
-        int nextIndex = (eN.indexOf(closestCyclePoint) + 1) % eN.size();
-        return this.a(eN.get(nextIndex));
+        int nextIndex = (CYCLE_SAFE_SPOTS.indexOf(closestCyclePoint) + 1) % CYCLE_SAFE_SPOTS.size();
+        return this.localToWorld(CYCLE_SAFE_SPOTS.get(nextIndex));
     }
 
     /**
@@ -202,7 +202,7 @@ public class MovingAwayFromAllDungTask extends KephriManager {
      * This can be used to track dung spawn events if needed.
      */
     @Subscribe
-    public void b(GameObjectSpawned gameObjectSpawned) {
+    public void onGameObjectSpawned(GameObjectSpawned gameObjectSpawned) {
         if (gameObjectSpawned.getGameObject().getId() == DUNG_OBJECT_ID) {
             // Dung has spawned - task will handle movement in next tick
         }

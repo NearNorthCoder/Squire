@@ -25,6 +25,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.Walker;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
+import gg.squire.sotf.framework.*;
 
 /**
  * Handles combat training by fighting NPCs.
@@ -113,56 +114,56 @@ public class CombatTrainingStep implements QuestStep {
         int attackLevel = Skills.getLevel(Skill.ATTACK);
 
         if (attackLevel >= 40 && !Bank.contains(RUNE_SCIMITAR_ID)) {
-            itemsToBuy.add(new d(RUNE_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 30635));
+            itemsToBuy.add(new ShopItem(RUNE_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 30635));
         }
 
         if (attackLevel >= 30 && !Bank.contains(ADAMANT_SCIMITAR_ID)) {
-            itemsToBuy.add(new d(ADAMANT_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 12245));
+            itemsToBuy.add(new ShopItem(ADAMANT_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 12245));
         }
 
         if (attackLevel >= 20 && !Bank.contains(MITHRIL_SCIMITAR_ID)) {
-            itemsToBuy.add(new d(MITHRIL_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 5211));
+            itemsToBuy.add(new ShopItem(MITHRIL_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 5211));
         }
 
         if (attackLevel >= 5 && !Bank.contains(STEEL_SCIMITAR_ID)) {
-            itemsToBuy.add(new d(STEEL_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 7271));
+            itemsToBuy.add(new ShopItem(STEEL_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 7271));
         }
 
         if (!Bank.contains(IRON_SCIMITAR_ID)) {
-            itemsToBuy.add(new d(IRON_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 19750));
+            itemsToBuy.add(new ShopItem(IRON_SCIMITAR_ID, BUY_WEAPON_QUANTITY, 19750));
         }
 
         // Buy armor based on defense level
         int defenseLevel = Skills.getLevel(Skill.DEFENCE);
 
         if (defenseLevel >= 20 && !Bank.contains(MITHRIL_CHAINBODY_ID)) {
-            itemsToBuy.add(new d(MITHRIL_CHAINBODY_ID, BUY_ARMOR_QUANTITY, 12191));
+            itemsToBuy.add(new ShopItem(MITHRIL_CHAINBODY_ID, BUY_ARMOR_QUANTITY, 12191));
         }
 
         if (defenseLevel >= 5 && !Bank.contains(STEEL_CHAINBODY_ID)) {
-            itemsToBuy.add(new d(STEEL_CHAINBODY_ID, BUY_ARMOR_QUANTITY, 8303));
+            itemsToBuy.add(new ShopItem(STEEL_CHAINBODY_ID, BUY_ARMOR_QUANTITY, 8303));
         }
 
         if (!Bank.contains(IRON_CHAINBODY_ID)) {
-            itemsToBuy.add(new d(IRON_CHAINBODY_ID, BUY_ARMOR_QUANTITY, 28391));
+            itemsToBuy.add(new ShopItem(IRON_CHAINBODY_ID, BUY_ARMOR_QUANTITY, 28391));
         }
 
         // Buy food
         if (!Bank.contains(LOBSTER_ID)) {
-            itemsToBuy.add(new d(LOBSTER_ID, BUY_FOOD_QUANTITY, j.cf));
+            itemsToBuy.add(new ShopItem(LOBSTER_ID, BUY_FOOD_QUANTITY, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Buy potions
         if (!Bank.contains(PRAYER_POTION_ID)) {
-            itemsToBuy.add(new d(PRAYER_POTION_ID, BUY_PRAYER_POTION_QUANTITY, 8319));
+            itemsToBuy.add(new ShopItem(PRAYER_POTION_ID, BUY_PRAYER_POTION_QUANTITY, 8319));
         }
 
         if (!Bank.contains(SUPER_ATTACK_POTION_ID)) {
-            itemsToBuy.add(new d(SUPER_ATTACK_POTION_ID, BUY_WEAPON_QUANTITY, 12258));
+            itemsToBuy.add(new ShopItem(SUPER_ATTACK_POTION_ID, BUY_WEAPON_QUANTITY, 12258));
         }
 
         if (!Bank.contains(SUPER_STRENGTH_POTION_ID)) {
-            itemsToBuy.add(new d(SUPER_STRENGTH_POTION_ID, BUY_WEAPON_QUANTITY, 16330));
+            itemsToBuy.add(new ShopItem(SUPER_STRENGTH_POTION_ID, BUY_WEAPON_QUANTITY, 16330));
         }
     }
 

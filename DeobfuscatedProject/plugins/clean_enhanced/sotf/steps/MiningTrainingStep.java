@@ -16,6 +16,7 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
+import gg.squire.sotf.framework.*;
 
 /**
  * Trains Mining by mining various ore types.
@@ -124,47 +125,47 @@ public class MiningTrainingStep implements QuestStep {
     public static void populateShoppingList() {
         // Buy rune pickaxe if missing
         if (!Bank.contains(RUNE_PICKAXE_ID)) {
-            itemsToBuy.add(new d(RUNE_PICKAXE_ID, 1, BUY_RUNE_PICKAXE_PRICE));
+            itemsToBuy.add(new ShopItem(RUNE_PICKAXE_ID, 1, BUY_RUNE_PICKAXE_PRICE));
         }
 
         // Buy adamant pickaxe if missing
         if (!Bank.contains(ADAMANT_PICKAXE_ID)) {
-            itemsToBuy.add(new d(ADAMANT_PICKAXE_ID, 1, BUY_ADAMANT_PICKAXE_PRICE));
+            itemsToBuy.add(new ShopItem(ADAMANT_PICKAXE_ID, 1, BUY_ADAMANT_PICKAXE_PRICE));
         }
 
         // Buy mithril pickaxe if missing
         if (!Bank.contains(MITHRIL_PICKAXE_ID)) {
-            itemsToBuy.add(new d(MITHRIL_PICKAXE_ID, 1, BUY_MITHRIL_PICKAXE_PRICE));
+            itemsToBuy.add(new ShopItem(MITHRIL_PICKAXE_ID, 1, BUY_MITHRIL_PICKAXE_PRICE));
         }
 
         // Buy steel pickaxe if missing
         if (!Bank.contains(STEEL_PICKAXE_ID)) {
-            itemsToBuy.add(new d(STEEL_PICKAXE_ID, 1, BUY_STEEL_PICKAXE_PRICE));
+            itemsToBuy.add(new ShopItem(STEEL_PICKAXE_ID, 1, BUY_STEEL_PICKAXE_PRICE));
         }
 
         // Buy iron pickaxe if missing
         if (!Bank.contains(IRON_PICKAXE_ID)) {
-            itemsToBuy.add(new d(IRON_PICKAXE_ID, 1, BUY_IRON_PICKAXE_PRICE));
+            itemsToBuy.add(new ShopItem(IRON_PICKAXE_ID, 1, BUY_IRON_PICKAXE_PRICE));
         }
 
         // Buy bronze pickaxe if missing
         if (!Bank.contains(BRONZE_PICKAXE_ID)) {
-            itemsToBuy.add(new d(BRONZE_PICKAXE_ID, 1, BUY_BRONZE_PICKAXE_PRICE));
+            itemsToBuy.add(new ShopItem(BRONZE_PICKAXE_ID, 1, BUY_BRONZE_PICKAXE_PRICE));
         }
 
         // Buy ring of wealth
         if (!Bank.contains(item -> item.getName().toLowerCase().contains(ITEM_PREFIX_RING_OF_WEALTH))) {
-            itemsToBuy.add(new d(RING_OF_WEALTH_ID, 35, BUY_RING_PRICE));
+            itemsToBuy.add(new ShopItem(RING_OF_WEALTH_ID, 35, BUY_RING_PRICE));
         }
 
         // Buy gloves
         if (!Bank.contains(GLOVES_ID)) {
-            itemsToBuy.add(new d(GLOVES_ID, 166, BUY_GLOVES_PRICE));
+            itemsToBuy.add(new ShopItem(GLOVES_ID, 166, BUY_GLOVES_PRICE));
         }
 
         // Buy beer
         if (!Bank.contains(BEER_ID)) {
-            itemsToBuy.add(new d(BEER_ID, 1, BUY_BEER_PRICE));
+            itemsToBuy.add(new ShopItem(BEER_ID, 1, BUY_BEER_PRICE));
         }
     }
 

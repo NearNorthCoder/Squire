@@ -12,6 +12,9 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Widgets;
+import gg.squire.sotf.framework.ShopItem;
+import gg.squire.sotf.framework.QuestStep;
+import gg.squire.sotf.framework.GameStateUtil;
 
 /**
  * Trains Herblore by making potions and cutting gems.
@@ -87,33 +90,33 @@ public class HerbloreTrainingStep implements QuestStep {
         if (herbloreLevel < LEVEL_THRESHOLD_LOW) {
             // Buy guam and eye of newt for attack potions
             if (!Bank.contains(VIAL_OF_WATER_ID)) {
-                itemsToBuy.add(new d(VIAL_OF_WATER_ID, QUANTITY_TO_BUY_VIALS, QUANTITY_TO_BUY_SECONDARY));
+                itemsToBuy.add(new ShopItem(VIAL_OF_WATER_ID, QUANTITY_TO_BUY_VIALS, QUANTITY_TO_BUY_SECONDARY));
             }
 
             if (!Bank.contains(GUAM_LEAF_ID)) {
-                itemsToBuy.add(new d(GUAM_LEAF_ID, calculateQuantityNeeded(), QUANTITY_TO_BUY_HERBS));
+                itemsToBuy.add(new ShopItem(GUAM_LEAF_ID, calculateQuantityNeeded(), QUANTITY_TO_BUY_HERBS));
             }
         }
 
         if (herbloreLevel >= LEVEL_THRESHOLD_LOW && herbloreLevel < LEVEL_THRESHOLD_MID) {
             // Buy marrentill and other herbs for prayer potions
             if (!Bank.contains(MARRENTILL_ID)) {
-                itemsToBuy.add(new d(MARRENTILL_ID, calculateQuantityNeeded(), QUANTITY_TO_BUY_MARRENTILL_LOW));
+                itemsToBuy.add(new ShopItem(MARRENTILL_ID, calculateQuantityNeeded(), QUANTITY_TO_BUY_MARRENTILL_LOW));
             }
 
             if (!Bank.contains(TARROMIN_ID)) {
-                itemsToBuy.add(new d(TARROMIN_ID, calculateQuantityNeeded(), QUANTITY_TO_BUY_TARROMIN));
+                itemsToBuy.add(new ShopItem(TARROMIN_ID, calculateQuantityNeeded(), QUANTITY_TO_BUY_TARROMIN));
             }
         }
 
         if (herbloreLevel >= LEVEL_THRESHOLD_MID) {
             // Continue with vials and marrentill
             if (!Bank.contains(VIAL_OF_WATER_ID)) {
-                itemsToBuy.add(new d(VIAL_OF_WATER_ID, QUANTITY_TO_BUY_VIALS, QUANTITY_TO_BUY_SECONDARY));
+                itemsToBuy.add(new ShopItem(VIAL_OF_WATER_ID, QUANTITY_TO_BUY_VIALS, QUANTITY_TO_BUY_SECONDARY));
             }
 
             if (!Bank.contains(UNCUT_SAPPHIRE_ID)) {
-                itemsToBuy.add(new d(UNCUT_SAPPHIRE_ID, QUANTITY_TO_BUY_VIALS, QUANTITY_TO_BUY_MARRENTILL_HIGH));
+                itemsToBuy.add(new ShopItem(UNCUT_SAPPHIRE_ID, QUANTITY_TO_BUY_VIALS, QUANTITY_TO_BUY_MARRENTILL_HIGH));
             }
         }
     }

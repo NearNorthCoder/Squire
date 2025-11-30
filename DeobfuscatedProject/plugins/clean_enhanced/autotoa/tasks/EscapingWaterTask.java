@@ -41,15 +41,15 @@ public class EscapingWaterTask extends KephriManager {
     }
 
     @Override
-    public boolean bL() {
+    protected boolean shouldExecute() {
         // Get the target NPC (likely the crocodile/crondis boss)
-        NPC targetNPC = this.cB();
+        NPC targetNPC = this.getZebakNPC();
         if (targetNPC == null) {
             return false;
         }
 
         // Calculate the safe dry land position
-        WorldPoint dryLandWorld = this.a(DRY_LAND_POSITION);
+        WorldPoint dryLandWorld = this.localToWorld(DRY_LAND_POSITION);
 
         // Check if the dry land position is accessible
         if (!Reachable.isWalkable(dryLandWorld) || Reachable.isObstacle(dryLandWorld)) {
@@ -63,7 +63,7 @@ public class EscapingWaterTask extends KephriManager {
         }
 
         // If we're in attack mode, move to the rock steps location
-        if (this.cF() == bY.ATTACK) {
+        if (this.getCurrentPhase() == ZebakPhase.ATTACK) {
             Movement.setDestination(rockSteps.getWorldLocation());
             return true;
         }

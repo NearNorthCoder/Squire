@@ -18,6 +18,8 @@ import net.unethicalite.api.entities.TileItems;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.input.Keyboard;
+import gg.squire.sotf.framework.ShopItem;
+import gg.squire.sotf.framework.GameStateUtil;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
@@ -930,12 +932,12 @@ public class WitchesHouseQuestStep implements QuestStep {
     private static void createShoppingList() {
         // Check lobster quantity
         if (!Bank.contains(LOBSTER_ID)) {
-            shoppingList.add(new d(LOBSTER_ID, 100, 110));
+            shoppingList.add(new ShopItem(LOBSTER_ID, 100, 110));
         }
 
         if (Bank.contains(LOBSTER_ID)) {
             if (Bank.getFirst(LOBSTER_ID).getQuantity() < LOBSTER_QUANTITY_MIN) {
-                shoppingList.add(new d(LOBSTER_ID, LOBSTER_QUANTITY_WITHDRAW, 110));
+                shoppingList.add(new ShopItem(LOBSTER_ID, LOBSTER_QUANTITY_WITHDRAW, 110));
             }
         }
 
@@ -943,51 +945,51 @@ public class WitchesHouseQuestStep implements QuestStep {
         if (Bank.contains(LEATHER_GLOVES_ID)) {
             if (Bank.contains(LEATHER_GLOVES_ID) &&
                 Bank.getFirst(LEATHER_GLOVES_ID).getQuantity() < 5) {
-                shoppingList.add(new d(LEATHER_GLOVES_ID, 5, 111));
+                shoppingList.add(new ShopItem(LEATHER_GLOVES_ID, 5, 111));
             }
         }
 
         // Check for ring of wealth
         if (Bank.contains((Predicate) item -> item.getName().toLowerCase().contains("ring of wealth ("))) {
-            shoppingList.add(new d(112, 12, 113));
+            shoppingList.add(new ShopItem(112, 12, 113));
         }
 
         // Check for item 8007
         if (Bank.contains(8007)) {
-            shoppingList.add(new d(8007, LOBSTER_QUANTITY_WITHDRAW, 114));
+            shoppingList.add(new ShopItem(8007, LOBSTER_QUANTITY_WITHDRAW, 114));
         }
 
         // Check teleport tablets
         if (Bank.contains(TELEPORT_TABLET_ID)) {
             if (Bank.contains(TELEPORT_TABLET_ID) &&
                 Bank.getFirst(TELEPORT_TABLET_ID).getQuantity() < 10) {
-                shoppingList.add(new d(TELEPORT_TABLET_ID, LOBSTER_QUANTITY_MIN, 114));
+                shoppingList.add(new ShopItem(TELEPORT_TABLET_ID, LOBSTER_QUANTITY_MIN, 114));
             }
         }
 
         // Check cheese
         if (Bank.contains(12625)) {
-            shoppingList.add(new d(12625, 5, j.cf));
+            shoppingList.add(new ShopItem(12625, 5, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Check fire runes
         if (Bank.contains(FIRE_RUNE_ID)) {
             if (Bank.getFirst(FIRE_RUNE_ID).getQuantity() < MIN_STOCK_QUANTITY) {
-                shoppingList.add(new d(FIRE_RUNE_ID, RUNE_STOCK_QUANTITY, 18));
+                shoppingList.add(new ShopItem(FIRE_RUNE_ID, RUNE_STOCK_QUANTITY, 18));
             }
         }
 
         // Check water runes
         if (Bank.contains(WATER_RUNE_ID)) {
             if (Bank.getFirst(WATER_RUNE_ID).getQuantity() < MIN_STOCK_QUANTITY) {
-                shoppingList.add(new d(WATER_RUNE_ID, RUNE_STOCK_QUANTITY, 18));
+                shoppingList.add(new ShopItem(WATER_RUNE_ID, RUNE_STOCK_QUANTITY, 18));
             }
         }
 
         // Check earth runes
         if (Bank.contains(EARTH_RUNE_ID)) {
             if (Bank.getFirst(EARTH_RUNE_ID).getQuantity() < MIN_STOCK_QUANTITY) {
-                shoppingList.add(new d(EARTH_RUNE_ID, RUNE_STOCK_QUANTITY, 18));
+                shoppingList.add(new ShopItem(EARTH_RUNE_ID, RUNE_STOCK_QUANTITY, 18));
             }
         }
     }

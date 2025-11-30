@@ -150,29 +150,29 @@ public class CookingTrainingStep implements QuestStep {
 
         // Add appropriate food to shopping list
         if (cookingLevel < SHRIMP_TO_TROUT_LEVEL) {
-            shoppingList.add(new d(RAW_SHRIMP_ID, SHRIMP_QUANTITY, SHRIMP_PRICE));
+            shoppingList.add(new ShopItem(RAW_SHRIMP_ID, SHRIMP_QUANTITY, SHRIMP_PRICE));
         }
 
         if (cookingLevel >= SHRIMP_TO_TROUT_LEVEL && cookingLevel < TROUT_TO_TUNA_LEVEL) {
-            shoppingList.add(new d(RAW_TROUT_ID, TROUT_QUANTITY, TROUT_PRICE));
+            shoppingList.add(new ShopItem(RAW_TROUT_ID, TROUT_QUANTITY, TROUT_PRICE));
         }
 
         if (cookingLevel >= TROUT_TO_TUNA_LEVEL) {
-            shoppingList.add(new d(RAW_TUNA_ID, TROUT_QUANTITY, TROUT_PRICE));
+            shoppingList.add(new ShopItem(RAW_TUNA_ID, TROUT_QUANTITY, TROUT_PRICE));
         }
 
         // Add rings if not in bank
         if (!Bank.contains(item -> item.getName().toLowerCase().contains(ITEM_RING_OF_DUELING))) {
-            shoppingList.add(new d(RING_OF_DUELING_ID, RING_DUELING_QUANTITY, RING_DUELING_PRICE));
+            shoppingList.add(new ShopItem(RING_OF_DUELING_ID, RING_DUELING_QUANTITY, RING_DUELING_PRICE));
         }
 
         if (!Bank.contains(item -> item.getName().toLowerCase().contains(ITEM_RING_OF_WEALTH))) {
-            shoppingList.add(new d(RING_OF_WEALTH_ID, RING_WEALTH_QUANTITY, RING_WEALTH_PRICE));
+            shoppingList.add(new ShopItem(RING_OF_WEALTH_ID, RING_WEALTH_QUANTITY, RING_WEALTH_PRICE));
         }
 
         // Add coins if not in bank
         if (!Bank.contains(COINS_ID)) {
-            shoppingList.add(new d(COINS_ID, COINS_QUANTITY, COINS_PRICE));
+            shoppingList.add(new ShopItem(COINS_ID, COINS_QUANTITY, COINS_PRICE));
         }
     }
 

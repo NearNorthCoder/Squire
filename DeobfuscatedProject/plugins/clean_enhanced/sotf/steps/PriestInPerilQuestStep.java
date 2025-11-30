@@ -732,25 +732,25 @@ public class PriestInPerilQuestStep implements QuestStep {
      */
     private static void checkAndAddMissingItems() {
         if (!Bank.contains(ITEM_GOLDEN_KEY)) {
-            itemsToBuy.add(new d(ITEM_GOLDEN_KEY, 1, 9000));
+            itemsToBuy.add(new ShopItem(ITEM_GOLDEN_KEY, 1, 9000));
         }
         if (!Bank.contains(ITEM_BRONZE_AXE)) {
-            itemsToBuy.add(new d(ITEM_BRONZE_AXE, 1, 9000));
+            itemsToBuy.add(new ShopItem(ITEM_BRONZE_AXE, 1, 9000));
         }
         if (!Bank.contains(ITEM_RUNE_SCIMITAR)) {
-            itemsToBuy.add(new d(ITEM_RUNE_SCIMITAR, 5, j.cf));
+            itemsToBuy.add(new ShopItem(ITEM_RUNE_SCIMITAR, 5, Constants.DEFAULT_GE_TIMEOUT));
         }
         if (!Bank.contains(ITEM_FOOD)) {
-            itemsToBuy.add(new d(ITEM_FOOD, 30, 300));
+            itemsToBuy.add(new ShopItem(ITEM_FOOD, 30, 300));
         }
         if (Bank.contains(ITEM_STAMINA_POTION) && Bank.getFirst(ITEM_STAMINA_POTION).getQuantity() < 50) {
-            itemsToBuy.add(new d(ITEM_STAMINA_POTION, 50, 107));
+            itemsToBuy.add(new ShopItem(ITEM_STAMINA_POTION, 50, 107));
         }
         if (!Bank.contains((Predicate<net.runelite.api.Item>)(item -> item.getName().toLowerCase().contains("ring of wealth (")))) {
-            itemsToBuy.add(new d(ITEM_RING_OF_WEALTH, 5, 25000));
+            itemsToBuy.add(new ShopItem(ITEM_RING_OF_WEALTH, 5, 25000));
         }
         if (!Bank.contains(ITEM_MITHRIL_AXE)) {
-            itemsToBuy.add(new d(ITEM_MITHRIL_AXE, 40, 900));
+            itemsToBuy.add(new ShopItem(ITEM_MITHRIL_AXE, 40, 900));
         }
     }
 }

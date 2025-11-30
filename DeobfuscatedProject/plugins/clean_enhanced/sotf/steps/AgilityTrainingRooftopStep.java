@@ -274,46 +274,46 @@ public class AgilityTrainingRooftopStep implements QuestStep {
      */
     public static void addMissingItemsToShoppingList() {
         if (!Bank.contains(11856)) {
-            missingSupplies.add(new d(11856, 1, 12668));
+            missingSupplies.add(new ShopItem(11856, 1, 12668));
         }
         if (!Bank.contains(32665)) {
-            missingSupplies.add(new d(32665, 2, 28548));
+            missingSupplies.add(new ShopItem(32665, 2, 28548));
         }
         if (!Bank.contains(12629)) {
-            missingSupplies.add(new d(12629, 2, 28548));
+            missingSupplies.add(new ShopItem(12629, 2, 28548));
         }
         if (!Bank.contains(11850)) {
-            missingSupplies.add(new d(11850, 9, 28531));
+            missingSupplies.add(new ShopItem(11850, 9, 28531));
         }
         if (!Bank.contains(11860)) {
-            missingSupplies.add(new d(11860, 9, 28531));
+            missingSupplies.add(new ShopItem(11860, 9, 28531));
         }
         if (!Bank.contains(11854)) {
-            missingSupplies.add(new d(11854, 9, 28531));
+            missingSupplies.add(new ShopItem(11854, 9, 28531));
         }
         if (!Bank.contains(11852)) {
-            missingSupplies.add(new d(11852, 9, 28531));
+            missingSupplies.add(new ShopItem(11852, 9, 28531));
         }
 
         // Check for summer pie quantity
         if (Bank.contains(7218)) {
             if (Bank.getFirst(7218).getQuantity() < 9) {
-                missingSupplies.add(new d(foodItemId, 60, 27131));
+                missingSupplies.add(new ShopItem(foodItemId, 60, 27131));
             }
         }
 
         // Check for stamina potion quantity
         if (Bank.contains(12625)) {
             if (Bank.getFirst(12625).getQuantity() < 9) {
-                missingSupplies.add(new d(12625, 9, 14848));
+                missingSupplies.add(new ShopItem(12625, 9, 14848));
             }
         }
 
         if (!Bank.contains(32651)) {
-            missingSupplies.add(new d(32651, 1, 25805));
+            missingSupplies.add(new ShopItem(32651, 1, 25805));
         }
         if (!Bank.contains(32665)) {
-            missingSupplies.add(new d(32665, 20, j.cf));
+            missingSupplies.add(new ShopItem(32665, 20, Constants.DEFAULT_GE_TIMEOUT));
         }
     }
 

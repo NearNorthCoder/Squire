@@ -13,6 +13,7 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
+import gg.squire.sotf.framework.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,28 +133,28 @@ public class DruidicRitualQuestStep implements QuestStep {
      */
     private static void buildShoppingList() {
         if (!Bank.contains(ITEM_COINS)) {
-            itemRequirements.add(new d(ITEM_COINS, 5, j.cf));
+            itemRequirements.add(new ShopItem(ITEM_COINS, 5, Constants.DEFAULT_GE_TIMEOUT));
         }
         if (!Bank.contains(ITEM_RAW_BEEF)) {
-            itemRequirements.add(new d(ITEM_RAW_BEEF, 1, 25000));
+            itemRequirements.add(new ShopItem(ITEM_RAW_BEEF, 1, 25000));
         }
         if (!Bank.contains(ITEM_RAW_CHICKEN)) {
-            itemRequirements.add(new d(ITEM_RAW_CHICKEN, 1, 25000));
+            itemRequirements.add(new ShopItem(ITEM_RAW_CHICKEN, 1, 25000));
         }
         if (!Bank.contains(ITEM_RAW_BEAR_MEAT)) {
-            itemRequirements.add(new d(ITEM_RAW_BEAR_MEAT, 1, 25000));
+            itemRequirements.add(new ShopItem(ITEM_RAW_BEAR_MEAT, 1, 25000));
         }
         if (!Bank.contains(ITEM_RAW_RAT_MEAT)) {
-            itemRequirements.add(new d(ITEM_RAW_RAT_MEAT, 1, 25000));
+            itemRequirements.add(new ShopItem(ITEM_RAW_RAT_MEAT, 1, 25000));
         }
         if (!Bank.contains(ITEM_SPADE)) {
-            itemRequirements.add(new d(ITEM_SPADE, 31, 25000));
+            itemRequirements.add(new ShopItem(ITEM_SPADE, 31, 25000));
         }
         if (!Bank.contains(item -> item.getName().toLowerCase().contains("ring of wealth ("))) {
-            itemRequirements.add(new d(ITEM_RING_OF_WEALTH, 5, 31914));
+            itemRequirements.add(new ShopItem(ITEM_RING_OF_WEALTH, 5, 31914));
         }
         if (!Bank.contains(995)) {
-            itemRequirements.add(new d(995, 32, 12949));
+            itemRequirements.add(new ShopItem(995, 32, 12949));
         }
     }
 

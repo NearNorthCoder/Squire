@@ -61,7 +61,7 @@ public class AttackingSwarmsTask extends KephriManager {
 
     @Inject
     protected AttackingSwarmsTask(Client client, ToaPlugin plugin, TOAConfig config) {
-        super(client, plugin, config, bi.SWARM);
+        super(client, plugin, config, KephriPhase.SWARM);
         this.targetedSwarms = new HashSet<>();
     }
 

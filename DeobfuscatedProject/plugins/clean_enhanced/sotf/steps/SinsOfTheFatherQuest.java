@@ -778,37 +778,37 @@ public class SinsOfTheFatherQuest implements QuestStep {
     public static void checkRequiredItems() {
         // Check for rope
         if (!Bank.contains(ROPE_ID)) {
-            buyingItemsList.add(new d(ROPE_ID, 14, 0x315));
+            buyingItemsList.add(new ShopItem(ROPE_ID, 14, 0x315));
         }
 
         // Check for stamina potions
         if (!Bank.contains(0x316)) {
-            buyingItemsList.add(new d(0x316, 4, j.cf));
+            buyingItemsList.add(new ShopItem(0x316, 4, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Check for water runes
         if (!Bank.contains(0x14) || Bank.getFirst(0x14).getQuantity() < 6) {
-            buyingItemsList.add(new d(0x14, 0x317, 19));
+            buyingItemsList.add(new ShopItem(0x14, 0x317, 19));
         }
 
         // Check for earth runes
         if (!Bank.contains(0x15) || Bank.getFirst(0x15).getQuantity() < 6) {
-            buyingItemsList.add(new d(0x15, 0x317, 19));
+            buyingItemsList.add(new ShopItem(0x15, 0x317, 19));
         }
 
         // Check for air runes
         if (!Bank.contains(0x16) || Bank.getFirst(0x16).getQuantity() < 6) {
-            buyingItemsList.add(new d(0x16, 0x317, 19));
+            buyingItemsList.add(new ShopItem(0x16, 0x317, 19));
         }
 
         // Check for ring of wealth
         if (Bank.contains(item -> item.getName().toLowerCase().contains("ring of wealth"))) {
-            buyingItemsList.add(new d(0x321, 21, 0x322));
+            buyingItemsList.add(new ShopItem(0x321, 21, 0x322));
         }
 
         // Check for games necklace
         if (Bank.contains(0x323)) {
-            buyingItemsList.add(new d(0x323, 58, 0x324));
+            buyingItemsList.add(new ShopItem(0x323, 58, 0x324));
         }
     }
 

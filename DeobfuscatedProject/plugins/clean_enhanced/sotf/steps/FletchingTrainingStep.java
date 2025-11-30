@@ -15,6 +15,8 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Production;
+import gg.squire.sotf.framework.ShopItem;
+import gg.squire.sotf.framework.QuestStep;
 
 /**
  * Trains Fletching by cutting logs and stringing bows.
@@ -155,43 +157,43 @@ public class FletchingTrainingStep implements QuestStep {
 
         // Buy knife
         if (!Bank.contains(KNIFE_ID)) {
-            itemsToBuy.add(new d(KNIFE_ID, BUY_KNIFE_QUANTITY, BUY_KNIFE_PRICE));
+            itemsToBuy.add(new ShopItem(KNIFE_ID, BUY_KNIFE_QUANTITY, BUY_KNIFE_PRICE));
         }
 
         // Buy logs based on level
         if (fletchingLevel < LEVEL_THRESHOLD_LOW) {
             if (!Bank.contains(LOGS_ID)) {
-                itemsToBuy.add(new d(LOGS_ID, BUY_LOGS_QUANTITY, BUY_LOGS_PRICE));
+                itemsToBuy.add(new ShopItem(LOGS_ID, BUY_LOGS_QUANTITY, BUY_LOGS_PRICE));
             }
             if (!Bank.contains(BOW_STRING_ID)) {
-                itemsToBuy.add(new d(BOW_STRING_ID, BUY_BOW_STRING_QUANTITY, BUY_BOW_STRING_PRICE));
+                itemsToBuy.add(new ShopItem(BOW_STRING_ID, BUY_BOW_STRING_QUANTITY, BUY_BOW_STRING_PRICE));
             }
         }
 
         if (fletchingLevel >= LEVEL_THRESHOLD_LOW && fletchingLevel < LEVEL_THRESHOLD_MID_2) {
             if (!Bank.contains(OAK_LOGS_ID)) {
-                itemsToBuy.add(new d(OAK_LOGS_ID, BUY_LOGS_QUANTITY, BUY_OAK_LOGS_PRICE));
+                itemsToBuy.add(new ShopItem(OAK_LOGS_ID, BUY_LOGS_QUANTITY, BUY_OAK_LOGS_PRICE));
             }
             if (!Bank.contains(BOW_STRING_ID)) {
-                itemsToBuy.add(new d(BOW_STRING_ID, BUY_BOW_STRING_QUANTITY, BUY_BOW_STRING_PRICE));
+                itemsToBuy.add(new ShopItem(BOW_STRING_ID, BUY_BOW_STRING_QUANTITY, BUY_BOW_STRING_PRICE));
             }
         }
 
         if (fletchingLevel >= LEVEL_THRESHOLD_MID_2 && fletchingLevel < LEVEL_THRESHOLD_MID_4) {
             if (!Bank.contains(WILLOW_LOGS_ID)) {
-                itemsToBuy.add(new d(WILLOW_LOGS_ID, BUY_WILLOW_LOGS_QUANTITY, BUY_WILLOW_LOGS_PRICE));
+                itemsToBuy.add(new ShopItem(WILLOW_LOGS_ID, BUY_WILLOW_LOGS_QUANTITY, BUY_WILLOW_LOGS_PRICE));
             }
             if (!Bank.contains(BOW_STRING_ID)) {
-                itemsToBuy.add(new d(BOW_STRING_ID, BUY_BOW_STRING_QUANTITY, BUY_BOW_STRING_PRICE));
+                itemsToBuy.add(new ShopItem(BOW_STRING_ID, BUY_BOW_STRING_QUANTITY, BUY_BOW_STRING_PRICE));
             }
         }
 
         if (fletchingLevel >= LEVEL_THRESHOLD_MID_4) {
             if (!Bank.contains(MAPLE_LOGS_ID)) {
-                itemsToBuy.add(new d(MAPLE_LOGS_ID, BUY_LOGS_QUANTITY, BUY_MAPLE_LOGS_PRICE));
+                itemsToBuy.add(new ShopItem(MAPLE_LOGS_ID, BUY_LOGS_QUANTITY, BUY_MAPLE_LOGS_PRICE));
             }
             if (!Bank.contains(BOW_STRING_ID)) {
-                itemsToBuy.add(new d(BOW_STRING_ID, BUY_BOW_STRING_QUANTITY, BUY_BOW_STRING_PRICE));
+                itemsToBuy.add(new ShopItem(BOW_STRING_ID, BUY_BOW_STRING_QUANTITY, BUY_BOW_STRING_PRICE));
             }
         }
     }

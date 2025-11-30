@@ -150,78 +150,78 @@ public class AnimalMagnetismStep implements QuestStep {
         // Ecto-tokens (5 needed)
         if (Bank.contains(ECTO_TOKENS_ID)) {
             if (Bank.contains(ECTO_TOKENS_ID) && Bank.getFirst(ECTO_TOKENS_ID).getQuantity() < 5) {
-                itemsToBuy.add(new d(ECTO_TOKENS_ID, 5, GameStateUtil.randomRange(13690, 5412)));
+                itemsToBuy.add(new ShopItem(ECTO_TOKENS_ID, 5, GameStateUtil.randomRange(13690, 5412)));
             }
         }
 
         // Cowhides (10 needed)
         if (Bank.contains(COWHIDE_ID)) {
             if (Bank.contains(COWHIDE_ID) && Bank.getFirst(COWHIDE_ID).getQuantity() < 10) {
-                itemsToBuy.add(new d(COWHIDE_ID, 10, 10220));
+                itemsToBuy.add(new ShopItem(COWHIDE_ID, 10, 10220));
             }
         }
 
         // Soft leather (7 needed)
         if (Bank.contains(SOFT_LEATHER_ID)) {
             if (Bank.contains(SOFT_LEATHER_ID) && Bank.getFirst(SOFT_LEATHER_ID).getQuantity() < 7) {
-                itemsToBuy.add(new d(SOFT_LEATHER_ID, 7, 31647));
+                itemsToBuy.add(new ShopItem(SOFT_LEATHER_ID, 7, 31647));
             }
         }
 
         // Polished buttons (if not in bank)
         if (!Bank.contains(POLISHED_BUTTONS_ID)) {
-            itemsToBuy.add(new d(POLISHED_BUTTONS_ID, 3, 16339));
+            itemsToBuy.add(new ShopItem(POLISHED_BUTTONS_ID, 3, 16339));
         }
 
         // Chisel (if not in bank)
         if (!Bank.contains(CHISEL_ID)) {
-            itemsToBuy.add(new d(CHISEL_ID, 1, 30527));
+            itemsToBuy.add(new ShopItem(CHISEL_ID, 1, 30527));
         }
 
         // Iron bar (127 needed for multiple purposes)
         if (Bank.contains(IRON_BAR_ID)) {
             if (Bank.contains(IRON_BAR_ID) && Bank.getFirst(IRON_BAR_ID).getQuantity() < 127) {
-                itemsToBuy.add(new d(IRON_BAR_ID, 127, 30527));
+                itemsToBuy.add(new ShopItem(IRON_BAR_ID, 127, 30527));
             }
         }
 
         // Needle (3 needed)
         if (Bank.contains(NEEDLE_ID)) {
             if (Bank.contains(NEEDLE_ID) && Bank.getFirst(NEEDLE_ID).getQuantity() < 3) {
-                itemsToBuy.add(new d(NEEDLE_ID, 3, 30527));
+                itemsToBuy.add(new ShopItem(NEEDLE_ID, 3, 30527));
             }
         }
 
         // Thread (3 needed)
         if (Bank.contains(THREAD_ID)) {
             if (Bank.contains(THREAD_ID) && Bank.getFirst(THREAD_ID).getQuantity() < 3) {
-                itemsToBuy.add(new d(THREAD_ID, 3, 30527));
+                itemsToBuy.add(new ShopItem(THREAD_ID, 3, 30527));
             }
         }
 
         // Hard leather (if not in bank)
         if (!Bank.contains(HARD_LEATHER_ID)) {
-            itemsToBuy.add(new d(HARD_LEATHER_ID, 1, 30527));
+            itemsToBuy.add(new ShopItem(HARD_LEATHER_ID, 1, 30527));
         }
 
         // Ring of wealth (predicate search)
         Predicate<net.unethicalite.api.items.Item> ringOfWealthPredicate =
             item -> item.getName().toLowerCase().contains("ring of wealth (");
         if (!Bank.contains(ringOfWealthPredicate)) {
-            itemsToBuy.add(new d(16159, 3, 32559));
+            itemsToBuy.add(new ShopItem(16159, 3, 32559));
         }
 
         // Polished buttons (127 needed)
         if (Bank.contains(POLISHED_BUTTONS_ID)) {
             if (Bank.contains(POLISHED_BUTTONS_ID) && Bank.getFirst(POLISHED_BUTTONS_ID).getQuantity() < 127) {
-                itemsToBuy.add(new d(POLISHED_BUTTONS_ID, 127, j.cf));
+                itemsToBuy.add(new ShopItem(POLISHED_BUTTONS_ID, 127, Constants.DEFAULT_GE_TIMEOUT));
             }
         }
 
         // Mithril axe (7 needed)
         if (Bank.contains(MITHRIL_AXE_ID)) {
             if (Bank.contains(MITHRIL_AXE_ID) && Bank.getFirst(MITHRIL_AXE_ID).getQuantity() < 7) {
-                itemsToBuy.add(new d(MITHRIL_AXE_ID, 40, 24026));
+                itemsToBuy.add(new ShopItem(MITHRIL_AXE_ID, 40, 24026));
             }
         }
     }
