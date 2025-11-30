@@ -49,7 +49,7 @@ public class DrinkingBrewTask extends KephriManager {
 
         // Find nectar (brew) in inventory
         Item brew = Inventory.getFirst(item ->
-            GameEnum12.NECTAR.d(item.getId()) && !item.getName().contains("brew")
+            TOAItemType.NECTAR.hasItemId(item.getId()) && !item.getName().contains("brew")
         );
 
         // No brew found

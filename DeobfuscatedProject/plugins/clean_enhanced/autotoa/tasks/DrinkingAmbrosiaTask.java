@@ -60,7 +60,7 @@ public class DrinkingAmbrosiaTask extends KephriManager {
         int healthThreshold = HP_THRESHOLD_DEFAULT;
 
         // If nectar (brew) is available in inventory, use lower threshold
-        if (Inventory.contains(item -> GameEnum12.NECTAR.d(item.getId()))) {
+        if (Inventory.contains(item -> TOAItemType.NECTAR.hasItemId(item.getId()))) {
             healthThreshold = HP_THRESHOLD_DEFAULT;
         }
 
@@ -76,7 +76,7 @@ public class DrinkingAmbrosiaTask extends KephriManager {
 
         // Find ambrosia potion in inventory
         Item ambrosia = Inventory.getFirst(item ->
-            GameEnum12.AMBROSIA.d(item.getId())
+            TOAItemType.AMBROSIA.hasItemId(item.getId())
         );
 
         // No ambrosia found

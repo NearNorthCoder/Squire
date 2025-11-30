@@ -30,11 +30,11 @@ public class ApplyingSilkTask extends KephriManager {
     private static final int TICK_COOLDOWN = 6;
 
     private int lastUseTick;
-    private final C consumableManager;
+    private final ConsumableManager consumableManager;
     private final SquireAutoTOA plugin;
 
     @Inject
-    protected ApplyingSilkTask(Client client, C consumableManager, SquireAutoTOA plugin) {
+    protected ApplyingSilkTask(Client client, ConsumableManager consumableManager, SquireAutoTOA plugin) {
         super(client);
         this.consumableManager = consumableManager;
         this.plugin = plugin;
@@ -55,7 +55,7 @@ public class ApplyingSilkTask extends KephriManager {
 
         // Check if we need healing and consumable manager allows it
         if (Combat.getMissingHealth() < MISSING_HEALTH_THRESHOLD ||
-            !this.consumableManager.al()) {
+            !this.consumableManager.canUseItem()) {
             return false;
         }
 
@@ -74,7 +74,7 @@ public class ApplyingSilkTask extends KephriManager {
         if (silkDressing != null) {
             silkDressing.interact("Apply");
             this.lastUseTick = currentTick;
-            this.consumableManager.an();
+            this.consumableManager.recordItemUse();
             return true;
         }
 

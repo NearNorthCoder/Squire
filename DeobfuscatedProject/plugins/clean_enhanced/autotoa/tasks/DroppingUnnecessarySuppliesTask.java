@@ -11,7 +11,7 @@
  *
  * Priority order for dropping:
  * 1. Antidote potions (when not poisoned)
- * 2. Excess combat potions (from GameEnum11)
+ * 2. Excess combat potions
  * 3. Tears of Elidinis (drink if prayer low, drop otherwise)
  * 4. Nectar (drink if health low, drop otherwise)
  */
@@ -34,10 +34,10 @@ public class DroppingUnnecessarySuppliesTask extends KephriManager {
     private static final int MIN_FREE_SLOTS = 2;
     private static final int SLEEP_DELAY = 4;
 
-    private final C consumableManager;
+    private final ConsumableManager consumableManager;
 
     @Inject
-    protected DroppingUnnecessarySuppliesTask(Client client, C consumableManager) {
+    protected DroppingUnnecessarySuppliesTask(Client client, ConsumableManager consumableManager) {
         super(client);
         this.consumableManager = consumableManager;
     }
@@ -63,10 +63,10 @@ public class DroppingUnnecessarySuppliesTask extends KephriManager {
             return true;
         }
 
-        // Drop excess combat potions (from GameEnum11 enum)
-        for (GameEnum11 potion : GameEnum11.values()) {
+        // Drop excess combat potions
+        for (CombatPotion potion : CombatPotion.values()) {
             Item potionItem = Inventory.getFirst(item ->
-                item.getName().toLowerCase().contains(potion.l().toLowerCase())
+                item.getName().toLowerCase().contains(potion.getName().toLowerCase())
             );
 
             if (potionItem != null) {
@@ -77,16 +77,16 @@ public class DroppingUnnecessarySuppliesTask extends KephriManager {
 
         // Handle Tears of Elidinis
         Item tears = Inventory.getFirst(item ->
-            GameEnum12.TEARS_OF_ELIDINIS.d(item.getId())
+            TOAItemType.TEARS_OF_ELIDINIS.hasItemId(item.getId())
         );
 
         if (tears != null) {
             // Check if we have ambrosia available and should use tears
-            int ambrosiaCount = this.consumableManager.av()
-                .getOrDefault(GameEnum12.AMBROSIA, 0);
+            int ambrosiaCount = this.consumableManager.getSupplyQuantity()
+                .getOrDefault(TOAItemType.AMBROSIA, 0);
 
             if (ambrosiaCount > 0 && be() && !Inventory.contains(item ->
-                GameEnum12.AMBROSIA.d(item.getId()))) {
+                TOAItemType.AMBROSIA.hasItemId(item.getId()))) {
 
                 // Drink tears if prayer is low, otherwise drop
                 String action;
@@ -104,16 +104,16 @@ public class DroppingUnnecessarySuppliesTask extends KephriManager {
 
         // Handle Nectar (brew)
         Item nectar = Inventory.getFirst(item ->
-            GameEnum12.NECTAR.d(item.getId())
+            TOAItemType.NECTAR.hasItemId(item.getId())
         );
 
         if (nectar != null) {
             // Check if we have ambrosia available and should use nectar
-            int ambrosiaCount = this.consumableManager.av()
-                .getOrDefault(GameEnum12.AMBROSIA, 0);
+            int ambrosiaCount = this.consumableManager.getSupplyQuantity()
+                .getOrDefault(TOAItemType.AMBROSIA, 0);
 
             if (ambrosiaCount > 0 && be() && !Inventory.contains(item ->
-                GameEnum12.AMBROSIA.d(item.getId()))) {
+                TOAItemType.AMBROSIA.hasItemId(item.getId()))) {
 
                 // Drink nectar if health is low, otherwise drop
                 String action;

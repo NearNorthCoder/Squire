@@ -26,10 +26,10 @@ import net.unethicalite.api.items.Inventory;
 public class CuringPoisonvenomTask extends KephriManager {
 
     private final SquireAutoTOA plugin;
-    private final C consumableManager;
+    private final ConsumableManager consumableManager;
 
     @Inject
-    protected CuringPoisonvenomTask(Client client, SquireAutoTOA plugin, C consumableManager) {
+    protected CuringPoisonvenomTask(Client client, SquireAutoTOA plugin, ConsumableManager consumableManager) {
         super(client);
         this.plugin = plugin;
         this.consumableManager = consumableManager;
