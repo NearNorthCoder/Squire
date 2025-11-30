@@ -31,7 +31,6 @@ import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 import gg.squire.autotoa.tasks.KephriManager;
-import gg.squire.autotoa.tasks.GameEnum4;
 
 /**
  * Task: Attack Akkha's Shadow during Butterfly Phase
