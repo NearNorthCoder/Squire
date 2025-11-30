@@ -337,7 +337,7 @@ public class ImpCatcherQuestStep implements QuestStep {
         // Check stamina potions
         if (!Bank.contains(STAMINA_POTION_ID)) {
             System.out.println("Adding staminas to buy list");
-            itemsToBuy.add(new ShopItem(STAMINA_POTION_ID, CHEESE_QUANTITY, j.cf));
+            itemsToBuy.add(new ShopItem(STAMINA_POTION_ID, CHEESE_QUANTITY, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Check runes

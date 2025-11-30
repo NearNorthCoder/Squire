@@ -150,7 +150,7 @@ public class CombatTrainingStep implements QuestStep {
 
         // Buy food
         if (!Bank.contains(LOBSTER_ID)) {
-            itemsToBuy.add(new ShopItem(LOBSTER_ID, BUY_FOOD_QUANTITY, j.cf));
+            itemsToBuy.add(new ShopItem(LOBSTER_ID, BUY_FOOD_QUANTITY, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Buy potions

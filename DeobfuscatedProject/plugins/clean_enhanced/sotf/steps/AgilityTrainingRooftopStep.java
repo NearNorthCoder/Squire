@@ -313,7 +313,7 @@ public class AgilityTrainingRooftopStep implements QuestStep {
             missingSupplies.add(new ShopItem(32651, 1, 25805));
         }
         if (!Bank.contains(32665)) {
-            missingSupplies.add(new ShopItem(32665, 20, j.cf));
+            missingSupplies.add(new ShopItem(32665, 20, Constants.DEFAULT_GE_TIMEOUT));
         }
     }
 

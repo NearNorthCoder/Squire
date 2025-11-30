@@ -233,7 +233,7 @@ public class XMarksTheSpotQuestStep implements QuestStep {
 
         // Clue scroll
         if (!Bank.contains(CLUE_SCROLL_ID) || Bank.getFirst(CLUE_SCROLL_ID).getQuantity() < TICK_DELAY_LONG) {
-            itemsToBuy.add(new ShopItem(CLUE_SCROLL_ID, TICK_DELAY_LONG, j.cf));
+            itemsToBuy.add(new ShopItem(CLUE_SCROLL_ID, TICK_DELAY_LONG, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Bread

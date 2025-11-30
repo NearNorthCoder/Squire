@@ -429,10 +429,10 @@ public class GrandTreeQuestStep implements QuestStep {
         // Check for Necklace of Passage
         if (Bank.contains(NECKLACE_OF_PASSAGE)) {
             if (Bank.contains(NECKLACE_OF_PASSAGE) && Bank.getFirst(NECKLACE_OF_PASSAGE).getQuantity() < 4) {
-                itemsToBuy.add(new ShopItem(NECKLACE_OF_PASSAGE, 4, j.cf));
+                itemsToBuy.add(new ShopItem(NECKLACE_OF_PASSAGE, 4, Constants.DEFAULT_GE_TIMEOUT));
             }
         } else {
-            itemsToBuy.add(new ShopItem(NECKLACE_OF_PASSAGE, 4, j.cf));
+            itemsToBuy.add(new ShopItem(NECKLACE_OF_PASSAGE, 4, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Check for Games Necklace

@@ -674,7 +674,7 @@ public class AgilityTraining1to50Step implements QuestStep {
             itemsToBuy.add(new ShopItem(11865, 1, 32607));
         }
         if (!Bank.contains(TEAM_CAPE_ID)) {
-            itemsToBuy.add(new ShopItem(TEAM_CAPE_ID, 20, j.cf));
+            itemsToBuy.add(new ShopItem(TEAM_CAPE_ID, 20, Constants.DEFAULT_GE_TIMEOUT));
         }
     }
 }

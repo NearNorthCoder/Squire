@@ -414,7 +414,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
             itemsToBuy.add(new ShopItem(WIZARDS_MIND_BOMB, 3, 17422));
         }
         if (Bank.contains(STEEL_NAILS)) {
-            itemsToBuy.add(new ShopItem(STEEL_NAILS, 90, j.cf));
+            itemsToBuy.add(new ShopItem(STEEL_NAILS, 90, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Add ring of wealth if available

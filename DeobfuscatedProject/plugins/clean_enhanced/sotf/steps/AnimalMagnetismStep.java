@@ -214,7 +214,7 @@ public class AnimalMagnetismStep implements QuestStep {
         // Polished buttons (127 needed)
         if (Bank.contains(POLISHED_BUTTONS_ID)) {
             if (Bank.contains(POLISHED_BUTTONS_ID) && Bank.getFirst(POLISHED_BUTTONS_ID).getQuantity() < 127) {
-                itemsToBuy.add(new ShopItem(POLISHED_BUTTONS_ID, 127, j.cf));
+                itemsToBuy.add(new ShopItem(POLISHED_BUTTONS_ID, 127, Constants.DEFAULT_GE_TIMEOUT));
             }
         }
 

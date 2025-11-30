@@ -133,7 +133,7 @@ public class DruidicRitualQuestStep implements QuestStep {
      */
     private static void buildShoppingList() {
         if (!Bank.contains(ITEM_COINS)) {
-            itemRequirements.add(new ShopItem(ITEM_COINS, 5, j.cf));
+            itemRequirements.add(new ShopItem(ITEM_COINS, 5, Constants.DEFAULT_GE_TIMEOUT));
         }
         if (!Bank.contains(ITEM_RAW_BEEF)) {
             itemRequirements.add(new ShopItem(ITEM_RAW_BEEF, 1, 25000));

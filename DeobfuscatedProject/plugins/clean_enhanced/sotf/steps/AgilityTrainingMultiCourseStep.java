@@ -1100,7 +1100,7 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
         }
 
         if (!Bank.contains(GRACEFUL_BOOTS_ID)) {
-            buyList.add(new ShopItem(GRACEFUL_BOOTS_ID, 20, j.cf));
+            buyList.add(new ShopItem(GRACEFUL_BOOTS_ID, 20, Constants.DEFAULT_GE_TIMEOUT));
         }
     }
 }

@@ -738,7 +738,7 @@ public class PriestInPerilQuestStep implements QuestStep {
             itemsToBuy.add(new ShopItem(ITEM_BRONZE_AXE, 1, 9000));
         }
         if (!Bank.contains(ITEM_RUNE_SCIMITAR)) {
-            itemsToBuy.add(new ShopItem(ITEM_RUNE_SCIMITAR, 5, j.cf));
+            itemsToBuy.add(new ShopItem(ITEM_RUNE_SCIMITAR, 5, Constants.DEFAULT_GE_TIMEOUT));
         }
         if (!Bank.contains(ITEM_FOOD)) {
             itemsToBuy.add(new ShopItem(ITEM_FOOD, 30, 300));

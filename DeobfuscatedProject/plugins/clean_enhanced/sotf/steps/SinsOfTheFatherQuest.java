@@ -783,7 +783,7 @@ public class SinsOfTheFatherQuest implements QuestStep {
 
         // Check for stamina potions
         if (!Bank.contains(0x316)) {
-            buyingItemsList.add(new ShopItem(0x316, 4, j.cf));
+            buyingItemsList.add(new ShopItem(0x316, 4, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Check for water runes

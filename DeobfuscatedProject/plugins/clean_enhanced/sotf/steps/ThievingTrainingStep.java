@@ -91,7 +91,7 @@ public class ThievingTrainingStep implements QuestStep {
     private static final int BUY_CABBAGE_SEED_QUANTITY = 40;
     private static final int BUY_CABBAGE_SEED_PRICE = 30387;
     private static final int BUY_LOBSTER_QUANTITY = 4;
-    private static final int BUY_LOBSTER_PRICE = j.cf;
+    private static final int BUY_LOBSTER_PRICE = Constants.DEFAULT_GE_TIMEOUT;
 
     // Status messages
     private static final String MSG_BUYING_ITEMS = "Buying items";

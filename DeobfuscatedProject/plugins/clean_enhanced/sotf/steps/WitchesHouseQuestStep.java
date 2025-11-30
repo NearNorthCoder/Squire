@@ -969,7 +969,7 @@ public class WitchesHouseQuestStep implements QuestStep {
 
         // Check cheese
         if (Bank.contains(12625)) {
-            shoppingList.add(new ShopItem(12625, 5, j.cf));
+            shoppingList.add(new ShopItem(12625, 5, Constants.DEFAULT_GE_TIMEOUT));
         }
 
         // Check fire runes
