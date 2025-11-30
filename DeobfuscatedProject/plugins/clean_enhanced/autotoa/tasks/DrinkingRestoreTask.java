@@ -82,7 +82,7 @@ public class DrinkingRestoreTask extends KephriManager {
 
         // Find restore or sanfew potion (but not Tears of Elidinis)
         Item restorePotion = Inventory.getFirst(item -> {
-            boolean isTears = GameEnum12.TEARS_OF_ELIDINIS.d(item.getId());
+            boolean isTears = TOAItemType.TEARS_OF_ELIDINIS.hasItemId(item.getId());
             boolean isRestore = item.getName().contains("restore");
             boolean isSanfew = item.getName().contains("Sanfew");
 

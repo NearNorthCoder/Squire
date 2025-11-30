@@ -15,6 +15,7 @@
 package gg.squire.autotoa.tasks;
 
 import com.google.inject.Inject;
+import gg.squire.autotoa.TOAConfig;
 import gg.squire.client.plugins.fw.TaskDesc;
 import net.runelite.api.Client;
 import net.runelite.api.Item;
@@ -31,12 +32,14 @@ public class SmellingSaltsTask extends KephriManager {
     private static final int TOA_VARBIT = 14469; // 0x3885
     private static final int STRENGTH_DRAIN_THRESHOLD = 20;
 
-    private final C consumableManager;
+    private final ConsumableManager consumableManager;
+    private final TOAConfig config;
 
     @Inject
-    protected SmellingSaltsTask(Client client, C consumableManager) {
+    protected SmellingSaltsTask(Client client, ConsumableManager consumableManager, TOAConfig config) {
         super(client);
         this.consumableManager = consumableManager;
+        this.config = config;
     }
 
     @Override
@@ -67,11 +70,11 @@ public class SmellingSaltsTask extends KephriManager {
         // Check if this is a labeled "1" dose
         if (smellingSalts.getName().contains("1")) {
             // Get usage count from consumable manager
-            int usageCount = this.consumableManager.av()
-                .getOrDefault(GameEnum12.SMELLING_SALTS, 0);
+            int usageCount = this.consumableManager.getSupplyQuantity()
+                .getOrDefault(TOAItemType.SMELLING_SALTS, 0);
 
             // Don't use if already used and not in special situations
-            if (usageCount < 1 && !aq() && !this.d.dehydration()) {
+            if (usageCount < 1 && !aq() && !this.config.dehydration()) {
                 return false;
             }
         }
@@ -93,7 +96,7 @@ public class SmellingSaltsTask extends KephriManager {
         // Don't use if strength boost is sufficient (less than threshold drain)
         // AND (not in special weapon mode OR not dehydrated)
         if (strengthBoost > STRENGTH_DRAIN_THRESHOLD &&
-            (!aq() || !this.d.dehydration())) {
+            (!aq() || !this.config.dehydration())) {
             return false;
         }
 

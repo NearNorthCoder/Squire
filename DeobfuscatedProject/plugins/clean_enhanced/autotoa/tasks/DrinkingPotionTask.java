@@ -71,16 +71,16 @@ public class DrinkingPotionTask extends KephriManager {
         Item equippedWeapon = Equipment.fromSlot(EquipmentInventorySlot.WEAPON);
 
         // Get all applicable potion types for this weapon
-        a[] potionTypes = a.a(equippedWeapon);
+        CombatPotion[] potionTypes = CombatPotion.getRelevantPotions(equippedWeapon);
 
         // Check each potion type to see if we need to drink
-        for (a potionType : potionTypes) {
-            Skill[] affectedSkills = potionType.m();
+        for (CombatPotion potionType : potionTypes) {
+            Skill[] affectedSkills = potionType.getSkills();
 
             for (Skill skill : affectedSkills) {
                 // Calculate the boost amount this potion provides
                 int baseLevel = Skills.getLevel(skill);
-                int maxBoost = potionType.a(skill);
+                int maxBoost = potionType.calculateBoostedLevel(skill);
                 int currentLevel = Skills.getBoostedLevel(skill);
 
                 // Drink potion if current level is at or below 50% of max boost
@@ -89,7 +89,7 @@ public class DrinkingPotionTask extends KephriManager {
 
                 if (currentLevel <= drinkThreshold) {
                     // Find the potion in inventory
-                    String potionNamePrefix = potionType.l();
+                    String potionNamePrefix = potionType.getName();
                     Item potion = Inventory.getFirst(item ->
                         item.getName().startsWith(potionNamePrefix)
                     );

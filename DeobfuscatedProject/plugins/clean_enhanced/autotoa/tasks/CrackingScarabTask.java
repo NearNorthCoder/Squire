@@ -29,16 +29,16 @@ public class CrackingScarabTask extends KephriManager {
     private static final String CRACK_ACTION = "Crack";
 
     // Dependencies
-    private final C config;
+    private final ConsumableManager consumableManager;
     private final SquireAutoTOA plugin;
 
     // State
     private int lastCrackTick;
 
     @Inject
-    protected CrackingScarabTask(Client client, C config, SquireAutoTOA plugin) {
+    protected CrackingScarabTask(Client client, ConsumableManager consumableManager, SquireAutoTOA plugin) {
         super(client);
-        this.config = config;
+        this.consumableManager = consumableManager;
         this.plugin = plugin;
     }
 
@@ -58,7 +58,7 @@ public class CrackingScarabTask extends KephriManager {
 
         // Find blessed crystal scarab in inventory
         Item scarab = Inventory.getFirst(item ->
-            e.BLESSED_CRYSTAL_SCARAB.d(item.getId())
+            TOAItemType.BLESSED_CRYSTAL_SCARAB.hasItemId(item.getId())
         );
 
         if (scarab == null) {

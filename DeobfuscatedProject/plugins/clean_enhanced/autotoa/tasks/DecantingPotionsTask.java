@@ -14,7 +14,7 @@ import net.runelite.api.Client;
 import net.runelite.api.Item;
 import net.unethicalite.api.items.Inventory;
 import gg.squire.autotoa.tasks.KephriManager;
-import gg.squire.autotoa.tasks.GameEnum12;
+import gg.squire.autotoa.tasks.TOAItemType;
 
 @TaskDesc(name="Decanting potions", priority=1000, blocking=true)
 public class DecantingPotionsTask extends KephriManager {
@@ -66,7 +66,7 @@ public class DecantingPotionsTask extends KephriManager {
     private boolean combinePotion(String potionType) {
         // Get all potions of this type that aren't already 4-dose
         List<Item> potions = Inventory.getAll(item -> {
-            if (GameEnum12.getItemById(item.getId()) == null
+            if (TOAItemType.fromItemId(item.getId()) == null
                 && item.getName().contains(potionType)
                 && !item.getName().contains(DOSE_4_TEXT)) {
                 return true;
