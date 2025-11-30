@@ -15,6 +15,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Production;
+import gg.squire.sotf.framework.QuestStep;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
  * Crafting training step using glassblowing.
  * Trains from level 1 to 87 by creating various glass items.
  */
-public class CraftingGlassblowingStep implements QuestStepInterface {
+public class CraftingGlassblowingStep implements QuestStep {
 
     private static final int MOLTEN_GLASS_ID = 1775;
     private static final int GLASSBLOWING_PIPE_ID = 1785;
@@ -212,7 +213,12 @@ public class CraftingGlassblowingStep implements QuestStepInterface {
     }
 
     @Override
-    public String getStepName() {
+    public boolean arePrerequisitesMet() {
+        return true;
+    }
+
+    @Override
+    public String getName() {
         return "Crafting";
     }
 
@@ -225,10 +231,5 @@ public class CraftingGlassblowingStep implements QuestStepInterface {
     @Override
     public boolean isComplete() {
         return Skills.getLevel(Skill.CRAFTING) >= TARGET_LEVEL;
-    }
-
-    @Override
-    public boolean shouldExecute() {
-        return false;
     }
 }

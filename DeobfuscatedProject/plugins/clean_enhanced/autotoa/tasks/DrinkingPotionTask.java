@@ -35,11 +35,11 @@ public class DrinkingPotionTask extends KephriManager {
     // Varbit for potion drinking cooldown (prevents spam-drinking)
     private static final int POTION_COOLDOWN_VARBIT = 14376;
 
-    private final C potionManager;          // Manages potion state
+    private final ConsumableManager potionManager;          // Manages potion state
     private final SquireAutoTOA pluginMain;  // Main plugin reference
 
     @Inject
-    protected DrinkingPotionTask(Client client, C potionManager, SquireAutoTOA pluginMain) {
+    protected DrinkingPotionTask(Client client, ConsumableManager potionManager, SquireAutoTOA pluginMain) {
         super(client);
         this.potionManager = potionManager;
         this.pluginMain = pluginMain;
@@ -63,7 +63,7 @@ public class DrinkingPotionTask extends KephriManager {
         }
 
         // Check if potion manager is ready
-        if (!this.potionManager.am()) {
+        if (!this.potionManager.canConsumeItem()) {
             return false;
         }
 
@@ -99,7 +99,7 @@ public class DrinkingPotionTask extends KephriManager {
                         potion.interact("Drink");
 
                         // Notify potion manager
-                        this.potionManager.ao();
+                        this.potionManager.recordConsumption();
 
                         return true;  // Task executed successfully
                     }

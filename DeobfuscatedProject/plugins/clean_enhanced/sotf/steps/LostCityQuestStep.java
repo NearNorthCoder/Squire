@@ -24,6 +24,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Prayers;
+import gg.squire.sotf.framework.QuestStep;
 
 /**
  * Lost City quest implementation for SOTF account builder.
@@ -41,7 +42,7 @@ import net.unethicalite.api.widgets.Prayers;
  * - Level 36 Woodcutting (for cutting Dramen tree)
  * - Access to combat supplies (food, prayer potions, combat gear)
  */
-public class LostCityQuestStep implements QuestStepInterface {
+public class LostCityQuestStep implements QuestStep {
 
     // Item IDs
     private static final int COINS = 995;
@@ -105,18 +106,18 @@ public class LostCityQuestStep implements QuestStepInterface {
     public static String questName = "Lost city " + currentStepDescription;
 
     /**
-     * Gets the quest priority level.
+     * Checks if prerequisites for this quest are met.
      *
-     * @return Priority value (100 = normal priority)
+     * @return true if prerequisites are met
      */
     @Override
-    public int getPriority() {
+    public boolean arePrerequisitesMet() {
         try {
             executeQuestStep();
         } catch (Exception e) {
-            // Ignore exceptions during priority check
+            // Ignore exceptions during prerequisite check
         }
-        return 100;
+        return true;
     }
 
     /**
@@ -137,6 +138,17 @@ public class LostCityQuestStep implements QuestStepInterface {
     @Override
     public String getName() {
         return questName;
+    }
+
+    /**
+     * Executes the quest step.
+     *
+     * @return sleep duration in milliseconds
+     */
+    @Override
+    public int execute() {
+        executeQuestStep();
+        return 600;
     }
 
     /**
@@ -805,13 +817,4 @@ public class LostCityQuestStep implements QuestStepInterface {
         return true;
     }
 
-    /**
-     * Checks if this quest step should be executed.
-     *
-     * @return false (quest is always active when selected)
-     */
-    @Override
-    public boolean shouldExecute() {
-        return false;
-    }
 }

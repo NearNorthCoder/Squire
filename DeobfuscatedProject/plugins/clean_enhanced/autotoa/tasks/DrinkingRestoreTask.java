@@ -29,10 +29,10 @@ public class DrinkingRestoreTask extends KephriManager {
     private static final int PRAYER_THRESHOLD = 60;
     private static final int TOA_VARBIT = 11460; // 0x2CC4
 
-    private final C consumableManager;
+    private final ConsumableManager consumableManager;
 
     @Inject
-    protected DrinkingRestoreTask(Client client, C consumableManager) {
+    protected DrinkingRestoreTask(Client client, ConsumableManager consumableManager) {
         super(client);
         this.consumableManager = consumableManager;
     }
@@ -90,9 +90,9 @@ public class DrinkingRestoreTask extends KephriManager {
         });
 
         // Check if potion found and consumable manager allows usage
-        if (restorePotion != null && this.consumableManager.am()) {
+        if (restorePotion != null && this.consumableManager.canConsumeItem()) {
             restorePotion.interact("Drink");
-            this.consumableManager.ao();
+            this.consumableManager.recordConsumption();
             return true;
         }
 
