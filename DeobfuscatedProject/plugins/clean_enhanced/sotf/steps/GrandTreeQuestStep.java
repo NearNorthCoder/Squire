@@ -388,70 +388,70 @@ public class GrandTreeQuestStep implements QuestStep {
         // Check for Lobsters
         if (Bank.contains(LOBSTER)) {
             if (Bank.contains(LOBSTER) && Bank.getFirst(LOBSTER).getQuantity() < 10) {
-                itemsToBuy.add(new d(LOBSTER, 10, GameStateUtil.randomRange(400, 500)));
+                itemsToBuy.add(new ShopItem(LOBSTER, 10, GameStateUtil.randomRange(400, 500)));
             }
         } else {
-            itemsToBuy.add(new d(LOBSTER, 10, GameStateUtil.randomRange(400, 500)));
+            itemsToBuy.add(new ShopItem(LOBSTER, 10, GameStateUtil.randomRange(400, 500)));
         }
 
         // Check for Fire Runes
         if (Bank.contains(FIRE_RUNE)) {
             if (Bank.contains(FIRE_RUNE) && Bank.getFirst(FIRE_RUNE).getQuantity() < 2500) {
-                itemsToBuy.add(new d(FIRE_RUNE, 2500, 8));
+                itemsToBuy.add(new ShopItem(FIRE_RUNE, 2500, 8));
             }
         } else {
-            itemsToBuy.add(new d(FIRE_RUNE, 2500, 8));
+            itemsToBuy.add(new ShopItem(FIRE_RUNE, 2500, 8));
         }
 
         // Check for Mind Runes
         if (Bank.contains(MIND_RUNE)) {
             if (Bank.contains(MIND_RUNE) && Bank.getFirst(MIND_RUNE).getQuantity() < 1000) {
-                itemsToBuy.add(new d(MIND_RUNE, 1000, 8));
+                itemsToBuy.add(new ShopItem(MIND_RUNE, 1000, 8));
             }
         } else {
-            itemsToBuy.add(new d(MIND_RUNE, 1000, 8));
+            itemsToBuy.add(new ShopItem(MIND_RUNE, 1000, 8));
         }
 
         // Check for Air Runes
         if (Bank.contains(556)) {
             if (Bank.contains(556) && Bank.getFirst(556).getQuantity() < 5) {
-                itemsToBuy.add(new d(556, 5, 2000));
+                itemsToBuy.add(new ShopItem(556, 5, 2000));
             }
         } else {
-            itemsToBuy.add(new d(556, 5, 2000));
+            itemsToBuy.add(new ShopItem(556, 5, 2000));
         }
 
         // Check for Ring of Wealth
         if (!Bank.contains((Predicate)(item -> item.getName().toLowerCase().contains("ring of wealth (")))) {
-            itemsToBuy.add(new d(RING_OF_WEALTH, 5, 25000));
+            itemsToBuy.add(new ShopItem(RING_OF_WEALTH, 5, 25000));
         }
 
         // Check for Necklace of Passage
         if (Bank.contains(NECKLACE_OF_PASSAGE)) {
             if (Bank.contains(NECKLACE_OF_PASSAGE) && Bank.getFirst(NECKLACE_OF_PASSAGE).getQuantity() < 4) {
-                itemsToBuy.add(new d(NECKLACE_OF_PASSAGE, 4, j.cf));
+                itemsToBuy.add(new ShopItem(NECKLACE_OF_PASSAGE, 4, j.cf));
             }
         } else {
-            itemsToBuy.add(new d(NECKLACE_OF_PASSAGE, 4, j.cf));
+            itemsToBuy.add(new ShopItem(NECKLACE_OF_PASSAGE, 4, j.cf));
         }
 
         // Check for Games Necklace
         if (Bank.contains(GAMES_NECKLACE)) {
             if (Bank.getFirst(GAMES_NECKLACE).getQuantity() < 4) {
-                itemsToBuy.add(new d(GAMES_NECKLACE, 4 - Bank.getFirst(GAMES_NECKLACE).getQuantity(), 15000));
+                itemsToBuy.add(new ShopItem(GAMES_NECKLACE, 4 - Bank.getFirst(GAMES_NECKLACE).getQuantity(), 15000));
             }
         }
         if (!Bank.contains(GAMES_NECKLACE)) {
-            itemsToBuy.add(new d(GAMES_NECKLACE, 4, 15000));
+            itemsToBuy.add(new ShopItem(GAMES_NECKLACE, 4, 15000));
         }
 
         // Check for Amulet of Glory
         if (Bank.contains(AMULET_OF_GLORY)) {
             if (Bank.getFirst(AMULET_OF_GLORY).getQuantity() < 40) {
-                itemsToBuy.add(new d(AMULET_OF_GLORY, 40, 900));
+                itemsToBuy.add(new ShopItem(AMULET_OF_GLORY, 40, 900));
             }
         } else {
-            itemsToBuy.add(new d(AMULET_OF_GLORY, 40, 900));
+            itemsToBuy.add(new ShopItem(AMULET_OF_GLORY, 40, 900));
         }
     }
 

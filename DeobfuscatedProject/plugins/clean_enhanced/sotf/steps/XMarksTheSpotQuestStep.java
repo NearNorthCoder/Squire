@@ -15,6 +15,7 @@ import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.quests.QuestVarbits;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Prayers;
+import gg.squire.sotf.framework.*;
 
 /**
  * Handles the "X Marks the Spot" tutorial quest.
@@ -212,37 +213,37 @@ public class XMarksTheSpotQuestStep implements QuestStep {
     private static void populateShoppingList() {
         // Casket
         if (!Bank.contains(CASKET_ID) || Bank.getFirst(CASKET_ID).getQuantity() < QUANTITY_TO_BUY) {
-            itemsToBuy.add(new d(CASKET_ID, QUANTITY_TO_BUY, GameStateUtil.randomRange(12344, 26482)));
+            itemsToBuy.add(new ShopItem(CASKET_ID, QUANTITY_TO_BUY, GameStateUtil.randomRange(12344, 26482)));
         }
 
         // Beer (example consumable)
         if (!Bank.contains(BEER_ID)) {
-            itemsToBuy.add(new d(BEER_ID, 22508, 20));
+            itemsToBuy.add(new ShopItem(BEER_ID, 22508, 20));
         }
 
         // Ring of wealth (using predicate to match any charged version)
         if (!Bank.contains(item -> item.getName().toLowerCase().contains(ITEM_PREFIX_RING_OF_WEALTH))) {
-            itemsToBuy.add(new d(RING_OF_WEALTH_PREFIX_ID, 35, 28653));
+            itemsToBuy.add(new ShopItem(RING_OF_WEALTH_PREFIX_ID, 35, 28653));
         }
 
         // Swordfish
         if (!Bank.contains(SWORDFISH_ID)) {
-            itemsToBuy.add(new d(SWORDFISH_ID, TICK_DELAY_SHORT, 31078));
+            itemsToBuy.add(new ShopItem(SWORDFISH_ID, TICK_DELAY_SHORT, 31078));
         }
 
         // Clue scroll
         if (!Bank.contains(CLUE_SCROLL_ID) || Bank.getFirst(CLUE_SCROLL_ID).getQuantity() < TICK_DELAY_LONG) {
-            itemsToBuy.add(new d(CLUE_SCROLL_ID, TICK_DELAY_LONG, j.cf));
+            itemsToBuy.add(new ShopItem(CLUE_SCROLL_ID, TICK_DELAY_LONG, j.cf));
         }
 
         // Bread
         if (!Bank.contains(BREAD_ID) || Bank.getFirst(BREAD_ID).getQuantity() < 20) {
-            itemsToBuy.add(new d(BREAD_ID, 20, 8061));
+            itemsToBuy.add(new ShopItem(BREAD_ID, 20, 8061));
         }
 
         // Hammer
         if (!Bank.contains(HAMMER_ID) || Bank.getFirst(HAMMER_ID).getQuantity() < REQUIRED_ITEMS_FOR_QUEST) {
-            itemsToBuy.add(new d(HAMMER_ID, 30, 9103));
+            itemsToBuy.add(new ShopItem(HAMMER_ID, 30, 9103));
         }
     }
 

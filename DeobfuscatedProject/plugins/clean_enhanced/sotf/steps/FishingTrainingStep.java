@@ -309,49 +309,49 @@ public class FishingTrainingStep implements QuestStep {
     public static void populateShoppingList() {
         // Check for small fishing net
         if (!Bank.contains(SMALL_FISHING_NET_ID)) {
-            shoppingList.add(new d(SMALL_FISHING_NET_ID, 1, BUY_PRICE_SMALL_NET));
+            shoppingList.add(new ShopItem(SMALL_FISHING_NET_ID, 1, BUY_PRICE_SMALL_NET));
         }
 
         // Check for fishing rod
         if (!Bank.contains(FISHING_ROD_ID)) {
-            shoppingList.add(new d(FISHING_ROD_ID, 1, BUY_PRICE_FISHING_ROD));
+            shoppingList.add(new ShopItem(FISHING_ROD_ID, 1, BUY_PRICE_FISHING_ROD));
         }
 
         // Check for fly fishing rod
         if (!Bank.contains(FLY_FISHING_ROD_ID)) {
-            shoppingList.add(new d(FLY_FISHING_ROD_ID, 1, BUY_PRICE_FLY_ROD));
+            shoppingList.add(new ShopItem(FLY_FISHING_ROD_ID, 1, BUY_PRICE_FLY_ROD));
         }
 
         // Check for fishing bait (high quantity)
         if (!Bank.contains(FISHING_BAIT_ID)) {
-            shoppingList.add(new d(FISHING_BAIT_ID, QUANTITY_BAIT, BUY_PRICE_BAIT));
+            shoppingList.add(new ShopItem(FISHING_BAIT_ID, QUANTITY_BAIT, BUY_PRICE_BAIT));
         }
 
         // Check for feathers
         if (!Bank.contains(FEATHER_ID)) {
-            shoppingList.add(new d(FEATHER_ID, QUANTITY_FEATHERS, BUY_PRICE_FEATHERS));
+            shoppingList.add(new ShopItem(FEATHER_ID, QUANTITY_FEATHERS, BUY_PRICE_FEATHERS));
         }
 
         // Check for barb-tail harpoon
         if (!Bank.contains(BARB_TAIL_HARPOON_ID)) {
-            shoppingList.add(new d(BARB_TAIL_HARPOON_ID, 1, BUY_PRICE_HARPOON));
+            shoppingList.add(new ShopItem(BARB_TAIL_HARPOON_ID, 1, BUY_PRICE_HARPOON));
         }
 
         // Check for ring of wealth
         if (!Bank.contains(RING_OF_WEALTH_ID)) {
-            shoppingList.add(new d(RING_OF_WEALTH_ID, 16, BUY_PRICE_RING));
+            shoppingList.add(new ShopItem(RING_OF_WEALTH_ID, 16, BUY_PRICE_RING));
         }
 
         // Check for ring of wealth (by name pattern)
         Predicate<Item> ringPredicate = item ->
             item.getName().toLowerCase().contains(ITEM_NAME_RING);
         if (!Bank.contains(ringPredicate)) {
-            shoppingList.add(new d(RING_OF_WEALTH_ID, 7, BUY_PRICE_RING));
+            shoppingList.add(new ShopItem(RING_OF_WEALTH_ID, 7, BUY_PRICE_RING));
         }
 
         // Check for weapon/tool (from equipment class)
         if (!Bank.contains(f.aT)) {
-            shoppingList.add(new d(f.aT[0], 54, 900));
+            shoppingList.add(new ShopItem(f.aT[0], 54, 900));
         }
     }
 

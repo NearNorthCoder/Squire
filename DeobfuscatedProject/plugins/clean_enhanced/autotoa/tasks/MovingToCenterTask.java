@@ -34,18 +34,18 @@ public class MovingToCenterTask extends KephriManager {
 
     @Inject
     protected MovingToCenterTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
-        super(client, plugin, tOAConfig, bY.ATTACK);
+        super(client, plugin, tOAConfig, ZebakPhase.ATTACK);
     }
 
     @Override
-    public boolean bL() {
+    protected boolean shouldExecute() {
         // Don't move to center if in spec mode or special attack is enabled
-        if (this.bq() && !Combat.isSpecEnabled()) {
+        if (this.isInSpecMode() && !Combat.isSpecEnabled()) {
             return false;
         }
 
         // Don't run if there are no enemies
-        if (this.cE().isEmpty()) {
+        if (this.getEnemies().isEmpty()) {
             return false;
         }
 
@@ -53,7 +53,7 @@ public class MovingToCenterTask extends KephriManager {
 
         // Find the closest center position instance
         // (there may be multiple instances in multi-area raids)
-        WorldPoint centerWorld = WorldPoint.toLocalInstance(this.cu, CENTER_POSITION.toWorld())
+        WorldPoint centerWorld = WorldPoint.toLocalInstance(this.client, CENTER_POSITION.toWorld())
             .stream()
             .min(Comparator.comparingInt(worldPoint -> worldPoint.distanceTo2D(playerLocation)))
             .orElse(null);
@@ -70,19 +70,19 @@ public class MovingToCenterTask extends KephriManager {
         }
 
         // Get the current target NPC
-        NPC targetNPC = this.cA();
+        NPC targetNPC = this.getTargetNPC();
         if (targetNPC == null) {
             return false;
         }
 
         // Don't move if the center position is dangerous
-        if (!this.p(centerWorld)) {
+        if (!this.isSafePosition(centerWorld)) {
             return false;
         }
 
         // Move to the center position
-        // Uses the movement helper method with a callback (this::P)
-        this.a(centerWorld, this::P);
+        // Uses the movement helper method with a callback
+        this.moveToPosition(centerWorld, this::onMovementComplete);
         return true;
     }
 }

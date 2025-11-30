@@ -392,34 +392,34 @@ public class DragonSlayerQuestHandler implements QuestStep {
 
         // Add teleport tablets
         if (!Bank.contains(PLANK) || Bank.getFirst(PLANK).getQuantity() < 3) {
-            itemsToBuy.add(new d(PLANK, 3, 17406));
+            itemsToBuy.add(new ShopItem(PLANK, 3, 17406));
         }
 
         // Add stamina potions
         if (!Bank.contains(1537) || Bank.getFirst(1537).getQuantity() < 14) {
-            itemsToBuy.add(new d(1537, 14, 17406));
+            itemsToBuy.add(new ShopItem(1537, 14, 17406));
         }
 
         // Add other required items
         if (Bank.contains(LOBSTER_POT)) {
-            itemsToBuy.add(new d(LOBSTER_POT, 1, 17422));
+            itemsToBuy.add(new ShopItem(LOBSTER_POT, 1, 17422));
         }
         if (Bank.contains(SILK)) {
-            itemsToBuy.add(new d(SILK, 1, 17423));
+            itemsToBuy.add(new ShopItem(SILK, 1, 17423));
         }
         if (Bank.contains(UNFIRED_BOWL)) {
-            itemsToBuy.add(new d(UNFIRED_BOWL, 1, 17424));
+            itemsToBuy.add(new ShopItem(UNFIRED_BOWL, 1, 17424));
         }
         if (Bank.contains(WIZARDS_MIND_BOMB)) {
-            itemsToBuy.add(new d(WIZARDS_MIND_BOMB, 3, 17422));
+            itemsToBuy.add(new ShopItem(WIZARDS_MIND_BOMB, 3, 17422));
         }
         if (Bank.contains(STEEL_NAILS)) {
-            itemsToBuy.add(new d(STEEL_NAILS, 90, j.cf));
+            itemsToBuy.add(new ShopItem(STEEL_NAILS, 90, j.cf));
         }
 
         // Add ring of wealth if available
         if (Bank.contains(item -> item.getName().toLowerCase().contains("ring of wealth ("))) {
-            itemsToBuy.add(new d(16383, 5, 17423));
+            itemsToBuy.add(new ShopItem(16383, 5, 17423));
         }
     }
 

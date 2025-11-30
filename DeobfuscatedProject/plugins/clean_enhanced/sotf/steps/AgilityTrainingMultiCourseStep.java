@@ -18,6 +18,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
+import gg.squire.sotf.framework.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1049,57 +1050,57 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
         buyList.clear();
 
         if (!Bank.contains(SPOTTIER_CAPE_ID)) {
-            buyList.add(new d(SPOTTIER_CAPE_ID, 1, 19534));
+            buyList.add(new ShopItem(SPOTTIER_CAPE_ID, 1, 19534));
         }
 
         if (!Bank.contains(GRACEFUL_CAPE_ID)) {
-            buyList.add(new d(GRACEFUL_CAPE_ID, 2, 28207));
+            buyList.add(new ShopItem(GRACEFUL_CAPE_ID, 2, 28207));
         }
 
         if (!Bank.contains(STAMINA_POTION_ID)) {
-            buyList.add(new d(STAMINA_POTION_ID, 2, 28207));
+            buyList.add(new ShopItem(STAMINA_POTION_ID, 2, 28207));
         }
 
         if (!Bank.contains(COINS_ID)) {
-            buyList.add(new d(COINS_ID, 10, 19124));
+            buyList.add(new ShopItem(COINS_ID, 10, 19124));
         }
 
         if (!Bank.contains(GRACEFUL_GLOVES_ID)) {
-            buyList.add(new d(GRACEFUL_GLOVES_ID, 10, 29111));
+            buyList.add(new ShopItem(GRACEFUL_GLOVES_ID, 10, 29111));
         }
 
         if (!Bank.contains(LEATHER_GLOVES_ID)) {
-            buyList.add(new d(LEATHER_GLOVES_ID, 10, 29111));
+            buyList.add(new ShopItem(LEATHER_GLOVES_ID, 10, 29111));
         }
 
         if (!Bank.contains(LEATHER_BOOTS_ID)) {
-            buyList.add(new d(LEATHER_BOOTS_ID, 10, 29111));
+            buyList.add(new ShopItem(LEATHER_BOOTS_ID, 10, 29111));
         }
 
         if (!Bank.contains(LEATHER_BODY_ID)) {
-            buyList.add(new d(LEATHER_BODY_ID, 10, 29111));
+            buyList.add(new ShopItem(LEATHER_BODY_ID, 10, 29111));
         }
 
         // Check summer pie quantity
         if (Bank.contains(SUMMER_PIE_ID)) {
             if (Bank.contains(SUMMER_PIE_ID) && Bank.getFirst(SUMMER_PIE_ID).getQuantity() < 10) {
-                buyList.add(new d(SUMMER_PIE_ID, 74, 16126));
+                buyList.add(new ShopItem(SUMMER_PIE_ID, 74, 16126));
             }
         }
 
         // Check graceful legs quantity
         if (Bank.contains(GRACEFUL_LEGS_ID)) {
             if (Bank.contains(GRACEFUL_LEGS_ID) && Bank.getFirst(GRACEFUL_LEGS_ID).getQuantity() < 10) {
-                buyList.add(new d(GRACEFUL_LEGS_ID, 10, 15095));
+                buyList.add(new ShopItem(GRACEFUL_LEGS_ID, 10, 15095));
             }
         }
 
         if (!Bank.contains(28160)) {
-            buyList.add(new d(28160, 1, 28033));
+            buyList.add(new ShopItem(28160, 1, 28033));
         }
 
         if (!Bank.contains(GRACEFUL_BOOTS_ID)) {
-            buyList.add(new d(GRACEFUL_BOOTS_ID, 20, j.cf));
+            buyList.add(new ShopItem(GRACEFUL_BOOTS_ID, 20, j.cf));
         }
     }
 }

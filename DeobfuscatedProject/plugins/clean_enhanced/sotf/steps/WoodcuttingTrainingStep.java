@@ -16,6 +16,8 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
+import gg.squire.sotf.framework.ShopItem;
+import gg.squire.sotf.framework.QuestStep;
 
 /**
  * Trains Woodcutting by chopping trees.
@@ -94,37 +96,37 @@ public class WoodcuttingTrainingStep implements QuestStep {
     public static void populateShoppingList() {
         // Buy rune axe if missing
         if (!Bank.contains(RUNE_AXE_ID)) {
-            itemsToBuy.add(new d(RUNE_AXE_ID, 1, QUANTITY_RUNE_AXE));
+            itemsToBuy.add(new ShopItem(RUNE_AXE_ID, 1, QUANTITY_RUNE_AXE));
         }
 
         // Buy adamant axe if missing
         if (!Bank.contains(ADAMANT_AXE_ID)) {
-            itemsToBuy.add(new d(ADAMANT_AXE_ID, 1, QUANTITY_ADAMANT_AXE));
+            itemsToBuy.add(new ShopItem(ADAMANT_AXE_ID, 1, QUANTITY_ADAMANT_AXE));
         }
 
         // Buy mithril axe if missing
         if (!Bank.contains(MITHRIL_AXE_ID)) {
-            itemsToBuy.add(new d(MITHRIL_AXE_ID, 1, QUANTITY_MITHRIL_AXE));
+            itemsToBuy.add(new ShopItem(MITHRIL_AXE_ID, 1, QUANTITY_MITHRIL_AXE));
         }
 
         // Buy steel axe if missing
         if (!Bank.contains(STEEL_AXE_ID)) {
-            itemsToBuy.add(new d(STEEL_AXE_ID, 1, QUANTITY_STEEL_AXE));
+            itemsToBuy.add(new ShopItem(STEEL_AXE_ID, 1, QUANTITY_STEEL_AXE));
         }
 
         // Buy iron axe if missing
         if (!Bank.contains(IRON_AXE_ID)) {
-            itemsToBuy.add(new d(IRON_AXE_ID, 1, QUANTITY_IRON_AXE));
+            itemsToBuy.add(new ShopItem(IRON_AXE_ID, 1, QUANTITY_IRON_AXE));
         }
 
         // Buy ring of wealth
         if (!Bank.contains(item -> item.getName().toLowerCase().contains(ITEM_PREFIX_RING_OF_WEALTH))) {
-            itemsToBuy.add(new d(16265, 35, 28653));
+            itemsToBuy.add(new ShopItem(16265, 35, 28653));
         }
 
         // Buy bronze axe
         if (!Bank.contains(32470)) {
-            itemsToBuy.add(new d(32470, 166, 16324));
+            itemsToBuy.add(new ShopItem(32470, 166, 16324));
         }
     }
 

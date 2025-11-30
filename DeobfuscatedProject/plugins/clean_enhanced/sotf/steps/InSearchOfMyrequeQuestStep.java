@@ -18,6 +18,8 @@ import net.unethicalite.api.input.Mouse;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
+import gg.squire.sotf.framework.ShopItem;
+import gg.squire.sotf.framework.GameStateUtil;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
@@ -732,67 +734,67 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
      */
     private static void buildShoppingList() {
         if (!Bank.contains(SILVER_SICKLE_B)) {
-            shoppingList.add(new d(SILVER_SICKLE_B, 1, 37432));
+            shoppingList.add(new ShopItem(SILVER_SICKLE_B, 1, 37432));
         }
 
         if (!Bank.contains(STEEL_MACE)) {
-            shoppingList.add(new d(STEEL_MACE, 1, 27547));
+            shoppingList.add(new ShopItem(STEEL_MACE, 1, 27547));
         }
 
         if (!Bank.contains(STEEL_LONGSWORD)) {
-            shoppingList.add(new d(STEEL_LONGSWORD, 1, 27547));
+            shoppingList.add(new ShopItem(STEEL_LONGSWORD, 1, 27547));
         }
 
         if (!Bank.contains(STEEL_WARHAMMER)) {
-            shoppingList.add(new d(STEEL_WARHAMMER, 1, 27547));
+            shoppingList.add(new ShopItem(STEEL_WARHAMMER, 1, 27547));
         }
 
         if (!Bank.contains(STEEL_CHAINBODY)) {
-            shoppingList.add(new d(STEEL_CHAINBODY, 1, 27547));
+            shoppingList.add(new ShopItem(STEEL_CHAINBODY, 1, 27547));
         }
 
         if (Bank.contains(STEEL_DAGGER) && Bank.getFirst(STEEL_DAGGER).getQuantity() < 2) {
-            shoppingList.add(new d(STEEL_DAGGER, 2, 27547));
+            shoppingList.add(new ShopItem(STEEL_DAGGER, 2, 27547));
         }
 
         if (Bank.contains(FOOD_MONKFISH) && Bank.getFirst(FOOD_MONKFISH).getQuantity() < 20) {
-            shoppingList.add(new d(FOOD_MONKFISH, 20, 14156));
+            shoppingList.add(new ShopItem(FOOD_MONKFISH, 20, 14156));
         }
 
         if (Bank.contains(STEEL_2H_SWORD) && Bank.getFirst(STEEL_2H_SWORD).getQuantity() < 225) {
-            shoppingList.add(new d(STEEL_2H_SWORD, 225, 78));
+            shoppingList.add(new ShopItem(STEEL_2H_SWORD, 225, 78));
         }
 
         if (Bank.contains(STEEL_MED_HELM) && Bank.getFirst(STEEL_MED_HELM).getQuantity() < 7) {
-            shoppingList.add(new d(STEEL_MED_HELM, 7, 197));
+            shoppingList.add(new ShopItem(STEEL_MED_HELM, 7, 197));
         }
 
         if (Bank.contains(SNAIL_SHELL) && Bank.getFirst(SNAIL_SHELL).getQuantity() < 7) {
-            shoppingList.add(new d(SNAIL_SHELL, 9, 203));
+            shoppingList.add(new ShopItem(SNAIL_SHELL, 9, 203));
         }
 
         if (Bank.contains(SWAMP_TAR) && Bank.getFirst(SWAMP_TAR).getQuantity() < 3) {
-            shoppingList.add(new d(SWAMP_TAR, 4, 32581));
+            shoppingList.add(new ShopItem(SWAMP_TAR, 4, 32581));
         }
 
         if (Bank.contains(BUCKET) && Bank.getFirst(BUCKET).getQuantity() < 10) {
-            shoppingList.add(new d(BUCKET, 10, GameStateUtil.randomRange(7820, 7918)));
+            shoppingList.add(new ShopItem(BUCKET, 10, GameStateUtil.randomRange(7820, 7918)));
         }
 
         if (Bank.contains(PLANK) && Bank.getFirst(PLANK).getQuantity() < 5) {
-            shoppingList.add(new d(PLANK, 5, GameStateUtil.randomRange(10214, 10046)));
+            shoppingList.add(new ShopItem(PLANK, 5, GameStateUtil.randomRange(10214, 10046)));
         }
 
         if (!Bank.contains(STEEL_SWORD)) {
-            shoppingList.add(new d(STEEL_SWORD, 1, 27547));
+            shoppingList.add(new ShopItem(STEEL_SWORD, 1, 27547));
         }
 
         if (!Bank.contains(item -> item.getName().toLowerCase().contains("ring of wealth ("))) {
-            shoppingList.add(new d(32492, 5, 27033));
+            shoppingList.add(new ShopItem(32492, 5, 27033));
         }
 
         if (!Bank.contains(ROPE)) {
-            shoppingList.add(new d(ROPE, 57, 28886));
+            shoppingList.add(new ShopItem(ROPE, 57, 28886));
         }
     }
 

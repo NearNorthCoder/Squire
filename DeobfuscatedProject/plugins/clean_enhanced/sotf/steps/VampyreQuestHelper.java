@@ -61,6 +61,7 @@ import net.unethicalite.api.quests.QuestVarbits;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Prayers;
 import net.unethicalite.api.widgets.Widgets;
+import gg.squire.sotf.framework.*;
 
 import gg.squire.sotf.util.BankingUtil;
 import gg.squire.sotf.util.ItemUtil;
@@ -485,55 +486,55 @@ private static void Q() {
                                                                     int[] nArray = new int[1];
                                                                     nArray[0] = 20235;
                                                                     if ((Bank.contains((int[])nArray) ) {
-                                                                        d d2 = new d(20235, 1, GameStateUtil.randomRange(155000, 165000));
+                                                                        d d2 = new ShopItem(20235, 1, GameStateUtil.randomRange(155000, 165000));
                                                                         questSteps.add(d2);
                                                                     }
                                                                     int[] nArray2 = new int[1];
                                                                     nArray2[0] = 11840;
                                                                     if ((Bank.contains((int[])nArray2) ) {
-                                                                        lllllllllllllllllIlllIIllIlIIlll = new d(11840, 1, GameStateUtil.randomRange(155000, 165000));
+                                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(11840, 1, GameStateUtil.randomRange(155000, 165000));
                                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                                     }
                                                                     int[] nArray3 = new int[1];
                                                                     nArray3[0] = 6568;
                                                                     if ((Bank.contains((int[])nArray3) ) {
-                                                                        lllllllllllllllllIlllIIllIlIIlll = new d(6568, 1, GameStateUtil.randomRange(890000, 965000));
+                                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(6568, 1, GameStateUtil.randomRange(890000, 965000));
                                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                                     }
                                                                     int[] nArray4 = new int[1];
                                                                     nArray4[0] = 21298;
                                                                     if ((Bank.contains((int[])nArray4) ) {
-                                                                        lllllllllllllllllIlllIIllIlIIlll = new d(21298, 1, GameStateUtil.randomRange(950000, 1050000));
+                                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(21298, 1, GameStateUtil.randomRange(950000, 1050000));
                                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                                     }
                                                                     int[] nArray5 = new int[1];
                                                                     nArray5[0] = 21301;
                                                                     if ((Bank.contains((int[])nArray5) ) {
-                                                                        lllllllllllllllllIlllIIllIlIIlll = new d(21301, 1, GameStateUtil.randomRange(1450000, 1550000));
+                                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(21301, 1, GameStateUtil.randomRange(1450000, 1550000));
                                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                                     }
                                                                     int[] nArray6 = new int[1];
                                                                     nArray6[0] = 21304;
                                                                     if ((Bank.contains((int[])nArray6) ) {
-                                                                        lllllllllllllllllIlllIIllIlIIlll = new d(21304, 1, GameStateUtil.randomRange(1150000, 1250000));
+                                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(21304, 1, GameStateUtil.randomRange(1150000, 1250000));
                                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                                     }
                                                                     int[] nArray7 = new int[1];
                                                                     nArray7[0] = 6524;
                                                                     if ((Bank.contains((int[])nArray7) ) {
-                                                                        lllllllllllllllllIlllIIllIlIIlll = new d(6524, 1, GameStateUtil.randomRange(690000, 790000));
+                                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(6524, 1, GameStateUtil.randomRange(690000, 790000));
                                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                                     }
                                                                     int[] nArray8 = new int[1];
                                                                     nArray8[0] = 6735;
                                                                     if ((Bank.contains((int[])nArray8) ) {
-                                                                        lllllllllllllllllIlllIIllIlIIlll = new d(6735, 1, GameStateUtil.randomRange(123230, 133230));
+                                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(6735, 1, GameStateUtil.randomRange(123230, 133230));
                                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                                     }
                                                                     int[] nArray9 = new int[1];
                                                                     nArray9[0] = 233;
                                                                     if ((Bank.contains((int[])nArray9) ) {
-                                                                        lllllllllllllllllIlllIIllIlIIlll = new d(233, 1, GameStateUtil.randomRange(9000, 9500));
+                                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(233, 1, GameStateUtil.randomRange(9000, 9500));
                                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                                     }
                                                                     int[] nArray10 = new int[1];
@@ -546,7 +547,7 @@ private static void Q() {
                                                                     nArray12[0] = 3024;
                                                                     if (!(Bank.getFirst((int[])nArray12).getQuantity()) < (10)) break block41;
                                                                 }
-                                                                lllllllllllllllllIlllIIllIlIIlll = new d(3024, 10, GameStateUtil.randomRange(17000, 18000));
+                                                                lllllllllllllllllIlllIIllIlIIlll = new ShopItem(3024, 10, GameStateUtil.randomRange(17000, 18000));
                                                                 questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                             }
                                                             int[] nArray = new int[1];
@@ -559,13 +560,13 @@ private static void Q() {
                                                             nArray14[0] = 12695;
                                                             if (!(Bank.getFirst((int[])nArray14).getQuantity()) < (10)) break block43;
                                                         }
-                                                        lllllllllllllllllIlllIIllIlIIlll = new d(12695, 10, GameStateUtil.randomRange(17000, 18000));
+                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(12695, 10, GameStateUtil.randomRange(17000, 18000));
                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                     }
                                                     int[] nArray = new int[1];
                                                     nArray[0] = 227;
                                                     if ((Bank.contains((int[])nArray) ) {
-                                                        lllllllllllllllllIlllIIllIlIIlll = new d(227, 1, GameStateUtil.randomRange(17000, 18000));
+                                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(227, 1, GameStateUtil.randomRange(17000, 18000));
                                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                                     }
                                                     int[] nArray15 = new int[1];
@@ -578,7 +579,7 @@ private static void Q() {
                                                     nArray17[0] = 554;
                                                     if (!(Bank.getFirst((int[])nArray17).getQuantity()) < (100)) break block45;
                                                 }
-                                                lllllllllllllllllIlllIIllIlIIlll = new d(554, 100, GameStateUtil.randomRange(20, 23));
+                                                lllllllllllllllllIlllIIllIlIIlll = new ShopItem(554, 100, GameStateUtil.randomRange(20, 23));
                                                 questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                             }
                                             int[] nArray = new int[1];
@@ -591,31 +592,31 @@ private static void Q() {
                                             nArray19[0] = 556;
                                             if (!(Bank.getFirst((int[])nArray19).getQuantity()) < (45)) break block47;
                                         }
-                                        lllllllllllllllllIlllIIllIlIIlll = new d(556, 51, GameStateUtil.randomRange(20, 23));
+                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(556, 51, GameStateUtil.randomRange(20, 23));
                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                     }
                                     int[] nArray = new int[1];
                                     nArray[0] = 1605;
                                     if ((Bank.contains((int[])nArray) ) {
-                                        lllllllllllllllllIlllIIllIlIIlll = new d(1605, 1, GameStateUtil.randomRange(10500, 11500));
+                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(1605, 1, GameStateUtil.randomRange(10500, 11500));
                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                     }
                                     int[] nArray20 = new int[1];
                                     nArray20[0] = 1755;
                                     if ((Bank.contains((int[])nArray20) ) {
-                                        lllllllllllllllllIlllIIllIlIIlll = new d(1755, 1, GameStateUtil.randomRange(8590, 9500));
+                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(1755, 1, GameStateUtil.randomRange(8590, 9500));
                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                     }
                                     int[] nArray21 = new int[1];
                                     nArray21[0] = 2961;
                                     if ((Bank.contains((int[])nArray21) ) {
-                                        lllllllllllllllllIlllIIllIlIIlll = new d(2961, 1, GameStateUtil.randomRange(10500, 11500));
+                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(2961, 1, GameStateUtil.randomRange(10500, 11500));
                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                     }
                                     int[] nArray22 = new int[1];
                                     nArray22[0] = 564;
                                     if ((Bank.contains((int[])nArray22) ) {
-                                        lllllllllllllllllIlllIIllIlIIlll = new d(564, 1, GameStateUtil.randomRange(10500, 11500));
+                                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(564, 1, GameStateUtil.randomRange(10500, 11500));
                                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                                     }
                                     int[] nArray23 = new int[1];
@@ -628,7 +629,7 @@ private static void Q() {
                                     nArray25[0] = 385;
                                     if (!(Bank.getFirst((int[])nArray25).getQuantity()) < (145)) break block49;
                                 }
-                                lllllllllllllllllIlllIIllIlIIlll = new d(385, 145, GameStateUtil.randomRange(1250, 1450));
+                                lllllllllllllllllIlllIIllIlIIlll = new ShopItem(385, 145, GameStateUtil.randomRange(1250, 1450));
                                 questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                             }
                             int[] nArray = new int[1];
@@ -641,7 +642,7 @@ private static void Q() {
                             nArray27[0] = 19629;
                             if (!(Bank.getFirst((int[])nArray27).getQuantity()) < (15)) break block51;
                         }
-                        lllllllllllllllllIlllIIllIlIIlll = new d(19629, 15, GameStateUtil.randomRange(8500, 9500));
+                        lllllllllllllllllIlllIIllIlIIlll = new ShopItem(19629, 15, GameStateUtil.randomRange(8500, 9500));
                         questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
                     }
                     int[] nArray = new int[1];
@@ -654,17 +655,17 @@ private static void Q() {
                     nArray29[0] = 2434;
                     if (!(Bank.getFirst((int[])nArray29).getQuantity()) < (23)) break block53;
                 }
-                lllllllllllllllllIlllIIllIlIIlll = new d(2434, 23, GameStateUtil.randomRange(13500, 14300));
+                lllllllllllllllllIlllIIllIlIIlll = new ShopItem(2434, 23, GameStateUtil.randomRange(13500, 14300));
                 questSteps.add((d)lllllllllllllllllIlllIIllIlIIlll);
             }
             if ((Bank.contains((Predicate) == 0(lllllllllllllllllIlllIIllIlIIlll = item -> item.getName().toLowerCase().contains("ring of wealth ("))) ) {
-                lllllllllllllllllIlllIIllIlIIllI = new d(11980, 5, GameStateUtil.randomRange(25500, 27500));
+                lllllllllllllllllIlllIIllIlIIllI = new ShopItem(11980, 5, GameStateUtil.randomRange(25500, 27500));
                 questSteps.add(lllllllllllllllllIlllIIllIlIIllI);
             }
             int[] nArray = new int[1];
             nArray[0] = 12625;
             if ((Bank.contains((int[])nArray) ) {
-                lllllllllllllllllIlllIIllIlIIllI = new d(12625, 4, j.cf);
+                lllllllllllllllllIlllIIllIlIIllI = new ShopItem(12625, 4, j.cf);
                 questSteps.add(lllllllllllllllllIlllIIllIlIIllI);
             }
             int[] nArray30 = new int[1];
@@ -677,7 +678,7 @@ private static void Q() {
             nArray32[0] = 8007;
             if (!(Bank.getFirst((int[])nArray32).getQuantity()) < (15)) break block55;
         }
-        lllllllllllllllllIlllIIllIlIIllI = new d(8007, 40, GameStateUtil.randomRange(950, 1050));
+        lllllllllllllllllIlllIIllIlIIllI = new ShopItem(8007, 40, GameStateUtil.randomRange(950, 1050));
         questSteps.add(lllllllllllllllllIlllIIllIlIIllI);
     }
 }

@@ -18,6 +18,7 @@ import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
+import gg.squire.sotf.framework.*;
 
 /**
  * Trains Thieving by pickpocketing NPCs and stealing from stalls.
@@ -140,32 +141,32 @@ public class ThievingTrainingStep implements QuestStep {
     public static void populateShoppingList() {
         // Dodgy necklace
         if (!Bank.contains(DODGY_NECKLACE_ID)) {
-            itemsToBuy.add(new d(DODGY_NECKLACE_ID, BUY_DODGY_NECKLACE_QUANTITY, BUY_DODGY_NECKLACE_PRICE));
+            itemsToBuy.add(new ShopItem(DODGY_NECKLACE_ID, BUY_DODGY_NECKLACE_QUANTITY, BUY_DODGY_NECKLACE_PRICE));
         }
 
         // Wine of Zamorak
         if (!Bank.contains(WINE_OF_ZAMORAK_ID)) {
-            itemsToBuy.add(new d(WINE_OF_ZAMORAK_ID, BUY_WINE_QUANTITY, BUY_WINE_PRICE));
+            itemsToBuy.add(new ShopItem(WINE_OF_ZAMORAK_ID, BUY_WINE_QUANTITY, BUY_WINE_PRICE));
         }
 
         // Cabbage seed
         if (!Bank.contains(CABBAGE_SEED_ID)) {
-            itemsToBuy.add(new d(CABBAGE_SEED_ID, BUY_CABBAGE_SEED_QUANTITY, BUY_CABBAGE_SEED_PRICE));
+            itemsToBuy.add(new ShopItem(CABBAGE_SEED_ID, BUY_CABBAGE_SEED_QUANTITY, BUY_CABBAGE_SEED_PRICE));
         }
 
         // Lobster
         if (!Bank.contains(LOBSTER_ID)) {
-            itemsToBuy.add(new d(LOBSTER_ID, BUY_LOBSTER_QUANTITY, BUY_LOBSTER_PRICE));
+            itemsToBuy.add(new ShopItem(LOBSTER_ID, BUY_LOBSTER_QUANTITY, BUY_LOBSTER_PRICE));
         }
 
         // Gloves of silence (if high enough level)
         if (Skills.getLevel(Skill.THIEVING) >= LEVEL_MASTER_FARMER) {
             if (!Bank.contains(JUG_OF_WINE_ID)) {
-                itemsToBuy.add(new d(JUG_OF_WINE_ID, 15307, 20));
+                itemsToBuy.add(new ShopItem(JUG_OF_WINE_ID, 15307, 20));
             }
 
             if (!Bank.contains(GLOVES_OF_SILENCE_ID)) {
-                itemsToBuy.add(new d(GLOVES_OF_SILENCE_ID, 44, 22081));
+                itemsToBuy.add(new ShopItem(GLOVES_OF_SILENCE_ID, 44, 22081));
             }
         }
     }

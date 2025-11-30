@@ -41,13 +41,13 @@ public class MovingToBestSpotTask extends KephriManager {
 
     @Inject
     protected MovingToBestSpotTask(Client client, ToaPlugin plugin, TOAConfig tOAConfig) {
-        super(client, plugin, tOAConfig, bi.ATTACK);
+        super(client, plugin, tOAConfig, KephriPhase.ATTACK);
     }
 
     @Override
-    protected boolean bL() {
+    protected boolean shouldExecute() {
         Player localPlayer = Players.getLocal();
-        NPC targetNPC = this.bO(); // Get the target boss NPC
+        NPC targetNPC = this.getTargetNPC(); // Get the target boss NPC
 
         // No NPC target found, skip task
         if (targetNPC == null) {
@@ -55,19 +55,19 @@ public class MovingToBestSpotTask extends KephriManager {
         }
 
         // Only move if we're in attack mode and not already positioned
-        if (!this.bR() || this.bV()) {
+        if (!this.isInAttackMode() || this.isAlreadyPositioned()) {
             return false;
         }
 
         // Get dangerous ground markers to avoid
-        Set<WorldPoint> dangerousGroundMarkers = this.bU();
+        Set<WorldPoint> dangerousGroundMarkers = this.getDangerousGroundMarkers();
         if (dangerousGroundMarkers.isEmpty()) {
             return false;
         }
 
         // Get the raid path points
-        List<WorldPoint> raidPath = this.bS();
-        WorldPoint targetLocation = this.bT();
+        List<WorldPoint> raidPath = this.getRaidPath();
+        WorldPoint targetLocation = this.getTargetLocation();
 
         // Find the best position to attack from:
         // 1. Start with tiles adjacent to the NPC (offset by 1)
@@ -85,7 +85,7 @@ public class MovingToBestSpotTask extends KephriManager {
             .filter(Reachable::isWalkable) // Must be walkable
             .filter(worldPoint -> !raidPath.contains(worldPoint)) // Avoid raid path
             .min(Comparator
-                .comparingDouble(worldPoint -> worldPoint.distanceToPath(this.cu, targetLocation)) // Closest to path
+                .comparingDouble(worldPoint -> worldPoint.distanceToPath(this.client, targetLocation)) // Closest to path
                 .thenComparing(worldPoint -> worldPoint.distanceTo2DHypotenuse(targetLocation))) // Then closest to target
             .orElse(null);
 

@@ -18,6 +18,8 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
+import gg.squire.sotf.framework.ShopItem;
+import gg.squire.sotf.framework.GameStateUtil;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Prayers;
 import net.unethicalite.api.widgets.Widgets;
@@ -205,45 +207,45 @@ public class NatureSpiritQuestStep implements QuestStep {
     private static void addMissingItemsToShoppingList() {
         // Add Salve graveyard teleport if missing
         if (!Bank.contains(ITEM_SALVE_GRAVEYARD_TELEPORT)) {
-            d teleportItem = new d(ITEM_SALVE_GRAVEYARD_TELEPORT, 1, 13407);
+            d teleportItem = new ShopItem(ITEM_SALVE_GRAVEYARD_TELEPORT, 1, 13407);
             itemsToBuy.add(teleportItem);
         }
 
         // Add stamina potion if missing
         if (!Bank.contains(12625)) {
-            d staminaPotion = new d(12625, 1, 7932);
+            d staminaPotion = new ShopItem(12625, 1, 7932);
             itemsToBuy.add(staminaPotion);
         }
 
         // Add silver sickle if missing
         if (!Bank.contains(ITEM_SILVER_SICKLE)) {
-            d silverSickle = new d(ITEM_SILVER_SICKLE, 165, GameStateUtil.randomRange(32445, 15399));
+            d silverSickle = new ShopItem(ITEM_SILVER_SICKLE, 165, GameStateUtil.randomRange(32445, 15399));
             itemsToBuy.add(silverSickle);
         }
 
         // Add nature talisman if missing
         if (!Bank.contains(ITEM_NATURE_TALISMAN)) {
-            d natureTalisman = new d(ITEM_NATURE_TALISMAN, 3, 15343);
+            d natureTalisman = new ShopItem(ITEM_NATURE_TALISMAN, 3, 15343);
             itemsToBuy.add(natureTalisman);
         }
 
         // Add rune essence if missing
         if (!Bank.contains(ITEM_RUNE_ESSENCE)) {
-            d runeEssence = new d(ITEM_RUNE_ESSENCE, 5, j.cf);
+            d runeEssence = new ShopItem(ITEM_RUNE_ESSENCE, 5, j.cf);
             itemsToBuy.add(runeEssence);
         }
 
         // Add prayer potion if missing - check quantity
         if (Bank.contains(ITEM_MORT_MYRE_FUNGUS)) {
             if (Bank.getFirst(ITEM_MORT_MYRE_FUNGUS).getQuantity() < 165) {
-                d prayerPotion = new d(ITEM_MORT_MYRE_FUNGUS, 191, 30573);
+                d prayerPotion = new ShopItem(ITEM_MORT_MYRE_FUNGUS, 191, 30573);
                 itemsToBuy.add(prayerPotion);
             }
         }
 
         // Add druid pouch if missing
         if (!Bank.contains(ITEM_DRUID_POUCH)) {
-            d druidPouch = new d(ITEM_DRUID_POUCH, 1, 13407);
+            d druidPouch = new ShopItem(ITEM_DRUID_POUCH, 1, 13407);
             itemsToBuy.add(druidPouch);
         }
 
@@ -251,13 +253,13 @@ public class NatureSpiritQuestStep implements QuestStep {
         Predicate<net.unethicalite.api.items.Item> wealthRingPredicate =
             item -> item.getName().toLowerCase().contains("ring of wealth (");
         if (!Bank.contains(wealthRingPredicate)) {
-            d ringOfWealth = new d(11980, 5, 25583);
+            d ringOfWealth = new ShopItem(11980, 5, 25583);
             itemsToBuy.add(ringOfWealth);
         }
 
         // Add nature rune if missing
         if (!Bank.contains(561)) {
-            d natureRune = new d(561, 1000, 2735);
+            d natureRune = new ShopItem(561, 1000, 2735);
             itemsToBuy.add(natureRune);
         }
     }

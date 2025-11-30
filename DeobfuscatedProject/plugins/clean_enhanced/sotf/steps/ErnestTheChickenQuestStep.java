@@ -17,6 +17,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Dialog;
+import gg.squire.sotf.framework.ShopItem;
 
 import gg.squire.sotf.framework.*;
 
@@ -836,21 +837,21 @@ public class ErnestTheChickenQuestStep implements QuestStep {
      */
     private static void prepareShoppingList() {
         if (!Bank.contains(RING_OF_WEALTH_5)) {
-            shoppingList.add(new d(RING_OF_WEALTH_5, 10, ITEM_PICKUP_TIMEOUT));
+            shoppingList.add(new ShopItem(RING_OF_WEALTH_5, 10, ITEM_PICKUP_TIMEOUT));
         }
 
         if (!Bank.contains(STAMINA_POTION_4) && !Bank.contains(STAMINA_POTION_1)) {
-            shoppingList.add(new d(STAMINA_POTION_4, 40, ITEM_PURCHASE_TIMEOUT));
+            shoppingList.add(new ShopItem(STAMINA_POTION_4, 40, ITEM_PURCHASE_TIMEOUT));
         }
 
         if (!Bank.contains(SPADE)) {
-            shoppingList.add(new d(SPADE, 1, ITEM_DROP_TIMEOUT));
+            shoppingList.add(new ShopItem(SPADE, 1, ITEM_DROP_TIMEOUT));
         }
 
         if (!Bank.contains(STAMINA_POTION_4)) {
             if (Bank.contains(STAMINA_POTION_4)) {
                 if (Bank.contains(STAMINA_POTION_4) && Bank.getFirst(STAMINA_POTION_4).getQuantity() < 15) {
-                    shoppingList.add(new d(STAMINA_POTION_4, 40, ITEM_PURCHASE_TIMEOUT));
+                    shoppingList.add(new ShopItem(STAMINA_POTION_4, 40, ITEM_PURCHASE_TIMEOUT));
                 }
             }
         }

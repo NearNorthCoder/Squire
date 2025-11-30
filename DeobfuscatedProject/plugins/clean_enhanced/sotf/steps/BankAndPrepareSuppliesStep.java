@@ -266,14 +266,14 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
         int[] crossbowCheck = new int[1];
         crossbowCheck[0] = CROSSBOW_ID;
         if (!Bank.contains(crossbowCheck)) {
-            d crossbowItem = new d(CROSSBOW_ID, 2, GameStateUtil.randomRange(7932, 6258));
+            d crossbowItem = new ShopItem(CROSSBOW_ID, 2, GameStateUtil.randomRange(7932, 6258));
             shoppingList.add(crossbowItem);
         }
         if (Bank.contains(crossbowCheck)) {
             int[] crossbowQuantityCheck = new int[1];
             crossbowQuantityCheck[0] = CROSSBOW_ID;
             if (Bank.getFirst(crossbowQuantityCheck).getQuantity() < 2) {
-                d crossbowItem = new d(CROSSBOW_ID, 2, GameStateUtil.randomRange(7932, 6258));
+                d crossbowItem = new ShopItem(CROSSBOW_ID, 2, GameStateUtil.randomRange(7932, 6258));
                 shoppingList.add(crossbowItem);
             }
         }
@@ -282,13 +282,13 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
         int[] silverBarCheck = new int[1];
         silverBarCheck[0] = 221;
         if (!Bank.contains(silverBarCheck)) {
-            d silverBarItem = new d(221, 22508, 20);
+            d silverBarItem = new ShopItem(221, 22508, 20);
             shoppingList.add(silverBarItem);
         }
 
         // Check for ring of wealth (by name contains check)
         if (!Bank.contains((item) -> item.getName().toLowerCase().contains(ITEM_RING_OF_WEALTH))) {
-            d ringItem = new d(8151, 5, 28664);
+            d ringItem = new ShopItem(8151, 5, 28664);
             shoppingList.add(ringItem);
         }
 
@@ -296,7 +296,7 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
         int[] teleportCheck = new int[1];
         teleportCheck[0] = 16342;
         if (!Bank.contains(teleportCheck)) {
-            d teleportItem = new d(16342, 1, 31159);
+            d teleportItem = new ShopItem(16342, 1, 31159);
             shoppingList.add(teleportItem);
         }
 
@@ -304,14 +304,14 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
         int[] varrockTeleportCheck = new int[1];
         varrockTeleportCheck[0] = VARROCK_TELEPORT_ID;
         if (!Bank.contains(varrockTeleportCheck)) {
-            d varrockItem = new d(VARROCK_TELEPORT_ID, 4, j.cf);
+            d varrockItem = new ShopItem(VARROCK_TELEPORT_ID, 4, j.cf);
             shoppingList.add(varrockItem);
         }
         if (Bank.contains(varrockTeleportCheck)) {
             int[] varrockQuantityCheck = new int[1];
             varrockQuantityCheck[0] = VARROCK_TELEPORT_ID;
             if (Bank.getFirst(varrockQuantityCheck).getQuantity() < 4) {
-                d varrockItem = new d(VARROCK_TELEPORT_ID, 4, j.cf);
+                d varrockItem = new ShopItem(VARROCK_TELEPORT_ID, 4, j.cf);
                 shoppingList.add(varrockItem);
             }
         }
@@ -320,14 +320,14 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
         int[] houseTabCheck = new int[1];
         houseTabCheck[0] = 8013;
         if (!Bank.contains(houseTabCheck)) {
-            d houseTabItem = new d(8013, 20, 7933);
+            d houseTabItem = new ShopItem(8013, 20, 7933);
             shoppingList.add(houseTabItem);
         }
         if (Bank.contains(houseTabCheck)) {
             int[] houseTabQuantityCheck = new int[1];
             houseTabQuantityCheck[0] = 8013;
             if (Bank.getFirst(houseTabQuantityCheck).getQuantity() < 20) {
-                d houseTabItem = new d(8013, 20, 7933);
+                d houseTabItem = new ShopItem(8013, 20, 7933);
                 shoppingList.add(houseTabItem);
             }
         }
@@ -336,14 +336,14 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
         int[] staminaCheck = new int[1];
         staminaCheck[0] = STAMINA_POTION_ID;
         if (!Bank.contains(staminaCheck)) {
-            d staminaItem = new d(STAMINA_POTION_ID, 32, 8111);
+            d staminaItem = new ShopItem(STAMINA_POTION_ID, 32, 8111);
             shoppingList.add(staminaItem);
         }
         if (Bank.contains(staminaCheck)) {
             int[] staminaQuantityCheck = new int[1];
             staminaQuantityCheck[0] = STAMINA_POTION_ID;
             if (Bank.getFirst(staminaQuantityCheck).getQuantity() < 15) {
-                d staminaItem = new d(STAMINA_POTION_ID, 32, 8111);
+                d staminaItem = new ShopItem(STAMINA_POTION_ID, 32, 8111);
                 shoppingList.add(staminaItem);
             }
         }
