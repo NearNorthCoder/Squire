@@ -1,23 +1,24 @@
 /*
  * Decompiled with CFR 0.152.
+ * Deobfuscated for Squire COX Plugin
  *
  * Could not load the following classes:
  *  net.runelite.api.Player
  */
 package gg.squire.cox.tasks;
 
-import gg.squire.cox.tasks.GameEnum11;
 import java.util.Objects;
 import net.runelite.api.Player;
 
 /**
- * PlayerRoomAssignment - Tracks which player is assigned to which room in a raid.
+ * PlayerRoomAssignment - Tracks which player is assigned to which room/effect in a raid.
  *
- * This class maintains the assignment of a player to a specific room type,
- * along with a counter that tracks some temporal aspect of the assignment.
+ * This class maintains the assignment of a player to a specific effect type
+ * (such as BURN, ACID, or TELEPORT during Olm), along with a counter that
+ * tracks the remaining tick duration of the assignment.
  */
 public class PlayerRoomAssignment {
-    private final C roomType;
+    private final CoxEffectType effectType;
     private int assignmentCounter;
     private final Player player;
 
@@ -36,15 +37,15 @@ public class PlayerRoomAssignment {
     }
 
     /**
-     * Creates a new player room assignment.
+     * Creates a new player effect assignment.
      *
      * @param player the player being assigned
-     * @param roomType the type of room the player is assigned to
+     * @param effectType the type of effect the player is assigned to handle
      */
-    public PlayerRoomAssignment(Player player, C roomType) {
+    public PlayerRoomAssignment(Player player, CoxEffectType effectType) {
         this.player = player;
-        this.roomType = roomType;
-        this.assignmentCounter = roomType.bB();
+        this.effectType = effectType;
+        this.assignmentCounter = effectType.getTickDuration();
     }
 
     @Override
@@ -57,7 +58,7 @@ public class PlayerRoomAssignment {
         }
         PlayerRoomAssignment other = (PlayerRoomAssignment) object;
         return Objects.equals(this.player.getName(), other.player.getName())
-            && this.roomType == other.roomType;
+            && this.effectType == other.effectType;
     }
 
     /**
@@ -80,17 +81,25 @@ public class PlayerRoomAssignment {
     }
 
     /**
-     * Gets the room type for this assignment.
+     * Gets the effect type for this assignment.
      *
-     * @return the room type
+     * @return the effect type
      */
-    public C getRoomType() {
-        return this.roomType;
+    public CoxEffectType getEffectType() {
+        return this.effectType;
+    }
+
+    /**
+     * @deprecated Use {@link #getEffectType()} instead
+     */
+    @Deprecated
+    public CoxEffectType getRoomType() {
+        return getEffectType();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.player.getName(), this.roomType);
+        return Objects.hash(this.player.getName(), this.effectType);
     }
 
     /**

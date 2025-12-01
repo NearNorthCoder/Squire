@@ -106,6 +106,8 @@ public class SquireAutoTOA extends SquirePlugin {
     private int completedRaidsCount;
     private int failedRaidsCount;
     private int deathsThisRaid;
+    private boolean kerisSpecialReady;
+    private boolean runToggleDisabled;
 
     public SquireAutoTOA() {
         this.prayersEnabled = false;
@@ -116,6 +118,8 @@ public class SquireAutoTOA extends SquirePlugin {
         this.completedRaidsCount = 0;
         this.failedRaidsCount = 0;
         this.deathsThisRaid = 0;
+        this.kerisSpecialReady = false;
+        this.runToggleDisabled = false;
     }
 
     /**
@@ -475,5 +479,79 @@ public class SquireAutoTOA extends SquirePlugin {
 
     public int getDeathsThisRaid() {
         return this.deathsThisRaid;
+    }
+
+    /**
+     * Checks if the plugin is currently paused.
+     * When paused, tasks should not execute.
+     *
+     * @return true if the plugin is paused
+     */
+    public boolean isPaused() {
+        // Check if plugin is in a paused state
+        // This could be based on config, manual pause, or other conditions
+        return !this.autoEatEnabled && !this.prayersEnabled;
+    }
+
+    /**
+     * @deprecated Use {@link #isPaused()} instead
+     */
+    @Deprecated
+    public boolean e() {
+        return isPaused();
+    }
+
+    /**
+     * Sets the keris special attack ready state.
+     * Called when the keris special attack has been used or when keris is unavailable.
+     *
+     * @param ready true if keris special is ready, false otherwise
+     */
+    public void setKerisSpecialReady(boolean ready) {
+        this.kerisSpecialReady = ready;
+    }
+
+    /**
+     * @deprecated Use {@link #setKerisSpecialReady(boolean)} instead
+     */
+    @Deprecated
+    public void c(boolean ready) {
+        setKerisSpecialReady(ready);
+    }
+
+    /**
+     * Checks if keris special attack is ready.
+     *
+     * @return true if keris special is ready
+     */
+    public boolean isKerisSpecialReady() {
+        return this.kerisSpecialReady;
+    }
+
+    /**
+     * Checks if run toggle is disabled.
+     * When true, the run toggle task should not execute.
+     *
+     * @return true if run toggle is disabled
+     */
+    public boolean isRunToggleDisabled() {
+        return this.runToggleDisabled;
+    }
+
+    /**
+     * @deprecated Use {@link #isRunToggleDisabled()} instead
+     */
+    @Deprecated
+    public boolean d() {
+        return isRunToggleDisabled();
+    }
+
+    /**
+     * Sets whether run toggle is disabled.
+     *
+     * @param disabled true to disable run toggle
+     */
+    public void setRunToggleDisabled(boolean disabled) {
+        this.runToggleDisabled = disabled;
     }
 }

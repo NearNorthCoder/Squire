@@ -47,7 +47,7 @@ public class MovingToRightSpotWithChargingTask extends KephriManager {
 
     @Override
     protected boolean shouldExecute() {
-        WorldPoint rightPositionWorld = this.a(RIGHT_POSITION);
+        WorldPoint rightPositionWorld = localToWorld(RIGHT_POSITION);
 
         // If obelisk has spawned and we're already at the right position, no need to move
         if (this.obeliskHasSpawned && Players.getLocal().getWorldLocation().equals(rightPositionWorld)) {
@@ -58,7 +58,7 @@ public class MovingToRightSpotWithChargingTask extends KephriManager {
 
         if (this.obeliskHasSpawned) {
             // Obelisk has spawned - move to charge position
-            destinationWorld = this.a(CHARGE_POSITION);
+            destinationWorld = localToWorld(CHARGE_POSITION);
 
             // Already at charge position
             if (Players.getLocal().getWorldLocation().equals(destinationWorld)) {

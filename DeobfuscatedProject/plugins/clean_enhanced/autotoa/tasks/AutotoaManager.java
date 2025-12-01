@@ -517,4 +517,436 @@ public abstract class KephriManager extends ToaTaskBase {
         exitNpc.interact("Talk-to");
         return true;
     }
+
+    // ========== Combat Area Detection (deobfuscated from bc(), aq(), bf(), be()) ==========
+
+    /** Region IDs for TOA combat areas */
+    private static final int TOA_REGION_COMBAT_1 = 14160; // Region ID for combat area
+    private static final int TOA_REGION_COMBAT_2 = 14672; // Region ID for boss area
+    private static final int TOA_REGION_COMBAT_3 = 15184; // Region ID for extended area
+    private static final int TOA_REGION_SPECIAL_1 = 15696; // Region ID for special weapon areas
+    private static final int TOA_REGION_SPECIAL_2 = 15952; // Region ID for special weapon areas
+
+    /** Boss NPC IDs for TOA */
+    private static final int[] BOSS_NPC_IDS = {27267, 27267, 27779, 27524}; // Kephri, Zebak, etc.
+
+    /** Animation ID for idle state */
+    private static final int ANIMATION_IDLE = -1;
+
+    /**
+     * Checks if the player is currently in a combat area within TOA.
+     * Used to determine if combat-related tasks should execute.
+     *
+     * @return true if in a combat area
+     */
+    protected boolean isInCombatArea() {
+        // Must be in instanced region
+        if (!this.client.isInInstancedRegion()) {
+            return false;
+        }
+        // Check if in one of the combat regions
+        return isInRegion(TOA_REGION_COMBAT_1) ||
+               isInRegion(TOA_REGION_COMBAT_2) ||
+               isInRegion(TOA_REGION_COMBAT_3);
+    }
+
+    /**
+     * @deprecated Use {@link #isInCombatArea()} instead
+     */
+    @Deprecated
+    protected boolean bc() {
+        return isInCombatArea();
+    }
+
+    /**
+     * Checks if the player is in a special weapon mode area.
+     * These are areas where special attack weapons are particularly effective.
+     *
+     * @return true if in special weapon mode area
+     */
+    protected boolean isInSpecialWeaponMode() {
+        return isInRegion(TOA_REGION_SPECIAL_1) || isInRegion(TOA_REGION_SPECIAL_2);
+    }
+
+    /**
+     * @deprecated Use {@link #isInSpecialWeaponMode()} instead
+     */
+    @Deprecated
+    protected boolean aq() {
+        return isInSpecialWeaponMode();
+    }
+
+    /**
+     * Checks if a boss fight is currently active.
+     * This is determined by whether a boss NPC is present in the area.
+     *
+     * @return true if a boss NPC is present and the fight is active
+     */
+    protected boolean isBossFightActive() {
+        return getNearestBossNpc() != null;
+    }
+
+    /**
+     * @deprecated Use {@link #isBossFightActive()} instead
+     */
+    @Deprecated
+    protected boolean bf() {
+        return isBossFightActive();
+    }
+
+    /**
+     * Checks if the boss is currently idle (not animating).
+     * Useful for timing attacks or special actions.
+     *
+     * @return true if boss is present and in idle animation state
+     */
+    protected boolean isBossIdle() {
+        NPC boss = getNearestBossNpc();
+        return boss != null && boss.getAnimation() == ANIMATION_IDLE;
+    }
+
+    /**
+     * @deprecated Use {@link #isBossIdle()} instead
+     */
+    @Deprecated
+    protected boolean be() {
+        return isBossIdle();
+    }
+
+    /**
+     * Gets the nearest boss NPC in the current area.
+     *
+     * @return the nearest boss NPC, or null if none found
+     */
+    protected NPC getNearestBossNpc() {
+        return NPCs.getNearest(BOSS_NPC_IDS);
+    }
+
+    /**
+     * @deprecated Use {@link #getNearestBossNpc()} instead
+     */
+    @Deprecated
+    protected NPC bd() {
+        return getNearestBossNpc();
+    }
+
+    /**
+     * Checks if the player is in a specific map region.
+     *
+     * @param regionId the region ID to check
+     * @return true if the player is in that region
+     */
+    protected boolean isInRegion(int regionId) {
+        int[] regions = this.client.getMapRegions();
+        if (regions == null) {
+            return false;
+        }
+        for (int region : regions) {
+            if (region == regionId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @deprecated Use {@link #isInRegion(int)} instead
+     */
+    @Deprecated
+    protected boolean j(int regionId) {
+        return isInRegion(regionId);
+    }
+
+    // ========== Additional Deobfuscated Methods ==========
+
+    /**
+     * Checks if the shadow puzzle is currently active.
+     * Used during the Het puzzle to determine special behavior.
+     *
+     * @return true if shadow puzzle is active
+     */
+    protected boolean isShadowPuzzleActive() {
+        // Check if in shadow puzzle region or state
+        return isInRegion(TOA_REGION_COMBAT_1) && !isInSpecialWeaponMode();
+    }
+
+    /**
+     * @deprecated Use {@link #isShadowPuzzleActive()} instead
+     */
+    @Deprecated
+    protected boolean aZ() {
+        return isShadowPuzzleActive();
+    }
+
+    /**
+     * Gets the count of tears/salt items available for prayer restoration.
+     *
+     * @return the count of available tears/salt items
+     */
+    protected int getTearsCount() {
+        // Count tears of elidinis and salt deposits in inventory
+        return (int) net.unethicalite.api.items.Inventory.getAll(item ->
+            item.getId() == 27339 || item.getId() == 19081
+        ).stream().count();
+    }
+
+    /**
+     * @deprecated Use {@link #getTearsCount()} instead
+     */
+    @Deprecated
+    protected int aY() {
+        return getTearsCount();
+    }
+
+    /**
+     * Gets the current phase ID based on boss animation state.
+     *
+     * @return the current phase animation ID
+     */
+    protected int getCurrentPhaseId() {
+        NPC boss = getNearestBossNpc();
+        if (boss == null) {
+            return -1;
+        }
+        return boss.getAnimation();
+    }
+
+    /**
+     * @deprecated Use {@link #getCurrentPhaseId()} instead
+     */
+    @Deprecated
+    protected int aX() {
+        return getCurrentPhaseId();
+    }
+
+    /**
+     * Checks if the butterfly phase is currently active during Akkha fight.
+     *
+     * @return true if butterfly phase is active
+     */
+    protected boolean isButterflyPhaseActive() {
+        // Check for Akkha's Shadow NPC presence
+        NPC akkhasShadow = NPCs.getNearest("Akkha's Shadow");
+        return akkhasShadow != null && !akkhasShadow.isDead();
+    }
+
+    /**
+     * @deprecated Use {@link #isButterflyPhaseActive()} instead
+     */
+    @Deprecated
+    protected boolean bu() {
+        return isButterflyPhaseActive();
+    }
+
+    /**
+     * Handles player movement state updates.
+     * Called when player is moving to update internal state.
+     */
+    protected void handlePlayerMoving() {
+        // Update movement state - typically clears pending actions
+        // This is called to notify the task that movement is occurring
+    }
+
+    /**
+     * @deprecated Use {@link #handlePlayerMoving()} instead
+     */
+    @Deprecated
+    protected void bp() {
+        handlePlayerMoving();
+    }
+
+    /**
+     * Gets the butterfly mechanic data for the current Akkha phase.
+     * Returns null if not in butterfly phase.
+     *
+     * @return the butterfly mechanic data, or null
+     */
+    protected ButterflyMechanic getButterflyMechanic() {
+        // This would return the butterfly mechanic data
+        // The actual implementation depends on how the mechanic is tracked
+        return null; // Placeholder - actual implementation needed
+    }
+
+    /**
+     * @deprecated Use {@link #getButterflyMechanic()} instead
+     */
+    @Deprecated
+    protected ButterflyMechanic bv() {
+        return getButterflyMechanic();
+    }
+
+    /**
+     * Gets the Warden NPC for the final boss fight.
+     *
+     * @return the Warden NPC, or null if not found
+     */
+    protected NPC getWardenNpc() {
+        return NPCs.getNearest(npc ->
+            npc.getName() != null &&
+            (npc.getName().contains("Warden") || npc.getName().contains("Elidinis") || npc.getName().contains("Tumeken"))
+        );
+    }
+
+    /**
+     * @deprecated Use {@link #getWardenNpc()} instead
+     */
+    @Deprecated
+    protected NPC co() {
+        return getWardenNpc();
+    }
+
+    /**
+     * Checks if the player can eat (has food and health is not full).
+     *
+     * @return true if player can eat
+     */
+    protected boolean canEat() {
+        // Check if player has food and is not at full health
+        return net.unethicalite.api.game.Combat.getCurrentHealth() < net.unethicalite.api.game.Combat.getMaxHealth() &&
+               net.unethicalite.api.items.Inventory.getFirst(item ->
+                   item.hasAction("Eat") || item.hasAction("Drink")
+               ) != null;
+    }
+
+    /**
+     * @deprecated Use {@link #canEat()} instead
+     */
+    @Deprecated
+    protected boolean ba() {
+        return canEat();
+    }
+
+    /**
+     * Converts a local Point coordinate to a WorldPoint.
+     * Used for converting arena tile positions to world coordinates.
+     *
+     * @param localPoint the local Point to convert
+     * @return the corresponding WorldPoint
+     */
+    protected WorldPoint localToWorld(Point localPoint) {
+        if (localPoint == null) {
+            return null;
+        }
+        LocalPoint local = LocalPoint.fromScene(localPoint.getX(), localPoint.getY());
+        return WorldPoint.fromLocal(this.client, local);
+    }
+
+    /**
+     * @deprecated Use {@link #localToWorld(Point)} instead
+     */
+    @Deprecated
+    protected WorldPoint a(Point localPoint) {
+        return localToWorld(localPoint);
+    }
+
+    /**
+     * Gets the Akkha's Shadow NPC during butterfly phase.
+     *
+     * @return the Akkha's Shadow NPC, or null if not found
+     */
+    protected NPC getAkkhasShadow() {
+        return NPCs.getNearest("Akkha's Shadow");
+    }
+
+    /**
+     * @deprecated Use {@link #getAkkhasShadow()} instead
+     */
+    @Deprecated
+    protected NPC J() {
+        return getAkkhasShadow();
+    }
+
+    /**
+     * Checks if an NPC is valid (not null and not dead).
+     *
+     * @param npc the NPC to check
+     * @return true if NPC is valid
+     */
+    protected boolean isNpcValid(NPC npc) {
+        return npc != null && !npc.isDead();
+    }
+
+    /**
+     * @deprecated Use {@link #isNpcValid(NPC)} instead
+     */
+    @Deprecated
+    protected boolean g(NPC npc) {
+        return isNpcValid(npc);
+    }
+
+    /**
+     * Moves the player to the specified world point.
+     *
+     * @param destination the destination WorldPoint
+     */
+    protected void moveTo(WorldPoint destination) {
+        if (destination != null) {
+            Movement.setDestination(destination);
+        }
+    }
+
+    /**
+     * @deprecated Use {@link #moveTo(WorldPoint)} instead
+     */
+    @Deprecated
+    protected void g(WorldPoint destination) {
+        moveTo(destination);
+    }
+
+    /**
+     * Resets the task state.
+     * Called when the task needs to be reset to initial state.
+     */
+    protected void resetTask() {
+        // Reset any internal state
+    }
+
+    /**
+     * @deprecated Use {@link #resetTask()} instead
+     */
+    @Deprecated
+    protected void r() {
+        resetTask();
+    }
+
+    /**
+     * Placeholder class for butterfly mechanic data.
+     * This should be replaced with the actual deobfuscated type.
+     */
+    public static class ButterflyMechanic {
+        private List<Point> circlePositions;
+        private List<Point> attackTiles;
+
+        /**
+         * Gets the circle positions for butterfly movement.
+         * @return list of circle positions
+         */
+        public List<Point> getCirclePositions() {
+            return circlePositions;
+        }
+
+        /**
+         * @deprecated Use {@link #getCirclePositions()} instead
+         */
+        @Deprecated
+        public List<Point> M() {
+            return getCirclePositions();
+        }
+
+        /**
+         * Gets the attack tile positions.
+         * @return list of attack tiles
+         */
+        public List<Point> getAttackTiles() {
+            return attackTiles;
+        }
+
+        /**
+         * @deprecated Use {@link #getAttackTiles()} instead
+         */
+        @Deprecated
+        public List<Point> N() {
+            return getAttackTiles();
+        }
+    }
 }

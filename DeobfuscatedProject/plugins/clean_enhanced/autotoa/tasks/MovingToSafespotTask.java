@@ -56,7 +56,7 @@ public class MovingToSafespotTask extends KephriManager {
     @Override
     protected boolean shouldExecute() {
         // Calculate the world location from the primary safe spot point
-        WorldPoint primarySafespotWorld = this.a(SAFESPOT_PRIMARY);
+        WorldPoint primarySafespotWorld = localToWorld(SAFESPOT_PRIMARY);
         WorldPoint destinationWorld;
 
         // If cooldown is active, decrement it
@@ -69,7 +69,7 @@ public class MovingToSafespotTask extends KephriManager {
             }
 
             // Get the world location of the current target safe spot
-            destinationWorld = this.a(this.currentSafespotTarget);
+            destinationWorld = localToWorld(this.currentSafespotTarget);
         } else {
             // Use primary safe spot when no cooldown
             destinationWorld = primarySafespotWorld;
@@ -118,7 +118,7 @@ public class MovingToSafespotTask extends KephriManager {
 
         // Check if the dangerous graphics spawned at the primary safe spot
         if ((graphicsId != GRAPHICS_ATTACK_TYPE_1 || graphicsId == GRAPHICS_ATTACK_TYPE_2) &&
-            graphicsLocation.equals(this.a(SAFESPOT_PRIMARY))) {
+            graphicsLocation.equals(localToWorld(SAFESPOT_PRIMARY))) {
 
             // Set cooldown and safe spot based on attack type
             if (graphicsId == GRAPHICS_ATTACK_TYPE_1) {
@@ -132,13 +132,13 @@ public class MovingToSafespotTask extends KephriManager {
     }
 
     @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
+    public ConfigStorageBox<EquipmentSetup> getGearSwap() {
         return null;
     }
 
     @Override
     public void reset() {
-        super.r();
+        resetTask();
         this.currentSafespotTarget = null;
         this.cooldownTicksRemaining = 0;
     }

@@ -150,7 +150,7 @@ public class KillingAnnoyingEggTask extends KephriManager {
         }
 
         // Prepare for attack
-        bp();
+        handlePlayerMoving();
 
         // Equip Keris weapon for bonus damage
         Item kerisWeapon = Inventory.getFirst(item -> item.getName().toLowerCase().contains(ITEM_NAME_KERIS));

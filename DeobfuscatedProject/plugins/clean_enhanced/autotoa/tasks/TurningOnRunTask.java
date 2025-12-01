@@ -34,8 +34,8 @@ public class TurningOnRunTask extends Task {
 
     @Override
     public boolean run() {
-        // Don't toggle run if plugin is paused
-        if (this.plugin.d()) {
+        // Don't toggle run if run toggle is disabled
+        if (this.plugin.isRunToggleDisabled()) {
             return false;
         }
 
