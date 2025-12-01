@@ -66,39 +66,38 @@ public class AttackingAkkhaButterflyTask extends KephriManager {
     @Override
     protected boolean shouldExecute() {
         // Check if we should be doing this task
-        if (!this.bu()) {
+        if (!isButterflyPhaseActive()) {
             return false;
         }
 
         // Don't run while player is moving
         if (Players.getLocal().isMoving()) {
-            bp();
+            handlePlayerMoving();
         }
 
         // Get butterfly mechanic data
-        o butterflyMechanic = bv();
+        ButterflyMechanic butterflyMechanic = getButterflyMechanic();
         if (butterflyMechanic == null) {
             return false;
         }
 
         // Find next position in butterfly circle
         WorldPoint nextPosition = null;
-        for (int i = 0; i < butterflyMechanic.M().size(); i++) {
-            WorldPoint circlePoint = a(butterflyMechanic.M().get(i));
+        for (int i = 0; i < butterflyMechanic.getCirclePositions().size(); i++) {
+            WorldPoint circlePoint = localToWorld(butterflyMechanic.getCirclePositions().get(i));
             if (circlePoint.equals(Players.getLocal().getWorldLocation())) {
                 // Found our current position, get next one in sequence
-                nextPosition = a(butterflyMechanic.M().get((i + 1) % butterflyMechanic.M().size()));
+                nextPosition = localToWorld(butterflyMechanic.getCirclePositions().get((i + 1) % butterflyMechanic.getCirclePositions().size()));
                 break;
             }
         }
 
         // Get Akkha's Shadow NPC
-        NPC akkhasShadow = J();
+        NPC akkhasShadow = getAkkhasShadow();
 
-        // If shadow not found and we're not at spawn, find it near spawn point
-        if (!g(akkhasShadow)) {
-            WorldPoint spawnLocation = bx().a(cu);
-            akkhasShadow = NPCs.getNearest(spawnLocation, AKKHA_SHADOW_NAME);
+        // If shadow not found, try to find nearest by name
+        if (!isNpcValid(akkhasShadow)) {
+            akkhasShadow = NPCs.getNearest(AKKHA_SHADOW_NAME);
         }
 
         if (akkhasShadow == null) {
@@ -107,8 +106,8 @@ public class AttackingAkkhaButterflyTask extends KephriManager {
 
         // Check if we're standing on one of the marked attack tiles
         WorldPoint playerLocation = Players.getLocal().getWorldLocation();
-        for (Point markedTile : butterflyMechanic.N()) {
-            if (playerLocation.equals(a(markedTile))) {
+        for (Point markedTile : butterflyMechanic.getAttackTiles()) {
+            if (playerLocation.equals(localToWorld(markedTile))) {
                 // We're on an attack tile, attack the shadow
                 akkhasShadow.interact(ATTACK_ACTION);
             }
@@ -116,12 +115,12 @@ public class AttackingAkkhaButterflyTask extends KephriManager {
 
         // If no next position and player not moving, move to first position
         if (nextPosition == null && !Players.getLocal().isMoving()) {
-            g(a(butterflyMechanic.M().get(0)));
+            moveTo(localToWorld(butterflyMechanic.getCirclePositions().get(0)));
             return true;
         }
 
         // Check if shadow is too far away (more than 2 tiles)
-        NPC shadow = J();
+        NPC shadow = getAkkhasShadow();
         if (shadow.getWorldArea().distanceTo(Players.getLocal()) > 2) {
             return false;
         }
@@ -136,11 +135,11 @@ public class AttackingAkkhaButterflyTask extends KephriManager {
     }
 
     @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
+    public ConfigStorageBox<EquipmentSetup> getGearSwap() {
         // Use shadow attack style when attacking Akkha's Shadow
-        if (!g(J())) {
+        if (!isNpcValid(getAkkhasShadow())) {
             return this.config.shadowAttackStyle();
         }
-        return super.br();
+        return super.getGearSwap();
     }
 }

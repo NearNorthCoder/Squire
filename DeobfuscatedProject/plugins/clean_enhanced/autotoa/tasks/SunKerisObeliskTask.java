@@ -110,7 +110,7 @@ public class SunKerisObeliskTask extends KephriManager {
     protected boolean shouldExecute() {
         // Check if we don't have keris or in inventory
         if (isKerisUnavailable()) {
-            this.plugin.c(false);
+            this.plugin.setKerisSpecialReady(false);
             return false;
         }
 
@@ -136,7 +136,7 @@ public class SunKerisObeliskTask extends KephriManager {
         }
 
         // Handle salt/tears usage for prayer
-        if (aZ() && !aq() && aY() > 1) {
+        if (isShadowPuzzleActive() && !isInSpecialWeaponMode() && getTearsCount() > 1) {
             Item saltOrTears = Inventory.getFirst(SALT_DEPOSIT, TEARS_OF_ELIDINIS);
             if (saltOrTears != null) {
                 saltOrTears.interact(ACTION_DRINK);
@@ -156,16 +156,16 @@ public class SunKerisObeliskTask extends KephriManager {
         // Determine which varbit to check based on puzzle state
         int currentVarbit = Vars.getVarp(VARBIT_NORMAL_VALUE);
         int targetVarbit;
-        if (aZ()) {
+        if (isShadowPuzzleActive()) {
             targetVarbit = VARBIT_SHADOW_VALUE;
         } else {
             targetVarbit = VARBIT_OVERLY_DRAINING;
         }
 
         // Adjust target based on draining config
-        if (cW.overlyDraining()) {
+        if (this.config.overlyDraining()) {
             int adjustedTarget;
-            if (aZ()) {
+            if (isShadowPuzzleActive()) {
                 adjustedTarget = VARBIT_SHADOW_PUZZLE;
             } else {
                 adjustedTarget = VARBIT_HIGH_DRAIN_PRAYER;
@@ -193,7 +193,7 @@ public class SunKerisObeliskTask extends KephriManager {
 
         // Activate special attack
         Combat.toggleSpec();
-        this.plugin.c(false);
+        this.plugin.setKerisSpecialReady(false);
         return false;
     }
 

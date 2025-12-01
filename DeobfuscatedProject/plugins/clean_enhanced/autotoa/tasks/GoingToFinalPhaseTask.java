@@ -54,7 +54,7 @@ public class GoingToFinalPhaseTask extends KephriManager {
         // Main task execution logic
 
         // Check if Warden is performing phase transition animation
-        NPC warden = this.co();  // Get Warden NPC
+        NPC warden = getWardenNpc();
 
         if (warden != null && warden.getAnimation() == WARDEN_PHASE_ANIMATION_1) {
             // Warden is transitioning - don't act yet
@@ -62,13 +62,13 @@ public class GoingToFinalPhaseTask extends KephriManager {
         }
 
         // Check if we're in the correct phase
-        if (this.aX() == WARDEN_PHASE_ANIMATION_2) {
+        if (getCurrentPhaseId() == WARDEN_PHASE_ANIMATION_2) {
             // Already in final phase
             return false;
         }
 
         // Don't pick up items if health is too low and we can't eat
-        if (Combat.getCurrentHealth() < LOW_HEALTH_THRESHOLD && !this.ba()) {
+        if (Combat.getCurrentHealth() < LOW_HEALTH_THRESHOLD && !canEat()) {
             return true;  // Focus on survival, not looting
         }
 
