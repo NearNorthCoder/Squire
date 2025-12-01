@@ -327,7 +327,7 @@ public class AgilityTraining1to50Step implements QuestStep {
                Inventory.contains(STEEL_PLATEBODY_ID) &&
                (!Inventory.contains(item -> item.getName().contains("passage")) ||
                 Equipment.contains(item -> item.getName().contains("passage"))) &&
-               (!Inventory.contains(f.bk) || Equipment.contains(f.bk));
+               (!Inventory.contains(ItemIdArrays.RING_OF_WEALTH) || Equipment.contains(ItemIdArrays.RING_OF_WEALTH));
     }
 
     /**
