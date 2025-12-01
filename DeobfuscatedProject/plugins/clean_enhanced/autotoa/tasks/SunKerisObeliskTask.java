@@ -34,6 +34,7 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Prayers;
 import gg.squire.autotoa.tasks.KephriManager;
+import gg.squire.autotoa.tasks.SpecialAttackTracker;
 import gg.squire.autotoa.tasks.TOAItemType;
 
 /**
@@ -175,11 +176,11 @@ public class SunKerisObeliskTask extends KephriManager {
 
         // Check if varbit matches expected state
         if (currentVarbit < targetVarbit) {
-            aY.c();
+            SpecialAttackTracker.resetSpecialState();
             return false;
         }
 
-        aY.c(true);
+        SpecialAttackTracker.setSpecialReady(true);
 
         // Equip keris if not equipped
         Item equippedWeapon = Equipment.fromSlot(EquipmentInventorySlot.WEAPON);

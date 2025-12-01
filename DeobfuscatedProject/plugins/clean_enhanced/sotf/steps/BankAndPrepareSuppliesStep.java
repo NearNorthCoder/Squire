@@ -125,14 +125,14 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
                 // Navigate to bank if not already there
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = MSG_NAV_TO_BANK;
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 // Handle banking operations
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     // Open bank if not already open
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), BANK_OPEN_TIMEOUT);
                     }
 
@@ -166,22 +166,22 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
 
                         // Withdraw required items if we have them
                         if (GameStateUtil.randomRange(requiredItems)) {
-                            a.a(STAMINA_POTION_ID, 2);         // Withdraw 2 stamina potions
-                            a.a(VARROCK_TELEPORT_ID, 1);       // Withdraw 1 teleport
+                            BankingUtil.withdrawItem(STAMINA_POTION_ID, 2);         // Withdraw 2 stamina potions
+                            BankingUtil.withdrawItem(VARROCK_TELEPORT_ID, 1);       // Withdraw 1 teleport
                         }
                     }
                 }
             }
 
             // Use stamina potion if run energy is low
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < MIN_RUN_ENERGY) {
-                Inventory.getFirst(f.ba).interact(MSG_DRINK);
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < MIN_RUN_ENERGY) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact(MSG_DRINK);
                 Time.sleepTicks(TICK_DELAY_SHORT);
             }
 
             // Use prayer potion if prayer points are low
-            if (Inventory.contains(f.aX) && Prayers.getPoints() < MIN_PRAYER_POINTS) {
-                Inventory.getFirst(f.aX).interact(MSG_DRINK);
+            if (Inventory.contains(ItemIdArrays.PRAYER_POTIONS) && Prayers.getPoints() < MIN_PRAYER_POINTS) {
+                Inventory.getFirst(ItemIdArrays.PRAYER_POTIONS).interact(MSG_DRINK);
             }
 
             // Eat food if health is low (below 60%)
@@ -214,7 +214,7 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
 
                 // Interact with start NPC/object
                 if (Players.getLocal().getWorldLocation().distanceTo(startLocation) <= NAVIGATION_DISTANCE) {
-                    g.a(MSG_EMPTY_STRING, dialogOptions);
+                    DialogUtil.talkToNpc(MSG_EMPTY_STRING, dialogOptions);
                 }
             }
         }
