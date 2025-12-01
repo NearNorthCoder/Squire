@@ -175,13 +175,13 @@ public class DragonSlayerQuestHandler implements QuestStep {
             }
 
             // Handle stamina and prayer potions
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 60) {
-                Inventory.getFirst(f.ba).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 60) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                 Time.sleepTicks(1);
             }
 
-            if (Inventory.contains(f.aX) && Prayers.getPoints() < 30) {
-                Inventory.getFirst(f.aX).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.PRAYER_POTIONS) && Prayers.getPoints() < 30) {
+                Inventory.getFirst(ItemIdArrays.PRAYER_POTIONS).interact("Drink");
             }
 
             // Eat food if low health
@@ -200,7 +200,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
             int questProgress = GameStateUtil.getVarbit(QUEST_VARBIT);
 
             // Stage 0: Not started - need to bank
-            if (!hasAllRequiredItems() && questProgress <= 2 && e.J() >= 32) {
+            if (!hasAllRequiredItems() && questProgress <= 2 && GameStateUtil.getCombatLevel() >= 32) {
                 handleBankingForQuestStart();
             }
 
@@ -212,7 +212,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
                     Time.sleepTicks(1);
                 } else {
                     AccBuilderSotf.c = "Talking";
-                    g.a("Guildmaster", questDialogOptions, 1);
+                    DialogUtil.talkToNpcWithWalk("Guildmaster", questDialogOptions, true);
                 }
             }
 
@@ -223,7 +223,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
                     Movement.walkTo(OZIACH_LOCATION);
                     Time.sleepTicks(1);
                 } else {
-                    g.a("Oziach", questDialogOptions, 1);
+                    DialogUtil.talkToNpcWithWalk("Oziach", questDialogOptions, true);
                 }
             }
 
@@ -327,7 +327,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
             AccBuilderSotf.c = "Handling banking";
 
             if (!Bank.isOpen()) {
-                a.a();
+                BankingUtil.openNearestBank();
                 Time.sleepUntil(() -> Bank.isOpen(), 5000);
             }
 
@@ -365,16 +365,16 @@ public class DragonSlayerQuestHandler implements QuestStep {
                 }
 
                 // Withdraw quest items
-                a.a(LOBSTER_POT, 5);
-                a.a(8008, 5);
-                a.a(8009, 5);
-                a.b(f.ba, 5);
-                a.a(1537, 5);
-                a.a(RUNE_SCIMITAR, 1);
-                a.a(1539, 1);
-                a.a(PLANK, 3);
-                a.a(7922, 1);
-                a.a(STEEL_NAILS, 90);
+                BankingUtil.withdrawItem(LOBSTER_POT, 5);
+                BankingUtil.withdrawItem(8008, 5);
+                BankingUtil.withdrawItem(8009, 5);
+                BankingUtil.withdrawItemsUntilFound(ItemIdArrays.STAMINA_POTIONS, 5);
+                BankingUtil.withdrawItem(1537, 5);
+                BankingUtil.withdrawItem(RUNE_SCIMITAR, 1);
+                BankingUtil.withdrawItem(1539, 1);
+                BankingUtil.withdrawItem(PLANK, 3);
+                BankingUtil.withdrawItem(7922, 1);
+                BankingUtil.withdrawItem(STEEL_NAILS, 90);
 
                 // Equip amulet of glory if available
                 if (!Inventory.contains(11980)) {
@@ -438,25 +438,25 @@ public class DragonSlayerQuestHandler implements QuestStep {
         } else {
             AccBuilderSotf.c = "Talking";
             if (!Dialog.isOpen()) {
-                g.a("Guildmaster", questDialogOptions, 1);
+                DialogUtil.talkToNpcWithWalk("Guildmaster", questDialogOptions, true);
             }
 
             if (Vars.getBit(24035) == 1) {
-                g.a("Where can I find the right ship?", "I talked to Oziach...");
+                DialogUtil.chooseDialogOptions(new String[]{"Where can I find the right ship?", "I talked to Oziach..."});
             }
             if (Vars.getBit(12798) == 1) {
-                g.a("How can I protect myself from the dragon's breath?");
+                DialogUtil.chooseDialogOptions(new String[]{"How can I protect myself from the dragon's breath?"});
             }
             if (Vars.getBit(7679) == 1 && Vars.getBit(12798)) {
                 if (!Inventory.contains("Maze key")) {
-                    g.a("How can I find the route to Crandor?", "Where is Melzar's map piece?");
+                    DialogUtil.chooseDialogOptions(new String[]{"How can I find the route to Crandor?", "Where is Melzar's map piece?"});
                 }
             }
             if (Vars.getBit(32543) == 1) {
-                g.a("How can I find the route to Crandor?", "Where is Thalzar's map piece?");
+                DialogUtil.chooseDialogOptions(new String[]{"How can I find the route to Crandor?", "Where is Thalzar's map piece?"});
             }
             if (Vars.getBit(MAZE_KEY_VARBIT) == 1) {
-                g.a("How can I find the route to Crandor?", "Where is Lozar's map piece?");
+                DialogUtil.chooseDialogOptions(new String[]{"How can I find the route to Crandor?", "Where is Lozar's map piece?"});
             }
         }
     }
@@ -475,7 +475,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
             }
 
             if (NPCs.getNearest("Oracle") != null) {
-                g.a("Oracle", questDialogOptions);
+                DialogUtil.talkToNpc("Oracle", questDialogOptions);
             }
         }
     }
@@ -503,7 +503,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
             AccBuilderSotf.c = "Handling banking";
 
             if (!Bank.isOpen()) {
-                a.a();
+                BankingUtil.openNearestBank();
                 Time.sleepUntil(() -> Bank.isOpen(), 5000);
             }
 
@@ -514,22 +514,22 @@ public class DragonSlayerQuestHandler implements QuestStep {
                 }
 
                 // Withdraw Melzar maze items
-                a.a(LOBSTER_POT, 5);
-                a.a(8008, 5);
-                a.a(8009, 5);
-                a.b(f.ba, 2);
-                a.a(RUNE_SCIMITAR, 4);
-                a.a(SILK, 1);
-                a.a(UNFIRED_BOWL, 1);
-                a.a(WIZARDS_MIND_BOMB, 1);
-                a.a(STEEL_NAILS, 90);
+                BankingUtil.withdrawItem(LOBSTER_POT, 5);
+                BankingUtil.withdrawItem(8008, 5);
+                BankingUtil.withdrawItem(8009, 5);
+                BankingUtil.withdrawItemsUntilFound(ItemIdArrays.STAMINA_POTIONS, 2);
+                BankingUtil.withdrawItem(RUNE_SCIMITAR, 4);
+                BankingUtil.withdrawItem(SILK, 1);
+                BankingUtil.withdrawItem(UNFIRED_BOWL, 1);
+                BankingUtil.withdrawItem(WIZARDS_MIND_BOMB, 1);
+                BankingUtil.withdrawItem(STEEL_NAILS, 90);
                 Bank.withdraw("Maze key", 1, Bank.WithdrawMode.ITEM);
 
                 if (!Inventory.contains(11980) && !Equipment.contains(11980)) {
                     Bank.withdraw(11980, 1, Bank.WithdrawMode.ITEM);
                 }
 
-                a.a(1537, Inventory.getFreeSlots());
+                BankingUtil.withdrawItem(1537, Inventory.getFreeSlots());
             }
         }
     }
@@ -615,14 +615,14 @@ public class DragonSlayerQuestHandler implements QuestStep {
                 Movement.walkTo(wormbrainCell);
                 Time.sleepTicks(1);
             }
-            g.a("Can I journey on this ship?",
+            DialogUtil.chooseDialogOptions(new String[]{"Can I journey on this ship?",
                 "Search away, I have nothing to hide.",
-                "Ok.");
+                "Ok."});
         }
 
         if (Players.getLocal().getWorldLocation().equals(wormbrainCell)) {
             AccBuilderSotf.c = "Talking";
-            g.a("Wormbrain", questDialogOptions);
+            DialogUtil.talkToNpc("Wormbrain", questDialogOptions);
         }
     }
 
@@ -861,7 +861,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
                     Inventory.getFirst("Crandor map").interact("Break");
                 }
 
-                g.a("Oziach", questDialogOptions);
+                DialogUtil.talkToNpc("Oziach", questDialogOptions);
             }
         }
     }

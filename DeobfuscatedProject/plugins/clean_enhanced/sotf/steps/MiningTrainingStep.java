@@ -217,14 +217,14 @@ public class MiningTrainingStep implements QuestStep {
         // Navigate to bank
         if (!nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = MSG_NAV_TO_BANK;
-            a.a(nearestBank);
+            BankingUtil.navigateToBank(nearestBank);
             return;
         }
 
         // Open bank
         if (!Bank.isOpen()) {
             AccBuilderSotf.c = MSG_OPENING_BANK;
-            a.a();
+            BankingUtil.openNearestBank();
             Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT_MS);
             return;
         }
@@ -265,27 +265,27 @@ public class MiningTrainingStep implements QuestStep {
 
         // Withdraw based on level
         if (miningLevel >= LEVEL_THRESHOLD_HIGH) {
-            a.a(RUNE_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(RUNE_PICKAXE_ID, 1);
         } else if (miningLevel >= LEVEL_THRESHOLD_IRON && miningLevel < LEVEL_THRESHOLD_HIGH) {
-            a.a(RUNE_PICKAXE_ID, 1);
-            a.a(ADAMANT_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(RUNE_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(ADAMANT_PICKAXE_ID, 1);
         } else if (miningLevel >= LEVEL_THRESHOLD_LOW && miningLevel < LEVEL_THRESHOLD_IRON) {
-            a.a(RUNE_PICKAXE_ID, 1);
-            a.a(ADAMANT_PICKAXE_ID, 1);
-            a.a(MITHRIL_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(RUNE_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(ADAMANT_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(MITHRIL_PICKAXE_ID, 1);
         } else if (miningLevel >= LEVEL_THRESHOLD_LOW) {
-            a.a(RUNE_PICKAXE_ID, 1);
-            a.a(ADAMANT_PICKAXE_ID, 1);
-            a.a(MITHRIL_PICKAXE_ID, 1);
-            a.a(STEEL_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(RUNE_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(ADAMANT_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(MITHRIL_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(STEEL_PICKAXE_ID, 1);
         } else {
             // Low level: all pickaxes
-            a.a(RUNE_PICKAXE_ID, 1);
-            a.a(ADAMANT_PICKAXE_ID, 1);
-            a.a(MITHRIL_PICKAXE_ID, 1);
-            a.a(STEEL_PICKAXE_ID, 1);
-            a.a(IRON_PICKAXE_ID, 1);
-            a.a(BRONZE_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(RUNE_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(ADAMANT_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(MITHRIL_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(STEEL_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(IRON_PICKAXE_ID, 1);
+            BankingUtil.withdrawItem(BRONZE_PICKAXE_ID, 1);
         }
     }
 

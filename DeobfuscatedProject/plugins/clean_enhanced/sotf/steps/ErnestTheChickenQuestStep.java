@@ -160,13 +160,13 @@ public class ErnestTheChickenQuestStep implements QuestStep {
                 // Navigate to bank if not in bank area
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Nav to bank";
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 // Handle banking operations
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(Bank::isOpen, BANK_TIMEOUT);
                     }
 
@@ -195,21 +195,21 @@ public class ErnestTheChickenQuestStep implements QuestStep {
 
                         // Withdraw quest items
                         if (GameStateUtil.randomRange(requiredItems)) {
-                            a.a(STAMINA_POTION_4, 10);
-                            a.a(RING_OF_WEALTH_5, 10);
-                            a.a(SPADE, 1);
-                            a.a(FISH_FOOD, 1);
-                            a.a(POISON, 1);
-                            a.a(STAMINA_POTION_1, 1);
-                            a.a(CAKE, 5);
+                            BankingUtil.withdrawItem(STAMINA_POTION_4, 10);
+                            BankingUtil.withdrawItem(RING_OF_WEALTH_5, 10);
+                            BankingUtil.withdrawItem(SPADE, 1);
+                            BankingUtil.withdrawItem(FISH_FOOD, 1);
+                            BankingUtil.withdrawItem(POISON, 1);
+                            BankingUtil.withdrawItem(STAMINA_POTION_1, 1);
+                            BankingUtil.withdrawItem(CAKE, 5);
                         }
                     }
                 }
             }
 
             // Drink stamina potion if needed
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() <= 50) {
-                Inventory.getFirst(f.ba).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() <= 50) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                 Time.sleepTicks(1);
             }
 
@@ -232,7 +232,7 @@ public class ErnestTheChickenQuestStep implements QuestStep {
                     if (Dialog.isOpen()) {
                         Dialog.close();
                     }
-                    g.a("Veronica", veronicaDialog);
+                    DialogUtil.talkToNpc("Veronica", veronicaDialog);
                 }
             }
 
@@ -325,7 +325,7 @@ public class ErnestTheChickenQuestStep implements QuestStep {
                                 TileObjects.getNearest("Fountain").interact("Search");
                                 Time.sleepTicks(4);
                             }
-                            g.a(veronicaDialog);
+                            DialogUtil.chooseDialogOptions(veronicaDialog);
                         }
                     }
                 }
@@ -422,7 +422,7 @@ public class ErnestTheChickenQuestStep implements QuestStep {
                         }
 
                         if (door == null) {
-                            g.a("Professor Oddenstein", veronicaDialog, 1);
+                            DialogUtil.talkToNpcWithWalk("Professor Oddenstein", veronicaDialog, true);
                         }
                     }
                 }
@@ -460,12 +460,12 @@ public class ErnestTheChickenQuestStep implements QuestStep {
                             aN.tb = 0;
                             questComplete = false;
                         }
-                        g.a("Professor Oddenstein", veronicaDialog, 1);
+                        DialogUtil.talkToNpcWithWalk("Professor Oddenstein", veronicaDialog, true);
                     }
                 }
             }
 
-            g.a(veronicaDialog);
+            DialogUtil.chooseDialogOptions(veronicaDialog);
         }
     }
 

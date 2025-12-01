@@ -174,8 +174,8 @@ public class DruidicRitualQuestStep implements QuestStep {
 
         if (!buyingItems) {
             // Consume stamina potions if needed
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 177) {
-                Inventory.getFirst(f.ba).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 177) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                 Time.sleepTicks(1);
             }
 
@@ -196,7 +196,7 @@ public class DruidicRitualQuestStep implements QuestStep {
                 BankLocation nearestBank = BankLocation.getNearest();
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Nav to bank";
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                     Time.sleepTicks(2);
                 }
 
@@ -204,7 +204,7 @@ public class DruidicRitualQuestStep implements QuestStep {
                     AccBuilderSotf.c = "Handling banking";
 
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(Bank::isOpen, 5000);
                     }
 
@@ -238,10 +238,10 @@ public class DruidicRitualQuestStep implements QuestStep {
                             Time.sleepTicks(1);
                             Bank.withdraw(ITEM_RAW_RAT_MEAT, 1, Bank.WithdrawMode.DEFAULT);
                             Time.sleepTicks(1);
-                            a.a(952, 5);
-                            a.b(f.ba, 5);
-                            a.a(ITEM_SPADE, 31);
-                            a.b(f.bk, 1);
+                            BankingUtil.withdrawItem(952, 5);
+                            BankingUtil.withdrawItemsUntilFound(ItemIdArrays.STAMINA_POTIONS, 5);
+                            BankingUtil.withdrawItem(ITEM_SPADE, 31);
+                            BankingUtil.withdrawItemsUntilFound(ItemIdArrays.RING_OF_WEALTH, 1);
                         }
                     }
                 }
@@ -252,7 +252,7 @@ public class DruidicRitualQuestStep implements QuestStep {
                 if (Players.getLocal().getWorldLocation().distanceTo(KAQEMEEX_LOCATION) > 3) {
                     AccBuilderSotf.c = "Nav to start";
                     if (questStepCounter < 1) {
-                        e.x();
+                        GameStateUtil.closeBankAndHopWorld();
                         questStepCounter += 1;
                     }
                     Movement.walkTo(KAQEMEEX_LOCATION);
@@ -260,7 +260,7 @@ public class DruidicRitualQuestStep implements QuestStep {
                 }
                 if (Players.getLocal().getWorldLocation().distanceTo(KAQEMEEX_LOCATION) <= 3) {
                     AccBuilderSotf.c = "Talk npc";
-                    g.a("Kaqemeex", dialogOptions);
+                    DialogUtil.talkToNpc("Kaqemeex", dialogOptions);
                 }
             }
 
@@ -274,7 +274,7 @@ public class DruidicRitualQuestStep implements QuestStep {
                 }
                 if (Players.getLocal().getWorldLocation().distanceTo(SANFEW_LOCATION) <= 3) {
                     AccBuilderSotf.c = "Talk sanfew";
-                    g.a("Sanfew", dialogOptions);
+                    DialogUtil.talkToNpc("Sanfew", dialogOptions);
                 }
             }
 
@@ -323,7 +323,7 @@ public class DruidicRitualQuestStep implements QuestStep {
                 }
                 if (Players.getLocal().getWorldLocation().distanceTo(SANFEW_LOCATION) <= 3) {
                     AccBuilderSotf.c = "Talk sanfew";
-                    g.a("Sanfew", dialogOptions);
+                    DialogUtil.talkToNpc("Sanfew", dialogOptions);
                 }
             }
 
@@ -342,12 +342,12 @@ public class DruidicRitualQuestStep implements QuestStep {
                         questInitialized += 1;
                         aN.pX = 0;
                     }
-                    g.a("Kaqemeex", dialogOptions);
+                    DialogUtil.talkToNpc("Kaqemeex", dialogOptions);
                 }
             }
 
             // Handle general dialog
-            g.a(dialogOptions);
+            DialogUtil.chooseDialogOptions(dialogOptions);
         }
     }
 }

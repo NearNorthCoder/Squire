@@ -102,13 +102,13 @@ public class ImpCatcherQuestStep implements QuestStep {
 
         if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = "Navigating to bank";
-            a.a(nearestBank);
+            BankingUtil.navigateToBank(nearestBank);
         }
 
         if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             if (!Bank.isOpen()) {
                 AccBuilderSotf.c = "Opening bank";
-                a.a();
+                BankingUtil.openNearestBank();
                 Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT);
             }
 
@@ -176,7 +176,7 @@ public class ImpCatcherQuestStep implements QuestStep {
 
                 // Close bank to withdraw items
                 if (!Bank.isOpen()) {
-                    a.a();
+                    BankingUtil.openNearestBank();
                     Time.sleepTicks(4);
                 }
 
@@ -426,13 +426,13 @@ public class ImpCatcherQuestStep implements QuestStep {
 
                     if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                         AccBuilderSotf.c = "Navigating to bank";
-                        a.a(nearestBank);
+                        BankingUtil.navigateToBank(nearestBank);
                     }
 
                     if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                         if (!Bank.isOpen()) {
                             AccBuilderSotf.c = "Opening bank";
-                            a.a();
+                            BankingUtil.openNearestBank();
                             Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT);
                         }
 
@@ -522,7 +522,7 @@ public class ImpCatcherQuestStep implements QuestStep {
 
                             // Close bank
                             if (!Bank.isOpen()) {
-                                a.a();
+                                BankingUtil.openNearestBank();
                                 Time.sleepTicks(4);
                             }
 
@@ -620,7 +620,7 @@ public class ImpCatcherQuestStep implements QuestStep {
 
                     if (!Bank.isOpen()) {
                         if (dialogState < 1) {
-                            e.x();
+                            GameStateUtil.closeBankAndHopWorld();
                             dialogState += 1;
                         }
 
@@ -638,10 +638,10 @@ public class ImpCatcherQuestStep implements QuestStep {
                 if (Players.getLocal().getWorldLocation().distanceTo(WIZARD_LOCATION) <= 6) {
                     AccBuilderSotf.c = "Handling quest";
                     completionState = 0;
-                    g.a(WIZARD_NPC_NAME, DIALOG_OPTIONS);
+                    DialogUtil.talkToNpc(WIZARD_NPC_NAME, DIALOG_OPTIONS);
 
                     if (g.M()) {
-                        g.a(DIALOG_OPTIONS);
+                        DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
                     }
                 }
             }
@@ -675,17 +675,17 @@ public class ImpCatcherQuestStep implements QuestStep {
                             questStarted = false;
                         }
 
-                        g.a(WIZARD_NPC_NAME, DIALOG_OPTIONS);
+                        DialogUtil.talkToNpc(WIZARD_NPC_NAME, DIALOG_OPTIONS);
 
                         if (g.M()) {
-                            g.a(DIALOG_OPTIONS);
+                            DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
                         }
                     }
                 }
             }
 
             System.out.println("Setting: " + GameStateUtil.getVarbit(QUEST_VARBIT));
-            g.a(new String[0]);
+            DialogUtil.chooseDialogOptions(new String[0]);
         }
     }
 

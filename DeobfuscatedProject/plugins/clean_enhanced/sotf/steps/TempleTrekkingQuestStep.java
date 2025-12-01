@@ -239,7 +239,7 @@ public class TempleTrekkingQuestStep implements QuestStep {
                 if (Inventory.contains(currentFoodId)) {
                     if (Inventory.contains("Knife") && Inventory.contains(ITEM_FOOD_2)) {
                         AccBuilderSotf.c = "Needs items, banking";
-                        a.a(ITEM_FOOD_2, 1);
+                        BankingUtil.withdrawItem(ITEM_FOOD_2, 1);
                     }
                 }
             }
@@ -259,8 +259,8 @@ public class TempleTrekkingQuestStep implements QuestStep {
         equipItems();
 
         // Drink stamina potion if needed
-        if (Inventory.contains(f.ba) && Movement.getRunEnergy() == MIN_HEALTH_FOOD) {
-            Inventory.getFirst(f.ba).interact("Drink");
+        if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() == MIN_HEALTH_FOOD) {
+            Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
             Time.sleepTicks(SLEEP_1_TICK);
         }
 
@@ -350,7 +350,7 @@ public class TempleTrekkingQuestStep implements QuestStep {
             // Withdraw food if low health
             if (Skills.getBoostedLevel(Skill.HITPOINTS) == MIN_HEALTH_FOOD) {
                 if (!Inventory.contains(currentFoodId)) {
-                    a.a(currentFoodId, FOOD_HEALTH_AMOUNT);
+                    BankingUtil.withdrawItem(currentFoodId, FOOD_HEALTH_AMOUNT);
                 }
             }
 
@@ -367,7 +367,7 @@ public class TempleTrekkingQuestStep implements QuestStep {
     private static void withdrawIfNeeded(int itemId) {
         if (!Equipment.contains(itemId)) {
             if (!Inventory.contains(itemId)) {
-                a.a(itemId, 1);
+                BankingUtil.withdrawItem(itemId, 1);
             }
         }
     }
@@ -407,13 +407,13 @@ public class TempleTrekkingQuestStep implements QuestStep {
                                 Time.sleepTicks(SLEEP_3_TICKS);
                             }
 
-                            g.a(new String[0]);
+                            DialogUtil.chooseDialogOptions(new String[0]);
                         }
                     }
                 }
             }
 
-            g.a(new String[]{"Yes."});
+            DialogUtil.chooseDialogOptions(new String[]{"Yes."});
         }
     }
 
@@ -449,14 +449,14 @@ public class TempleTrekkingQuestStep implements QuestStep {
                                 Time.sleepTicks(SLEEP_3_TICKS);
                             }
 
-                            g.a(new String[0]);
+                            DialogUtil.chooseDialogOptions(new String[0]);
                             Time.sleepTicks(SLEEP_2_TICKS);
                         }
                     }
                 }
             }
 
-            g.a(new String[0]);
+            DialogUtil.chooseDialogOptions(new String[0]);
         }
     }
 
@@ -465,7 +465,7 @@ public class TempleTrekkingQuestStep implements QuestStep {
      */
     public static void handleTrekEvents() {
         // Handle starting trek dialog
-        g.a(new String[]{"Yes."});
+        DialogUtil.chooseDialogOptions(new String[]{"Yes."});
 
         Widget startButton = Widgets.get(TREK_WIDGET_ID, TREK_WIDGET_CHILD);
         TileObject continueObject = TileObjects.getNearest(obj -> obj.hasAction("Continue-trek"));
@@ -535,19 +535,19 @@ public class TempleTrekkingQuestStep implements QuestStep {
         // Broken bridge event
         if (TileObjects.getNearest("Broken bridge") != null) {
             handleBrokenBridge();
-            g.a(new String[]{"Yes."});
+            DialogUtil.chooseDialogOptions(new String[]{"Yes."});
         }
 
         // Partially broken bridge event
         if (TileObjects.getNearest("Partially broken bridge") != null) {
             handlePartiallyBrokenBridge();
-            g.a(new String[]{"Yes."});
+            DialogUtil.chooseDialogOptions(new String[]{"Yes."});
         }
 
         // Slightly broken bridge event
         if (TileObjects.getNearest("Slightly broken bridge") != null) {
             handleSlightlyBrokenBridge();
-            g.a(new String[]{"Yes."});
+            DialogUtil.chooseDialogOptions(new String[]{"Yes."});
         }
 
         // Fixed bridge crossing
@@ -1231,8 +1231,8 @@ public class TempleTrekkingQuestStep implements QuestStep {
     private static void equipItems() {
         equipItemIfPresent(new int[]{ITEM_DRAGON_SWORD}, new String[]{"Wear", "Wield", "Equip"});
         equipItemIfPresent(new int[]{ITEM_WEAPON_3}, new String[]{"Wear", "Wield", "Equip"});
-        equipItemIfPresent(f.bk, new String[]{"Wear", "Wield", "Equip"});
-        equipItemIfPresent(f.aW, new String[]{"Wear", "Wield", "Equip"});
+        equipItemIfPresent(ItemIdArrays.RING_OF_WEALTH, new String[]{"Wear", "Wield", "Equip"});
+        equipItemIfPresent(ItemIdArrays.aW, new String[]{"Wear", "Wield", "Equip"});
     }
 
     /**

@@ -277,7 +277,7 @@ public class AnimalMagnetismStep implements QuestStep {
 
         if (ECTOFUNTUS_AREA_1.contains(Players.getLocal().getWorldLocation())
                 && Players.getLocal().getWorldLocation().distanceTo(AVA_LOCATION) <= 8) {
-            g.a("Ava", dialogOptions);
+            DialogUtil.talkToNpc("Ava", dialogOptions);
         }
 
         if (Players.getLocal().getWorldLocation().equals(new WorldPoint(32765, 32667, 0))) {
@@ -396,12 +396,12 @@ public class AnimalMagnetismStep implements QuestStep {
 
                     if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                         AccBuilderSotf.c = "Nav to bank";
-                        a.a(nearestBank);
+                        BankingUtil.navigateToBank(nearestBank);
                     }
 
                     if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                         if (!Bank.isOpen()) {
-                            a.a();
+                            BankingUtil.openNearestBank();
                             Time.sleepUntil(() -> Bank.isOpen(), 30463);
                         }
 
@@ -466,18 +466,18 @@ public class AnimalMagnetismStep implements QuestStep {
 
                             if (GameStateUtil.randomRange(allRequiredItemIds)) {
                                 // Withdraw items
-                                a.a(POLISHED_BUTTONS_ID, 127);
-                                a.a(CHISEL_ID, 1);
-                                a.a(ECTO_TOKENS_ID, 1);
-                                a.a(IRON_BAR_ID, 127);
-                                a.a(THREAD_ID, 127);
-                                a.a(HOLY_SYMBOL_ID, 1);
-                                a.a(HARD_LEATHER_ID, 1);
-                                a.a(MITHRIL_AXE_ID, 5);
-                                a.a(COWHIDE_ID, 5);
-                                a.a(SOFT_LEATHER_ID, 7);
-                                a.a(31674, 1);
-                                a.a(22011, 30527);
+                                BankingUtil.withdrawItem(POLISHED_BUTTONS_ID, 127);
+                                BankingUtil.withdrawItem(CHISEL_ID, 1);
+                                BankingUtil.withdrawItem(ECTO_TOKENS_ID, 1);
+                                BankingUtil.withdrawItem(IRON_BAR_ID, 127);
+                                BankingUtil.withdrawItem(THREAD_ID, 127);
+                                BankingUtil.withdrawItem(HOLY_SYMBOL_ID, 1);
+                                BankingUtil.withdrawItem(HARD_LEATHER_ID, 1);
+                                BankingUtil.withdrawItem(MITHRIL_AXE_ID, 5);
+                                BankingUtil.withdrawItem(COWHIDE_ID, 5);
+                                BankingUtil.withdrawItem(SOFT_LEATHER_ID, 7);
+                                BankingUtil.withdrawItem(31674, 1);
+                                BankingUtil.withdrawItem(22011, 30527);
                             }
                         }
                     }
@@ -485,13 +485,13 @@ public class AnimalMagnetismStep implements QuestStep {
             }
 
             // Consume potions and food
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 30) {
-                Inventory.getFirst(f.ba).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 30) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                 Time.sleepTicks(1);
             }
 
-            if (Inventory.contains(f.aX) && Prayers.getPoints() < 17) {
-                Inventory.getFirst(f.aX).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.PRAYER_POTIONS) && Prayers.getPoints() < 17) {
+                Inventory.getFirst(ItemIdArrays.PRAYER_POTIONS).interact("Drink");
             }
 
             if (GameStateUtil.getHealthPercentage() < 60.0) {
@@ -516,7 +516,7 @@ public class AnimalMagnetismStep implements QuestStep {
                 if (ECTOFUNTUS_AREA_1.contains(Players.getLocal().getWorldLocation())
                         && Players.getLocal().getWorldLocation().distanceTo(AVA_LOCATION) <= 8) {
                     dialogIndex = 0;
-                    g.a("Ava", dialogOptions);
+                    DialogUtil.talkToNpc("Ava", dialogOptions);
                 }
 
                 if (Players.getLocal().getWorldLocation().equals(new WorldPoint(32765, 32667, 0))) {
@@ -620,10 +620,10 @@ public class AnimalMagnetismStep implements QuestStep {
                     if (!Inventory.contains("Bonemeal")
                             && Players.getLocal().getWorldLocation().distanceTo(charterPoint) <= 17) {
                         if (!Dialog.isOpen()) {
-                            g.a("Ghost disciple", dialogOptions);
+                            DialogUtil.talkToNpc("Ghost disciple", dialogOptions);
                             Time.sleepTicks(1);
                         }
-                        g.a(dialogOptions);
+                        DialogUtil.chooseDialogOptions(dialogOptions);
                     }
                 }
 
@@ -640,26 +640,26 @@ public class AnimalMagnetismStep implements QuestStep {
                     }
 
                     if (Players.getLocal().getWorldLocation().distanceTo(MALCOLM_LOCATION) <= 7) {
-                        g.a("Malcolm", dialogOptions);
+                        DialogUtil.talkToNpc("Malcolm", dialogOptions);
                     }
                 }
             }
 
             // Quest steps 17-54: Dialog with Alice
             if (Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == 17) {
-                g.a("Alice", dialogOptions);
+                DialogUtil.talkToNpc("Alice", dialogOptions);
             }
             if (Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == 36) {
-                g.a("Malcolm", dialogOptions);
+                DialogUtil.talkToNpc("Malcolm", dialogOptions);
             }
             if (Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == 40) {
-                g.a("Alice", dialogOptions);
+                DialogUtil.talkToNpc("Alice", dialogOptions);
             }
             if (Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == 30) {
-                g.a("Malcolm", dialogOptions);
+                DialogUtil.talkToNpc("Malcolm", dialogOptions);
             }
             if (Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == 70) {
-                g.a("Alice", dialogOptions);
+                DialogUtil.talkToNpc("Alice", dialogOptions);
             }
 
             // Quest steps 66-68: Old crone
@@ -674,7 +674,7 @@ public class AnimalMagnetismStep implements QuestStep {
                 }
 
                 if (Players.getLocal().getWorldLocation().distanceTo(croneLocation) <= 3) {
-                    g.a("Old crone", dialogOptions);
+                    DialogUtil.talkToNpc("Old crone", dialogOptions);
                 }
             }
 
@@ -686,19 +686,19 @@ public class AnimalMagnetismStep implements QuestStep {
                 }
 
                 if (Players.getLocal().getWorldLocation().distanceTo(MALCOLM_LOCATION) <= 7) {
-                    g.a("Malcolm", dialogOptions);
+                    DialogUtil.talkToNpc("Malcolm", dialogOptions);
                 }
             }
 
             // Quest step 80: More Malcolm dialog
             if (Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == 80) {
-                g.a("Malcolm", dialogOptions);
+                DialogUtil.talkToNpc("Malcolm", dialogOptions);
             }
 
             // Quest steps 58-76: Undead chicken and witch
             if (Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) != 58
                     || Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == 76) {
-                g.a("Malcolm", dialogOptions);
+                DialogUtil.talkToNpc("Malcolm", dialogOptions);
             }
 
             if (Vars.getBit(QuestVarbits.QUEST_ANIMAL_MAGNETISM.getId()) == 76) {
@@ -724,7 +724,7 @@ public class AnimalMagnetismStep implements QuestStep {
                 var witch = NPCs.getNearest("Witch");
                 if (witch != null) {
                     if (Reachable.isInteractable(witch)) {
-                        g.a("Witch", dialogOptions);
+                        DialogUtil.talkToNpc("Witch", dialogOptions);
                     }
                     if (!Reachable.isInteractable(witch)) {
                         Movement.walkTo(witch);
@@ -783,8 +783,8 @@ public class AnimalMagnetismStep implements QuestStep {
                 WorldPoint turaelPoint = new WorldPoint(21850, 32702, 0);
 
                 if (Players.getLocal().getWorldLocation().distanceTo(turaelPoint) > 2) {
-                    if (Inventory.contains(f.aT)) {
-                        Inventory.getFirst(f.aT).interact("Wear");
+                    if (Inventory.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
+                        Inventory.getFirst(ItemIdArrays.QUEST_EQUIPMENT).interact("Wear");
                     }
                     AccBuilderSotf.c = "Nav to npc";
                     Movement.walkTo(turaelPoint);
@@ -795,7 +795,7 @@ public class AnimalMagnetismStep implements QuestStep {
                     var turael = NPCs.getNearest("Turael");
                     if (turael != null) {
                         if (Reachable.isInteractable(turael)) {
-                            g.a("Turael", dialogOptions);
+                            DialogUtil.talkToNpc("Turael", dialogOptions);
                         }
                         if (!Reachable.isInteractable(turael)) {
                             Movement.walkTo(turael);
@@ -887,7 +887,7 @@ public class AnimalMagnetismStep implements QuestStep {
             }
 
             // Continue dialog
-            g.a(dialogOptions);
+            DialogUtil.chooseDialogOptions(dialogOptions);
         }
     }
 }

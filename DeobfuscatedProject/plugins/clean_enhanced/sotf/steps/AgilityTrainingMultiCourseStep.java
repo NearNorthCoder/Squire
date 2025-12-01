@@ -216,7 +216,7 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
                         }
                     }
 
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 // Handle banking
@@ -225,7 +225,7 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
 
                     // Open bank if not open
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(Bank::isOpen, 5000);
                     }
 
@@ -258,61 +258,61 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
                     // Withdraw items based on agility level
                     if (GameStateUtil.randomRange(requiredItems)) {
                         // Withdraw graceful pieces
-                        a.a(GRACEFUL_HOOD_ID, 1);
-                        a.a(GRACEFUL_TOP_ID, 1);
-                        a.a(GRACEFUL_LEGS_ID, 1);
-                        a.a(GRACEFUL_GLOVES_ID, 1);
-                        a.a(GRACEFUL_BOOTS_ID, 1);
-                        a.a(GRACEFUL_CAPE_ID, 1);
-                        a.a(SPOTTIER_CAPE_ID, 1);
+                        BankingUtil.withdrawItem(GRACEFUL_HOOD_ID, 1);
+                        BankingUtil.withdrawItem(GRACEFUL_TOP_ID, 1);
+                        BankingUtil.withdrawItem(GRACEFUL_LEGS_ID, 1);
+                        BankingUtil.withdrawItem(GRACEFUL_GLOVES_ID, 1);
+                        BankingUtil.withdrawItem(GRACEFUL_BOOTS_ID, 1);
+                        BankingUtil.withdrawItem(GRACEFUL_CAPE_ID, 1);
+                        BankingUtil.withdrawItem(SPOTTIER_CAPE_ID, 1);
 
                         // Handle mark of grace
                         if (!Inventory.contains(GRACEFUL_HOOD_ID) && !Equipment.contains(GRACEFUL_HOOD_ID) &&
                             !Bank.contains(GRACEFUL_HOOD_ID)) {
-                            a.a(MARK_OF_GRACE_ID, 1);
+                            BankingUtil.withdrawItem(MARK_OF_GRACE_ID, 1);
                         }
 
                         // Withdraw stamina potions
-                        a.a(GRACEFUL_CAPE_ID, 1);
-                        e.l(GRACEFUL_HOOD_ID);
-                        e.l(GRACEFUL_TOP_ID);
-                        e.l(GRACEFUL_LEGS_ID);
-                        e.l(GRACEFUL_GLOVES_ID);
-                        e.l(GRACEFUL_BOOTS_ID);
+                        BankingUtil.withdrawItem(GRACEFUL_CAPE_ID, 1);
+                        GameStateUtil.equipItem(GRACEFUL_HOOD_ID);
+                        GameStateUtil.equipItem(GRACEFUL_TOP_ID);
+                        GameStateUtil.equipItem(GRACEFUL_LEGS_ID);
+                        GameStateUtil.equipItem(GRACEFUL_GLOVES_ID);
+                        GameStateUtil.equipItem(GRACEFUL_BOOTS_ID);
                         Time.sleepTicks(1);
-                        e.l(SPOTTIER_CAPE_ID);
-                        e.l(11862);
-                        e.l(GRACEFUL_CAPE_ID);
-                        e.l(MARK_OF_GRACE_ID);
-                        e.l(GRACEFUL_CAPE_ID);
+                        GameStateUtil.equipItem(SPOTTIER_CAPE_ID);
+                        GameStateUtil.equipItem(11862);
+                        GameStateUtil.equipItem(GRACEFUL_CAPE_ID);
+                        GameStateUtil.equipItem(MARK_OF_GRACE_ID);
+                        GameStateUtil.equipItem(GRACEFUL_CAPE_ID);
                         Time.sleepTicks(3);
 
                         // Reopen bank if needed
                         if (!Bank.isOpen()) {
-                            a.a();
+                            BankingUtil.openNearestBank();
                             Time.sleepTicks(6);
                         }
 
                         // Withdraw equipment based on agility level
                         if (Bank.isOpen()) {
                             if (Skills.getLevel(Skill.AGILITY) < AGILITY_LEVEL_VARROCK) {
-                                a.a(COINS_ID, 10);
-                                a.a(LEATHER_BODY_ID, 10);
-                                a.a(GRACEFUL_GLOVES_ID, 10);
-                                a.a(LEATHER_GLOVES_ID, 10);
-                                a.b(f.bk, 1);
-                                a.a(STAMINA_POTION_ID, 1);
-                                a.a(GRACEFUL_BOOTS_ID, 5);
-                                a.a(SUMMER_PIE_ID, 173);
+                                BankingUtil.withdrawItem(COINS_ID, 10);
+                                BankingUtil.withdrawItem(LEATHER_BODY_ID, 10);
+                                BankingUtil.withdrawItem(GRACEFUL_GLOVES_ID, 10);
+                                BankingUtil.withdrawItem(LEATHER_GLOVES_ID, 10);
+                                BankingUtil.withdrawItemsUntilFound(ItemIdArrays.RING_OF_WEALTH, 1);
+                                BankingUtil.withdrawItem(STAMINA_POTION_ID, 1);
+                                BankingUtil.withdrawItem(GRACEFUL_BOOTS_ID, 5);
+                                BankingUtil.withdrawItem(SUMMER_PIE_ID, 173);
                             }
                             if (Skills.getLevel(Skill.AGILITY) >= AGILITY_LEVEL_VARROCK) {
-                                a.a(COINS_ID, 10);
-                                a.a(GRACEFUL_GLOVES_ID, 10);
-                                a.a(GRACEFUL_LEGS_ID, 10);
-                                a.b(f.bk, 1);
-                                a.a(STAMINA_POTION_ID, 1);
-                                a.a(GRACEFUL_BOOTS_ID, 8);
-                                a.a(SUMMER_PIE_ID, 10);
+                                BankingUtil.withdrawItem(COINS_ID, 10);
+                                BankingUtil.withdrawItem(GRACEFUL_GLOVES_ID, 10);
+                                BankingUtil.withdrawItem(GRACEFUL_LEGS_ID, 10);
+                                BankingUtil.withdrawItemsUntilFound(ItemIdArrays.RING_OF_WEALTH, 1);
+                                BankingUtil.withdrawItem(STAMINA_POTION_ID, 1);
+                                BankingUtil.withdrawItem(GRACEFUL_BOOTS_ID, 8);
+                                BankingUtil.withdrawItem(SUMMER_PIE_ID, 10);
                             }
                         }
                     }
@@ -327,8 +327,8 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
                 }
 
                 // Drink stamina potions
-                if (Inventory.contains(f.ba) && Movement.getRunEnergy() < RUN_ENERGY_THRESHOLD) {
-                    Inventory.getFirst(f.ba).interact(ACTION_DRINK);
+                if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < RUN_ENERGY_THRESHOLD) {
+                    Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact(ACTION_DRINK);
                     Time.sleepTicks(1);
                 }
 
@@ -1027,7 +1027,7 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
                 Inventory.contains(SUMMER_PIE_ID) &&
                 (!Inventory.contains(item -> item.getName().contains(OBJECT_PASSAGE)) ||
                  Equipment.contains(item -> item.getName().contains(OBJECT_PASSAGE))) &&
-                (!Inventory.contains(f.bk) || Equipment.contains(f.bk))) {
+                (!Inventory.contains(ItemIdArrays.RING_OF_WEALTH) || Equipment.contains(ItemIdArrays.RING_OF_WEALTH))) {
                 return true;
             }
         }
@@ -1036,7 +1036,7 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
             Inventory.contains(LEATHER_BODY_ID) &&
             (!Inventory.contains(item -> item.getName().contains(OBJECT_PASSAGE)) ||
              Equipment.contains(item -> item.getName().contains(OBJECT_PASSAGE))) &&
-            (!Inventory.contains(f.bk) || Equipment.contains(f.bk))) {
+            (!Inventory.contains(ItemIdArrays.RING_OF_WEALTH) || Equipment.contains(ItemIdArrays.RING_OF_WEALTH))) {
             return true;
         }
 

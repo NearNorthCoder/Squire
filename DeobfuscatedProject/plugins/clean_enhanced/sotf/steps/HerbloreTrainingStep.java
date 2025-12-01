@@ -224,13 +224,13 @@ public class HerbloreTrainingStep implements QuestStep {
         // Navigate to bank
         if (!nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = MSG_NAV_TO_BANK;
-            a.a(nearestBank);
+            BankingUtil.navigateToBank(nearestBank);
             return;
         }
 
         // Open bank
         if (!Bank.isOpen()) {
-            a.a();
+            BankingUtil.openNearestBank();
             Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT_MS);
             return;
         }

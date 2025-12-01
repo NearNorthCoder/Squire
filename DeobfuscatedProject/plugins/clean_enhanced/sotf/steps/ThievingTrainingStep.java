@@ -228,12 +228,12 @@ public class ThievingTrainingStep implements QuestStep {
         BankLocation nearestBank = BankLocation.getNearest();
         if (nearestBank == null || nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = MSG_NAV_TO_BANK;
-            a.a(nearestBank);
+            BankingUtil.navigateToBank(nearestBank);
             return;
         }
 
         if (!Bank.isOpen()) {
-            a.a();
+            BankingUtil.openNearestBank();
             Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT_MS);
             return;
         }
@@ -267,19 +267,19 @@ public class ThievingTrainingStep implements QuestStep {
         int thievingLevel = Skills.getLevel(Skill.THIEVING);
 
         if (thievingLevel < LEVEL_TEA_STALL) {
-            a.a(WINE_OF_ZAMORAK_ID, 10);
-            a.a(DODGY_NECKLACE_ID, 10);
-            a.a(CABBAGE_SEED_ID, 13);
+            BankingUtil.withdrawItem(WINE_OF_ZAMORAK_ID, 10);
+            BankingUtil.withdrawItem(DODGY_NECKLACE_ID, 10);
+            BankingUtil.withdrawItem(CABBAGE_SEED_ID, 13);
         }
 
         if (thievingLevel >= LEVEL_TEA_STALL && thievingLevel < LEVEL_MASTER_FARMER) {
-            a.a(DODGY_NECKLACE_ID, 10);
+            BankingUtil.withdrawItem(DODGY_NECKLACE_ID, 10);
         }
 
         if (thievingLevel >= LEVEL_MASTER_FARMER) {
-            a.a(GLOVES_OF_SILENCE_ID, 10);
-            a.a(JUG_OF_WINE_ID, 20);
-            a.a(32235, 20);
+            BankingUtil.withdrawItem(GLOVES_OF_SILENCE_ID, 10);
+            BankingUtil.withdrawItem(JUG_OF_WINE_ID, 20);
+            BankingUtil.withdrawItem(32235, 20);
         }
 
         failCount += 1;

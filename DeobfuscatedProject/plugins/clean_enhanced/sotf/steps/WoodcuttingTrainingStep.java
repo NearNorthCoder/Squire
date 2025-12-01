@@ -206,14 +206,14 @@ public class WoodcuttingTrainingStep implements QuestStep {
         // Navigate to bank
         if (!nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = MSG_NAV_TO_BANK;
-            a.a(nearestBank);
+            BankingUtil.navigateToBank(nearestBank);
             return;
         }
 
         // Open bank
         if (!Bank.isOpen()) {
             AccBuilderSotf.c = MSG_OPENING_BANK;
-            a.a();
+            BankingUtil.openNearestBank();
             Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT_MS);
             return;
         }

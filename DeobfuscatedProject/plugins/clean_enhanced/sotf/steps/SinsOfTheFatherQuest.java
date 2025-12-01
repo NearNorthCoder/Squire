@@ -191,8 +191,8 @@ public class SinsOfTheFatherQuest implements QuestStep {
         }
 
         // Handle stamina potion drinking
-        if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 32 && !Dialog.isOpen()) {
-            Inventory.getFirst(f.ba).interact("Drink");
+        if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 32 && !Dialog.isOpen()) {
+            Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
             Time.sleepTicks(1);
         }
 
@@ -217,13 +217,13 @@ public class SinsOfTheFatherQuest implements QuestStep {
                 nearestBank = BankLocation.getNearest();
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Navigating to bank";
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     if (!Bank.isOpen()) {
                         AccBuilderSotf.c = "Opening bank";
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), 5000);
                     }
 
@@ -256,11 +256,11 @@ public class SinsOfTheFatherQuest implements QuestStep {
 
                     if (Bank.isOpen()) {
                         if (bankCounter < 1) {
-                            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 32) {
-                                Inventory.getFirst(f.ba).interact("Drink");
+                            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 32) {
+                                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                                 Time.sleepTicks(1);
                             }
-                            e.x();
+                            GameStateUtil.closeBankAndHopWorld();
                             bankCounter += 1;
                         }
 
@@ -272,7 +272,7 @@ public class SinsOfTheFatherQuest implements QuestStep {
 
                 if (Players.getLocal().getWorldLocation().distanceTo(QUEST_START_LOCATION) <= 7) {
                     AccBuilderSotf.c = "Chatting";
-                    g.a(ALMERA_NPC, DIALOGUE_OPTIONS);
+                    DialogUtil.talkToNpc(ALMERA_NPC, DIALOGUE_OPTIONS);
                 }
             }
         }
@@ -286,7 +286,7 @@ public class SinsOfTheFatherQuest implements QuestStep {
 
             if (Players.getLocal().getWorldLocation().distanceTo(ALMERA_LOCATION) <= 3) {
                 AccBuilderSotf.c = "Chat boy";
-                g.a(HUDON_NPC, DIALOGUE_OPTIONS);
+                DialogUtil.talkToNpc(HUDON_NPC, DIALOGUE_OPTIONS);
             }
         }
 
@@ -459,7 +459,7 @@ public class SinsOfTheFatherQuest implements QuestStep {
         if (Players.getLocal().getWorldLocation().getY() >= 0x677C) {
             if (Inventory.contains(GLARIALS_AMULET_ID) < 1) {
                 AccBuilderSotf.c = "Chat npc";
-                g.a(GOLRIE_NPC, DIALOGUE_OPTIONS);
+                DialogUtil.talkToNpc(GOLRIE_NPC, DIALOGUE_OPTIONS);
             }
         }
     }
@@ -549,12 +549,12 @@ public class SinsOfTheFatherQuest implements QuestStep {
                     AccBuilderSotf.c = "Nav to bank";
 
                     // Withdraw runes from bank
-                    if (!Equipment.contains(f.aT) && !Inventory.contains(f.aT)) {
-                        Inventory.getFirst(f.aT).interact("Wear");
+                    if (!Equipment.contains(ItemIdArrays.QUEST_EQUIPMENT) && !Inventory.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
+                        Inventory.getFirst(ItemIdArrays.QUEST_EQUIPMENT).interact("Wear");
                         Time.sleepTicks(1);
                     }
 
-                    if (!Equipment.contains(f.aT)) {
+                    if (!Equipment.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
                         Movement.walkTo(0x386, 0x387, 0);
                     }
                 }
@@ -750,17 +750,17 @@ public class SinsOfTheFatherQuest implements QuestStep {
         }
 
         // Check if we have stamina potions
-        if (!Inventory.contains(f.ba)) {
-            if (!Equipment.contains(f.ba)) {
+        if (!Inventory.contains(ItemIdArrays.STAMINA_POTIONS)) {
+            if (!Equipment.contains(ItemIdArrays.STAMINA_POTIONS)) {
                 return true;
             }
         }
 
         // Check if we have teleport items
-        if (Inventory.contains(f.aT)) {
-            if (!Equipment.contains(f.aT)) {
-                if (Inventory.contains(f.aS)) {
-                    if (!Equipment.contains(f.aS)) {
+        if (Inventory.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
+            if (!Equipment.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
+                if (Inventory.contains(ItemIdArrays.aS)) {
+                    if (!Equipment.contains(ItemIdArrays.aS)) {
                         if (!Inventory.contains("Rope")) {
                             return true;
                         }

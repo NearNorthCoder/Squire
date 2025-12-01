@@ -162,7 +162,7 @@ public class AgilityTrainingRooftopStep implements QuestStep {
                 }
             }
 
-            a.a(nearestBank);
+            BankingUtil.navigateToBank(nearestBank);
         }
 
         // Handle banking
@@ -171,7 +171,7 @@ public class AgilityTrainingRooftopStep implements QuestStep {
 
             // Open bank
             if (!Bank.isOpen()) {
-                a.a();
+                BankingUtil.openNearestBank();
                 Time.sleepUntil(() -> Bank.isOpen(), 5000);
             }
 
@@ -208,39 +208,39 @@ public class AgilityTrainingRooftopStep implements QuestStep {
      */
     private static void withdrawSupplies() {
         // Withdraw and equip gear
-        a.a(11858, 1); // Graceful gloves
-        a.a(11860, 1); // Graceful boots
-        a.a(11854, 1); // Graceful top
-        a.a(11856, 1); // Graceful legs
-        a.a(11850, 1); // Graceful hood
-        a.a(11852, 1); // Graceful cape
-        a.a(13579, 1); // Weight-reducing top
+        BankingUtil.withdrawItem(11858, 1); // Graceful gloves
+        BankingUtil.withdrawItem(11860, 1); // Graceful boots
+        BankingUtil.withdrawItem(11854, 1); // Graceful top
+        BankingUtil.withdrawItem(11856, 1); // Graceful legs
+        BankingUtil.withdrawItem(11850, 1); // Graceful hood
+        BankingUtil.withdrawItem(11852, 1); // Graceful cape
+        BankingUtil.withdrawItem(13579, 1); // Weight-reducing top
 
         // Check for stamina potions and withdraw backup if needed
         if (!Inventory.contains(11858) && !Equipment.contains(11858)) {
             if (!Bank.contains(11858)) {
-                a.a(13579, 1);
+                BankingUtil.withdrawItem(13579, 1);
             }
         }
 
-        a.a(32665, 1);
+        BankingUtil.withdrawItem(32665, 1);
 
         // Equip items
-        e.l(11858); // Gloves
-        e.l(11860); // Boots
-        e.l(11854); // Top
-        e.l(11856); // Legs
-        e.l(11850); // Hood
+        GameStateUtil.equipItem(11858); // Gloves
+        GameStateUtil.equipItem(11860); // Boots
+        GameStateUtil.equipItem(11854); // Top
+        GameStateUtil.equipItem(11856); // Legs
+        GameStateUtil.equipItem(11850); // Hood
         Time.sleepTicks(1);
-        e.l(13579);
-        e.l(11852); // Cape
-        e.l(11852);
-        e.l(13579);
+        GameStateUtil.equipItem(13579);
+        GameStateUtil.equipItem(11852); // Cape
+        GameStateUtil.equipItem(11852);
+        GameStateUtil.equipItem(13579);
         Time.sleepTicks(3);
 
         // Reopen bank if needed
         if (!Bank.isOpen()) {
-            a.a();
+            BankingUtil.openNearestBank();
             Time.sleepTicks(6);
         }
 
@@ -249,22 +249,22 @@ public class AgilityTrainingRooftopStep implements QuestStep {
             int agilityLevel = Skills.getLevel(Skill.AGILITY);
 
             if (agilityLevel < 40) {
-                a.a(11850, 9);
-                a.a(11852, 9);
-                a.a(11860, 9);
-                a.a(11854, 9);
-                a.b(f.bk, 1);
-                a.a(12629, 1);
-                a.a(32665, 5);
-                a.a(7218, 15);
+                BankingUtil.withdrawItem(11850, 9);
+                BankingUtil.withdrawItem(11852, 9);
+                BankingUtil.withdrawItem(11860, 9);
+                BankingUtil.withdrawItem(11854, 9);
+                BankingUtil.withdrawItemsUntilFound(ItemIdArrays.RING_OF_WEALTH, 1);
+                BankingUtil.withdrawItem(12629, 1);
+                BankingUtil.withdrawItem(32665, 5);
+                BankingUtil.withdrawItem(7218, 15);
             } else if (agilityLevel >= 40) {
-                a.a(11850, 9);
-                a.a(11860, 9);
-                a.a(12625, 9);
-                a.b(f.bk, 1);
-                a.a(12629, 1);
-                a.a(32665, 8);
-                a.a(7218, 9);
+                BankingUtil.withdrawItem(11850, 9);
+                BankingUtil.withdrawItem(11860, 9);
+                BankingUtil.withdrawItem(12625, 9);
+                BankingUtil.withdrawItemsUntilFound(ItemIdArrays.RING_OF_WEALTH, 1);
+                BankingUtil.withdrawItem(12629, 1);
+                BankingUtil.withdrawItem(32665, 8);
+                BankingUtil.withdrawItem(7218, 9);
             }
         }
     }
@@ -327,8 +327,8 @@ public class AgilityTrainingRooftopStep implements QuestStep {
         }
 
         // Drink stamina potion if run energy is low
-        if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 60) {
-            Inventory.getFirst(f.ba).interact("Drink");
+        if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 60) {
+            Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
             Time.sleepTicks(1);
         }
 
@@ -380,7 +380,7 @@ public class AgilityTrainingRooftopStep implements QuestStep {
                 && Inventory.contains(7218) // Summer pie
                 && (Inventory.contains(item -> item.getName().contains("passage"))
                     || Equipment.contains(item -> item.getName().contains("passage")))
-                && (Inventory.contains(f.bk) || Equipment.contains(f.bk));
+                && (Inventory.contains(ItemIdArrays.RING_OF_WEALTH) || Equipment.contains(ItemIdArrays.RING_OF_WEALTH));
         } else {
             // Lower level requirements (below 40)
             return Inventory.contains(11850) // Graceful hood
@@ -388,7 +388,7 @@ public class AgilityTrainingRooftopStep implements QuestStep {
                 && Inventory.contains(11852) // Graceful cape
                 && (Inventory.contains(item -> item.getName().contains("passage"))
                     || Equipment.contains(item -> item.getName().contains("passage")))
-                && (Inventory.contains(f.bk) || Equipment.contains(f.bk));
+                && (Inventory.contains(ItemIdArrays.RING_OF_WEALTH) || Equipment.contains(ItemIdArrays.RING_OF_WEALTH));
         }
     }
 

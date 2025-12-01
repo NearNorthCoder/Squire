@@ -126,7 +126,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot1 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -142,7 +142,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot2 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -158,7 +158,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot3 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -174,7 +174,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot4 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -190,7 +190,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot5 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -206,7 +206,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot6 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -222,7 +222,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot7 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -238,7 +238,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot8 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -254,7 +254,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot9 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -270,7 +270,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot10 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -286,7 +286,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot11 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -302,7 +302,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot12 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -318,7 +318,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot13 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -334,7 +334,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot14 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -350,7 +350,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     Time.sleepTicks(2);
                     shouldCollectRoot15 = false;
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
         }
 
@@ -497,12 +497,12 @@ public class GrandTreeQuestStep implements QuestStep {
 
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Nav to bank";
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), 5000);
                     }
 
@@ -576,18 +576,18 @@ public class GrandTreeQuestStep implements QuestStep {
 
                         // Close bank
                         if (!Bank.isOpen()) {
-                            a.a();
+                            BankingUtil.openNearestBank();
                             Time.sleepTicks(6);
                         }
 
                         // Withdraw items
                         if (GameStateUtil.randomRange(specialItems)) {
-                            a.a(AMULET_OF_GLORY, 10);
-                            a.a(NECKLACE_OF_PASSAGE, 3);
+                            BankingUtil.withdrawItem(AMULET_OF_GLORY, 10);
+                            BankingUtil.withdrawItem(NECKLACE_OF_PASSAGE, 3);
                             Bank.withdraw(COINS, 5000, Bank.WithdrawMode.ITEM);
                             Bank.withdraw(556, 1, Bank.WithdrawMode.ITEM);
                             Bank.withdraw(GAMES_NECKLACE, 4, Bank.WithdrawMode.ITEM);
-                            a.a(LOBSTER, 5);
+                            BankingUtil.withdrawItem(LOBSTER, 5);
 
                             // Withdraw Mind Runes
                             if (Bank.contains(MIND_RUNE)) {
@@ -612,8 +612,8 @@ public class GrandTreeQuestStep implements QuestStep {
             }
 
             // Use stamina potion
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 50) {
-                Inventory.getFirst(f.ba).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 50) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                 Time.sleepTicks(1);
             }
 
@@ -641,7 +641,7 @@ public class GrandTreeQuestStep implements QuestStep {
 
                 if (Players.getLocal().getWorldLocation().distanceTo(GRAND_TREE_LOCATION) <= 3
                     || Players.getLocal().getWorldLocation().distanceTo(KING_START) < 15) {
-                    g.a("King Narnode Shareen", dialogOptions);
+                    DialogUtil.talkToNpc("King Narnode Shareen", dialogOptions);
                 }
             }
 
@@ -658,7 +658,7 @@ public class GrandTreeQuestStep implements QuestStep {
 
                     if (Players.getLocal().getWorldLocation().distanceTo(HAZELMERE_LOCATION) < 3
                         && Players.getLocal().getWorldLocation().getPlane() == 1) {
-                        g.a("Hazelmere", dialogOptions);
+                        DialogUtil.talkToNpc("Hazelmere", dialogOptions);
                     }
                 }
 
@@ -689,7 +689,7 @@ public class GrandTreeQuestStep implements QuestStep {
 
                     if (Players.getLocal().getWorldLocation().distanceTo(GRAND_TREE_LOCATION) <= 3
                         || Players.getLocal().getWorldLocation().distanceTo(KING_START) < 15) {
-                        g.a("King Narnode Shareen", dialogOptions);
+                        DialogUtil.talkToNpc("King Narnode Shareen", dialogOptions);
                     }
                 }
             }
@@ -704,7 +704,7 @@ public class GrandTreeQuestStep implements QuestStep {
                 }
 
                 if (Players.getLocal().getWorldLocation().distanceTo(GLOUGH_HOUSE_LOCATION) <= 15) {
-                    g.a("Glough", dialogOptions);
+                    DialogUtil.talkToNpc("Glough", dialogOptions);
                 }
             }
 
@@ -719,7 +719,7 @@ public class GrandTreeQuestStep implements QuestStep {
 
                 if (Players.getLocal().getWorldLocation().distanceTo(GRAND_TREE_LOCATION) <= 3
                     || Players.getLocal().getWorldLocation().distanceTo(KING_START) < 15) {
-                    g.a("King Narnode Shareen", dialogOptions);
+                    DialogUtil.talkToNpc("King Narnode Shareen", dialogOptions);
                 }
             }
 
@@ -734,7 +734,7 @@ public class GrandTreeQuestStep implements QuestStep {
 
                 if (Players.getLocal().getWorldLocation().distanceTo(CHARLIE_LOCATION) < 3
                     && Players.getLocal().getWorldLocation().getPlane() == 3) {
-                    g.a("Charlie", dialogOptions);
+                    DialogUtil.talkToNpc("Charlie", dialogOptions);
                 }
             }
 
@@ -773,19 +773,19 @@ public class GrandTreeQuestStep implements QuestStep {
             // Quest step 70 - Talk to Glough and Charlie
             if (GameStateUtil.getVarbit(questVarbit) == 70) {
                 AccBuilderSotf.c = "Talk";
-                g.a("Glough", dialogOptions);
+                DialogUtil.talkToNpc("Glough", dialogOptions);
 
                 if (Players.getLocal().getWorldLocation().equals(new WorldPoint(2464, 3496, 3))) {
-                    g.a("Charlie", dialogOptions);
+                    DialogUtil.talkToNpc("Charlie", dialogOptions);
                 }
-                g.a(dialogOptions);
+                DialogUtil.chooseDialogOptions(dialogOptions);
             }
 
             // Quest step 80 - Shipyard sequence
             if (GameStateUtil.getVarbit(questVarbit) == 80) {
                 if (Players.getLocal().getWorldLocation().distanceTo(CHARLIE_LOCATION) < 20) {
                     AccBuilderSotf.c = "Talk to pilot";
-                    g.a("Captain Errdo", dialogOptions);
+                    DialogUtil.talkToNpc("Captain Errdo", dialogOptions);
                 }
 
                 if (Players.getLocal().getWorldLocation().distanceTo(CHARLIE_LOCATION) >= 20) {
@@ -801,7 +801,7 @@ public class GrandTreeQuestStep implements QuestStep {
                                 TileObjects.getNearest("Gate").interact("Open");
                                 Time.sleepTicks(3);
                             }
-                            g.a(dialogOptions);
+                            DialogUtil.chooseDialogOptions(dialogOptions);
                         }
                     }
 
@@ -868,7 +868,7 @@ public class GrandTreeQuestStep implements QuestStep {
 
                     if (Players.getLocal().getWorldLocation().distanceTo(CHARLIE_LOCATION) < 3
                         && Players.getLocal().getWorldLocation().getPlane() == 3) {
-                        g.a("Charlie", dialogOptions);
+                        DialogUtil.talkToNpc("Charlie", dialogOptions);
                     }
                 }
             }
@@ -895,7 +895,7 @@ public class GrandTreeQuestStep implements QuestStep {
                     }
 
                     if (Players.getLocal().getWorldLocation().distanceTo(ANITA_LOCATION) < 5) {
-                        g.a("Anita", dialogOptions);
+                        DialogUtil.talkToNpc("Anita", dialogOptions);
                     }
                 }
 
@@ -946,7 +946,7 @@ public class GrandTreeQuestStep implements QuestStep {
 
                 if (Players.getLocal().getWorldLocation().distanceTo(GRAND_TREE_LOCATION) <= 3
                     || Players.getLocal().getWorldLocation().distanceTo(KING_START) < 15) {
-                    g.a("King Narnode Shareen", dialogOptions);
+                    DialogUtil.talkToNpc("King Narnode Shareen", dialogOptions);
                 }
             }
 
@@ -965,14 +965,14 @@ public class GrandTreeQuestStep implements QuestStep {
             if (GameStateUtil.getVarbit(questVarbit) == 140) {
                 if (Players.getLocal().getWorldLocation().distanceTo(CHARLIE_LOCATION) < 20) {
                     AccBuilderSotf.c = "Nav to king underground";
-                    g.a("King Narnode Shareen", dialogOptions);
+                    DialogUtil.talkToNpc("King Narnode Shareen", dialogOptions);
                 }
 
                 AccBuilderSotf.c = "Find rock";
                 TileObjects.getNearest("Daconia rock").interact("Search");
 
-                if (Inventory.contains(f.be)) {
-                    Inventory.getFirst(f.be).interact("Drink");
+                if (Inventory.contains(ItemIdArrays.EXTENDED_ANTIFIRE_POTIONS)) {
+                    Inventory.getFirst(ItemIdArrays.EXTENDED_ANTIFIRE_POTIONS).interact("Drink");
                     Time.sleepTicks(2);
                 }
 
@@ -982,7 +982,7 @@ public class GrandTreeQuestStep implements QuestStep {
             // Quest step 150 - Collect Daconia roots
             if (GameStateUtil.getVarbit(questVarbit) == 150) {
                 AccBuilderSotf.c = "Nav to king underground";
-                g.a("King Narnode Shareen", dialogOptions);
+                DialogUtil.talkToNpc("King Narnode Shareen", dialogOptions);
                 collectDaconiaRoots();
             }
         }

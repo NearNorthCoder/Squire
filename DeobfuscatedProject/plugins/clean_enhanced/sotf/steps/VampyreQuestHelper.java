@@ -448,7 +448,7 @@ public static void navigateToStart() {
         }
     }
     if ((lllllllllllllllllIlllIIllIllIlIl.contains(Players.getLocal() != 0.getWorldLocation()) ) {
-        g.a("Safalaan Hallow", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
     }
 }
 
@@ -1052,10 +1052,10 @@ public static void prepareForQuest() {
                     Time.sleepTicks((int)1);
                 }
                 if ((Players.getLocal().getWorldLocation().distanceTo(MYREQUE_HIDEOUT)) > (5)) {
-                    g.a("Garth", DIALOG_OPTIONS);
+                    DialogUtil.talkToNpc("Garth", DIALOG_OPTIONS);
                 }
             }
-            g.a(y.DIALOG_OPTIONS);
+            DialogUtil.chooseDialogOptions(y.DIALOG_OPTIONS);
         }
         if (an() && (Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (15)) {
             lllllllllllllllllIlllIIlllIIlIlI = new WorldArea(3607, 3198, 75, 30, 0);
@@ -1075,7 +1075,7 @@ public static void prepareForQuest() {
                 }
                 if ((Players.getLocal().getWorldLocation().distanceTo(NavUtil.DARKMEYER_WAYPOINT)) > (7)) {
                     AccBuilderSotf.c = "Talk";
-                    g.a("Safalaan Hallow", DIALOG_OPTIONS);
+                    DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
                 }
             }
         }
@@ -1101,7 +1101,7 @@ public static void prepareForQuest() {
                     Time.sleepTicks((int)6);
                 }
             }
-            g.a(y.DIALOG_OPTIONS);
+            DialogUtil.chooseDialogOptions(y.DIALOG_OPTIONS);
         }
         if (!(Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) != (30) || (Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (35)) {
             String[] DIALOG_OPTIONS9 = new String[1];
@@ -1120,9 +1120,9 @@ public static void prepareForQuest() {
                 if (Dialog.isOpen()) {
                     Dialog.close();
                 }
-                g.a("Harpert", DIALOG_OPTIONS);
+                DialogUtil.talkToNpc("Harpert", DIALOG_OPTIONS);
             }
-            g.a(DIALOG_OPTIONS);
+            DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
         }
         if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (40)) {
             TileObject lllllllllllllllllIlllIIlllIIIIIl;
@@ -1250,7 +1250,7 @@ if ((Skills.getBoostedLevel((Skill)Skill.HITPOINTS)) < (Skills.getLevel((Skill)S
     Inventory.getFirst((String[])stringArray17).interact("Eat");
     Time.sleepTicks((int)1);
 }
-g.a(DIALOG_OPTIONS);
+DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (45)) {
     lllllllllllllllllIlllIIlllIIlIlI = new WorldArea(3663, 3221, 29, 22, 2);
@@ -1335,17 +1335,17 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (45)) {
             }
             if ((Players.getLocal().getWorldLocation().distanceTo(NavUtil.DARKMEYER_WAYPOINT)) > (7)) {
                 AccBuilderSotf.c = "Talk";
-                g.a("Safalaan Hallow", DIALOG_OPTIONS);
+                DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
             }
         }
     }
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if (!(Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) != (50) || !(Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) != (55) || (Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (60)) {
-    g.a("Flaygian Screwte", DIALOG_OPTIONS);
+    DialogUtil.talkToNpc("Flaygian Screwte", DIALOG_OPTIONS);
 }
 if (!(Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) != (65) || (Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (70)) {
-    g.a("Safalaan Hallow", DIALOG_OPTIONS);
+    DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (75)) {
     navigateToStart();
@@ -1451,16 +1451,16 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (80)) {
         Inventory.getFirst((String[])stringArray38).useOn(TileObjects.getNearest((String[])stringArray39));
         Time.sleepTicks((int)4);
     }
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (81)) {
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (82)) {
-    g.a("Safalaan Hallow", DIALOG_OPTIONS);
+    DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (83)) {
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (84)) {
     String[] DIALOG_OPTIONS40 = new String[1];
@@ -1545,8 +1545,8 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (84)) {
         Inventory.getFirst((String[])stringArray57).useOn(TileObjects.getNearest((String[])stringArray58));
         Time.sleepTicks((int)4);
     }
-    g.a(DIALOG_OPTIONS);
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (85)) {
     lllllllllllllllllIlllIIlllIIlIlI = new WorldArea(3593, 9680, 7, 5, 0);
@@ -1578,7 +1578,7 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (85)) {
             Time.sleepTicks((int)3);
         }
     }
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (86)) {
     lllllllllllllllllIlllIIlllIIlIlI = new WorldArea(3593, 9680, 7, 5, 0);
@@ -1589,7 +1589,7 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (86)) {
         Time.sleepTicks((int)4);
     }
     if ((lllllllllllllllllIlllIIlllIIlIlI.contains(Players.getLocal() == 0.getWorldLocation()) ) {
-        g.a("Safalaan Hallow", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
     }
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (90)) {
@@ -1623,10 +1623,10 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (90)) {
         }
         if ((Players.getLocal().getWorldLocation().distanceTo(NavUtil.DARKMEYER_WAYPOINT)) > (7)) {
             AccBuilderSotf.c = "Talk";
-            g.a("Safalaan Hallow", DIALOG_OPTIONS);
+            DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
         }
     }
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if (!(Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) != (95) || (Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (100)) {
     String[] DIALOG_OPTIONS67 = new String[1];
@@ -1651,8 +1651,8 @@ if (!(Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) != (95) || (
                 Inventory.getFirst((String[])stringArray69).interact("Eat");
             }
         }
-        if ((Skills.getLevel((Skill)Skill.STRENGTH)) == (Skills.getBoostedLevel((Skill)Skill.STRENGTH)) && (Inventory.contains((int[])f.aY) ) {
-            Inventory.getFirst((int[])f.aY).interact("Drink");
+        if ((Skills.getLevel((Skill)Skill.STRENGTH)) == (Skills.getBoostedLevel((Skill)Skill.STRENGTH)) && (Inventory.contains((int[])ItemIdArrays.SUPER_RESTORE_POTIONS) ) {
+            Inventory.getFirst((int[])ItemIdArrays.SUPER_RESTORE_POTIONS).interact("Drink");
         }
         if (Prayers.getPoints() < 30 {
             int[] nArray = new int[1];
@@ -1690,7 +1690,7 @@ if (!(Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) != (95) || (
             NPCs.getNearest((String[])stringArray70).interact("Attack");
         }
     }
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (110)) {
     int[] nArray = new int[1];
@@ -1828,18 +1828,18 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (110)) {
         }
     }
     if ((MEIYERDITCH_AREA.contains(Players.getLocal() != 0.getWorldLocation()) ) {
-        g.a("Safalaan Hallow", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
     }
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (115)) {
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (120)) {
     String[] DIALOG_OPTIONS81 = new String[1];
     stringArray81[0] = "Flaygian's notes";
     if ((Inventory.contains((String[]) == 0stringArray81) ) {
-        g.a("Vertida Sefalatis", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Vertida Sefalatis", DIALOG_OPTIONS);
     }
     String[] DIALOG_OPTIONS82 = new String[1];
     stringArray82[0] = "Flaygian's notes";
@@ -1849,7 +1849,7 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (120)) {
         Inventory.getFirst((String[])stringArray83).interact("Read");
         Time.sleepTicks((int)2);
     }
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (125)) {
     String[] DIALOG_OPTIONS84 = new String[1];
@@ -1907,11 +1907,11 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (125)) {
                 stringArray94[0] = "Rod of ivandis (10)";
                 if ((Inventory.contains((String[]) == 0stringArray94) ) {
                     if ((stepCounter) < (2)) {
-                        g.a("Vertida Sefalatis", DIALOG_OPTIONS);
+                        DialogUtil.talkToNpc("Vertida Sefalatis", DIALOG_OPTIONS);
                         Time.sleepTicks((int)4);
                         stepCounter += 1;
                     }
-                    g.a(DIALOG_OPTIONS);
+                    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
                     if (!Dialog.isOpen()) {
                         String[] DIALOG_OPTIONS95 = new String[1];
                         stringArray95[0] = "Veliaf Hurtz";
@@ -1939,7 +1939,7 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (125)) {
                         stringArray98[0] = "Veliaf Hurtz";
                         if ((NPCs.getNearest((String[]) != nullstringArray98))) {
                             AccBuilderSotf.c = "Talking to veliaf";
-                            g.a("Veliaf Hurtz", DIALOG_OPTIONS);
+                            DialogUtil.talkToNpc("Veliaf Hurtz", DIALOG_OPTIONS);
                         }
                     }
                 }
@@ -2029,18 +2029,18 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (125)) {
                 }
             }
             if ((MEIYERDITCH_AREA.contains(Players.getLocal() != 0.getWorldLocation()) ) {
-                g.a("Safalaan Hallow", DIALOG_OPTIONS);
+                DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
             }
-            g.a(DIALOG_OPTIONS);
+            DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
         }
     }
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (130)) {
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (135)) {
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
     if (!Dialog.isOpen()) {
         if ((MEIYERDITCH_AREA.contains(Players.getLocal() != 0.getWorldLocation()) ) {
             String[] DIALOG_OPTIONS119 = new String[1];
@@ -2060,7 +2060,7 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (135)) {
                 handleBankingAndEquipment();
             }
             if (hasRequiredItems()) {
-                g.a("Kael Forshaw", DIALOG_OPTIONS);
+                DialogUtil.talkToNpc("Kael Forshaw", DIALOG_OPTIONS);
             }
         }
     }
@@ -2081,11 +2081,11 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (140)) {
                     Time.sleepTicks((int)2);
                 }
             }
-            if ((Prayers.getPoints()) < (45) && (Inventory.contains((int[])f.aX) ) {
-                Inventory.getFirst((int[])f.aX).interact("Drink");
+            if ((Prayers.getPoints()) < (45) && (Inventory.contains((int[])ItemIdArrays.PRAYER_POTIONS) ) {
+                Inventory.getFirst((int[])ItemIdArrays.PRAYER_POTIONS).interact("Drink");
                 Time.sleepTicks((int)1);
             }
-            g.a("Kael Forshaw", DIALOG_OPTIONS);
+            DialogUtil.talkToNpc("Kael Forshaw", DIALOG_OPTIONS);
         }
         if (!hasRequiredItems() {
             handleBankingAndEquipment();
@@ -2097,7 +2097,7 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (140)) {
             safeSpot = new WorldPoint(currentTarget.getX() - 7, currentTarget.getY(), currentTarget.getPlane());
         }
         if ((Prayers.getPoints()) < (25) && llIIIIlIlllIl(llIIIIlIlIIII(GameStateUtil.getHealthPercentage(), 65.0))) {
-            Inventory.getFirst((int[])f.aX).interact("Drink");
+            Inventory.getFirst((int[])ItemIdArrays.PRAYER_POTIONS).interact("Drink");
         }
         if (llIIIIlIllIll(llIIIIlIIllll(GameStateUtil.getHealthPercentage(), 65.0))) {
             String[] DIALOG_OPTIONS125 = new String[1];
@@ -2108,12 +2108,12 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (140)) {
                 Inventory.getFirst((String[])stringArray126).interact("Eat");
             }
         }
-        if ((Skills.getLevel((Skill)Skill.STRENGTH) + 12) < (Skills.getBoostedLevel((Skill)Skill.STRENGTH)) && (Inventory.contains((int[])f.aY) ) {
-            Inventory.getFirst((int[])f.aY).interact("Drink");
+        if ((Skills.getLevel((Skill)Skill.STRENGTH) + 12) < (Skills.getBoostedLevel((Skill)Skill.STRENGTH)) && (Inventory.contains((int[])ItemIdArrays.SUPER_RESTORE_POTIONS) ) {
+            Inventory.getFirst((int[])ItemIdArrays.SUPER_RESTORE_POTIONS).interact("Drink");
         }
         String[] DIALOG_OPTIONS127 = new String[1];
         stringArray127[0] = "Shark";
-        if ((Inventory.contains((String[]) == 0stringArray127) ? 1 : 0) && !llIIIIlIlllIl(llIIIIlIIllll(GameStateUtil.getHealthPercentage(), 50.0)) || (Inventory.contains((int[])f.aX) ? 1 : 0) && (Prayers.getPoints()) > (3)) {
+        if ((Inventory.contains((String[]) == 0stringArray127) ? 1 : 0) && !llIIIIlIlllIl(llIIIIlIIllll(GameStateUtil.getHealthPercentage(), 50.0)) || (Inventory.contains((int[])ItemIdArrays.PRAYER_POTIONS) ? 1 : 0) && (Prayers.getPoints()) > (3)) {
             AccBuilderSotf.c = "Escaping";
             lllllllllllllllllIlllIIlllIIlIIl = TileObjects.getNearest(tileObject -> {
                 int n2;
@@ -2266,10 +2266,10 @@ if ((NPCs.getNearest((String[]) == nullstringArray137))) {
     }
 }
 }
-g.a(DIALOG_OPTIONS);
+DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (145)) {
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (150)) {
     if ((UNDERGROUND_AREA.contains(Players.getLocal() != 0.getWorldLocation()) ? 1 : 0) && (MEIYERDITCH_AREA.contains(Players.getLocal() == 0.getWorldLocation()) ) {
@@ -2285,8 +2285,8 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (150)) {
                     Inventory.getFirst((String[])stringArray140).interact("Eat");
                 }
             }
-            if ((Prayers.getPoints()) < (45) && (Inventory.contains((int[])f.aX) ) {
-                Inventory.getFirst((int[])f.aX).interact("Drink");
+            if ((Prayers.getPoints()) < (45) && (Inventory.contains((int[])ItemIdArrays.PRAYER_POTIONS) ) {
+                Inventory.getFirst((int[])ItemIdArrays.PRAYER_POTIONS).interact("Drink");
             }
             handleBankingAndEquipment();
         }
@@ -2328,9 +2328,9 @@ if ((Vars.getBit((int)QuestVarbits.QUEST_A_TASTE_OF_HOPE.getId())) == (150)) {
             aN.su = 0;
             needsBank = 0;
         }
-        g.a("Safalaan Hallow", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Safalaan Hallow", DIALOG_OPTIONS);
     }
-    g.a(DIALOG_OPTIONS);
+    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 String[] DIALOG_OPTIONS147 = new String[1];
 stringArray147[0] = "Tome of experience";
@@ -2349,7 +2349,7 @@ if ((lllllllllllllllllIlllIIlllIIlIIl = Widgets.get((int) != null240, (int)26)))
     lllllllllllllllllIlllIIlllIIlIIl.interact("Confirm");
     Time.sleepTicks((int)2);
 }
-g.a(DIALOG_OPTIONS);
+DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
 }
 }
 
