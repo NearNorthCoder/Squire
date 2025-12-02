@@ -9,6 +9,7 @@ package squire.launcher;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -105,6 +106,9 @@ public class SquireLauncher {
             log.info("Creating Squire home directory");
             SQUIRE_HOME.mkdirs();
         }
+
+        // Bypass Squire authentication for using AccountImporter
+        bypassSquireAuth();
 
         // Parse command line arguments
         File repoDir = REPOSITORY_DIR;
@@ -396,5 +400,34 @@ public class SquireLauncher {
      */
     public static boolean isLicensed() {
         return HWID_FILE.exists();
+    }
+
+    /**
+     * Bypasses Squire authentication by setting Launcher.authenticated = true
+     * via reflection. This allows using AccountImporter without the auth panel.
+     */
+    private static void bypassSquireAuth() {
+        try {
+            Class<?> launcherClass = Class.forName("net.runelite.launcher.Launcher");
+
+            // Set authenticated = true
+            Field authenticatedField = launcherClass.getDeclaredField("authenticated");
+            authenticatedField.setAccessible(true);
+            authenticatedField.setBoolean(null, true);
+            log.info("Bypassed Squire authentication (authenticated=true)");
+
+            // Set auth = "bypassed" (some code may check this string)
+            Field authField = launcherClass.getDeclaredField("auth");
+            authField.setAccessible(true);
+            authField.set(null, "bypassed");
+            log.info("Set auth token to 'bypassed'");
+
+        } catch (ClassNotFoundException e) {
+            log.warn("Launcher class not found, authentication bypass not needed");
+        } catch (NoSuchFieldException e) {
+            log.warn("Launcher auth fields not found: {}", e.getMessage());
+        } catch (IllegalAccessException e) {
+            log.error("Failed to bypass authentication: {}", e.getMessage());
+        }
     }
 }
