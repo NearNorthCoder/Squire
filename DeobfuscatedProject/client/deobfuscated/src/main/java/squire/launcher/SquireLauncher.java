@@ -23,7 +23,8 @@ import squire.launcher.config.OperatingSystem;
 import squire.launcher.config.OSType;
 import squire.launcher.local.LocalClientLauncher;
 import squire.launcher.ui.LauncherFrame;
-import net.runelite.launcher.AccountImporter;
+import squire.launcher.auth.BrowserAccountImporter;
+// import net.runelite.launcher.AccountImporter; // JCEF-based, requires native libs
 
 /**
  * Main entry point for the Squire launcher.
@@ -236,31 +237,28 @@ public class SquireLauncher {
 
     /**
      * Opens the account importer to import Jagex accounts via OAuth2
+     * Uses browser-based OAuth flow (no JCEF/CEF dependencies required)
      */
     private static void importJagexAccounts() {
         try {
-            // Use the existing AccountImporter from squire-with-logging.jar
-            AccountImporter.importAccounts(() -> {
+            // Use browser-based importer (opens system browser for OAuth)
+            // This avoids JCEF native library requirements
+            final Object lock = new Object();
+            final boolean[] done = {false};
+
+            BrowserAccountImporter.importAccounts(() -> {
                 log.info("Account import callback triggered");
+                synchronized (lock) {
+                    done[0] = true;
+                    lock.notify();
+                }
             });
 
-            // Wait for the import window to close
-            // The import is asynchronous, so we need to wait a bit
-            Thread.sleep(500);
-            while (true) {
-                // Check if any import windows are open
-                java.awt.Frame[] frames = java.awt.Frame.getFrames();
-                boolean importWindowOpen = false;
-                for (java.awt.Frame frame : frames) {
-                    if (frame.isVisible() && frame.getTitle().contains("Import")) {
-                        importWindowOpen = true;
-                        break;
-                    }
+            // Wait for import to complete (max 5 minutes)
+            synchronized (lock) {
+                if (!done[0]) {
+                    lock.wait(300000);
                 }
-                if (!importWindowOpen) {
-                    break;
-                }
-                Thread.sleep(500);
             }
         } catch (Exception e) {
             log.error("Failed to import accounts", e);
