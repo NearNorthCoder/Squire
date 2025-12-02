@@ -331,11 +331,12 @@ public class BrowserAccountImporter {
             }
 
             // Save accounts
-            // IMPORTANT: Store the realIdToken (JWT) as the session token, NOT the short game session ID
-            // The JX_ACCESS_TOKEN needs the actual JWT for authentication, not the 22-char session ID
+            // Store BOTH sessionId (for JX_SESSION_ID) AND realIdToken (for JX_ACCESS_TOKEN)
+            // Format: ::sessionId:accessToken:refreshToken:accountId:displayName
             log.info("=== SAVING ACCOUNTS ===");
-            log.info("Using realIdToken as session (length: {} chars)", realIdToken.length());
-            log.info("Storing refreshToken for token refresh (length: {} chars)", refreshToken != null ? refreshToken.length() : 0);
+            log.info("Game Session ID (JX_SESSION_ID): {} chars", sessionId.length());
+            log.info("Access Token (JX_ACCESS_TOKEN): {} chars", realIdToken.length());
+            log.info("Refresh Token (JX_REFRESH_TOKEN): {} chars", refreshToken != null ? refreshToken.length() : 0);
             int imported = 0;
             for (Map<String, Object> account : accounts) {
                 String accountId = (String) account.get("accountId");
@@ -346,9 +347,8 @@ public class BrowserAccountImporter {
                 }
 
                 log.info("Saving account: {} ({})", displayName, accountId);
-                // Store realIdToken (JWT) AND refreshToken for authentication
-                // Format: ::idToken:refreshToken:accountId:displayName
-                if (saveAccount(realIdToken, refreshToken, accountId, displayName)) {
+                // Store sessionId, accessToken (realIdToken), refreshToken for full JX_* support
+                if (saveAccount(sessionId, realIdToken, refreshToken, accountId, displayName)) {
                     imported++;
                     log.info("Successfully saved!");
                 } else {
@@ -589,23 +589,24 @@ public class BrowserAccountImporter {
 
     /**
      * Save account to launcher.dat
-     * Format: ::idToken:refreshToken:accountId:displayName
+     * Format: ::sessionId:accessToken:refreshToken:accountId:displayName
      * @return true if saved, false if already exists
      */
-    private static boolean saveAccount(String idToken, String refreshToken, String accountId, String displayName) {
+    private static boolean saveAccount(String sessionId, String accessToken, String refreshToken, String accountId, String displayName) {
         SQUIRE_HOME.mkdirs();
 
         // Check if account already exists
         if (accountExists(accountId)) {
             log.info("Account {} already exists, updating tokens", displayName);
-            updateAccountTokens(accountId, idToken, refreshToken);
+            updateAccountTokens(accountId, sessionId, accessToken, refreshToken);
             return false;
         }
 
         try (FileWriter writer = new FileWriter(LAUNCHER_DATA, true)) {
-            // New format: ::idToken:refreshToken:accountId:displayName
+            // Format: ::sessionId:accessToken:refreshToken:accountId:displayName
+            String accessStr = accessToken != null ? accessToken : "";
             String refreshStr = refreshToken != null ? refreshToken : "";
-            writer.write(String.format("::%s:%s:%s:%s%n", idToken, refreshStr, accountId, displayName));
+            writer.write(String.format("::%s:%s:%s:%s:%s%n", sessionId, accessStr, refreshStr, accountId, displayName));
             return true;
         } catch (IOException e) {
             log.error("Failed to save account", e);
@@ -615,9 +616,9 @@ public class BrowserAccountImporter {
 
     /**
      * Update tokens for existing account.
-     * Format: ::idToken:refreshToken:accountId:displayName
+     * Format: ::sessionId:accessToken:refreshToken:accountId:displayName
      */
-    private static void updateAccountTokens(String accountId, String newIdToken, String newRefreshToken) {
+    private static void updateAccountTokens(String accountId, String newSessionId, String newAccessToken, String newRefreshToken) {
         if (!LAUNCHER_DATA.exists()) return;
 
         try {
@@ -628,11 +629,11 @@ public class BrowserAccountImporter {
                     if (line.contains(":" + accountId + ":")) {
                         // Update tokens - preserve display name
                         String[] parts = line.split(":");
-                        // Old format: ::sessionId:accountId:displayName (5 parts)
-                        // New format: ::idToken:refreshToken:accountId:displayName (6 parts)
-                        String displayName = parts.length >= 6 ? parts[5] : (parts.length >= 5 ? parts[4] : "Unknown");
+                        // New format: ::sessionId:accessToken:refreshToken:accountId:displayName (7 parts)
+                        String displayName = parts.length >= 7 ? parts[6] : (parts.length >= 6 ? parts[5] : (parts.length >= 5 ? parts[4] : "Unknown"));
+                        String accessStr = newAccessToken != null ? newAccessToken : "";
                         String refreshStr = newRefreshToken != null ? newRefreshToken : "";
-                        line = String.format("::%s:%s:%s:%s", newIdToken, refreshStr, accountId, displayName);
+                        line = String.format("::%s:%s:%s:%s:%s", newSessionId, accessStr, refreshStr, accountId, displayName);
                     }
                     lines.add(line);
                 }

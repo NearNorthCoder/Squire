@@ -171,10 +171,12 @@ public class LocalClientLauncher {
         Map<String, String> env = pb.environment();
 
         String sessionId = jagexAccount.sessionId;
+        String accessToken = jagexAccount.accessToken;
+        String refreshToken = jagexAccount.refreshToken;
         String accountId = jagexAccount.accountId;
         String displayName = jagexAccount.displayName;
 
-        // Validate values before setting
+        // Validate required values
         if (sessionId == null || sessionId.isEmpty()) {
             log.error("ERROR: JX_SESSION_ID is null or empty!");
             throw new IllegalStateException("Session ID is required for Jagex account login");
@@ -188,19 +190,23 @@ public class LocalClientLauncher {
             throw new IllegalStateException("Display name is required for Jagex account login");
         }
 
+        // Set all JX_* environment variables
         env.put("JX_SESSION_ID", sessionId);
         env.put("JX_CHARACTER_ID", accountId);
         env.put("JX_DISPLAY_NAME", displayName);
-        // ACCESS_TOKEN and REFRESH_TOKEN are optional - use sessionId as fallback
-        env.put("JX_ACCESS_TOKEN", sessionId);
-        env.put("JX_REFRESH_TOKEN", "");
+        // accessToken is the JWT for JX_ACCESS_TOKEN
+        env.put("JX_ACCESS_TOKEN", accessToken != null ? accessToken : sessionId);
+        // refreshToken for JX_REFRESH_TOKEN (may be empty)
+        env.put("JX_REFRESH_TOKEN", refreshToken != null ? refreshToken : "");
 
-        log.info("JX_SESSION_ID:    {} (length: {})",
+        log.info("JX_SESSION_ID:    {} (length: {} chars)",
                  sessionId.substring(0, Math.min(20, sessionId.length())) + "...", sessionId.length());
         log.info("JX_CHARACTER_ID:  {}", accountId);
         log.info("JX_DISPLAY_NAME:  {}", displayName);
-        log.info("JX_ACCESS_TOKEN:  (same as session ID)");
-        log.info("JX_REFRESH_TOKEN: (empty)");
+        log.info("JX_ACCESS_TOKEN:  {} (length: {} chars)",
+                 accessToken != null ? accessToken.substring(0, Math.min(20, accessToken.length())) + "..." : "(using sessionId)",
+                 accessToken != null ? accessToken.length() : sessionId.length());
+        log.info("JX_REFRESH_TOKEN: {} chars", refreshToken != null ? refreshToken.length() : 0);
         log.info("-------------------------------------------------------");
 
         // Start the subprocess
