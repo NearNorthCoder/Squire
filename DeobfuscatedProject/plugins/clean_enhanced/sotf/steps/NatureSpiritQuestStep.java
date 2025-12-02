@@ -20,6 +20,8 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import gg.squire.sotf.framework.ShopItem;
 import gg.squire.sotf.framework.GameStateUtil;
+import gg.squire.sotf.framework.DialogUtil;
+import gg.squire.sotf.framework.ItemIdArrays;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Prayers;
 import net.unethicalite.api.widgets.Widgets;
@@ -167,7 +169,7 @@ public class NatureSpiritQuestStep implements QuestStep {
         if (!Inventory.contains("Salve graveyard teleport")) {
             return false;
         }
-        if (!Inventory.contains(f.ba)) {
+        if (!Inventory.contains(ItemIdArrays.STAMINA_POTIONS)) {
             return false;
         }
         if (!Inventory.contains(ITEM_MORT_MYRE_FUNGUS)) {
@@ -296,13 +298,13 @@ public class NatureSpiritQuestStep implements QuestStep {
                 // Navigate to bank if not there
                 if (bankLocation != null && !bankLocation.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Nav to bank";
-                    a.a(bankLocation);
+                    BankingUtil.navigateToBank(bankLocation);
                 }
 
                 // Open bank and handle banking
                 if (bankLocation != null && bankLocation.getArea().contains(Players.getLocal().getWorldLocation())) {
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), 20000);
                     }
 
@@ -350,23 +352,23 @@ public class NatureSpiritQuestStep implements QuestStep {
 
                         // Withdraw quest items
                         if (GameStateUtil.randomRange(requiredItems)) {
-                            a.a(12625, 2);
-                            a.a(ITEM_DRUID_POUCH, 1);
-                            a.a(ITEM_SALVE_GRAVEYARD_TELEPORT, 1);
-                            a.a(561, 165);
-                            a.a(ITEM_SILVER_SICKLE, 165);
-                            a.a(ITEM_DRUID_POUCH, 1);
-                            a.a(ITEM_NATURE_TALISMAN, 3);
-                            a.a(ITEM_RUNE_ESSENCE, 4);
-                            a.a(ITEM_MORT_MYRE_FUNGUS, 50);
+                            BankingUtil.withdrawItem(12625, 2);
+                            BankingUtil.withdrawItem(ITEM_DRUID_POUCH, 1);
+                            BankingUtil.withdrawItem(ITEM_SALVE_GRAVEYARD_TELEPORT, 1);
+                            BankingUtil.withdrawItem(561, 165);
+                            BankingUtil.withdrawItem(ITEM_SILVER_SICKLE, 165);
+                            BankingUtil.withdrawItem(ITEM_DRUID_POUCH, 1);
+                            BankingUtil.withdrawItem(ITEM_NATURE_TALISMAN, 3);
+                            BankingUtil.withdrawItem(ITEM_RUNE_ESSENCE, 4);
+                            BankingUtil.withdrawItem(ITEM_MORT_MYRE_FUNGUS, 50);
                         }
                     }
                 }
             }
 
             // Use stamina potion if needed
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 181) {
-                Inventory.getFirst(f.ba).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 181) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                 Time.sleepTicks(1);
             }
 
@@ -453,7 +455,7 @@ public class NatureSpiritQuestStep implements QuestStep {
 
                     // Inside grotto area - handle NPCs and items
                     if (Players.getLocal().getWorldLocation().distanceTo(LOCATION_GROTTO_INSIDE) <= 4) {
-                        e.l(ITEM_DRUID_POUCH);
+                        GameStateUtil.equipItem(ITEM_DRUID_POUCH);
 
                         if (!Inventory.contains("Mirror")) {
                             AccBuilderSotf.c = "Getting mirror";
@@ -491,7 +493,7 @@ public class NatureSpiritQuestStep implements QuestStep {
 
                         // Talk to Filliman Tarlock
                         if (NPCs.getNearest("Filliman Tarlock") != null) {
-                            g.a("Filliman Tarlock", DIALOG_OPTIONS);
+                            DialogUtil.talkToNpc("Filliman Tarlock", DIALOG_OPTIONS);
                         }
                     }
                 }
@@ -527,7 +529,7 @@ public class NatureSpiritQuestStep implements QuestStep {
                             Time.sleepTicks(3);
                         }
 
-                        g.a(DIALOG_OPTIONS);
+                        DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
                     }
                 }
             }
@@ -543,7 +545,7 @@ public class NatureSpiritQuestStep implements QuestStep {
                     Inventory.getFirst("Journal").useOn(NPCs.getNearest("Filliman Tarlock"));
                 }
 
-                g.a(DIALOG_OPTIONS);
+                DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
             }
 
             // Quest stage 191: More dialog
@@ -554,7 +556,7 @@ public class NatureSpiritQuestStep implements QuestStep {
                 }
 
                 if (NPCs.getNearest("Filliman Tarlock") != null) {
-                    g.a("Filliman Tarlock", DIALOG_OPTIONS);
+                    DialogUtil.talkToNpc("Filliman Tarlock", DIALOG_OPTIONS);
                 }
             }
 
@@ -587,7 +589,7 @@ public class NatureSpiritQuestStep implements QuestStep {
                 // Talk to Drezel
                 if (Players.getLocal().getWorldLocation().distanceTo(LOCATION_GROTTO_LOG) <= 6) {
                     AccBuilderSotf.c = "Interact priest";
-                    g.a("Drezel", DIALOG_OPTIONS);
+                    DialogUtil.talkToNpc("Drezel", DIALOG_OPTIONS);
                 }
             }
 
@@ -686,7 +688,7 @@ public class NatureSpiritQuestStep implements QuestStep {
                     }
 
                     if (NPCs.getNearest("Filliman Tarlock") != null) {
-                        g.a("Filliman Tarlock", DIALOG_OPTIONS);
+                        DialogUtil.talkToNpc("Filliman Tarlock", DIALOG_OPTIONS);
                     }
                 }
             }
@@ -718,7 +720,7 @@ public class NatureSpiritQuestStep implements QuestStep {
 
                         if (Players.getLocal().getWorldLocation().equals(logLocation)) {
                             AccBuilderSotf.c = "Talking to filliman";
-                            g.a("Filliman Tarlock", DIALOG_OPTIONS);
+                            DialogUtil.talkToNpc("Filliman Tarlock", DIALOG_OPTIONS);
                         }
                     }
                 }
@@ -739,7 +741,7 @@ public class NatureSpiritQuestStep implements QuestStep {
                 }
 
                 if (NPCs.getNearest("Filliman Tarlock") != null) {
-                    g.a("Filliman Tarlock", DIALOG_OPTIONS);
+                    DialogUtil.talkToNpc("Filliman Tarlock", DIALOG_OPTIONS);
                 }
             }
 
@@ -753,18 +755,18 @@ public class NatureSpiritQuestStep implements QuestStep {
                 }
 
                 if (NPCs.getNearest("Filliman Tarlock") != null) {
-                    g.a("Filliman Tarlock", DIALOG_OPTIONS);
+                    DialogUtil.talkToNpc("Filliman Tarlock", DIALOG_OPTIONS);
                 }
 
                 if (NPCs.getNearest("Nature Spirit") != null) {
-                    g.a("Nature Spirit", DIALOG_OPTIONS);
+                    DialogUtil.talkToNpc("Nature Spirit", DIALOG_OPTIONS);
                 }
             }
 
             // Quest stages 69-75: Dialog and druid pouch handling
             if (GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) >= 69 && GameStateUtil.getVarbit(VARBIT_NATURE_SPIRIT) <= 75) {
                 if (Dialog.isOpen()) {
-                    g.a(DIALOG_OPTIONS);
+                    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
                 }
 
                 if (TileObjects.getNearest("Grotto") != null) {
@@ -920,11 +922,11 @@ public class NatureSpiritQuestStep implements QuestStep {
                     }
 
                     if (NPCs.getNearest("Filliman Tarlock") != null) {
-                        g.a("Filliman Tarlock", DIALOG_OPTIONS);
+                        DialogUtil.talkToNpc("Filliman Tarlock", DIALOG_OPTIONS);
                     }
 
                     if (NPCs.getNearest("Nature Spirit") != null) {
-                        g.a("Nature Spirit", DIALOG_OPTIONS);
+                        DialogUtil.talkToNpc("Nature Spirit", DIALOG_OPTIONS);
                     }
                 }
             }

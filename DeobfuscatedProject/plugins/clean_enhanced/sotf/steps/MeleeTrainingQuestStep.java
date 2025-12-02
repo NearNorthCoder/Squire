@@ -188,7 +188,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
                 // Navigate to bank if not there
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Navigating to bank";
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 // Handle banking
@@ -197,7 +197,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
 
                     // Open bank
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), 4000);
                     }
 
@@ -226,20 +226,20 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
                         if (Skills.getLevel(Skill.ATTACK) < TARGET_DEFENCE_LEVEL
                             || (Skills.getLevel(Skill.ATTACK) >= TARGET_DEFENCE_LEVEL
                                 && Skills.getLevel(Skill.DEFENCE) < TARGET_DEFENCE_LEVEL)) {
-                            a.a(LOW_LEVEL_EQUIPMENT, 1);
+                            BankingUtil.withdrawItem(LOW_LEVEL_EQUIPMENT, 1);
                         }
 
                         if (Skills.getLevel(Skill.ATTACK) >= TARGET_DEFENCE_LEVEL
                             && Skills.getLevel(Skill.STRENGTH) >= TARGET_DEFENCE_LEVEL
                             && Skills.getLevel(Skill.DEFENCE) >= TARGET_DEFENCE_LEVEL) {
-                            a.a(HIGH_LEVEL_EQUIPMENT, 1);
+                            BankingUtil.withdrawItem(HIGH_LEVEL_EQUIPMENT, 1);
                         }
 
                         // Withdraw supplies
-                        a.a(11995, 6194);  // Unknown item IDs
-                        a.b(f.ba, 1);
-                        a.a(24400, 5);
-                        a.a(21887, 100);
+                        BankingUtil.withdrawItem(11995, 6194);  // Unknown item IDs
+                        BankingUtil.withdrawItemsUntilFound(ItemIdArrays.STAMINA_POTIONS, 1);
+                        BankingUtil.withdrawItem(24400, 5);
+                        BankingUtil.withdrawItem(21887, 100);
                     }
                 }
             }
@@ -406,14 +406,14 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
             && Skills.getLevel(Skill.STRENGTH) >= TARGET_DEFENCE_LEVEL
             && Skills.getLevel(Skill.DEFENCE) >= TARGET_DEFENCE_LEVEL) {
 
-            e.l(RUNE_SCIMITAR);
-            e.l(AMULET_OF_POWER);
-            e.l(AMULET_OF_STRENGTH);
-            e.l(ADAMANT_SCIMITAR);
-            e.l(MITHRIL_SCIMITAR);
-            e.l(STEEL_SCIMITAR);
-            e.l(IRON_SCIMITAR);
-            e.l(IRON_PLATEBODY);
+            GameStateUtil.equipItem(RUNE_SCIMITAR);
+            GameStateUtil.equipItem(AMULET_OF_POWER);
+            GameStateUtil.equipItem(AMULET_OF_STRENGTH);
+            GameStateUtil.equipItem(ADAMANT_SCIMITAR);
+            GameStateUtil.equipItem(MITHRIL_SCIMITAR);
+            GameStateUtil.equipItem(STEEL_SCIMITAR);
+            GameStateUtil.equipItem(IRON_SCIMITAR);
+            GameStateUtil.equipItem(IRON_PLATEBODY);
         }
 
         // Equip scimitars based on Attack level

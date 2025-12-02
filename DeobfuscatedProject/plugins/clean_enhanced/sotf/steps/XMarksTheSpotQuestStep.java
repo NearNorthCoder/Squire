@@ -91,14 +91,14 @@ public class XMarksTheSpotQuestStep implements QuestStep {
             }
 
             // Use stamina potion if run energy is low
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < RUN_ENERGY_THRESHOLD) {
-                Inventory.getFirst(f.ba).interact(MSG_DRINK);
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < RUN_ENERGY_THRESHOLD) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact(MSG_DRINK);
                 Time.sleepTicks(TICK_DELAY_SHORT);
             }
 
             // Use prayer restore if prayer points are low
-            if (Inventory.contains(f.aX) && Prayers.getPoints() < PRAYER_POINTS_THRESHOLD) {
-                Inventory.getFirst(f.aX).interact(MSG_DRINK);
+            if (Inventory.contains(ItemIdArrays.PRAYER_POTIONS) && Prayers.getPoints() < PRAYER_POINTS_THRESHOLD) {
+                Inventory.getFirst(ItemIdArrays.PRAYER_POTIONS).interact(MSG_DRINK);
             }
 
             // Eat food if health is low
@@ -125,12 +125,12 @@ public class XMarksTheSpotQuestStep implements QuestStep {
 
         if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = MSG_NAV_TO_BANK;
-            a.a(nearestBank);
+            BankingUtil.navigateToBank(nearestBank);
         }
 
         if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             if (!Bank.isOpen()) {
-                a.a();
+                BankingUtil.openNearestBank();
                 Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT_MS);
             }
 
@@ -158,8 +158,8 @@ public class XMarksTheSpotQuestStep implements QuestStep {
 
                 // Withdraw quest supplies
                 if (GameStateUtil.randomRange(new int[]{0, SPADE_ID, CASKET_ID})) {
-                    a.a(SPADE_ID, QUANTITY_TO_BUY);
-                    a.a(CLUE_SCROLL_ID, TICK_DELAY_SHORT);
+                    BankingUtil.withdrawItem(SPADE_ID, QUANTITY_TO_BUY);
+                    BankingUtil.withdrawItem(CLUE_SCROLL_ID, TICK_DELAY_SHORT);
                 }
             }
         }
@@ -186,7 +186,7 @@ public class XMarksTheSpotQuestStep implements QuestStep {
      */
     private static void completeQuestDialog() {
         if (Players.getLocal().getWorldLocation().distanceTo(questStartLocation) <= QUEST_DISTANCE) {
-            g.a("", questDialogOptions);
+            DialogUtil.talkToNpc("", questDialogOptions);
         }
     }
 

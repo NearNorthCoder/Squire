@@ -172,11 +172,11 @@ public class PriestInPerilQuestStep implements QuestStep {
                 BankLocation bank = BankLocation.getNearest();
                 if (bank != null && !bank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Nav to bank";
-                    a.a(bank);
+                    BankingUtil.navigateToBank(bank);
                 }
                 if (bank != null && bank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), 5000);
                     }
                     if (Bank.isOpen()) {
@@ -199,19 +199,19 @@ public class PriestInPerilQuestStep implements QuestStep {
                             return;
                         }
                         if (GameStateUtil.randomRange(requiredItems)) {
-                            a.a(ITEM_MITHRIL_AXE, 10);
-                            a.a(ITEM_GOLDEN_KEY, 1);
-                            a.a(ITEM_BRONZE_AXE, 1);
-                            a.a(ITEM_RUNE_SCIMITAR, 4);
-                            a.a(ITEM_FOOD, 10);
+                            BankingUtil.withdrawItem(ITEM_MITHRIL_AXE, 10);
+                            BankingUtil.withdrawItem(ITEM_GOLDEN_KEY, 1);
+                            BankingUtil.withdrawItem(ITEM_BRONZE_AXE, 1);
+                            BankingUtil.withdrawItem(ITEM_RUNE_SCIMITAR, 4);
+                            BankingUtil.withdrawItem(ITEM_FOOD, 10);
                         }
                     }
                 }
             }
 
             // Drink stamina potion if run energy is low
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 50) {
-                Inventory.getFirst(f.ba).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 50) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                 Time.sleepTicks(1);
             }
 
@@ -233,7 +233,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                 }
                 if (Players.getLocal().getWorldLocation().distanceTo(KING_ROALD_LOCATION) <= 3) {
                     AccBuilderSotf.c = "Starting quest";
-                    g.a("King Roald", questDialogOptions);
+                    DialogUtil.talkToNpc("King Roald", questDialogOptions);
                 }
             }
 
@@ -249,7 +249,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                     if (!Dialog.isOpen()) {
                         TileObjects.getNearest("Large door").interact("Open");
                     }
-                    g.a(questDialogOptions);
+                    DialogUtil.chooseDialogOptions(questDialogOptions);
                 }
             }
 
@@ -259,7 +259,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                     AccBuilderSotf.c = "Nav to doggo";
                     TileObject trapdoor = TileObjects.getNearest("Trapdoor");
                     if (trapdoor != null && Players.getLocal().getWorldLocation().distanceTo(trapdoor) <= 4 && Dialog.isOpen()) {
-                        g.a(questDialogOptions);
+                        DialogUtil.chooseDialogOptions(questDialogOptions);
                     }
                     if (!Dialog.isOpen() || Players.getLocal().distanceTo(new WorldPoint(3405, 3506, 0)) > 5) {
                         Movement.walkTo(new WorldPoint(3405, 3506, 0));
@@ -279,7 +279,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                                 Time.sleepTicks(2);
                             }
                         }
-                        g.a(questDialogOptions);
+                        DialogUtil.chooseDialogOptions(questDialogOptions);
                     }
                 }
                 if (NPCs.getNearest("Temple Guardian") != null) {
@@ -315,7 +315,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                         if (!Dialog.isOpen()) {
                             TileObjects.getNearest("Large door").interact("Open");
                         }
-                        g.a(questDialogOptions);
+                        DialogUtil.chooseDialogOptions(questDialogOptions);
                         if (Dialog.isOpen() && Dialog.getText().contains("tell the king")) {
                             talkedToDrezelAboutBlessingWater = true;
                         }
@@ -329,7 +329,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                     }
                     if (Players.getLocal().getWorldLocation().distanceTo(KING_ROALD_LOCATION) <= 3) {
                         AccBuilderSotf.c = "talk king";
-                        g.a("King Roald", questDialogOptions);
+                        DialogUtil.talkToNpc("King Roald", questDialogOptions);
                     }
                 }
             }
@@ -354,7 +354,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                         if (!Dialog.isOpen()) {
                             TileObjects.getNearest("Cell door").interact("Open");
                         }
-                        g.a(questDialogOptions);
+                        DialogUtil.chooseDialogOptions(questDialogOptions);
                     }
                 }
             }
@@ -426,7 +426,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                 if (!Inventory.contains("Blessed water") && drezel != null) {
                     if (Reachable.isInteractable(drezel)) {
                         AccBuilderSotf.c = "Handling chat";
-                        g.a("Drezel", questDialogOptions);
+                        DialogUtil.talkToNpc("Drezel", questDialogOptions);
                     }
                     if (!Reachable.isInteractable(drezel)) {
                         AccBuilderSotf.c = "Entering cell";
@@ -457,7 +457,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                 if (drezel != null) {
                     if (Reachable.isInteractable(drezel)) {
                         AccBuilderSotf.c = "Handling chat";
-                        g.a("Drezel", questDialogOptions);
+                        DialogUtil.talkToNpc("Drezel", questDialogOptions);
                     }
                     if (!Reachable.isInteractable(drezel)) {
                         AccBuilderSotf.c = "Entering cell";
@@ -505,7 +505,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                 }
                 if (Players.getLocal().getWorldLocation().distanceTo(DREZEL_FINAL_LOCATION) <= 5) {
                     AccBuilderSotf.c = "Handling chat";
-                    g.a("Drezel", questDialogOptions);
+                    DialogUtil.talkToNpc("Drezel", questDialogOptions);
                 }
             }
 
@@ -521,7 +521,7 @@ public class PriestInPerilQuestStep implements QuestStep {
                             aN.qG = 0;
                             hasInitializedEssenceCounter = false;
                         }
-                        g.a("Drezel", questDialogOptions);
+                        DialogUtil.talkToNpc("Drezel", questDialogOptions);
                     }
                 }
                 if (!Inventory.contains("Pure essence") && GameStateUtil.getVarbit(QUEST_PROGRESS_VARBIT) < 60) {
@@ -575,13 +575,13 @@ public class PriestInPerilQuestStep implements QuestStep {
                         Mouse.click(Widgets.get(153, 16).getClickPoint().getX(), Widgets.get(153, 16).getClickPoint().getY(), true);
                         Time.sleepTicks(3);
                     }
-                    g.a("Drezel", questDialogOptions);
-                    g.a(questDialogOptions);
+                    DialogUtil.talkToNpc("Drezel", questDialogOptions);
+                    DialogUtil.chooseDialogOptions(questDialogOptions);
                 }
             }
 
             // Continue dialog
-            g.a(questDialogOptions);
+            DialogUtil.chooseDialogOptions(questDialogOptions);
         }
     }
 
@@ -680,11 +680,11 @@ public class PriestInPerilQuestStep implements QuestStep {
         BankLocation bank = BankLocation.getNearest();
         if (bank != null && !bank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = "Nav to bank";
-            a.a(bank);
+            BankingUtil.navigateToBank(bank);
         }
         if (bank != null && bank.getArea().contains(Players.getLocal().getWorldLocation())) {
             if (!Bank.isOpen()) {
-                a.a();
+                BankingUtil.openNearestBank();
                 Time.sleepUntil(() -> Bank.isOpen(), 5000);
             }
             if (Bank.isOpen()) {
@@ -693,9 +693,9 @@ public class PriestInPerilQuestStep implements QuestStep {
                     Bank.depositInventory();
                     Time.sleepTicks(4);
                 }
-                a.a(ITEM_MITHRIL_AXE, 10);
-                a.a(ITEM_RUNE_SCIMITAR, 4);
-                a.a(ITEM_STAMINA_POTION, 30);
+                BankingUtil.withdrawItem(ITEM_MITHRIL_AXE, 10);
+                BankingUtil.withdrawItem(ITEM_RUNE_SCIMITAR, 4);
+                BankingUtil.withdrawItem(ITEM_STAMINA_POTION, 30);
             }
         }
     }
@@ -707,11 +707,11 @@ public class PriestInPerilQuestStep implements QuestStep {
         BankLocation bank = BankLocation.getNearest();
         if (bank != null && !bank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = "Nav to bank";
-            a.a(bank);
+            BankingUtil.navigateToBank(bank);
         }
         if (bank != null && bank.getArea().contains(Players.getLocal().getWorldLocation())) {
             if (!Bank.isOpen()) {
-                a.a();
+                BankingUtil.openNearestBank();
                 Time.sleepUntil(() -> Bank.isOpen(), 5000);
             }
             if (Bank.isOpen()) {
@@ -720,9 +720,9 @@ public class PriestInPerilQuestStep implements QuestStep {
                     Bank.depositInventory();
                     Time.sleepTicks(4);
                 }
-                a.a(ITEM_MITHRIL_AXE, 10);
-                a.a(ITEM_RUNE_SCIMITAR, 1);
-                a.a(ITEM_STAMINA_POTION, 30);
+                BankingUtil.withdrawItem(ITEM_MITHRIL_AXE, 10);
+                BankingUtil.withdrawItem(ITEM_RUNE_SCIMITAR, 1);
+                BankingUtil.withdrawItem(ITEM_STAMINA_POTION, 30);
             }
         }
     }

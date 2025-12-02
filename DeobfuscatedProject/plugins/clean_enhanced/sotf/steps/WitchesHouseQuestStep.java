@@ -246,8 +246,8 @@ public class WitchesHouseQuestStep implements QuestStep {
                     AccBuilderSotf.c = "Nav to start";
 
                     // Drink stamina potion if needed
-                    if (Inventory.contains(f.ba) && Movement.getRunEnergy() >= MIN_RUN_ENERGY) {
-                        Inventory.getFirst(f.ba).interact("Drink");
+                    if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() >= MIN_RUN_ENERGY) {
+                        Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                         Time.sleepTicks(SHORT_SLEEP_TICKS);
                     }
 
@@ -257,7 +257,7 @@ public class WitchesHouseQuestStep implements QuestStep {
 
                 // Talk to Boy NPC to start quest
                 if (Players.getLocal().getWorldLocation().distanceTo(QUEST_START_LOCATION) <= 6) {
-                    g.a("Boy", QUEST_START_DIALOG);
+                    DialogUtil.talkToNpc("Boy", QUEST_START_DIALOG);
                 }
             }
         }
@@ -603,7 +603,7 @@ public class WitchesHouseQuestStep implements QuestStep {
                         needsToBuyItems = false;
                     }
 
-                    g.a("Boy", QUEST_START_DIALOG);
+                    DialogUtil.talkToNpc("Boy", QUEST_START_DIALOG);
                 }
             }
         }
@@ -613,8 +613,8 @@ public class WitchesHouseQuestStep implements QuestStep {
      * Enables run mode and drinks stamina potion if available.
      */
     public static void enableRunAndDrinkStamina() {
-        if (Inventory.contains(f.ba) && Movement.getRunEnergy() >= 190) {
-            Inventory.getFirst(f.ba).interact("Drink");
+        if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() >= 190) {
+            Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
             Time.sleepTicks(SHORT_SLEEP_TICKS);
         }
 
@@ -749,14 +749,14 @@ public class WitchesHouseQuestStep implements QuestStep {
         // Navigate to bank
         if (bankLocation != null && !bankLocation.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = "Navigating to bank";
-            a.a(bankLocation);
+            BankingUtil.navigateToBank(bankLocation);
         }
 
         if (bankLocation != null && bankLocation.getArea().contains(Players.getLocal().getWorldLocation())) {
             // Open bank
             if (!Bank.isOpen()) {
                 AccBuilderSotf.c = "Opening bank";
-                a.a();
+                BankingUtil.openNearestBank();
                 Time.sleepUntil(() -> Bank.isOpen(), LONG_SLEEP_MS);
             }
 
@@ -858,7 +858,7 @@ public class WitchesHouseQuestStep implements QuestStep {
      */
     private static void withdrawQuestItems() {
         if (!Bank.isOpen()) {
-            a.a();
+            BankingUtil.openNearestBank();
             Time.sleepTicks(4);
         }
 

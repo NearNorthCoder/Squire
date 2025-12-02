@@ -217,13 +217,13 @@ public class CombatTrainingStep implements QuestStep {
         // Navigate to bank
         if (!nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = MSG_NAV_TO_BANK;
-            a.a(nearestBank);
+            BankingUtil.navigateToBank(nearestBank);
             return;
         }
 
         // Open bank
         if (!Bank.isOpen()) {
-            a.a();
+            BankingUtil.openNearestBank();
             Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT_MS);
             return;
         }
@@ -262,35 +262,35 @@ public class CombatTrainingStep implements QuestStep {
         int attackLevel = Skills.getLevel(Skill.ATTACK);
 
         if (attackLevel >= 40 && Bank.contains(RUNE_SCIMITAR_ID)) {
-            a.a(RUNE_SCIMITAR_ID, 1);
+            BankingUtil.withdrawItem(RUNE_SCIMITAR_ID, 1);
         } else if (attackLevel >= 30 && Bank.contains(ADAMANT_SCIMITAR_ID)) {
-            a.a(ADAMANT_SCIMITAR_ID, 1);
+            BankingUtil.withdrawItem(ADAMANT_SCIMITAR_ID, 1);
         } else if (attackLevel >= 20 && Bank.contains(MITHRIL_SCIMITAR_ID)) {
-            a.a(MITHRIL_SCIMITAR_ID, 1);
+            BankingUtil.withdrawItem(MITHRIL_SCIMITAR_ID, 1);
         } else if (attackLevel >= 5 && Bank.contains(STEEL_SCIMITAR_ID)) {
-            a.a(STEEL_SCIMITAR_ID, 1);
+            BankingUtil.withdrawItem(STEEL_SCIMITAR_ID, 1);
         } else {
-            a.a(IRON_SCIMITAR_ID, 1);
+            BankingUtil.withdrawItem(IRON_SCIMITAR_ID, 1);
         }
 
         // Withdraw armor
         int defenseLevel = Skills.getLevel(Skill.DEFENCE);
 
         if (defenseLevel >= 20 && Bank.contains(MITHRIL_CHAINBODY_ID)) {
-            a.a(MITHRIL_CHAINBODY_ID, 1);
+            BankingUtil.withdrawItem(MITHRIL_CHAINBODY_ID, 1);
         } else if (defenseLevel >= 5 && Bank.contains(STEEL_CHAINBODY_ID)) {
-            a.a(STEEL_CHAINBODY_ID, 1);
+            BankingUtil.withdrawItem(STEEL_CHAINBODY_ID, 1);
         } else {
-            a.a(IRON_CHAINBODY_ID, 1);
+            BankingUtil.withdrawItem(IRON_CHAINBODY_ID, 1);
         }
 
         // Withdraw food
-        a.a(LOBSTER_ID, 20);
+        BankingUtil.withdrawItem(LOBSTER_ID, 20);
 
         // Withdraw potions
-        a.a(PRAYER_POTION_ID, 2);
-        a.a(SUPER_ATTACK_POTION_ID, 1);
-        a.a(SUPER_STRENGTH_POTION_ID, 1);
+        BankingUtil.withdrawItem(PRAYER_POTION_ID, 2);
+        BankingUtil.withdrawItem(SUPER_ATTACK_POTION_ID, 1);
+        BankingUtil.withdrawItem(SUPER_STRENGTH_POTION_ID, 1);
     }
 
     /**
@@ -308,8 +308,8 @@ public class CombatTrainingStep implements QuestStep {
      */
     private static void usePotionsIfNeeded() {
         // Drink prayer potion if needed
-        if (Inventory.contains(f.aX) && Skills.getBoostedLevel(Skill.PRAYER) < PRAYER_POINTS_THRESHOLD) {
-            Inventory.getFirst(f.aX).interact(MSG_DRINK);
+        if (Inventory.contains(ItemIdArrays.PRAYER_POTIONS) && Skills.getBoostedLevel(Skill.PRAYER) < PRAYER_POINTS_THRESHOLD) {
+            Inventory.getFirst(ItemIdArrays.PRAYER_POTIONS).interact(MSG_DRINK);
             Time.sleepTicks(TICK_DELAY_SHORT);
         }
 

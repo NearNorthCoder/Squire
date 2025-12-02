@@ -350,8 +350,8 @@ public class FishingTrainingStep implements QuestStep {
         }
 
         // Check for weapon/tool (from equipment class)
-        if (!Bank.contains(f.aT)) {
-            shoppingList.add(new ShopItem(f.aT[0], 54, 900));
+        if (!Bank.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
+            shoppingList.add(new ShopItem(ItemIdArrays.QUEST_EQUIPMENT[0], 54, 900));
         }
     }
 
@@ -380,14 +380,14 @@ public class FishingTrainingStep implements QuestStep {
                 // Navigate to bank
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = STATUS_NAV_TO_BANK;
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 // Open bank and handle banking
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     if (!Bank.isOpen()) {
                         AccBuilderSotf.c = STATUS_OPENING_BANK;
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT_MS);
                     }
 
@@ -443,8 +443,8 @@ public class FishingTrainingStep implements QuestStep {
                         }
 
                         // Check for weapon/tool
-                        if (!Bank.contains(f.aT) || Inventory.getCount(f.aT) < 1) {
-                            if (!Equipment.contains(f.aT)) {
+                        if (!Bank.contains(ItemIdArrays.QUEST_EQUIPMENT) || Inventory.getCount(ItemIdArrays.QUEST_EQUIPMENT) < 1) {
+                            if (!Equipment.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
                                 missingItems = true;
                             }
                         }
@@ -489,13 +489,13 @@ public class FishingTrainingStep implements QuestStep {
                         }
 
                         // Withdraw weapon/tool
-                        if (Bank.contains(f.aT)) {
-                            a.b(f.aT, QUANTITY_ONE);
+                        if (Bank.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
+                            BankingUtil.withdrawItemsUntilFound(ItemIdArrays.QUEST_EQUIPMENT, QUANTITY_ONE);
                         }
 
                         // Withdraw barb-tail harpoon
                         if (Bank.contains(BARB_TAIL_HARPOON_ID)) {
-                            a.a(BARB_TAIL_HARPOON_ID, QUANTITY_ONE);
+                            BankingUtil.withdrawItem(BARB_TAIL_HARPOON_ID, QUANTITY_ONE);
                         }
                     }
                 }
@@ -528,8 +528,8 @@ public class FishingTrainingStep implements QuestStep {
                                 AccBuilderSotf.c = STATUS_NAV_TO_SMALL_FISH;
 
                                 // Wear weapon if in inventory
-                                if (Inventory.contains(f.aT)) {
-                                    Inventory.getFirst(f.aT).interact(INTERACT_WEAR);
+                                if (Inventory.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
+                                    Inventory.getFirst(ItemIdArrays.QUEST_EQUIPMENT).interact(INTERACT_WEAR);
                                 }
 
                                 Movement.walkTo(SMALL_NET_FISHING_SPOT);
@@ -627,13 +627,13 @@ public class FishingTrainingStep implements QuestStep {
 
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = STATUS_NAV_TO_BANK;
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     if (!Bank.isOpen()) {
                         AccBuilderSotf.c = STATUS_OPENING_BANK;
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT_MS);
                     }
 
@@ -649,9 +649,9 @@ public class FishingTrainingStep implements QuestStep {
                         // Check for missing items
                         boolean missingSmallNet = Bank.contains(SMALL_FISHING_NET_ID)
                             && Inventory.getCount(ITEM_NAME_SMALL_NET) < 1;
-                        boolean missingWeapon = !Bank.contains(f.aT)
-                            && !Inventory.contains(f.aT)
-                            && !Equipment.contains(f.aT);
+                        boolean missingWeapon = !Bank.contains(ItemIdArrays.QUEST_EQUIPMENT)
+                            && !Inventory.contains(ItemIdArrays.QUEST_EQUIPMENT)
+                            && !Equipment.contains(ItemIdArrays.QUEST_EQUIPMENT);
 
                         if (missingSmallNet || missingWeapon) {
                             populateShoppingList();
@@ -668,8 +668,8 @@ public class FishingTrainingStep implements QuestStep {
                         }
 
                         // Withdraw weapon
-                        if (Bank.contains(f.aT)) {
-                            a.b(f.aT, QUANTITY_ONE);
+                        if (Bank.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
+                            BankingUtil.withdrawItemsUntilFound(ItemIdArrays.QUEST_EQUIPMENT, QUANTITY_ONE);
                         }
                     }
                 }
@@ -695,14 +695,14 @@ public class FishingTrainingStep implements QuestStep {
 
                         if (Players.getLocal().getWorldLocation().distanceTo(bankPoint) <= DISTANCE_THRESHOLD_BANK) {
                             if (!Bank.isOpen()) {
-                                a.a();
+                                BankingUtil.openNearestBank();
                             }
 
                             if (Bank.isOpen()) {
                                 Time.sleepTicks(TICK_DELAY_2);
                                 Bank.depositInventory();
                                 Time.sleepTicks(TICK_DELAY_2);
-                                a.a(SMALL_FISHING_NET_ID, QUANTITY_ONE);
+                                BankingUtil.withdrawItem(SMALL_FISHING_NET_ID, QUANTITY_ONE);
                             }
                         }
                     }
@@ -715,8 +715,8 @@ public class FishingTrainingStep implements QuestStep {
                         && Players.getLocal().getWorldLocation().distanceTo(SMALL_NET_FISHING_SPOT) > FISHING_LEVEL_BAIT) {
                         AccBuilderSotf.c = STATUS_NAV_TO_SMALL_FISH;
 
-                        if (Inventory.contains(f.aT)) {
-                            Inventory.getFirst(f.aT).interact(INTERACT_WEAR);
+                        if (Inventory.contains(ItemIdArrays.QUEST_EQUIPMENT)) {
+                            Inventory.getFirst(ItemIdArrays.QUEST_EQUIPMENT).interact(INTERACT_WEAR);
                         }
 
                         Movement.walkTo(SMALL_NET_FISHING_SPOT);
@@ -777,7 +777,7 @@ public class FishingTrainingStep implements QuestStep {
             && Inventory.contains(ITEM_NAME_FLY_ROD)
             && Inventory.contains(ITEM_NAME_FEATHER)
             && Inventory.contains(ITEM_NAME_BAIT)
-            && (!Inventory.contains(f.aT) || Equipment.contains(f.aT));
+            && (!Inventory.contains(ItemIdArrays.QUEST_EQUIPMENT) || Equipment.contains(ItemIdArrays.QUEST_EQUIPMENT));
     }
 
     /**
@@ -788,7 +788,7 @@ public class FishingTrainingStep implements QuestStep {
      */
     public static boolean hasSmallFishingNet() {
         return Inventory.contains(ITEM_NAME_SMALL_NET)
-            && (!Inventory.contains(f.aT) || Equipment.contains(f.aT));
+            && (!Inventory.contains(ItemIdArrays.QUEST_EQUIPMENT) || Equipment.contains(ItemIdArrays.QUEST_EQUIPMENT));
     }
 
     @Override

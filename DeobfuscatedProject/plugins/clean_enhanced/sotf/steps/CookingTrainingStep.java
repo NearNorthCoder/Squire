@@ -208,7 +208,7 @@ public class CookingTrainingStep implements QuestStep {
 
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = MSG_NAVIGATING_TO_BANK;
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
@@ -216,7 +216,7 @@ public class CookingTrainingStep implements QuestStep {
 
                     // Open bank if not already open
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), TIMEOUT_5_SECONDS);
                     }
 
@@ -264,7 +264,7 @@ public class CookingTrainingStep implements QuestStep {
                     // Withdraw ring of dueling if far from cooking location
                     if (!Equipment.contains(RING_OF_DUELING_ID) &&
                         Players.getLocal().getWorldLocation().distanceTo(ALTERNATIVE_LOCATION) > 135) {
-                        a.b(f.aS, 1);
+                        BankingUtil.withdrawItemsUntilFound(ItemIdArrays.aS, 1);
                         Time.sleepTicks(1);
                         Time.sleepUntil(() -> Inventory.getCount(RING_OF_DUELING_ID) > 0, TIMEOUT_5_SECONDS);
                     }

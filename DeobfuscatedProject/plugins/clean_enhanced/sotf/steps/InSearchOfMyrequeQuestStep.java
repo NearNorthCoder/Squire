@@ -193,8 +193,8 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
 
             // Check prerequisite quests
             if (GameStateUtil.getVarbit(9253) < 26 && Skills.getLevel(Skill.AGILITY) >= 26 && Skills.getLevel(Skill.PRAYER) >= 183) {
-                if (Inventory.contains(f.bf)) {
-                    Inventory.getFirst(f.bf).interact("Drop");
+                if (Inventory.contains(ItemIdArrays.ANTIDOTE_PLUS_PLUS)) {
+                    Inventory.getFirst(ItemIdArrays.ANTIDOTE_PLUS_PLUS).interact("Drop");
                 }
                 questName = "- Nature Spirit";
                 G.cb();
@@ -209,12 +209,12 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                 BankLocation nearestBank = BankLocation.getNearest();
                 if (nearestBank != null && !nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Nav to bank";
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), 6567);
                     }
 
@@ -250,7 +250,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                         if (GameStateUtil.randomRange(requiredItems)) {
                             // Equip silver sickle if not equipped
                             if (!Equipment.contains(SILVER_SICKLE_B)) {
-                                a.a(SILVER_SICKLE_B, 1);
+                                BankingUtil.withdrawItem(SILVER_SICKLE_B, 1);
                                 if (Inventory.contains(SILVER_SICKLE_B)) {
                                     Inventory.getFirst(SILVER_SICKLE_B).interact("Wield");
                                     Time.sleepTicks(1);
@@ -258,29 +258,29 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                             }
 
                             if (!Bank.isOpen()) {
-                                a.a();
+                                BankingUtil.openNearestBank();
                                 Time.sleepTicks(4);
                             }
 
                             if (Bank.isOpen()) {
                                 // Withdraw all required items
-                                a.a(STEEL_SWORD, 1);
-                                a.a(STEEL_MACE, 1);
-                                a.a(STEEL_LONGSWORD, 1);
-                                a.a(STEEL_WARHAMMER, 1);
-                                a.a(STEEL_DAGGER, 2);
-                                a.a(STEEL_2H_SWORD, 225);
-                                a.a(STEEL_CHAINBODY, 1);
-                                a.a(STEEL_MED_HELM, 7);
-                                a.a(STAMINA_POTION, 197);
+                                BankingUtil.withdrawItem(STEEL_SWORD, 1);
+                                BankingUtil.withdrawItem(STEEL_MACE, 1);
+                                BankingUtil.withdrawItem(STEEL_LONGSWORD, 1);
+                                BankingUtil.withdrawItem(STEEL_WARHAMMER, 1);
+                                BankingUtil.withdrawItem(STEEL_DAGGER, 2);
+                                BankingUtil.withdrawItem(STEEL_2H_SWORD, 225);
+                                BankingUtil.withdrawItem(STEEL_CHAINBODY, 1);
+                                BankingUtil.withdrawItem(STEEL_MED_HELM, 7);
+                                BankingUtil.withdrawItem(STAMINA_POTION, 197);
                                 Bank.withdraw("Druid pouch", 1, Bank.WithdrawMode.ITEM);
-                                a.a(CHITIN, 1);
-                                a.a(SWAMP_TAR, 1);
-                                a.a(SNAIL_SHELL, 7);
-                                a.a(BUCKET, 10);
-                                a.a(ROPE, 10);
-                                a.a(PLANK, 1);
-                                a.a(FOOD_MONKFISH, 1);
+                                BankingUtil.withdrawItem(CHITIN, 1);
+                                BankingUtil.withdrawItem(SWAMP_TAR, 1);
+                                BankingUtil.withdrawItem(SNAIL_SHELL, 7);
+                                BankingUtil.withdrawItem(BUCKET, 10);
+                                BankingUtil.withdrawItem(ROPE, 10);
+                                BankingUtil.withdrawItem(PLANK, 1);
+                                BankingUtil.withdrawItem(FOOD_MONKFISH, 1);
                             }
                         }
                     }
@@ -288,8 +288,8 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
             }
 
             // Use stamina potion if needed
-            if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 244) {
-                Inventory.getFirst(f.ba).interact("Drink");
+            if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 244) {
+                Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                 Time.sleepTicks(1);
             }
 
@@ -334,7 +334,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
 
                 if (Players.getLocal().getWorldLocation().distanceTo(CANIFIS_BANK) <= 4) {
                     AccBuilderSotf.c = "Starting quest";
-                    g.a("Vanstrom Klause", DIALOGUE_OPTIONS);
+                    DialogUtil.talkToNpc("Vanstrom Klause", DIALOGUE_OPTIONS);
                 }
             }
 
@@ -390,7 +390,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                                 }
 
                                 if (Players.getLocal().getWorldLocation().distanceTo(new WorldPoint(23133, 29885, 0)) <= 2) {
-                                    e.k(e.v());
+                                    GameStateUtil.hopToWorld(GameStateUtil.getRandomWorldFromList());
                                 }
 
                                 if (Static.getClient().getWorld() != currentWorld) {
@@ -400,7 +400,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                         }
                     }
 
-                    g.a("Cyreg Paddlehorn", DIALOGUE_OPTIONS);
+                    DialogUtil.talkToNpc("Cyreg Paddlehorn", DIALOGUE_OPTIONS);
                 }
             }
 
@@ -411,7 +411,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                         TileObjects.getNearest("Swamp Boaty").interact("Board");
                         Time.sleepTicks(2);
                     }
-                    g.a(DIALOGUE_OPTIONS);
+                    DialogUtil.chooseDialogOptions(DIALOGUE_OPTIONS);
                 }
 
                 if (Players.getLocal().getWorldLocation().distanceTo(BRIDGE_START) <= 42) {
@@ -494,7 +494,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
 
                     if (Players.getLocal().getWorldLocation().distanceTo(MYREQUE_HIDEOUT_DOOR) <= 5) {
                         AccBuilderSotf.c = "Handling chat";
-                        g.a("Curpile Fyod", DIALOGUE_OPTIONS);
+                        DialogUtil.talkToNpc("Curpile Fyod", DIALOGUE_OPTIONS);
                     }
                 }
             }
@@ -528,7 +528,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                 AccBuilderSotf.c = "Entering doors";
                 TileObjects.getNearest("Wooden doors").interact("Open");
                 Time.sleepTicks(4);
-                g.a(DIALOGUE_OPTIONS);
+                DialogUtil.chooseDialogOptions(DIALOGUE_OPTIONS);
             }
 
             // Navigate to cave
@@ -544,13 +544,13 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                         AccBuilderSotf.c = "Entering cave";
                         TileObjects.getNearest("Cave entrance").interact("Enter");
                         Time.sleepTicks(4);
-                        g.a(DIALOGUE_OPTIONS);
+                        DialogUtil.chooseDialogOptions(DIALOGUE_OPTIONS);
                     }
                 }
 
                 if (CAVE_AREA.contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Talking";
-                    g.a("Veliaf Hurtz", DIALOGUE_OPTIONS);
+                    DialogUtil.talkToNpc("Veliaf Hurtz", DIALOGUE_OPTIONS);
                 }
             }
 
@@ -562,37 +562,37 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
 
                 if (memberProgress == 0) {
                     if (!Dialog.canContinue()) {
-                        g.a("Harold Evans", DIALOGUE_OPTIONS);
+                        DialogUtil.talkToNpc("Harold Evans", DIALOGUE_OPTIONS);
                     }
-                    g.a(DIALOGUE_OPTIONS);
+                    DialogUtil.chooseDialogOptions(DIALOGUE_OPTIONS);
                 }
 
                 if (memberProgress == 2) {
                     if (!Dialog.canContinue()) {
                         NPCs.getNearest("Radigad Ponfit").interact("Talk-to");
                     }
-                    g.a("Radigad Ponfit", DIALOGUE_OPTIONS);
+                    DialogUtil.talkToNpc("Radigad Ponfit", DIALOGUE_OPTIONS);
                 }
 
                 if (memberProgress == 7) {
                     if (!Dialog.canContinue()) {
                         NPCs.getNearest("Sani Piliu").interact("Talk-to");
                     }
-                    g.a("Sani Piliu", DIALOGUE_OPTIONS);
+                    DialogUtil.talkToNpc("Sani Piliu", DIALOGUE_OPTIONS);
                 }
 
                 if (memberProgress == 15) {
                     if (!Dialog.canContinue()) {
                         NPCs.getNearest("Polmafi Ferdygris").interact("Talk-to");
                     }
-                    g.a("Polmafi Ferdygris", DIALOGUE_OPTIONS);
+                    DialogUtil.talkToNpc("Polmafi Ferdygris", DIALOGUE_OPTIONS);
                 }
 
                 if (memberProgress == 17) {
                     if (!Dialog.canContinue()) {
                         NPCs.getNearest("Ivan Strom").interact("Talk-to");
                     }
-                    g.a("Ivan Strom", DIALOGUE_OPTIONS);
+                    DialogUtil.talkToNpc("Ivan Strom", DIALOGUE_OPTIONS);
                 }
 
                 if (memberProgress == 19) {
@@ -600,20 +600,20 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                         "Let's talk about the weapons.",
                         "I'll be back later."
                     };
-                    g.a("Veliaf Hurtz", weaponOptions);
+                    DialogUtil.talkToNpc("Veliaf Hurtz", weaponOptions);
                 }
             }
 
             // Talk to Veliaf
             if (GameStateUtil.getVarbit(QUEST_VARBIT) == 72) {
                 AccBuilderSotf.c = "Talking";
-                g.a("Veliaf Hurtz", DIALOGUE_OPTIONS);
+                DialogUtil.talkToNpc("Veliaf Hurtz", DIALOGUE_OPTIONS);
             }
 
             // Handle quest dialogue
             if (GameStateUtil.getVarbit(QUEST_VARBIT) == 66) {
                 AccBuilderSotf.c = "Handling chat";
-                g.a(DIALOGUE_OPTIONS);
+                DialogUtil.chooseDialogOptions(DIALOGUE_OPTIONS);
             }
 
             // Boss fight
@@ -621,8 +621,8 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                 AccBuilderSotf.c = "BOSS FIGHT";
 
                 // Restore prayer
-                if (Prayers.getPoints() < 20 && Inventory.contains(f.aX)) {
-                    Inventory.getFirst(f.aX).interact("Drink");
+                if (Prayers.getPoints() < 20 && Inventory.contains(ItemIdArrays.PRAYER_POTIONS)) {
+                    Inventory.getFirst(ItemIdArrays.PRAYER_POTIONS).interact("Drink");
                     Time.sleepTicks(1);
                 }
 
@@ -656,7 +656,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                     Prayers.toggle(Prayer.PROTECT_FROM_MELEE);
                 }
 
-                g.a("Veliaf Hurtz", DIALOGUE_OPTIONS);
+                DialogUtil.talkToNpc("Veliaf Hurtz", DIALOGUE_OPTIONS);
             }
 
             // Exit cave and finish quest
@@ -667,7 +667,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                     AccBuilderSotf.c = "Exiting cave";
                     TileObjects.getNearest("Cave entrance").interact("Enter");
                     Time.sleepTicks(4);
-                    g.a(DIALOGUE_OPTIONS);
+                    DialogUtil.chooseDialogOptions(DIALOGUE_OPTIONS);
                 }
 
                 if (!CAVE_AREA.contains(Players.getLocal().getWorldLocation())) {
@@ -694,7 +694,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
                             initializedBridge = false;
                         }
 
-                        g.a("Stranger", DIALOGUE_OPTIONS);
+                        DialogUtil.talkToNpc("Stranger", DIALOGUE_OPTIONS);
                     }
                 }
             }

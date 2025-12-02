@@ -222,14 +222,14 @@ public class DarknessOfHallowvale implements QuestStep {
                 }
             }
 
-            a.a(nearestBank);  // Walk to bank
+            BankingUtil.navigateToBank(nearestBank);  // Walk to bank
             return;
         }
 
         // Open bank if at bank location
         if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             if (!Bank.isOpen()) {
-                a.a();  // Open bank
+                BankingUtil.openNearestBank();  // Open bank
                 Time.sleepUntil(Bank::isOpen, 5000);
                 return;
             }
@@ -340,14 +340,14 @@ public class DarknessOfHallowvale implements QuestStep {
             // Equip rune scimitar
             if (!Equipment.contains(RUNE_SCIMITAR)) {
                 if (!Inventory.contains(RUNE_SCIMITAR)) {
-                    a.a(RUNE_SCIMITAR, 1);  // Withdraw from bank
+                    BankingUtil.withdrawItem(RUNE_SCIMITAR, 1);  // Withdraw from bank
                 }
             }
 
             // Equip Efaritay's aid
             if (!Equipment.contains(EFARITAYS_AID)) {
                 if (!Inventory.contains(EFARITAYS_AID)) {
-                    a.a(EFARITAYS_AID, 1);  // Withdraw from bank
+                    BankingUtil.withdrawItem(EFARITAYS_AID, 1);  // Withdraw from bank
                 }
             }
         }
@@ -359,9 +359,9 @@ public class DarknessOfHallowvale implements QuestStep {
         }
 
         // Wield rune scimitar
-        e.l(RUNE_SCIMITAR);
+        GameStateUtil.equipItem(RUNE_SCIMITAR);
         // Wield Efaritay's aid
-        e.l(EFARITAYS_AID);
+        GameStateUtil.equipItem(EFARITAYS_AID);
         Time.sleepTicks(2);
     }
 
@@ -373,22 +373,22 @@ public class DarknessOfHallowvale implements QuestStep {
             AccBuilderSotf.c = "Getting starting supplies";
 
             if (!Bank.isOpen()) {
-                a.a();  // Open bank
+                BankingUtil.openNearestBank();  // Open bank
                 Time.sleepTicks(6);
                 return;
             }
 
             // Withdraw all required items
-            a.a(BRONZE_PICKAXE, 1);
-            a.a(SALVE_GRAVEYARD_TELEPORT, 5);
-            a.a(BUCKET, 5);
-            a.a(STEEL_NAILS, 44);
-            a.a(PLANK, 6);
-            a.a(SPADE, 1);
-            a.a(HAMMER, 1);
-            a.a(BARROWS_TELEPORT, 10);
-            a.a(SHARK, 10);
-            a.a(STAMINA_POTION_4, 2);
+            BankingUtil.withdrawItem(BRONZE_PICKAXE, 1);
+            BankingUtil.withdrawItem(SALVE_GRAVEYARD_TELEPORT, 5);
+            BankingUtil.withdrawItem(BUCKET, 5);
+            BankingUtil.withdrawItem(STEEL_NAILS, 44);
+            BankingUtil.withdrawItem(PLANK, 6);
+            BankingUtil.withdrawItem(SPADE, 1);
+            BankingUtil.withdrawItem(HAMMER, 1);
+            BankingUtil.withdrawItem(BARROWS_TELEPORT, 10);
+            BankingUtil.withdrawItem(SHARK, 10);
+            BankingUtil.withdrawItem(STAMINA_POTION_4, 2);
         }
     }
 
@@ -397,8 +397,8 @@ public class DarknessOfHallowvale implements QuestStep {
      */
     private static void handleMovement() {
         // Drink stamina potion if run energy is low
-        if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 50) {
-            Inventory.getFirst(f.ba).interact("Drink");
+        if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 50) {
+            Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
             Time.sleepTicks(1);
         }
     }
@@ -513,7 +513,7 @@ public class DarknessOfHallowvale implements QuestStep {
         // Talk to Veliaf if close enough
         if (CAVE_AREA.contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = "Starting quest";
-            g.a("Veliaf Hurtz", DIALOG_OPTIONS);
+            DialogUtil.talkToNpc("Veliaf Hurtz", DIALOG_OPTIONS);
         }
     }
 
@@ -541,7 +541,7 @@ public class DarknessOfHallowvale implements QuestStep {
                 Time.sleepTicks(1);
             } else {
                 AccBuilderSotf.c = "Talk to guy";
-                g.a("Florin", DIALOG_OPTIONS);
+                DialogUtil.talkToNpc("Florin", DIALOG_OPTIONS);
             }
         }
     }
@@ -573,7 +573,7 @@ public class DarknessOfHallowvale implements QuestStep {
         // Talk to Razvan
         if (Players.getLocal().getWorldLocation().distanceTo(RAZVAN_LOCATION) <= 5) {
             AccBuilderSotf.c = "Talk to guy";
-            g.a("Razvan", DIALOG_OPTIONS);
+            DialogUtil.talkToNpc("Razvan", DIALOG_OPTIONS);
         }
 
         // Handle rubble clearing specific steps
@@ -710,7 +710,7 @@ public class DarknessOfHallowvale implements QuestStep {
         AccBuilderSotf.c = "Nav to general store";
 
         if (Dialog.isOpen()) {
-            g.a(DIALOG_OPTIONS);
+            DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
         }
 
         // Navigate to general store if far
@@ -729,7 +729,7 @@ public class DarknessOfHallowvale implements QuestStep {
 
         // Talk to Aurel once at general store
         if (Players.getLocal().getWorldLocation().distanceTo(VELIAF_LOCATION) <= 10) {
-            g.a("Aurel", DIALOG_OPTIONS);
+            DialogUtil.talkToNpc("Aurel", DIALOG_OPTIONS);
         }
 
         // Handle roof repair on different floors
@@ -763,7 +763,7 @@ public class DarknessOfHallowvale implements QuestStep {
                         Time.sleepTicks(2);
                     }
                 }
-                g.a(DIALOG_OPTIONS);
+                DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
             }
         }
 
@@ -787,7 +787,7 @@ public class DarknessOfHallowvale implements QuestStep {
                         Time.sleepTicks(2);
                     }
                 }
-                g.a(DIALOG_OPTIONS);
+                DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
             }
         }
 
@@ -796,7 +796,7 @@ public class DarknessOfHallowvale implements QuestStep {
             AccBuilderSotf.c = "Nav to general store";
 
             if (Dialog.isOpen()) {
-                g.a(DIALOG_OPTIONS);
+                DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
             }
 
             if (!Dialog.isOpen() && Players.getLocal().getWorldLocation().distanceTo(VELIAF_LOCATION) > 10) {
@@ -810,7 +810,7 @@ public class DarknessOfHallowvale implements QuestStep {
             }
 
             if (Players.getLocal().getWorldLocation().distanceTo(VELIAF_LOCATION) <= 10) {
-                g.a("Aurel", DIALOG_OPTIONS);
+                DialogUtil.talkToNpc("Aurel", DIALOG_OPTIONS);
             }
         }
     }
@@ -838,11 +838,11 @@ public class DarknessOfHallowvale implements QuestStep {
 
         // Talk to Cornelius to hire banker
         AccBuilderSotf.c = "Hiring banker";
-        g.a("Cornelius", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Cornelius", DIALOG_OPTIONS);
 
         // Return to pub to talk to Razvan
         AccBuilderSotf.c = "Nav to pub";
-        g.a("Razvan", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Razvan", DIALOG_OPTIONS);
     }
 
     /**
@@ -872,7 +872,7 @@ public class DarknessOfHallowvale implements QuestStep {
         // Talk to general store guys
         AccBuilderSotf.c = "Nav to general store";
         AccBuilderSotf.c = "Talking to guys";
-        g.a("Gadderanks", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Gadderanks", DIALOG_OPTIONS);
     }
 
     /**
@@ -902,7 +902,7 @@ public class DarknessOfHallowvale implements QuestStep {
             }
 
             if (Players.getLocal().getWorldLocation().distanceTo(VELIAF_LOCATION) <= 10) {
-                g.a("Aurel", DIALOG_OPTIONS);
+                DialogUtil.talkToNpc("Aurel", DIALOG_OPTIONS);
             }
         }
 
@@ -930,12 +930,12 @@ public class DarknessOfHallowvale implements QuestStep {
 
         // Talk to Gadderanks after fight
         AccBuilderSotf.c = "Talking to gadderanks";
-        g.a("Gadderanks", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Gadderanks", DIALOG_OPTIONS);
 
         // Talk to Veliaf
-        g.a("Veliaf Hurtz", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Veliaf Hurtz", DIALOG_OPTIONS);
         AccBuilderSotf.c = "Talking to veliaf";
-        g.a("Veliaf Hurtz", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Veliaf Hurtz", DIALOG_OPTIONS);
 
         // Enter cave for final dialog
         AccBuilderSotf.c = "Entering cave";
@@ -945,7 +945,7 @@ public class DarknessOfHallowvale implements QuestStep {
             Time.sleepTicks(2);
         }
 
-        g.a("Veliaf Hurtz", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Veliaf Hurtz", DIALOG_OPTIONS);
     }
 
     /**
@@ -963,12 +963,12 @@ public class DarknessOfHallowvale implements QuestStep {
                 Time.sleepTicks(5);
             }
 
-            a.a(nearestBank);  // Walk to bank
+            BankingUtil.navigateToBank(nearestBank);  // Walk to bank
         }
 
         if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             if (!Bank.isOpen()) {
-                a.a();  // Open bank
+                BankingUtil.openNearestBank();  // Open bank
                 Time.sleepUntil(Bank::isOpen, 5000);
 
                 // Open Burgh de Rott bank if available
@@ -991,12 +991,12 @@ public class DarknessOfHallowvale implements QuestStep {
                 // Withdraw items for vyrewatch disguise
                 if (!preparedForVyrewatch) {
                     Bank.withdraw("Citizen clothing", 1, Bank.WithdrawMode.DEFAULT);
-                    a.a(BRONZE_AXE, 10);
-                    a.a(TINDERBOX, 3);
-                    a.a(MACKEREL, 10);
+                    BankingUtil.withdrawItem(BRONZE_AXE, 10);
+                    BankingUtil.withdrawItem(TINDERBOX, 3);
+                    BankingUtil.withdrawItem(MACKEREL, 10);
 
                     if (hasTinderbox) {
-                        a.a(THIN_SNAIL, 10);
+                        BankingUtil.withdrawItem(THIN_SNAIL, 10);
                     }
                 }
             }
@@ -1028,7 +1028,7 @@ public class DarknessOfHallowvale implements QuestStep {
                 Time.sleepTicks(4);
 
                 while (Dialog.isOpen()) {
-                    g.a(DIALOG_OPTIONS);
+                    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
                     Time.sleepTicks(1);
                 }
             }
@@ -1038,7 +1038,7 @@ public class DarknessOfHallowvale implements QuestStep {
                 Time.sleepTicks(4);
 
                 while (Dialog.isOpen()) {
-                    g.a(DIALOG_OPTIONS);
+                    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
                     Time.sleepTicks(1);
                 }
             }
@@ -1049,7 +1049,7 @@ public class DarknessOfHallowvale implements QuestStep {
                 Time.sleepTicks(4);
 
                 while (Dialog.isOpen()) {
-                    g.a(DIALOG_OPTIONS);
+                    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
                     Time.sleepTicks(1);
                 }
 
@@ -1057,7 +1057,7 @@ public class DarknessOfHallowvale implements QuestStep {
                 Time.sleepTicks(4);
 
                 while (Dialog.isOpen()) {
-                    g.a(DIALOG_OPTIONS);
+                    DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
                     Time.sleepTicks(1);
                 }
             }
@@ -1083,7 +1083,7 @@ public class DarknessOfHallowvale implements QuestStep {
             }
         }
 
-        g.a(DIALOG_OPTIONS);
+        DialogUtil.chooseDialogOptions(DIALOG_OPTIONS);
     }
 
     /**
@@ -1122,23 +1122,23 @@ public class DarknessOfHallowvale implements QuestStep {
                 }
 
                 // Withdraw items for temple trek
-                a.a(SALMON, 5);
-                a.a(MITHRIL_BAR, 5);
-                a.a(SILVER_BAR, 1);
-                a.a(HAMMER, 1);
-                a.a(CHISEL, 1);
-                a.a(ROPE, 1);
-                a.a(WATER_RUNE, 1);
-                a.a(SWAMP_PASTE, 3);
-                a.a(STEEL_PLATELEGS, 1);
-                a.a(BARROWS_TELEPORT, 5);
-                a.a(SALVE_GRAVEYARD_TELEPORT, 5);
-                a.a(SALVE_GRAVEYARD_TELEPORT, 5);
-                a.b(f.aS, 1);  // Stamina potion
+                BankingUtil.withdrawItem(SALMON, 5);
+                BankingUtil.withdrawItem(MITHRIL_BAR, 5);
+                BankingUtil.withdrawItem(SILVER_BAR, 1);
+                BankingUtil.withdrawItem(HAMMER, 1);
+                BankingUtil.withdrawItem(CHISEL, 1);
+                BankingUtil.withdrawItem(ROPE, 1);
+                BankingUtil.withdrawItem(WATER_RUNE, 1);
+                BankingUtil.withdrawItem(SWAMP_PASTE, 3);
+                BankingUtil.withdrawItem(STEEL_PLATELEGS, 1);
+                BankingUtil.withdrawItem(BARROWS_TELEPORT, 5);
+                BankingUtil.withdrawItem(SALVE_GRAVEYARD_TELEPORT, 5);
+                BankingUtil.withdrawItem(SALVE_GRAVEYARD_TELEPORT, 5);
+                BankingUtil.withdrawItemsUntilFound(ItemIdArrays.aS, 1);  // Stamina potion
 
                 // Withdraw coins if needed
                 if (!Inventory.contains(SWAMP_PASTE)) {
-                    a.a(995, 2);  // Coins
+                    BankingUtil.withdrawItem(995, 2);  // Coins
                 }
             }
         }
@@ -1159,7 +1159,7 @@ public class DarknessOfHallowvale implements QuestStep {
             Time.sleepTicks(2);
         }
 
-        g.a("Polmafi Ferdygris", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Polmafi Ferdygris", DIALOG_OPTIONS);
 
         // Give Ivan Strom gear and food
         AccBuilderSotf.c = "Giving Ivan gear";
@@ -1211,7 +1211,7 @@ public class DarknessOfHallowvale implements QuestStep {
 
         // Start the trek
         AccBuilderSotf.c = "Starting trek";
-        g.a("Ivan Strom", DIALOG_OPTIONS);
+        DialogUtil.talkToNpc("Ivan Strom", DIALOG_OPTIONS);
     }
 
     // ==================== HELPER METHODS ====================

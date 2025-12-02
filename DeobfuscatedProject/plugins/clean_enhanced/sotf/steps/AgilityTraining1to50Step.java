@@ -149,14 +149,14 @@ public class AgilityTraining1to50Step implements QuestStep {
                             Time.sleepTicks(1);
                         }
                     }
-                    a.a(nearestBank);
+                    BankingUtil.navigateToBank(nearestBank);
                 }
 
                 if (nearestBank != null && nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
                     AccBuilderSotf.c = "Handling banking";
 
                     if (!Bank.isOpen()) {
-                        a.a();
+                        BankingUtil.openNearestBank();
                         Time.sleepUntil(() -> Bank.isOpen(), 5000);
                     }
 
@@ -189,64 +189,64 @@ public class AgilityTraining1to50Step implements QuestStep {
 
                     if (GameStateUtil.randomRange(requiredItems)) {
                         // Withdraw required items
-                        a.a(IRON_CROSSBOW_ID, 1);
-                        a.a(TEAM_CAPE_ID, 1);
-                        a.a(LEATHER_BODY_ID, 1);
-                        a.a(LEATHER_GLOVES_ID, 1);
-                        a.a(LEATHER_BOOTS_ID, 1);
-                        a.a(STEEL_PLATEBODY_ID, 1);
-                        a.a(STEEL_PLATELEGS_ID, 1);
+                        BankingUtil.withdrawItem(IRON_CROSSBOW_ID, 1);
+                        BankingUtil.withdrawItem(TEAM_CAPE_ID, 1);
+                        BankingUtil.withdrawItem(LEATHER_BODY_ID, 1);
+                        BankingUtil.withdrawItem(LEATHER_GLOVES_ID, 1);
+                        BankingUtil.withdrawItem(LEATHER_BOOTS_ID, 1);
+                        BankingUtil.withdrawItem(STEEL_PLATEBODY_ID, 1);
+                        BankingUtil.withdrawItem(STEEL_PLATELEGS_ID, 1);
 
                         // Equip items
                         if (!Inventory.contains(IRON_CROSSBOW_ID)) {
                             if (!Equipment.contains(IRON_CROSSBOW_ID)) {
                                 if (!Bank.contains(IRON_CROSSBOW_ID)) {
-                                    a.a(33, 1);
+                                    BankingUtil.withdrawItem(33, 1);
                                 }
                             }
                         }
 
-                        a.a(AGILITY_POTION_4_ID, 1);
+                        BankingUtil.withdrawItem(AGILITY_POTION_4_ID, 1);
 
                         // Withdraw food and stamina potions
-                        e.l(IRON_CROSSBOW_ID);
-                        e.l(TEAM_CAPE_ID);
-                        e.l(LEATHER_BODY_ID);
-                        e.l(LEATHER_GLOVES_ID);
-                        e.l(LEATHER_BOOTS_ID);
+                        GameStateUtil.equipItem(IRON_CROSSBOW_ID);
+                        GameStateUtil.equipItem(TEAM_CAPE_ID);
+                        GameStateUtil.equipItem(LEATHER_BODY_ID);
+                        GameStateUtil.equipItem(LEATHER_GLOVES_ID);
+                        GameStateUtil.equipItem(LEATHER_BOOTS_ID);
                         Time.sleepTicks(1);
-                        e.l(STEEL_PLATELEGS_ID);
-                        e.l(7170);
-                        e.l(STEEL_PLATEBODY_ID);
-                        e.l(33);
-                        e.l(AGILITY_POTION_4_ID);
+                        GameStateUtil.equipItem(STEEL_PLATELEGS_ID);
+                        GameStateUtil.equipItem(7170);
+                        GameStateUtil.equipItem(STEEL_PLATEBODY_ID);
+                        GameStateUtil.equipItem(33);
+                        GameStateUtil.equipItem(AGILITY_POTION_4_ID);
                         Time.sleepTicks(3);
 
                         if (!Bank.isOpen()) {
-                            a.a();
+                            BankingUtil.openNearestBank();
                             Time.sleepTicks(6);
                         }
 
                         if (Bank.isOpen()) {
                             // Withdraw appropriate items based on agility level
                             if (Skills.getLevel(Skill.AGILITY) < CANIFIS_LEVEL) {
-                                a.a(COINS_ID, 10);
-                                a.a(STEEL_PLATEBODY_ID, 10);
-                                a.a(SUMMER_PIE_ID, 10);
-                                a.a(LEATHER_BOOTS_ID, 10);
-                                a.b(f.bk, 1);
-                                a.a(STAMINA_POTION_ID, 1);
-                                a.a(TEAM_CAPE_ID, 5);
-                                a.a(SUMMER_PIE_ID, 11);
+                                BankingUtil.withdrawItem(COINS_ID, 10);
+                                BankingUtil.withdrawItem(STEEL_PLATEBODY_ID, 10);
+                                BankingUtil.withdrawItem(SUMMER_PIE_ID, 10);
+                                BankingUtil.withdrawItem(LEATHER_BOOTS_ID, 10);
+                                BankingUtil.withdrawItemsUntilFound(ItemIdArrays.RING_OF_WEALTH, 1);
+                                BankingUtil.withdrawItem(STAMINA_POTION_ID, 1);
+                                BankingUtil.withdrawItem(TEAM_CAPE_ID, 5);
+                                BankingUtil.withdrawItem(SUMMER_PIE_ID, 11);
                             }
                             if (Skills.getLevel(Skill.AGILITY) >= CANIFIS_LEVEL) {
-                                a.a(COINS_ID, 10);
-                                a.a(SUMMER_PIE_ID, 10);
-                                a.a(IRON_CROSSBOW_ID, 10);
-                                a.b(f.bk, 1);
-                                a.a(STAMINA_POTION_ID, 1);
-                                a.a(TEAM_CAPE_ID, 8);
-                                a.a(SUMMER_PIE_ID, 10);
+                                BankingUtil.withdrawItem(COINS_ID, 10);
+                                BankingUtil.withdrawItem(SUMMER_PIE_ID, 10);
+                                BankingUtil.withdrawItem(IRON_CROSSBOW_ID, 10);
+                                BankingUtil.withdrawItemsUntilFound(ItemIdArrays.RING_OF_WEALTH, 1);
+                                BankingUtil.withdrawItem(STAMINA_POTION_ID, 1);
+                                BankingUtil.withdrawItem(TEAM_CAPE_ID, 8);
+                                BankingUtil.withdrawItem(SUMMER_PIE_ID, 10);
                             }
                         }
                     }
@@ -261,8 +261,8 @@ public class AgilityTraining1to50Step implements QuestStep {
                 }
 
                 // Drink stamina potions
-                if (Inventory.contains(f.ba) && Movement.getRunEnergy() < 30) {
-                    Inventory.getFirst(f.ba).interact("Drink");
+                if (Inventory.contains(ItemIdArrays.STAMINA_POTIONS) && Movement.getRunEnergy() < 30) {
+                    Inventory.getFirst(ItemIdArrays.STAMINA_POTIONS).interact("Drink");
                     Time.sleepTicks(1);
                 }
 
@@ -319,7 +319,7 @@ public class AgilityTraining1to50Step implements QuestStep {
                    (Inventory.contains(SUMMER_PIE_ID) ||
                     !Inventory.contains(item -> item.getName().contains("passage")) ||
                     Equipment.contains(item -> item.getName().contains("passage"))) &&
-                   (!Inventory.contains(f.bk) || Equipment.contains(f.bk));
+                   (!Inventory.contains(ItemIdArrays.RING_OF_WEALTH) || Equipment.contains(ItemIdArrays.RING_OF_WEALTH));
         }
 
         return Inventory.contains(COINS_ID) &&
@@ -327,7 +327,7 @@ public class AgilityTraining1to50Step implements QuestStep {
                Inventory.contains(STEEL_PLATEBODY_ID) &&
                (!Inventory.contains(item -> item.getName().contains("passage")) ||
                 Equipment.contains(item -> item.getName().contains("passage"))) &&
-               (!Inventory.contains(f.bk) || Equipment.contains(f.bk));
+               (!Inventory.contains(ItemIdArrays.RING_OF_WEALTH) || Equipment.contains(ItemIdArrays.RING_OF_WEALTH));
     }
 
     /**

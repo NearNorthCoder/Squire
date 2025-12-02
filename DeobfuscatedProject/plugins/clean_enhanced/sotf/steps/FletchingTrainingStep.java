@@ -271,13 +271,13 @@ public class FletchingTrainingStep implements QuestStep {
         // Navigate to bank
         if (!nearestBank.getArea().contains(Players.getLocal().getWorldLocation())) {
             AccBuilderSotf.c = MSG_NAV_TO_BANK;
-            a.a(nearestBank);
+            BankingUtil.navigateToBank(nearestBank);
             return;
         }
 
         // Open bank
         if (!Bank.isOpen()) {
-            a.a();
+            BankingUtil.openNearestBank();
             Time.sleepUntil(() -> Bank.isOpen(), BANK_TIMEOUT_MS);
             return;
         }
@@ -317,17 +317,17 @@ public class FletchingTrainingStep implements QuestStep {
         int logId = getLogIdForLevel();
 
         if (fletchingLevel < LEVEL_THRESHOLD_LOW) {
-            a.a(logId, 500);
-            a.a(BOW_STRING_ID, 500);
+            BankingUtil.withdrawItem(logId, 500);
+            BankingUtil.withdrawItem(BOW_STRING_ID, 500);
         } else if (fletchingLevel >= LEVEL_THRESHOLD_LOW && fletchingLevel < LEVEL_THRESHOLD_MID_2) {
-            a.a(logId, 500);
-            a.a(BOW_STRING_ID, 500);
+            BankingUtil.withdrawItem(logId, 500);
+            BankingUtil.withdrawItem(BOW_STRING_ID, 500);
         } else if (fletchingLevel >= LEVEL_THRESHOLD_MID_2 && fletchingLevel < LEVEL_THRESHOLD_MID_4) {
-            a.a(logId, 500);
-            a.a(BOW_STRING_ID, 500);
+            BankingUtil.withdrawItem(logId, 500);
+            BankingUtil.withdrawItem(BOW_STRING_ID, 500);
         } else {
-            a.a(logId, 500);
-            a.a(BOW_STRING_ID, 500);
+            BankingUtil.withdrawItem(logId, 500);
+            BankingUtil.withdrawItem(BOW_STRING_ID, 500);
         }
     }
 
