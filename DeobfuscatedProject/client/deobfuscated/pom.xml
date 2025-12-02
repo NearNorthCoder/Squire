@@ -63,14 +63,9 @@
             <version>32.1.3-jre</version>
         </dependency>
 
-        <!-- Squire Launcher (original JAR for non-deobfuscated classes) -->
-        <dependency>
-            <groupId>gg.squire</groupId>
-            <artifactId>squire-launcher-original</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/squire-with-logging.jar</systemPath>
-        </dependency>
+        <!-- NOTE: Original squire-with-logging.jar dependency removed -->
+        <!-- The local launcher no longer needs the original Squire classes -->
+        <!-- Client JARs are loaded dynamically from repository2 at runtime -->
     </dependencies>
 
     <build>
