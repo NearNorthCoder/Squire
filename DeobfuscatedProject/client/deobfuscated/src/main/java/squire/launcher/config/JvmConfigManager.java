@@ -142,24 +142,14 @@ public final class JvmConfigManager {
     }
 
     /**
-     * Checks if the current JVM is Java 17 or higher.
+     * Checks if the current JVM is Java 16 or higher.
+     * 16 has the same module restrictions as 17, so we use the 17 settings for it.
      *
-     * @return true if running on Java 17+, false otherwise
+     * @return true if running on Java 16+, false otherwise
      */
     private static boolean isJava17() {
-        String version = System.getProperty("java.version");
-        if (version.startsWith("1.")) {
-            // Pre-Java 9 format (e.g., "1.8.0_292")
-            return false;
-        }
-        // Java 9+ format (e.g., "11.0.11", "17.0.1")
-        int dotIndex = version.indexOf('.');
-        String majorVersion = dotIndex > 0 ? version.substring(0, dotIndex) : version;
-        try {
-            return Integer.parseInt(majorVersion) >= 17;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        // Matches RuneLite launcher implementation
+        return Runtime.version().feature() >= 16;
     }
 
     /**

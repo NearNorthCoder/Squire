@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
-import net.runelite.launcher.Launcher;
 import net.runelite.launcher.beans.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,11 +134,22 @@ public final class JvmConfigManager {
         OSType os = OperatingSystem.getCurrent();
 
         // Check if using JVM 17+
-        if (Launcher.isJava17()) {
+        if (isJava17()) {
             return getJvm17Arguments(bootstrap, os);
         } else {
             return getJvm11Arguments(bootstrap, os);
         }
+    }
+
+    /**
+     * Checks if the current JVM is Java 16 or higher.
+     * 16 has the same module restrictions as 17, so we use the 17 settings for it.
+     *
+     * @return true if running on Java 16+, false otherwise
+     */
+    private static boolean isJava17() {
+        // Matches RuneLite launcher implementation
+        return Runtime.version().feature() >= 16;
     }
 
     /**
