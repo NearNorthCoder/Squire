@@ -35,7 +35,9 @@ import squire.launcher.ui.components.CustomScrollBarUI;
 import squire.launcher.ui.components.ProgressBarUI;
 import squire.launcher.ui.components.WrappingLabel;
 import squire.launcher.util.FontManager;
+import squire.launcher.util.HardwareIdGenerator;
 import squire.launcher.util.ThemeColors;
+import net.runelite.launcher.Launcher;
 
 /**
  * Panel for HWID/license key validation in the Squire launcher.
@@ -284,10 +286,22 @@ public class LicenseValidationPanel extends JPanel {
      * @param licenseField Text field containing the license key
      */
     private void validateLicense(JTextField licenseField) {
-        OkHttpClient httpClient = new OkHttpClient();
         String licenseKey = licenseField.getText().trim();
-        String hwid = "hwid-placeholder"; // Would be generated from system
 
+        // Validate input
+        if (licenseKey.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Please enter a license key.",
+                    "Missing License Key",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Generate hardware ID from system properties
+        String hwid = HardwareIdGenerator.generateHwid();
+
+        // Build API request
+        OkHttpClient httpClient = new OkHttpClient();
         String url = String.format(LICENSE_API_URL, licenseKey, hwid);
         Request request = new Request.Builder()
                 .url(url)
@@ -303,29 +317,50 @@ public class LicenseValidationPanel extends JPanel {
                 return;
             }
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to connect to license server. Please check your internet connection.",
+                    "Connection Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // License validated successfully
-        // Launcher.setLicenseValid(true);
-        LauncherFrame.close();
+        // License validated successfully - set authentication state
+        Launcher.authenticated = true;
+        Launcher.auth = hwid;
 
-        // Save HWID to file
-        String validatedHwid = licenseField.getText();
-        File hwidFile = new File(SQUIRE_DIR, "hwid");
-
+        // Ensure Squire directory exists
         if (!SQUIRE_DIR.exists()) {
             SQUIRE_DIR.mkdirs();
         }
 
+        // Save the license key to hwid file (this marks the user as registered)
+        File hwidFile = new File(SQUIRE_DIR, "hwid");
         try {
             hwidFile.createNewFile();
             try (FileWriter writer = new FileWriter(hwidFile)) {
-                writer.write(validatedHwid.trim());
+                // Save the license key - this is used to verify on subsequent launches
+                writer.write(licenseKey.trim());
             }
         } catch (IOException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Failed to save license. Please try again.",
+                    "Save Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        // Close the current launcher frame
+        LauncherFrame.close();
+
+        // Show success message and reopen launcher with profile selection
+        JOptionPane.showMessageDialog(null,
+                "License activated successfully! The launcher will now restart.",
+                "Activation Successful",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        // Reopen the launcher - it will now show profile selection since hwid file exists
+        LauncherFrame.open(null);
     }
 
     /**
