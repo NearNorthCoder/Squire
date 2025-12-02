@@ -100,7 +100,16 @@ public class LocalClientLauncher {
      * This is required for Jagex account authentication.
      */
     private static void launchAsSubprocess(File repositoryDir, File[] jarFiles, Collection<String> clientArgs, JagexAccountData jagexAccount) throws Exception {
-        log.info("Launching client as subprocess with Jagex account environment variables...");
+        log.info("=======================================================");
+        log.info("JAGEX ACCOUNT LOGIN - SUBPROCESS LAUNCH");
+        log.info("=======================================================");
+        log.info("Account Display Name: {}", jagexAccount.displayName);
+        log.info("Account ID: {}", jagexAccount.accountId);
+        log.info("Session ID Length: {} chars", jagexAccount.sessionId != null ? jagexAccount.sessionId.length() : 0);
+        log.info("Repository: {}", repositoryDir.getAbsolutePath());
+        log.info("JAR files: {}", jarFiles.length);
+        log.info("Client args: {}", clientArgs);
+        log.info("-------------------------------------------------------");
 
         // Build classpath string
         StringBuilder classpath = new StringBuilder();
@@ -156,22 +165,49 @@ public class LocalClientLauncher {
         pb.inheritIO(); // Redirect stdout/stderr to parent process
 
         // Set Jagex account environment variables
+        log.info("-------------------------------------------------------");
+        log.info("SETTING JAGEX ENVIRONMENT VARIABLES");
+        log.info("-------------------------------------------------------");
         Map<String, String> env = pb.environment();
-        env.put("JX_SESSION_ID", jagexAccount.sessionId);
-        env.put("JX_CHARACTER_ID", jagexAccount.accountId);
-        env.put("JX_DISPLAY_NAME", jagexAccount.displayName);
+
+        String sessionId = jagexAccount.sessionId;
+        String accountId = jagexAccount.accountId;
+        String displayName = jagexAccount.displayName;
+
+        // Validate values before setting
+        if (sessionId == null || sessionId.isEmpty()) {
+            log.error("ERROR: JX_SESSION_ID is null or empty!");
+            throw new IllegalStateException("Session ID is required for Jagex account login");
+        }
+        if (accountId == null || accountId.isEmpty()) {
+            log.error("ERROR: JX_CHARACTER_ID (accountId) is null or empty!");
+            throw new IllegalStateException("Account ID is required for Jagex account login");
+        }
+        if (displayName == null || displayName.isEmpty()) {
+            log.error("ERROR: JX_DISPLAY_NAME is null or empty!");
+            throw new IllegalStateException("Display name is required for Jagex account login");
+        }
+
+        env.put("JX_SESSION_ID", sessionId);
+        env.put("JX_CHARACTER_ID", accountId);
+        env.put("JX_DISPLAY_NAME", displayName);
         // ACCESS_TOKEN and REFRESH_TOKEN are optional - use sessionId as fallback
-        env.put("JX_ACCESS_TOKEN", jagexAccount.sessionId);
+        env.put("JX_ACCESS_TOKEN", sessionId);
         env.put("JX_REFRESH_TOKEN", "");
 
-        log.info("Set Jagex environment variables:");
-        log.info("  JX_SESSION_ID: {}...", jagexAccount.sessionId.substring(0, Math.min(20, jagexAccount.sessionId.length())));
-        log.info("  JX_CHARACTER_ID: {}", jagexAccount.accountId);
-        log.info("  JX_DISPLAY_NAME: {}", jagexAccount.displayName);
+        log.info("JX_SESSION_ID:    {} (length: {})",
+                 sessionId.substring(0, Math.min(20, sessionId.length())) + "...", sessionId.length());
+        log.info("JX_CHARACTER_ID:  {}", accountId);
+        log.info("JX_DISPLAY_NAME:  {}", displayName);
+        log.info("JX_ACCESS_TOKEN:  (same as session ID)");
+        log.info("JX_REFRESH_TOKEN: (empty)");
+        log.info("-------------------------------------------------------");
 
         // Start the subprocess
+        log.info("STARTING CLIENT SUBPROCESS...");
         Process process = pb.start();
-        log.info("Client subprocess started with PID: {}", process.pid());
+        log.info("SUCCESS: Client subprocess started with PID: {}", process.pid());
+        log.info("=======================================================");
 
         // Create a shutdown hook to terminate the client when launcher exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
