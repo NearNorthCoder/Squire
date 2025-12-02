@@ -1,6 +1,7 @@
 /*
  * Browser-based Account Importer
- * Alternative to JCEF-based importer - uses system browser + local callback server
+ * Uses system browser for Jagex OAuth2 authentication
+ * Falls back to manual URL entry if port 80 isn't available
  */
 package squire.launcher.auth;
 
@@ -16,9 +17,13 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Imports Jagex accounts using the system browser for OAuth2.
@@ -29,22 +34,18 @@ public class BrowserAccountImporter {
     private static final Logger log = LoggerFactory.getLogger(BrowserAccountImporter.class);
     private static final Gson gson = new Gson();
 
-    // OAuth Configuration (from deobfuscated SquireAuthHandler)
-    private static final String OAUTH_CLIENT_ID = "1fddee4e-b100-4f4e-b2b0-097f9088f9d2";
+    // OAuth Configuration - must match Jagex's registered values exactly
     private static final String OAUTH_AUTH_CLIENT_ID = "com_jagex_auth_desktop_launcher";
     private static final String OAUTH_SCOPE = "openid offline gamesso.token.create user.profile.read";
-    private static final String OAUTH_NONCE = "YWI0MTUzZWYtODQ2My00NWRhLTkyZDktNWI3MmIxNDA1Mzgz";
-    private static final String OAUTH_STATE = "SquireLocal";
+
+    // Jagex-registered redirect URI - MUST be exactly this
+    private static final String REDIRECT_URI = "https://secure.runescape.com/m=weblogin/launcher-redirect";
 
     // API Endpoints
     private static final String OAUTH_AUTH_URL = "https://account.jagex.com/oauth2/auth";
     private static final String OAUTH_TOKEN_URL = "https://account.jagex.com/oauth2/token";
     private static final String GAME_SESSION_URL = "https://auth.runescape.com/game-session/v1/sessions";
     private static final String GAME_ACCOUNTS_URL = "https://auth.runescape.com/game-session/v1/accounts";
-
-    // Local callback server port
-    private static final int CALLBACK_PORT = 8432;
-    private static final String REDIRECT_URI = "http://localhost:" + CALLBACK_PORT + "/callback";
 
     // Squire home
     private static final File SQUIRE_HOME = new File(System.getProperty("user.home"), ".squire");
@@ -54,6 +55,7 @@ public class BrowserAccountImporter {
 
     /**
      * Import Jagex accounts using system browser OAuth flow.
+     * Since we can't intercept the redirect, user must copy-paste the final URL.
      *
      * @param callback Called when import completes (success or failure)
      */
@@ -63,46 +65,65 @@ public class BrowserAccountImporter {
         // Initialize HTTP client
         httpClient = new OkHttpClient.Builder()
             .followRedirects(false)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
             .build();
-
-        // Start callback server in background
-        Thread serverThread = new Thread(() -> {
-            try {
-                runCallbackServer(callback);
-            } catch (Exception e) {
-                log.error("Callback server error", e);
-                showError("Failed to start callback server: " + e.getMessage());
-            }
-        });
-        serverThread.setDaemon(true);
-        serverThread.start();
-
-        // Give server time to start
-        try { Thread.sleep(500); } catch (InterruptedException ignored) {}
 
         // Build OAuth URL
         String authUrl = buildAuthUrl();
-        log.info("Opening browser for authentication...");
         log.info("Auth URL: {}", authUrl);
 
         // Open system browser
-        if (!openBrowser(authUrl)) {
-            showError("Failed to open browser. Please manually visit:\n" + authUrl);
+        boolean browserOpened = openBrowser(authUrl);
+
+        // Show dialog asking user to paste the redirect URL
+        SwingUtilities.invokeLater(() -> {
+            showManualEntryDialog(browserOpened, authUrl, callback);
+        });
+    }
+
+    /**
+     * Show dialog for manual URL/code entry after browser auth.
+     */
+    private static void showManualEntryDialog(boolean browserOpened, String authUrl, Runnable callback) {
+        String message;
+        if (browserOpened) {
+            message = "Your browser should open to the Jagex login page.\n\n" +
+                "1. Log in with your Jagex account\n" +
+                "2. After login, you'll see a page or error (this is normal)\n" +
+                "3. Copy the ENTIRE URL from your browser's address bar\n" +
+                "4. Paste it below\n\n" +
+                "The URL will look like:\n" +
+                "https://secure.runescape.com/m=weblogin/launcher-redirect?code=XXXXX";
+        } else {
+            message = "Could not open browser automatically.\n\n" +
+                "Please manually open this URL:\n" + authUrl + "\n\n" +
+                "After logging in, copy the redirect URL and paste it below.";
         }
 
-        // Show instruction dialog
-        SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(
-                null,
-                "Your browser should open to the Jagex login page.\n\n" +
-                "1. Log in with your Jagex account\n" +
-                "2. Authorize the application\n" +
-                "3. You'll be redirected back automatically\n\n" +
-                "Waiting for authentication...",
-                "Import Jagex Account",
-                JOptionPane.INFORMATION_MESSAGE
-            );
-        });
+        String input = JOptionPane.showInputDialog(
+            null,
+            message,
+            "Paste Redirect URL",
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (input == null || input.trim().isEmpty()) {
+            log.info("User cancelled import");
+            if (callback != null) callback.run();
+            return;
+        }
+
+        // Process the URL in background thread
+        new Thread(() -> {
+            try {
+                processRedirectUrl(input.trim(), callback);
+            } catch (Exception e) {
+                log.error("Failed to process URL", e);
+                showError("Failed to process URL: " + e.getMessage());
+                if (callback != null) callback.run();
+            }
+        }).start();
     }
 
     /**
@@ -114,75 +135,54 @@ public class BrowserAccountImporter {
             "&redirect_uri=" + encodeUrl(REDIRECT_URI) +
             "&response_type=code" +
             "&scope=" + encodeUrl(OAUTH_SCOPE) +
-            "&state=" + OAUTH_STATE +
+            "&state=SquireLocal" +
             "&prompt=login";
     }
 
     /**
-     * Run local HTTP server to receive OAuth callback.
+     * Process the redirect URL pasted by user.
+     * Extracts auth code and continues the OAuth flow.
      */
-    private static void runCallbackServer(Runnable callback) throws IOException {
-        try (ServerSocket server = new ServerSocket(CALLBACK_PORT)) {
-            server.setSoTimeout(300000); // 5 minute timeout
-            log.info("Callback server listening on port {}", CALLBACK_PORT);
+    private static void processRedirectUrl(String url, Runnable callback) {
+        log.info("Processing redirect URL: {}", url.length() > 100 ? url.substring(0, 100) + "..." : url);
 
-            try (Socket client = server.accept()) {
-                BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(client.getInputStream())
-                );
+        try {
+            // Extract authorization code from URL
+            String code = null;
 
-                // Read HTTP request
-                String requestLine = reader.readLine();
-                log.info("Received callback: {}", requestLine);
-
-                // Parse authorization code from URL
-                String code = null;
-                String state = null;
-                String error = null;
-
-                if (requestLine != null && requestLine.startsWith("GET /callback")) {
-                    String queryString = requestLine.split(" ")[1];
-                    if (queryString.contains("?")) {
-                        String params = queryString.substring(queryString.indexOf("?") + 1);
-                        for (String param : params.split("&")) {
-                            String[] kv = param.split("=", 2);
-                            if (kv.length == 2) {
-                                if ("code".equals(kv[0])) code = kv[1];
-                                else if ("state".equals(kv[0])) state = kv[1];
-                                else if ("error".equals(kv[0])) error = kv[1];
-                            }
-                        }
+            // Try query parameter first (?code=XXX)
+            if (url.contains("code=")) {
+                String query = url.contains("?") ? url.substring(url.indexOf("?") + 1) : url;
+                // Also handle fragments (#code=XXX)
+                if (query.contains("#")) {
+                    query = query.replace("#", "&");
+                }
+                for (String param : query.split("&")) {
+                    if (param.startsWith("code=")) {
+                        code = param.substring(5);
+                        // Remove any trailing parameters or fragments
+                        if (code.contains("&")) code = code.substring(0, code.indexOf("&"));
+                        if (code.contains("#")) code = code.substring(0, code.indexOf("#"));
+                        code = URLDecoder.decode(code, StandardCharsets.UTF_8.name());
+                        break;
                     }
                 }
-
-                // Send response to browser
-                String responseBody;
-                if (code != null) {
-                    responseBody = "<html><body><h1>Success!</h1><p>You can close this window.</p></body></html>";
-                } else if (error != null) {
-                    responseBody = "<html><body><h1>Error</h1><p>" + error + "</p></body></html>";
-                } else {
-                    responseBody = "<html><body><h1>Error</h1><p>No authorization code received.</p></body></html>";
-                }
-
-                PrintWriter writer = new PrintWriter(client.getOutputStream());
-                writer.println("HTTP/1.1 200 OK");
-                writer.println("Content-Type: text/html");
-                writer.println("Content-Length: " + responseBody.length());
-                writer.println("Connection: close");
-                writer.println();
-                writer.print(responseBody);
-                writer.flush();
-
-                // Process the authorization code
-                if (code != null) {
-                    processAuthCode(code, callback);
-                } else {
-                    log.error("No authorization code received. Error: {}", error);
-                    showError("Authentication failed: " + (error != null ? error : "Unknown error"));
-                    if (callback != null) callback.run();
-                }
             }
+
+            if (code == null || code.isEmpty()) {
+                showError("Could not find authorization code in URL.\n\n" +
+                    "Make sure you copied the entire URL after logging in.\n" +
+                    "It should contain 'code=' in it.");
+                return;
+            }
+
+            log.info("Found auth code: {}...", code.substring(0, Math.min(20, code.length())));
+            processAuthCode(code, callback);
+
+        } catch (Exception e) {
+            log.error("Failed to parse URL", e);
+            showError("Failed to parse URL: " + e.getMessage());
+            if (callback != null) callback.run();
         }
     }
 
@@ -190,17 +190,26 @@ public class BrowserAccountImporter {
      * Process the authorization code - exchange for tokens and get accounts.
      */
     private static void processAuthCode(String code, Runnable callback) {
-        log.info("Processing authorization code...");
+        log.info("Exchanging authorization code for tokens...");
 
         try {
             // Exchange code for tokens
             Map<String, Object> tokens = exchangeCodeForTokens(code);
+
+            if (tokens.containsKey("error")) {
+                String error = (String) tokens.get("error");
+                String desc = (String) tokens.getOrDefault("error_description", "Unknown error");
+                log.error("Token exchange failed: {} - {}", error, desc);
+                showError("Failed to exchange code: " + desc);
+                return;
+            }
+
             String idToken = (String) tokens.get("id_token");
             String accessToken = (String) tokens.get("access_token");
 
             if (idToken == null) {
-                log.error("No ID token received");
-                showError("Failed to get ID token from Jagex");
+                log.error("No ID token in response: {}", tokens);
+                showError("Failed to get ID token from Jagex.\nThe authorization code may have expired. Please try again.");
                 return;
             }
 
@@ -214,14 +223,15 @@ public class BrowserAccountImporter {
                 return;
             }
 
-            log.info("Session created: {}", sessionId.substring(0, 10) + "...");
+            log.info("Session created: {}...", sessionId.substring(0, Math.min(10, sessionId.length())));
 
             // Get linked accounts
             List<Map<String, Object>> accounts = getLinkedAccounts(sessionId);
             log.info("Found {} linked accounts", accounts.size());
 
             if (accounts.isEmpty()) {
-                showError("No game accounts found linked to this Jagex account.");
+                showError("No game accounts found linked to this Jagex account.\n\n" +
+                    "Make sure you have an OSRS character linked to your Jagex account.");
                 return;
             }
 
@@ -232,18 +242,20 @@ public class BrowserAccountImporter {
                 String displayName = (String) account.get("displayName");
 
                 if (displayName == null || displayName.isEmpty()) {
-                    displayName = "Account-" + accountId.substring(0, 8);
+                    displayName = "Account-" + accountId.substring(0, Math.min(8, accountId.length()));
                 }
 
-                saveAccount(sessionId, accountId, displayName);
-                imported++;
-                log.info("Imported account: {} ({})", displayName, accountId);
+                if (saveAccount(sessionId, accountId, displayName)) {
+                    imported++;
+                    log.info("Imported account: {} ({})", displayName, accountId);
+                }
             }
 
             // Show success
             int total = countSavedAccounts();
             String message = String.format(
-                "Successfully imported %d account(s)!\nTotal saved accounts: %d",
+                "Successfully imported %d account(s)!\nTotal saved accounts: %d\n\n" +
+                "You can now run with --jagexlauncher to select an account.",
                 imported, total
             );
             JOptionPane.showMessageDialog(null, message, "Import Complete", JOptionPane.INFORMATION_MESSAGE);
@@ -319,20 +331,56 @@ public class BrowserAccountImporter {
     /**
      * Save account to launcher.dat
      * Format: ::sessionId:accountId:displayName
+     * @return true if saved, false if already exists
      */
-    private static void saveAccount(String sessionId, String accountId, String displayName) {
+    private static boolean saveAccount(String sessionId, String accountId, String displayName) {
         SQUIRE_HOME.mkdirs();
 
         // Check if account already exists
         if (accountExists(accountId)) {
-            log.info("Account {} already exists, skipping", displayName);
-            return;
+            log.info("Account {} already exists, updating session", displayName);
+            updateAccountSession(accountId, sessionId);
+            return false;
         }
 
         try (FileWriter writer = new FileWriter(LAUNCHER_DATA, true)) {
             writer.write(String.format("::%s:%s:%s%n", sessionId, accountId, displayName));
+            return true;
         } catch (IOException e) {
             log.error("Failed to save account", e);
+            return false;
+        }
+    }
+
+    /**
+     * Update session ID for existing account.
+     */
+    private static void updateAccountSession(String accountId, String newSessionId) {
+        if (!LAUNCHER_DATA.exists()) return;
+
+        try {
+            List<String> lines = new ArrayList<>();
+            try (Scanner scanner = new Scanner(LAUNCHER_DATA)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    if (line.contains(":" + accountId + ":")) {
+                        // Update session ID
+                        String[] parts = line.split(":");
+                        if (parts.length >= 5) {
+                            line = String.format("::%s:%s:%s", newSessionId, parts[3], parts[4]);
+                        }
+                    }
+                    lines.add(line);
+                }
+            }
+
+            try (FileWriter writer = new FileWriter(LAUNCHER_DATA, false)) {
+                for (String line : lines) {
+                    writer.write(line + "\n");
+                }
+            }
+        } catch (IOException e) {
+            log.error("Failed to update account session", e);
         }
     }
 
@@ -387,7 +435,7 @@ public class BrowserAccountImporter {
             String os = System.getProperty("os.name").toLowerCase();
             ProcessBuilder pb;
             if (os.contains("win")) {
-                pb = new ProcessBuilder("cmd", "/c", "start", url);
+                pb = new ProcessBuilder("cmd", "/c", "start", "", url);
             } else if (os.contains("mac")) {
                 pb = new ProcessBuilder("open", url);
             } else {
