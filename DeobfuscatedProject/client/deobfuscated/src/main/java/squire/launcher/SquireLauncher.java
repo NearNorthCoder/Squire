@@ -3,13 +3,17 @@
  * Deobfuscated from the Squire OSRS botting client
  *
  * Modified to load client locally instead of downloading from S3
+ * Supports Jagex account import and selection
  */
 package squire.launcher;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import org.slf4j.Logger;
@@ -18,6 +22,7 @@ import squire.launcher.config.OperatingSystem;
 import squire.launcher.config.OSType;
 import squire.launcher.local.LocalClientLauncher;
 import squire.launcher.ui.LauncherFrame;
+import net.runelite.launcher.AccountImporter;
 
 /**
  * Main entry point for the Squire launcher.
@@ -61,19 +66,29 @@ public class SquireLauncher {
      */
     public static final File PROFILES_FILE;
 
+    /**
+     * Jagex accounts file (launcher.dat)
+     */
+    public static final File LAUNCHER_DATA_FILE;
+
     static {
         SQUIRE_HOME = new File(System.getProperty("user.home"), ".squire");
         REPOSITORY_DIR = new File(SQUIRE_HOME, "repository2");
         HWID_FILE = new File(SQUIRE_HOME, "hwid");
         PROFILES_FILE = new File(SQUIRE_HOME, "profiles.txt");
+        LAUNCHER_DATA_FILE = new File(SQUIRE_HOME, "launcher.dat");
     }
 
     /**
      * Main entry point.
      *
      * @param args Command line arguments
-     *             --local-repo <path> : Use specified directory for client JARs
-     *             --debug             : Enable debug logging
+     *             --local-repo <path>   : Use specified directory for client JARs
+     *             --account <name>      : Launch with specified Jagex account
+     *             --jagexlauncher       : Show account selection dialog
+     *             --import-accounts     : Import Jagex accounts via OAuth2
+     *             --list-accounts       : List imported accounts and exit
+     *             --debug               : Enable debug logging
      *             Additional args are passed to the RuneLite client
      */
     public static void main(String[] args) throws Exception {
@@ -94,18 +109,55 @@ public class SquireLauncher {
         // Parse command line arguments
         File repoDir = REPOSITORY_DIR;
         List<String> clientArgs = new ArrayList<>();
+        String selectedAccount = null;
+        boolean showAccountSelector = false;
+        boolean importAccounts = false;
+        boolean listAccounts = false;
 
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if ("--local-repo".equals(arg) && i + 1 < args.length) {
                 repoDir = new File(args[++i]);
                 log.info("Using custom repository: {}", repoDir.getAbsolutePath());
+            } else if ("--account".equals(arg) && i + 1 < args.length) {
+                selectedAccount = args[++i];
+                log.info("Using account: {}", selectedAccount);
+            } else if ("--jagexlauncher".equals(arg)) {
+                showAccountSelector = true;
+            } else if ("--import-accounts".equals(arg)) {
+                importAccounts = true;
+            } else if ("--list-accounts".equals(arg)) {
+                listAccounts = true;
             } else if ("--debug".equals(arg)) {
                 clientArgs.add("--debug");
             } else {
                 // Pass other args to the client
                 clientArgs.add(arg);
             }
+        }
+
+        // Handle --list-accounts
+        if (listAccounts) {
+            listSavedAccounts();
+            System.exit(0);
+        }
+
+        // Handle --import-accounts
+        if (importAccounts) {
+            log.info("Opening account importer...");
+            importJagexAccounts();
+            log.info("Account import complete. Run with --list-accounts to see imported accounts.");
+            System.exit(0);
+        }
+
+        // Handle --jagexlauncher (account selection)
+        if (showAccountSelector) {
+            selectedAccount = selectAccount();
+            if (selectedAccount == null) {
+                log.info("No account selected, exiting.");
+                System.exit(0);
+            }
+            log.info("Selected account: {}", selectedAccount);
         }
 
         // Check if repository exists
@@ -137,6 +189,12 @@ public class SquireLauncher {
             log.warn("Warning: No runelite-client JAR found in repository");
         }
 
+        // Add account to client args if specified
+        if (selectedAccount != null && !selectedAccount.isEmpty()) {
+            clientArgs.add("--account=" + selectedAccount);
+            log.info("Passing account to client: {}", selectedAccount);
+        }
+
         // Launch the client locally
         log.info("Launching client from local repository...");
         log.info("Client args: {}", clientArgs);
@@ -148,6 +206,133 @@ public class SquireLauncher {
             log.error("Failed to launch client", e);
             System.exit(1);
         }
+    }
+
+    /**
+     * Lists all saved Jagex accounts from launcher.dat
+     */
+    private static void listSavedAccounts() {
+        List<String[]> accounts = loadAccountsFromFile();
+        if (accounts.isEmpty()) {
+            System.out.println("No Jagex accounts found.");
+            System.out.println("Use --import-accounts to import accounts.");
+            return;
+        }
+
+        System.out.println("=== Saved Jagex Accounts ===");
+        int i = 1;
+        for (String[] account : accounts) {
+            String displayName = account[0];
+            String accountId = account[1];
+            System.out.printf("%d. %s (ID: %s)%n", i++, displayName, accountId);
+        }
+        System.out.println("============================");
+        System.out.println("Use --account <name> to launch with a specific account");
+    }
+
+    /**
+     * Opens the account importer to import Jagex accounts via OAuth2
+     */
+    private static void importJagexAccounts() {
+        try {
+            // Use the existing AccountImporter from squire-with-logging.jar
+            AccountImporter.importAccounts(() -> {
+                log.info("Account import callback triggered");
+            });
+
+            // Wait for the import window to close
+            // The import is asynchronous, so we need to wait a bit
+            Thread.sleep(500);
+            while (true) {
+                // Check if any import windows are open
+                java.awt.Frame[] frames = java.awt.Frame.getFrames();
+                boolean importWindowOpen = false;
+                for (java.awt.Frame frame : frames) {
+                    if (frame.isVisible() && frame.getTitle().contains("Import")) {
+                        importWindowOpen = true;
+                        break;
+                    }
+                }
+                if (!importWindowOpen) {
+                    break;
+                }
+                Thread.sleep(500);
+            }
+        } catch (Exception e) {
+            log.error("Failed to import accounts", e);
+        }
+    }
+
+    /**
+     * Shows a dialog to select from saved accounts
+     * @return The selected account display name, or null if cancelled
+     */
+    private static String selectAccount() {
+        List<String[]> accounts = loadAccountsFromFile();
+
+        if (accounts.isEmpty()) {
+            int result = JOptionPane.showConfirmDialog(
+                null,
+                "No Jagex accounts found. Would you like to import accounts now?",
+                "No Accounts",
+                JOptionPane.YES_NO_OPTION
+            );
+            if (result == JOptionPane.YES_OPTION) {
+                importJagexAccounts();
+                // Reload accounts after import
+                accounts = loadAccountsFromFile();
+            }
+            if (accounts.isEmpty()) {
+                return null;
+            }
+        }
+
+        // Build array of display names for the dropdown
+        String[] displayNames = accounts.stream()
+            .map(a -> a[0])
+            .toArray(String[]::new);
+
+        String selected = (String) JOptionPane.showInputDialog(
+            null,
+            "Select a Jagex account to launch with:",
+            "Select Account",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            displayNames,
+            displayNames[0]
+        );
+
+        return selected;
+    }
+
+    /**
+     * Loads accounts from launcher.dat
+     * @return List of [displayName, accountId, sessionId] arrays
+     */
+    private static List<String[]> loadAccountsFromFile() {
+        List<String[]> accounts = new ArrayList<>();
+
+        if (!LAUNCHER_DATA_FILE.exists()) {
+            return accounts;
+        }
+
+        try (Scanner scanner = new Scanner(LAUNCHER_DATA_FILE)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                // Format: ::sessionId:accountId:displayName
+                String[] parts = line.split(":");
+                if (parts.length >= 5) {
+                    String sessionId = parts[2];
+                    String accountId = parts[3];
+                    String displayName = parts[4];
+                    accounts.add(new String[]{displayName, accountId, sessionId});
+                }
+            }
+        } catch (FileNotFoundException e) {
+            log.warn("Could not read launcher.dat: {}", e.getMessage());
+        }
+
+        return accounts;
     }
 
     /**

@@ -28,6 +28,7 @@ if [ ! -d "$REPO_DIR" ]; then
 fi
 
 # Build classpath with all required dependencies
+LIB_DIR="$SCRIPT_DIR/lib"
 CLASSPATH="$LAUNCHER_JAR"
 CLASSPATH="$CLASSPATH:$REPO_DIR/slf4j-api-1.7.32.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/logback-classic-1.2.9.jar"
@@ -38,6 +39,8 @@ CLASSPATH="$CLASSPATH:$REPO_DIR/gson-2.8.5.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/okio-jvm-3.0.0.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/kotlin-stdlib-1.6.21.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/kotlin-stdlib-common-1.6.21.jar"
+# Include original Squire launcher for AccountImporter
+CLASSPATH="$CLASSPATH:$LIB_DIR/squire-with-logging.jar"
 
 echo "Using repository: $REPO_DIR"
 echo "Launcher JAR: $LAUNCHER_JAR"
@@ -58,6 +61,26 @@ if [ "$JAVA_VERSION" -ge 17 ]; then
     JVM_ARGS="$JVM_ARGS --add-opens=java.desktop/sun.awt=ALL-UNNAMED"
 else
     JVM_ARGS=""
+fi
+
+# Show help if requested
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    echo "Usage: ./run-local.sh [OPTIONS]"
+    echo ""
+    echo "Options:"
+    echo "  --account <name>      Launch with specified Jagex account"
+    echo "  --jagexlauncher       Show account selection dialog"
+    echo "  --import-accounts     Import Jagex accounts via OAuth2"
+    echo "  --list-accounts       List imported accounts and exit"
+    echo "  --debug               Enable debug logging"
+    echo "  --help, -h            Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  ./run-local.sh                          # Launch without account"
+    echo "  ./run-local.sh --jagexlauncher          # Select account from list"
+    echo "  ./run-local.sh --account MyPlayer       # Launch with specific account"
+    echo "  ./run-local.sh --import-accounts        # Import accounts first"
+    exit 0
 fi
 
 echo "Starting client..."
