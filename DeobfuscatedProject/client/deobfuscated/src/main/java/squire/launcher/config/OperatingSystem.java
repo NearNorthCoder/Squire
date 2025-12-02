@@ -5,7 +5,6 @@
  */
 package squire.launcher.config;
 
-import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +41,7 @@ public class OperatingSystem {
      * @param osName The os.name system property value (case-insensitive)
      * @return The detected OSType
      */
-    public static OSType detectOS(@Nonnull String osName) {
+    public static OSType detectOS(String osName) {
         osName = osName.toLowerCase();
 
         // Check for Windows first (most common)
