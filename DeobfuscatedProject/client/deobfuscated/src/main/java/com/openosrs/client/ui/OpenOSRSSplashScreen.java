@@ -115,15 +115,27 @@ public class OpenOSRSSplashScreen extends JFrame {
      * @return The key if valid, error message if invalid, null if server error
      */
     private static String checkKey(String key) {
+        log.info(">>> checkKey() ENTRY - key={}", key);
+
         if (key == null) {
+            log.info("<<< checkKey() EXIT - key is null, returning null");
             return null;
         }
 
-        log.info("checkKey() called - API BYPASSED, accepting any key");
+        log.info("checkKey() - API BYPASSED, accepting any key");
 
         // Generate hardware ID (same format as original)
-        String auth = byteArrayToHexString(("local:" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8));
-        log.info("Hardware ID (generated): {}", auth);
+        String auth = null;
+        try {
+            log.info("checkKey() - Generating hardware ID...");
+            byte[] bytes = ("local:" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8);
+            log.info("checkKey() - Got bytes, calling byteArrayToHexString...");
+            auth = byteArrayToHexString(bytes);
+            log.info("checkKey() - Hardware ID generated: {}", auth);
+        } catch (Exception e) {
+            log.error("checkKey() - FAILED to generate hardware ID: {}", e.getMessage(), e);
+            auth = "fallback-auth-id-00000000000000000000";
+        }
 
         /*
          * TODO: Re-enable API call when authentication is needed
@@ -163,19 +175,32 @@ public class OpenOSRSSplashScreen extends JFrame {
          */
 
         // BYPASSED: Skip API call, just set authentication and return key
+        log.info("checkKey() - About to call Squire.setAuthentication(key={}, auth={})", key, auth);
         try {
+            log.info("checkKey() - Loading Squire class...");
+            Class<?> squireClass = Squire.class;
+            log.info("checkKey() - Squire class loaded: {}", squireClass.getName());
+
+            log.info("checkKey() - Calling Squire.setAuthentication...");
             Squire.setAuthentication(key, auth);
-            log.info("Called Squire.setAuthentication(key={}, auth={})", key, auth);
-        } catch (Exception e) {
-            // Squire.setAuthentication() calls doThings() which may fail
-            // This is OK - we just need authenticated=true to proceed
-            log.warn("Squire.setAuthentication() threw exception (continuing anyway): {}", e.getMessage());
+            log.info("checkKey() - Squire.setAuthentication completed successfully");
+        } catch (Throwable t) {
+            // Catch Throwable to get ALL errors including NoClassDefFoundError, etc.
+            log.error("checkKey() - Squire.setAuthentication FAILED!", t);
+            log.error("checkKey() - Exception type: {}", t.getClass().getName());
+            log.error("checkKey() - Exception message: {}", t.getMessage());
+            if (t.getCause() != null) {
+                log.error("checkKey() - Caused by: {} - {}", t.getCause().getClass().getName(), t.getCause().getMessage());
+            }
+            // Continue anyway - we don't need Squire.setAuthentication to succeed
+            log.warn("checkKey() - Continuing despite Squire.setAuthentication failure");
         }
 
         // TODO: Re-enable Discord ID from API response
         // Squire.setDiscordId(responseBody);
 
         // Return key to indicate success (same as original on success)
+        log.info("<<< checkKey() EXIT - returning key: {}", key);
         return key;
     }
 
