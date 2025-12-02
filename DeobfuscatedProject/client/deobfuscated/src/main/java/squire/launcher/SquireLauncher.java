@@ -24,6 +24,7 @@ import squire.launcher.config.OSType;
 import squire.launcher.local.LocalClientLauncher;
 import squire.launcher.ui.LauncherFrame;
 import squire.launcher.auth.BrowserAccountImporter;
+import squire.launcher.tools.SquireAntiTamperPatcher;
 // import net.runelite.launcher.AccountImporter; // JCEF-based, requires native libs
 
 /**
@@ -107,6 +108,9 @@ public class SquireLauncher {
             log.info("Creating Squire home directory");
             SQUIRE_HOME.mkdirs();
         }
+
+        // Patch anti-tamper code in client JARs (bypasses doThings() key length check)
+        patchAntiTamper();
 
         // Bypass Squire authentication for using AccountImporter
         bypassSquireAuth();
@@ -447,6 +451,22 @@ public class SquireLauncher {
      */
     public static boolean isLicensed() {
         return HWID_FILE.exists();
+    }
+
+    /**
+     * Patches the anti-tamper check in Squire.class (doThings method).
+     * This changes the key length check from <= 8 to <= 0, making it impossible to trigger.
+     */
+    private static void patchAntiTamper() {
+        try {
+            if (!REPOSITORY_DIR.exists()) {
+                log.info("Repository not found, skipping anti-tamper patch");
+                return;
+            }
+            SquireAntiTamperPatcher.main(new String[]{REPOSITORY_DIR.getAbsolutePath()});
+        } catch (Exception e) {
+            log.warn("Failed to patch anti-tamper (may already be patched): {}", e.getMessage());
+        }
     }
 
     /**
