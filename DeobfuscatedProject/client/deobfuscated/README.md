@@ -5,49 +5,48 @@ A deobfuscated version of the Squire OSRS botting client launcher. This project 
 ## Project Structure
 
 ```
-src/main/java/
-├── squire/launcher/
-│   ├── SquireLauncher.java      # Main entry point
-│   ├── auth/
-│   │   └── AuthenticationManager.java  # OAuth2/Discord SSO
-│   ├── config/
-│   │   ├── HardwareAccelerationMode.java  # GPU acceleration modes
-│   │   ├── JvmConfigManager.java   # JVM argument management
-│   │   ├── OperatingSystem.java    # OS detection
-│   │   └── OSType.java             # OS type enum
-│   ├── process/
-│   │   ├── ClassLoaderLauncher.java  # URLClassLoader-based launch
-│   │   ├── ClientThread.java         # Client thread via reflection
-│   │   └── ProcessLauncher.java      # Process-based launch
-│   ├── ui/
-│   │   ├── LauncherFrame.java        # Main JFrame window
-│   │   ├── LicenseValidationPanel.java  # HWID/license UI
-│   │   ├── ProfileSelectionPanel.java   # Profile selection UI
-│   │   ├── SidebarInfoPanel.java        # Sidebar with links
-│   │   └── components/
-│   │       ├── ButtonHoverAdapter.java
-│   │       ├── ClickableLabelAdapter.java
-│   │       ├── ColorChooserAdapter.java
-│   │       ├── ColorComboBoxEditor.java
-│   │       ├── ColorComboDemo.java
-│   │       ├── ColorListCellRenderer.java
-│   │       ├── ColorSelectionListener.java
-│   │       ├── CustomScrollBarUI.java
-│   │       ├── HwidKeyListener.java
-│   │       ├── ProfileWrappingLabel.java
-│   │       ├── ProgressBarUI.java
-│   │       └── WrappingLabel.java
-│   └── util/
-│       ├── CookieJarImpl.java      # OkHttp cookie management
-│       ├── DesktopUtil.java        # URL/file opening
-│       ├── FontManager.java        # Custom font loading
-│       ├── ImageLoader.java        # Image resource loading
-│       ├── ThemeColors.java        # UI color constants
-│       └── TrustAllCertsManager.java  # Insecure SSL manager
-└── net/runelite/launcher/
-    ├── Launcher.java               # RuneLite launcher stub
-    └── beans/
-        └── Bootstrap.java          # Bootstrap config stub
+.
+├── pom.xml                          # Maven build configuration
+├── lib/
+│   └── squire-with-logging.jar      # Original Squire launcher (provides net.runelite.launcher.*)
+└── src/main/java/squire/launcher/
+    ├── SquireLauncher.java          # Main entry point
+    ├── auth/
+    │   └── AuthenticationManager.java  # OAuth2/Discord SSO
+    ├── config/
+    │   ├── HardwareAccelerationMode.java  # GPU acceleration modes
+    │   ├── JvmConfigManager.java   # JVM argument management
+    │   ├── OperatingSystem.java    # OS detection
+    │   └── OSType.java             # OS type enum
+    ├── process/
+    │   ├── ClassLoaderLauncher.java  # URLClassLoader-based launch
+    │   ├── ClientThread.java         # Client thread via reflection
+    │   └── ProcessLauncher.java      # Process-based launch
+    ├── ui/
+    │   ├── LauncherFrame.java        # Main JFrame window
+    │   ├── LicenseValidationPanel.java  # HWID/license UI
+    │   ├── ProfileSelectionPanel.java   # Profile selection UI
+    │   ├── SidebarInfoPanel.java        # Sidebar with links
+    │   └── components/               # UI helper components
+    │       ├── ButtonHoverAdapter.java
+    │       ├── ClickableLabelAdapter.java
+    │       ├── ColorChooserAdapter.java
+    │       ├── ColorComboBoxEditor.java
+    │       ├── ColorComboDemo.java
+    │       ├── ColorListCellRenderer.java
+    │       ├── ColorSelectionListener.java
+    │       ├── CustomScrollBarUI.java
+    │       ├── HwidKeyListener.java
+    │       ├── ProfileWrappingLabel.java
+    │       ├── ProgressBarUI.java
+    │       └── WrappingLabel.java
+    └── util/
+        ├── CookieJarImpl.java      # OkHttp cookie management
+        ├── DesktopUtil.java        # URL/file opening
+        ├── FontManager.java        # Custom font loading
+        ├── ImageLoader.java        # Image resource loading
+        ├── ThemeColors.java        # UI color constants
+        └── TrustAllCertsManager.java  # Insecure SSL manager
 ```
 
 ## Building
@@ -90,12 +89,18 @@ java -jar target/squire-launcher-1.0.0-SNAPSHOT.jar --first-launch
 
 ## Dependencies
 
+### Maven Dependencies (Downloaded automatically)
 - **OkHttp 4.12.0** - HTTP client for API calls
 - **Gson 2.10.1** - JSON parsing
 - **SLF4J 2.0.9** - Logging facade
 - **Logback 1.4.11** - Logging implementation
 - **Guava 32.1.3** - Utility methods
 - **JSR-305** - Nullability annotations
+
+### Local Dependencies (in `lib/` folder)
+- **squire-with-logging.jar** - Original Squire launcher JAR
+  - Provides `net.runelite.launcher.*` classes (Launcher, Bootstrap, etc.)
+  - Contains all original obfuscated classes not yet deobfuscated
 
 ## Configuration
 
