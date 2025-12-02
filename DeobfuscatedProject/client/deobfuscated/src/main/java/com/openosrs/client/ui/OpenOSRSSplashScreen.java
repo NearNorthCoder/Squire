@@ -163,8 +163,14 @@ public class OpenOSRSSplashScreen extends JFrame {
          */
 
         // BYPASSED: Skip API call, just set authentication and return key
-        Squire.setAuthentication(key, auth);
-        log.info("Called Squire.setAuthentication(key={}, auth={})", key, auth);
+        try {
+            Squire.setAuthentication(key, auth);
+            log.info("Called Squire.setAuthentication(key={}, auth={})", key, auth);
+        } catch (Exception e) {
+            // Squire.setAuthentication() calls doThings() which may fail
+            // This is OK - we just need authenticated=true to proceed
+            log.warn("Squire.setAuthentication() threw exception (continuing anyway): {}", e.getMessage());
+        }
 
         // TODO: Re-enable Discord ID from API response
         // Squire.setDiscordId(responseBody);
