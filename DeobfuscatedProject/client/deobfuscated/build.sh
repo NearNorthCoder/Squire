@@ -43,6 +43,8 @@ CLASSPATH="$CLASSPATH:$REPO_DIR/kotlin-stdlib-common-1.6.21.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/annotations-22.0.0.jar"
 # Include original Squire launcher for AccountImporter
 CLASSPATH="$CLASSPATH:$LIB_DIR/squire-with-logging.jar"
+# Include client JAR for OpenOSRSSplashScreen bypass
+CLASSPATH="$CLASSPATH:$REPO_DIR/runelite-client-1.1.12-SNAPSHOT.jar"
 
 # Clean and create target directory
 rm -rf "$TARGET_DIR/classes"
