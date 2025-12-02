@@ -267,13 +267,60 @@ public static void setJagexAccount(String jagexAccount) {
          │                        │                        │    RuneLiteAPI
 ```
 
+## Environment Variables for Jagex Accounts
+
+The client expects these environment variables to be set when launching with a Jagex account:
+
+| Variable | Description |
+|----------|-------------|
+| `JX_SESSION_ID` | The session token from OAuth2 flow |
+| `JX_CHARACTER_ID` | The Jagex account ID |
+| `JX_DISPLAY_NAME` | The account display name |
+| `JX_ACCESS_TOKEN` | Access token (optional, can use sessionId) |
+| `JX_REFRESH_TOKEN` | Refresh token (optional) |
+
+### How It Works
+
+1. **Account Import**: OAuth2 flow stores `sessionId`, `accountId`, and `displayName` in `launcher.dat`
+2. **Account Selection**: User selects account via `--jagexlauncher` UI
+3. **Launcher Lookup**: Launcher looks up account data from `launcher.dat` by display name
+4. **Subprocess Launch**: Client is launched as a subprocess with `JX_*` environment variables set
+5. **Client Auth**: Client reads `JX_*` env vars and uses `sessionId` to authenticate with game servers
+
+### Implementation Details
+
+**SquireLauncher.java:**
+```java
+// Look up account data from launcher.dat
+JagexAccountData jagexAccountData = lookupJagexAccount(selectedAccount);
+
+// Launch with account data (sets environment variables)
+LocalClientLauncher.launch(repoDir, clientArgs, jagexAccountData);
+```
+
+**LocalClientLauncher.java:**
+```java
+// Set environment variables before launching subprocess
+Map<String, String> env = pb.environment();
+env.put("JX_SESSION_ID", jagexAccount.sessionId);
+env.put("JX_CHARACTER_ID", jagexAccount.accountId);
+env.put("JX_DISPLAY_NAME", jagexAccount.displayName);
+env.put("JX_ACCESS_TOKEN", jagexAccount.sessionId);
+env.put("JX_REFRESH_TOKEN", "");
+
+// Start subprocess
+Process process = pb.start();
+```
+
 ## Files Reference
 
 | File | Location | Purpose |
 |------|----------|---------|
 | `AccountImporter.java` | `net/runelite/launcher/` | OAuth2 import flow |
 | `MessagePanel.java` | `net/runelite/launcher/` | Account selection UI |
-| `Launcher.java` | `net/runelite/launcher/` | Main launcher, passes `--account` |
+| `SquireLauncher.java` | `squire/launcher/` | Main launcher, passes account data |
+| `LocalClientLauncher.java` | `squire/launcher/local/` | Subprocess launch with env vars |
+| `BrowserAccountImporter.java` | `squire/launcher/auth/` | Browser-based OAuth2 import |
 | `launcher.dat` | `~/.squire/` | Account storage |
 | `RuneLiteAPI.java` | `net/runelite/http/api/` | Client-side account storage |
 | `Game.java` | `net/unethicalite/api/game/` | Unethicalite account API |

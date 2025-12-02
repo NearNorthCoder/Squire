@@ -194,10 +194,19 @@ public class SquireLauncher {
             log.warn("Warning: No runelite-client JAR found in repository");
         }
 
-        // Add account to client args if specified
+        // Look up full Jagex account data if account is specified
+        JagexAccountData jagexAccountData = null;
         if (selectedAccount != null && !selectedAccount.isEmpty()) {
-            clientArgs.add("--account=" + selectedAccount);
-            log.info("Passing account to client: {}", selectedAccount);
+            jagexAccountData = lookupJagexAccount(selectedAccount);
+            if (jagexAccountData != null) {
+                log.info("Found Jagex account data: {}", jagexAccountData);
+                // Add account to client args (for compatibility)
+                clientArgs.add("--account=" + selectedAccount);
+            } else {
+                log.warn("Could not find account data for '{}' in launcher.dat", selectedAccount);
+                log.warn("This may cause login issues. Make sure the account was imported correctly.");
+                clientArgs.add("--account=" + selectedAccount);
+            }
         }
 
         // Launch the client locally
@@ -205,7 +214,7 @@ public class SquireLauncher {
         log.info("Client args: {}", clientArgs);
 
         try {
-            LocalClientLauncher.launch(repoDir, clientArgs);
+            LocalClientLauncher.launch(repoDir, clientArgs, jagexAccountData);
             log.info("Client launched successfully!");
         } catch (Exception e) {
             log.error("Failed to launch client", e);
@@ -335,6 +344,46 @@ public class SquireLauncher {
         }
 
         return accounts;
+    }
+
+    /**
+     * Looks up a Jagex account by display name and returns all account data.
+     * @param displayName The display name to search for
+     * @return JagexAccountData containing sessionId, accountId, and displayName, or null if not found
+     */
+    public static JagexAccountData lookupJagexAccount(String displayName) {
+        if (displayName == null || displayName.isEmpty()) {
+            return null;
+        }
+
+        List<String[]> accounts = loadAccountsFromFile();
+        for (String[] account : accounts) {
+            // account[0] = displayName, account[1] = accountId, account[2] = sessionId
+            if (displayName.equals(account[0])) {
+                return new JagexAccountData(account[2], account[1], account[0]);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Data class holding Jagex account information for launching.
+     */
+    public static class JagexAccountData {
+        public final String sessionId;
+        public final String accountId;
+        public final String displayName;
+
+        public JagexAccountData(String sessionId, String accountId, String displayName) {
+            this.sessionId = sessionId;
+            this.accountId = accountId;
+            this.displayName = displayName;
+        }
+
+        @Override
+        public String toString() {
+            return "JagexAccountData{displayName='" + displayName + "', accountId='" + accountId + "'}";
+        }
     }
 
     /**
