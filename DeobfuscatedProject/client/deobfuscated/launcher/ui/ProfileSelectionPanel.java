@@ -92,7 +92,7 @@ class ProfileSelectionPanel extends JPanel {
     /**
      * Panel size (frame width minus sidebar width)
      */
-    static final Dimension PANEL_SIZE;
+    public static final Dimension PANEL_SIZE;
 
     /**
      * Progress bar size

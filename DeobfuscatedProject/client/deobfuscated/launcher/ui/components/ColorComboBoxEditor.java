@@ -127,7 +127,7 @@ public class ColorComboBoxEditor implements ComboBoxEditor {
      *
      * @param color The new color
      */
-    protected void fireColorChanged(Color color) {
+    public void fireColorChanged(Color color) {
         Object[] listeners = listenerList.getListenerList();
 
         // Iterate backwards through listener pairs

@@ -107,7 +107,7 @@ Location: `/DeobfuscatedProject/client/deobfuscated/`
 
 **Mapping Document Created**: `CLIENT_CORE_MAPPING.md` - Full analysis of all 39 files
 
-#### Deobfuscated Files (26 classes)
+#### Deobfuscated Files (30 classes)
 
 | Original | Deobfuscated | Package | Purpose |
 |----------|--------------|---------|---------|
@@ -137,6 +137,10 @@ Location: `/DeobfuscatedProject/client/deobfuscated/`
 | `d.java` | `ProgressBarUI.java` | ui/components | Progress bar styling |
 | `A.java`-`D.java` | `ButtonHoverAdapter.java` | ui/components | Mouse hover adapters |
 | `r.java`, `s.java` | `ClickableLabelAdapter.java` | ui/components | Link click adapters |
+| `h.java` | `ColorChooserAdapter.java` | ui/components | JColorChooser ActionListener |
+| `i.java` | `ColorComboDemo.java` | ui/components | Color combobox demo/test |
+| `j.java` | `ColorSelectionListener.java` | ui/components | Color selection ActionListener |
+| `E.java` | `ProfileWrappingLabel.java` | ui/components | Width-constrained profile label |
 
 #### Package Structure
 ```
@@ -156,10 +160,14 @@ client/deobfuscated/launcher/
 │   └── components/
 │       ├── ButtonHoverAdapter.java
 │       ├── ClickableLabelAdapter.java
+│       ├── ColorChooserAdapter.java
 │       ├── ColorComboBoxEditor.java
+│       ├── ColorComboDemo.java
 │       ├── ColorListCellRenderer.java
+│       ├── ColorSelectionListener.java
 │       ├── CustomScrollBarUI.java
 │       ├── HwidKeyListener.java
+│       ├── ProfileWrappingLabel.java
 │       ├── ProgressBarUI.java
 │       └── WrappingLabel.java
 ├── util/
@@ -175,19 +183,19 @@ client/deobfuscated/launcher/
     └── ProcessLauncher.java
 ```
 
-#### Remaining Client Core Files (13 files)
+#### Remaining Client Core Files (9 files - all SKIP)
 
 | Category | Files | Priority |
 |----------|-------|----------|
-| UI Helpers | `h.java`, `i.java`, `j.java` | LOW - Color chooser adapters |
-| UI Labels | `E.java` | LOW - Profile wrapping label |
 | Switch Maps | `I.java`, `M.java`, `o.java`, `v.java`, `x.java` | SKIP (compiler-generated) |
+
+**Note:** The remaining 9 files are all compiler-generated synthetic switch map classes. These are not worth deobfuscating as they contain no meaningful logic.
 
 ---
 
 ## Remaining Work Summary
 
-### 1. Client Core - 13 FILES REMAINING (was 26)
+### 1. Client Core - COMPLETED (30 of 39 files deobfuscated)
 ```bash
 # Location
 /home/user/Squire/DeobfuscatedProject/client/src/c/r/m/
@@ -199,10 +207,14 @@ client/deobfuscated/launcher/
 - `q.java` → `SidebarInfoPanel.java` (Logo, version, links)
 - `c.java` → `LicenseValidationPanel.java` (HWID validation)
 
-**Remaining (LOW priority):**
-- `h.java`, `i.java`, `j.java` - Color chooser adapters
-- `E.java` - Profile wrapping label
-- Switch maps (compiler-generated, skip)
+**Completed in Phase 11:**
+- `h.java` → `ColorChooserAdapter.java` (Color chooser ActionListener)
+- `i.java` → `ColorComboDemo.java` (Color combobox demo/test)
+- `j.java` → `ColorSelectionListener.java` (Color selection listener)
+- `E.java` → `ProfileWrappingLabel.java` (Profile panel wrapping label)
+
+**Remaining (SKIP - compiler-generated):**
+- `I.java`, `M.java`, `o.java`, `v.java`, `x.java` - Switch map classes (synthetic)
 
 ### 2. Other Plugins with Similar Patterns
 Each plugin likely has its own `a.java`, `e.java`, `f.java`, `g.java` that follow the same patterns we decoded in SOTF.
@@ -271,6 +283,8 @@ head -50 /home/user/Squire/DeobfuscatedProject/client/src/c/r/m/a.java
 ---
 
 ## Git Branch
-Current: `claude/deobfuscate-squire-client-01NUD2Zyj3Db52dRPZRsJxEL`
+Current: `claude/deobfuscate-squire-client-01AwmK5zfNGoAV3XGP9thiqm`
 
-Latest Commit: Phase 10 - Add 5 core UI panel classes (AuthenticationManager, LauncherFrame, ProfileSelectionPanel, SidebarInfoPanel, LicenseValidationPanel)
+Latest Commit: Phase 11 - Complete final 4 UI component classes (ColorChooserAdapter, ColorComboDemo, ColorSelectionListener, ProfileWrappingLabel)
+
+**Client Core Deobfuscation: COMPLETE** - 30 of 39 files done (remaining 9 are compiler-generated switch maps to skip)

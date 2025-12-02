@@ -19,9 +19,9 @@ This document maps the 39 obfuscated client core files at `/client/src/c/r/m/` t
 | `e.java` | `WrappingLabel` | ui | Auto-wrapping JLabel component |
 | `f.java` | `ColorListCellRenderer` | ui | Renders colors in combobox |
 | `g.java` | `ColorComboBoxEditor` | ui | Editable combobox for colors |
-| `h.java` | `ColorChooserAdapter` | ui | ActionListener for color chooser |
-| `i.java` | `ColorComboDemo` | ui | Demo/test for color combobox |
-| `j.java` | `ColorSelectionListener` | ui | ActionListener for color selection |
+| `h.java` | `ColorChooserAdapter` | ui | ActionListener for color chooser | ✅ DONE |
+| `i.java` | `ColorComboDemo` | ui | Demo/test for color combobox | ✅ DONE |
+| `j.java` | `ColorSelectionListener` | ui | ActionListener for color selection | ✅ DONE |
 | `k.java` | `ThemeColors` | util | Color constants for UI theme |
 | `l.java` | `CustomScrollBarUI` | ui | Custom scrollbar styling |
 | `m.java` | `FontManager` | util | Loads custom fonts (Roboto) |
@@ -42,7 +42,7 @@ This document maps the 39 obfuscated client core files at `/client/src/c/r/m/` t
 | `B.java` | `LaunchButtonHoverAdapter` | ui | Mouse hover for launch button |
 | `C.java` | `DeleteButtonHoverAdapter` | ui | Mouse hover for delete button |
 | `D.java` | `RefreshButtonHoverAdapter` | ui | Mouse hover for refresh button |
-| `E.java` | `ProfileWrappingLabel` | ui | Wrapping label for profile panel |
+| `E.java` | `ProfileWrappingLabel` | ui | Wrapping label for profile panel | ✅ DONE |
 | `F.java` | `OperatingSystem` | util | Detects current OS from system props |
 | `G.java` | `OSType` | config | Enum: Windows, MacOS, Linux, Other |
 | `H.java` | `JvmConfigManager` | config | Manages JVM args, settings.json |
