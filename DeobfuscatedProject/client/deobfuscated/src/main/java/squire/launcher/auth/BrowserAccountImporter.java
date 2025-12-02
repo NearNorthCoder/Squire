@@ -34,12 +34,23 @@ public class BrowserAccountImporter {
     private static final Logger log = LoggerFactory.getLogger(BrowserAccountImporter.class);
     private static final Gson gson = new Gson();
 
-    // OAuth Configuration - must match Jagex's registered values exactly
+    // OAuth Configuration - TWO client IDs are used in the flow!
+    // First stage: com_jagex_auth_desktop_launcher (initial auth)
+    // Second stage: 1fddee4e-b100-4f4e-b2b0-097f9088f9d2 (consent/game session)
     private static final String OAUTH_AUTH_CLIENT_ID = "com_jagex_auth_desktop_launcher";
-    private static final String OAUTH_SCOPE = "openid offline gamesso.token.create user.profile.read";
+    private static final String OAUTH_GAME_CLIENT_ID = "1fddee4e-b100-4f4e-b2b0-097f9088f9d2";
 
-    // Jagex-registered redirect URI - MUST be exactly this
+    // Scopes for each stage
+    private static final String OAUTH_SCOPE = "openid offline gamesso.token.create user.profile.read";
+    private static final String OAUTH_GAME_SCOPE = "openid offline";
+
+    // Jagex-registered redirect URIs
     private static final String REDIRECT_URI = "https://secure.runescape.com/m=weblogin/launcher-redirect";
+    private static final String REDIRECT_URI_LOCALHOST = "http://localhost";
+
+    // Nonce and state for second OAuth
+    private static final String OAUTH_NONCE = "YWI0MTUzZWYtODQ2My00NWRhLTkyZDktNWI3MmIxNDA1Mzgz";
+    private static final String OAUTH_STATE = "SquireLocal";
 
     // API Endpoints
     private static final String OAUTH_AUTH_URL = "https://account.jagex.com/oauth2/auth";
@@ -204,9 +215,13 @@ public class BrowserAccountImporter {
 
     /**
      * Process the authorization code - exchange for tokens and get accounts.
+     * This implements a TWO-STAGE OAuth flow:
+     * 1. Exchange code for first id_token (from com_jagex_auth_desktop_launcher)
+     * 2. Use first id_token as hint to get REAL id_token (from game client)
+     * 3. Use REAL id_token to create game session
      */
     private static void processAuthCode(String code, Runnable callback) {
-        log.info("=== EXCHANGING AUTH CODE FOR TOKENS ===");
+        log.info("=== STAGE 1: EXCHANGING AUTH CODE FOR INITIAL TOKENS ===");
         log.info("Code to exchange: {}...", code.substring(0, Math.min(30, code.length())));
 
         try {
@@ -231,20 +246,20 @@ public class BrowserAccountImporter {
                 return;
             }
 
-            String idToken = (String) tokens.get("id_token");
+            String firstIdToken = (String) tokens.get("id_token");
             String accessToken = (String) tokens.get("access_token");
             String refreshToken = (String) tokens.get("refresh_token");
 
-            log.info("id_token present: {}", idToken != null);
+            log.info("first id_token present: {}", firstIdToken != null);
             log.info("access_token present: {}", accessToken != null);
             log.info("refresh_token present: {}", refreshToken != null);
 
-            if (idToken != null) {
-                log.info("id_token length: {}", idToken.length());
-                log.info("id_token preview: {}...", idToken.substring(0, Math.min(50, idToken.length())));
+            if (firstIdToken != null) {
+                log.info("first id_token length: {}", firstIdToken.length());
+                log.info("first id_token preview: {}...", firstIdToken.substring(0, Math.min(50, firstIdToken.length())));
             }
 
-            if (idToken == null) {
+            if (firstIdToken == null) {
                 log.error("NO ID TOKEN IN RESPONSE!");
                 log.error("Full response: {}", tokens);
                 showError("Failed to get ID token from Jagex.\nThe authorization code may have expired. Please try again.");
@@ -252,11 +267,37 @@ public class BrowserAccountImporter {
                 return;
             }
 
-            log.info("=== CREATING GAME SESSION ===");
+            // === STAGE 2: Get REAL id_token using the game client ===
+            log.info("=== STAGE 2: GET REAL ID_TOKEN (CONSENT FLOW) ===");
+            log.info("Using game client_id: {}", OAUTH_GAME_CLIENT_ID);
+            log.info("Using first id_token as hint");
+
+            // Build consent URL
+            String consentUrl = buildConsentUrl(firstIdToken);
+            log.info("Consent URL: {}", consentUrl);
+
+            // Open browser and ask user to copy redirect
+            boolean browserOpened = openBrowser(consentUrl);
+
+            // Show dialog for second URL
+            String realIdToken = showConsentDialog(browserOpened, consentUrl);
+
+            if (realIdToken == null) {
+                log.error("Failed to get real id_token from consent flow");
+                showError("Failed to complete consent flow.\nPlease try again.");
+                if (callback != null) callback.run();
+                return;
+            }
+
+            log.info("Got REAL id_token!");
+            log.info("real id_token length: {}", realIdToken.length());
+            log.info("real id_token preview: {}...", realIdToken.substring(0, Math.min(50, realIdToken.length())));
+
+            log.info("=== STAGE 3: CREATING GAME SESSION ===");
             log.info("Session endpoint: {}", GAME_SESSION_URL);
 
-            // Create game session
-            String sessionId = createGameSession(idToken);
+            // Create game session with REAL id_token
+            String sessionId = createGameSession(realIdToken);
 
             if (sessionId == null) {
                 log.error("FAILED TO CREATE GAME SESSION - sessionId is null");
@@ -329,6 +370,112 @@ public class BrowserAccountImporter {
             showError("Failed to import account: " + e.getMessage());
         } finally {
             if (callback != null) callback.run();
+        }
+    }
+
+    /**
+     * Build the consent URL for Stage 2 (get real id_token).
+     * Uses the game client_id and first id_token as hint.
+     */
+    private static String buildConsentUrl(String idTokenHint) {
+        return OAUTH_AUTH_URL + "?" +
+            "id_token_hint=" + encodeUrl(idTokenHint) +
+            "&nonce=" + OAUTH_NONCE +
+            "&prompt=consent" +
+            "&redirect_uri=" + encodeUrl(REDIRECT_URI_LOCALHOST) +
+            "&response_type=" + encodeUrl("id_token code") +
+            "&state=" + OAUTH_STATE +
+            "&client_id=" + OAUTH_GAME_CLIENT_ID +
+            "&scope=" + encodeUrl(OAUTH_GAME_SCOPE);
+    }
+
+    /**
+     * Show dialog for consent flow (Stage 2).
+     * User needs to visit the consent URL and copy the redirect.
+     * The real id_token is in the URL fragment (after #).
+     *
+     * @return The real id_token, or null if cancelled/failed
+     */
+    private static String showConsentDialog(boolean browserOpened, String consentUrl) {
+        String message;
+        if (browserOpened) {
+            message = "STEP 2: Consent Authorization\n\n" +
+                "Your browser should open to a consent page.\n\n" +
+                "1. Click 'Allow' or 'Authorize' on the page\n" +
+                "2. You'll be redirected to a page that won't load (localhost)\n" +
+                "3. Copy the ENTIRE URL from your browser's address bar\n" +
+                "4. Paste it below\n\n" +
+                "The URL will look like:\n" +
+                "http://localhost#id_token=XXXXX&code=XXXXX...";
+        } else {
+            message = "STEP 2: Consent Authorization\n\n" +
+                "Could not open browser automatically.\n\n" +
+                "Please manually open this URL:\n" + consentUrl + "\n\n" +
+                "Click 'Allow', then copy the redirect URL and paste it below.\n" +
+                "The URL starts with: http://localhost#id_token=...";
+        }
+
+        String input = JOptionPane.showInputDialog(
+            null,
+            message,
+            "Paste Consent Redirect URL",
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (input == null || input.trim().isEmpty()) {
+            log.info("User cancelled consent dialog");
+            return null;
+        }
+
+        // Extract id_token from fragment
+        return extractIdTokenFromFragment(input.trim());
+    }
+
+    /**
+     * Extract id_token from URL fragment.
+     * Format: http://localhost#id_token=XXX&code=YYY&...
+     */
+    private static String extractIdTokenFromFragment(String url) {
+        log.info("=== EXTRACTING ID_TOKEN FROM FRAGMENT ===");
+        log.info("URL: {}", url);
+
+        try {
+            String fragment = null;
+
+            // Get fragment (after #)
+            if (url.contains("#")) {
+                fragment = url.substring(url.indexOf("#") + 1);
+            } else if (url.contains("?")) {
+                // Sometimes it might be in query string
+                fragment = url.substring(url.indexOf("?") + 1);
+            } else {
+                // Maybe they just pasted the fragment itself
+                fragment = url;
+            }
+
+            log.info("Fragment: {}", fragment);
+
+            // Parse fragment parameters
+            for (String param : fragment.split("&")) {
+                log.info("Parsing param: {}", param.length() > 50 ? param.substring(0, 50) + "..." : param);
+                if (param.startsWith("id_token=")) {
+                    String idToken = param.substring(9);
+                    // Remove any trailing params
+                    if (idToken.contains("&")) {
+                        idToken = idToken.substring(0, idToken.indexOf("&"));
+                    }
+                    idToken = URLDecoder.decode(idToken, StandardCharsets.UTF_8.name());
+                    log.info("Extracted id_token length: {}", idToken.length());
+                    return idToken;
+                }
+            }
+
+            log.error("No id_token found in fragment!");
+            return null;
+
+        } catch (Exception e) {
+            log.error("Failed to extract id_token", e);
+            return null;
         }
     }
 
