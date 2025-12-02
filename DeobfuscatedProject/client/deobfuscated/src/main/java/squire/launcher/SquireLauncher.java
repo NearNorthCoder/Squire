@@ -24,6 +24,7 @@ import squire.launcher.config.OSType;
 import squire.launcher.local.LocalClientLauncher;
 import squire.launcher.ui.LauncherFrame;
 import squire.launcher.auth.BrowserAccountImporter;
+import squire.launcher.tools.SquireAntiTamperPatcher;
 // import net.runelite.launcher.AccountImporter; // JCEF-based, requires native libs
 
 /**
@@ -107,6 +108,9 @@ public class SquireLauncher {
             log.info("Creating Squire home directory");
             SQUIRE_HOME.mkdirs();
         }
+
+        // Patch anti-tamper code in client JARs (bypasses doThings() key length check)
+        patchAntiTamper();
 
         // Bypass Squire authentication for using AccountImporter
         bypassSquireAuth();
@@ -197,16 +201,28 @@ public class SquireLauncher {
         // Look up full Jagex account data if account is specified
         JagexAccountData jagexAccountData = null;
         if (selectedAccount != null && !selectedAccount.isEmpty()) {
+            log.info("=======================================================");
+            log.info("LOOKING UP JAGEX ACCOUNT: {}", selectedAccount);
+            log.info("=======================================================");
+            log.info("Searching in launcher.dat: {}", LAUNCHER_DATA_FILE.getAbsolutePath());
+            log.info("File exists: {}", LAUNCHER_DATA_FILE.exists());
+
             jagexAccountData = lookupJagexAccount(selectedAccount);
+
             if (jagexAccountData != null) {
-                log.info("Found Jagex account data: {}", jagexAccountData);
+                log.info("SUCCESS: Found Jagex account data!");
+                log.info("  Display Name: {}", jagexAccountData.displayName);
+                log.info("  Account ID:   {}", jagexAccountData.accountId);
+                log.info("  Session ID:   {} chars", jagexAccountData.sessionId != null ? jagexAccountData.sessionId.length() : 0);
                 // Add account to client args (for compatibility)
                 clientArgs.add("--account=" + selectedAccount);
             } else {
-                log.warn("Could not find account data for '{}' in launcher.dat", selectedAccount);
-                log.warn("This may cause login issues. Make sure the account was imported correctly.");
+                log.error("FAILED: Could not find account data for '{}' in launcher.dat", selectedAccount);
+                log.error("This WILL cause login issues. Make sure the account was imported correctly.");
+                log.error("Use --list-accounts to see available accounts.");
                 clientArgs.add("--account=" + selectedAccount);
             }
+            log.info("=======================================================");
         }
 
         // Launch the client locally
@@ -324,25 +340,40 @@ public class SquireLauncher {
         List<String[]> accounts = new ArrayList<>();
 
         if (!LAUNCHER_DATA_FILE.exists()) {
+            log.debug("launcher.dat does not exist at: {}", LAUNCHER_DATA_FILE.getAbsolutePath());
             return accounts;
         }
 
+        log.debug("Reading launcher.dat from: {}", LAUNCHER_DATA_FILE.getAbsolutePath());
+        int lineNumber = 0;
+
         try (Scanner scanner = new Scanner(LAUNCHER_DATA_FILE)) {
             while (scanner.hasNextLine()) {
+                lineNumber++;
                 String line = scanner.nextLine();
+                log.debug("Line {}: {} chars", lineNumber, line.length());
+
                 // Format: ::sessionId:accountId:displayName
                 String[] parts = line.split(":");
+                log.debug("Line {} split into {} parts", lineNumber, parts.length);
+
                 if (parts.length >= 5) {
                     String sessionId = parts[2];
                     String accountId = parts[3];
                     String displayName = parts[4];
+                    log.debug("Parsed account: displayName='{}', accountId='{}', sessionId={}chars",
+                             displayName, accountId, sessionId.length());
                     accounts.add(new String[]{displayName, accountId, sessionId});
+                } else {
+                    log.warn("Line {} has invalid format (expected 5+ parts, got {}): {}",
+                            lineNumber, parts.length, line.substring(0, Math.min(50, line.length())) + "...");
                 }
             }
         } catch (FileNotFoundException e) {
             log.warn("Could not read launcher.dat: {}", e.getMessage());
         }
 
+        log.debug("Loaded {} accounts from launcher.dat", accounts.size());
         return accounts;
     }
 
@@ -352,17 +383,38 @@ public class SquireLauncher {
      * @return JagexAccountData containing sessionId, accountId, and displayName, or null if not found
      */
     public static JagexAccountData lookupJagexAccount(String displayName) {
+        log.info("lookupJagexAccount() - Searching for: '{}'", displayName);
+
         if (displayName == null || displayName.isEmpty()) {
+            log.warn("lookupJagexAccount() - Display name is null or empty!");
             return null;
         }
 
         List<String[]> accounts = loadAccountsFromFile();
-        for (String[] account : accounts) {
-            // account[0] = displayName, account[1] = accountId, account[2] = sessionId
-            if (displayName.equals(account[0])) {
-                return new JagexAccountData(account[2], account[1], account[0]);
+        log.info("lookupJagexAccount() - Found {} accounts in launcher.dat", accounts.size());
+
+        for (int i = 0; i < accounts.size(); i++) {
+            String[] account = accounts.get(i);
+            String accDisplayName = account[0];
+            String accAccountId = account[1];
+            String accSessionId = account[2];
+
+            log.info("lookupJagexAccount() - Checking account {}: '{}' (id={})",
+                    i + 1, accDisplayName, accAccountId);
+
+            if (displayName.equals(accDisplayName)) {
+                log.info("lookupJagexAccount() - MATCH FOUND!");
+                log.info("  displayName: {}", accDisplayName);
+                log.info("  accountId:   {}", accAccountId);
+                log.info("  sessionId:   {} chars", accSessionId != null ? accSessionId.length() : 0);
+                return new JagexAccountData(accSessionId, accAccountId, accDisplayName);
             }
         }
+
+        log.warn("lookupJagexAccount() - No match found for '{}'", displayName);
+        log.warn("Available accounts: {}", accounts.stream()
+                .map(a -> a[0])
+                .collect(java.util.stream.Collectors.joining(", ")));
         return null;
     }
 
@@ -447,6 +499,22 @@ public class SquireLauncher {
      */
     public static boolean isLicensed() {
         return HWID_FILE.exists();
+    }
+
+    /**
+     * Patches the anti-tamper check in Squire.class (doThings method).
+     * This changes the key length check from <= 8 to <= 0, making it impossible to trigger.
+     */
+    private static void patchAntiTamper() {
+        try {
+            if (!REPOSITORY_DIR.exists()) {
+                log.info("Repository not found, skipping anti-tamper patch");
+                return;
+            }
+            SquireAntiTamperPatcher.main(new String[]{REPOSITORY_DIR.getAbsolutePath()});
+        } catch (Exception e) {
+            log.warn("Failed to patch anti-tamper (may already be patched): {}", e.getMessage());
+        }
     }
 
     /**

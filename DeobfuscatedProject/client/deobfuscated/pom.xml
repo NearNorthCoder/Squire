@@ -89,6 +89,13 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                    <!-- Exclude bypass/injection classes that depend on client JARs -->
+                    <!-- These are meant to be injected into the running client, not compiled with launcher -->
+                    <excludes>
+                        <exclude>gg/**</exclude>
+                        <exclude>com/**</exclude>
+                        <exclude>net/**</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 
