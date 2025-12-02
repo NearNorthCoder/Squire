@@ -174,26 +174,35 @@ public class OpenOSRSSplashScreen extends JFrame {
          * =======================================================
          */
 
-        // BYPASSED: Skip API call, just set authentication and return key
-        log.info("checkKey() - About to call Squire.setAuthentication(key={}, auth={})", key, auth);
+        // BYPASSED: Use reflection to set Squire fields directly
+        // This avoids calling setAuthentication() which triggers doThings() -> System.exit(0)
+        // when key.length() <= 8 (anti-tampering protection)
+        log.info("checkKey() - Setting Squire auth fields via reflection (bypassing doThings anti-tamper)");
         try {
-            log.info("checkKey() - Loading Squire class...");
             Class<?> squireClass = Squire.class;
-            log.info("checkKey() - Squire class loaded: {}", squireClass.getName());
 
-            log.info("checkKey() - Calling Squire.setAuthentication...");
-            Squire.setAuthentication(key, auth);
-            log.info("checkKey() - Squire.setAuthentication completed successfully");
+            // Set Squire.key
+            java.lang.reflect.Field keyField = squireClass.getDeclaredField("key");
+            keyField.setAccessible(true);
+            keyField.set(null, key);
+            log.info("checkKey() - Set Squire.key = {}", key);
+
+            // Set Squire.identifier
+            java.lang.reflect.Field identifierField = squireClass.getDeclaredField("identifier");
+            identifierField.setAccessible(true);
+            identifierField.set(null, auth != null ? auth : "null");
+            log.info("checkKey() - Set Squire.identifier = {}", auth);
+
+            // Set Squire.uuid
+            java.lang.reflect.Field uuidField = squireClass.getDeclaredField("uuid");
+            uuidField.setAccessible(true);
+            uuidField.set(null, java.util.UUID.randomUUID());
+            log.info("checkKey() - Set Squire.uuid = random UUID");
+
+            log.info("checkKey() - Squire auth fields set successfully (doThings bypassed)");
         } catch (Throwable t) {
-            // Catch Throwable to get ALL errors including NoClassDefFoundError, etc.
-            log.error("checkKey() - Squire.setAuthentication FAILED!", t);
-            log.error("checkKey() - Exception type: {}", t.getClass().getName());
-            log.error("checkKey() - Exception message: {}", t.getMessage());
-            if (t.getCause() != null) {
-                log.error("checkKey() - Caused by: {} - {}", t.getCause().getClass().getName(), t.getCause().getMessage());
-            }
-            // Continue anyway - we don't need Squire.setAuthentication to succeed
-            log.warn("checkKey() - Continuing despite Squire.setAuthentication failure");
+            log.error("checkKey() - Failed to set Squire fields via reflection", t);
+            log.warn("checkKey() - Continuing anyway - client may have limited functionality");
         }
 
         // TODO: Re-enable Discord ID from API response
