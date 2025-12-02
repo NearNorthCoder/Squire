@@ -208,17 +208,12 @@ public class LocalClientLauncher {
         Process process = pb.start();
         log.info("SUCCESS: Client subprocess started with PID: {}", process.pid());
         log.info("=======================================================");
+        log.info("Waiting for client to exit...");
 
-        // Create a shutdown hook to terminate the client when launcher exits
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (process.isAlive()) {
-                log.info("Terminating client subprocess...");
-                process.destroy();
-            }
-        }));
-
-        // Keep the launcher running
-        log.info("Client is running. Close this window to terminate.");
+        // Wait for the client process to complete
+        // This keeps the launcher alive so the shutdown hook doesn't kill the subprocess
+        int exitCode = process.waitFor();
+        log.info("Client exited with code: {}", exitCode);
     }
 
     /**
