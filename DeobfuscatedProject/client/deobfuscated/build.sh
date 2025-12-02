@@ -30,6 +30,7 @@ if [ ! -d "$REPO_DIR" ]; then
 fi
 
 # Build classpath
+LIB_DIR="$SCRIPT_DIR/lib"
 CLASSPATH="$REPO_DIR/slf4j-api-1.7.32.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/logback-classic-1.2.9.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/logback-core-1.2.9.jar"
@@ -40,6 +41,8 @@ CLASSPATH="$CLASSPATH:$REPO_DIR/okio-jvm-3.0.0.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/kotlin-stdlib-1.6.21.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/kotlin-stdlib-common-1.6.21.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/annotations-22.0.0.jar"
+# Include original Squire launcher for AccountImporter
+CLASSPATH="$CLASSPATH:$LIB_DIR/squire-with-logging.jar"
 
 # Clean and create target directory
 rm -rf "$TARGET_DIR/classes"
