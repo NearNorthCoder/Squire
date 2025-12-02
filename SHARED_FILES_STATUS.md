@@ -4,8 +4,20 @@
 
 ```
 /home/user/Squire/DeobfuscatedProject/
-├── client/src/c/r/m/           # 39 CORE CLIENT CLASSES (heavily obfuscated)
-├── deobfuscated/src/squire/    # 41 CLEAN CLIENT FILES (auth, ui, util, config)
+├── client/
+│   ├── src/c/r/m/              # 39 CORE CLIENT CLASSES (original obfuscated)
+│   └── deobfuscated/           # ✅ COMPILABLE MAVEN PROJECT
+│       ├── pom.xml             # Maven build configuration
+│       ├── README.md           # Build & run instructions
+│       └── src/main/java/
+│           ├── squire/launcher/    # 30 DEOBFUSCATED FILES
+│           │   ├── SquireLauncher.java  # Main entry point
+│           │   ├── auth/       # AuthenticationManager
+│           │   ├── config/     # OSType, JvmConfigManager, etc.
+│           │   ├── process/    # ClassLoaderLauncher, ProcessLauncher
+│           │   ├── ui/         # LauncherFrame, panels
+│           │   └── util/       # ThemeColors, FontManager, etc.
+│           └── net/runelite/launcher/  # Stub classes
 ├── plugins/
 │   ├── src/                    # 68 ORIGINAL OBFUSCATED PLUGINS (UUID directories)
 │   ├── clean_enhanced/         # 62 WORKING DEOBFUSCATION COPIES
