@@ -31,9 +31,10 @@ public class LocalClientLauncher {
     private static final Logger log = LoggerFactory.getLogger(LocalClientLauncher.class);
 
     /**
-     * The main class to run (RuneLite entry point)
+     * The main class to run - uses our wrapper for detailed logging
+     * Wrapper will initialize logging then call net.runelite.client.RuneLite
      */
-    private static final String MAIN_CLASS = "net.runelite.client.RuneLite";
+    private static final String MAIN_CLASS = "squire.launcher.debug.SquireClientWrapper";
 
     /**
      * UIManager key for storing the class loader reference

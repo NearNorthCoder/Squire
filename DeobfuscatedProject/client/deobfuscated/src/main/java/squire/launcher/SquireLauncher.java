@@ -227,7 +227,8 @@ public class SquireLauncher {
                     if (freshIdToken != null) {
                         log.info("TOKEN REFRESH SUCCESS!");
                         log.info("  New token length: {} chars", freshIdToken.length());
-                        jagexAccountData.sessionId = freshIdToken;
+                        // Update accessToken (JWT), NOT sessionId (22-char game session)
+                        jagexAccountData.accessToken = freshIdToken;
                         // Update the stored token
                         BrowserAccountImporter.updateIdToken(jagexAccountData.displayName, freshIdToken);
                     } else {
