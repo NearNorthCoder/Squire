@@ -87,9 +87,10 @@ public class LauncherFrame extends JFrame {
                 }
 
                 try {
-                    File squireDir = new File(System.getProperty("user.home") + "/.squire/");
-                    File hwidFile = new File(squireDir, "hwid");
-                    instance = new LauncherFrame(profileName, hwidFile.exists());
+                    // BYPASS: Always skip license validation, go straight to profile panel
+                    // Original code checked: hwidFile.exists()
+                    boolean isRegistered = true;  // Skip license screen
+                    instance = new LauncherFrame(profileName, isRegistered);
                 } catch (Exception e) {
                     log.warn("Failed to create launcher frame", e);
                 }
