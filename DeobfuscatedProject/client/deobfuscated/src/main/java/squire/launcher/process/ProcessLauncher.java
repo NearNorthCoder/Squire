@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import net.runelite.launcher.Launcher;
 import net.runelite.launcher.beans.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,7 +162,7 @@ public final class ProcessLauncher {
         OSType os = OperatingSystem.getCurrent();
 
         // Check if using JVM 17+
-        if (Launcher.isJava17()) {
+        if (isJava17()) {
             switch (os) {
                 case Windows:
                     String[] windowsArgs = bootstrap.getClientJvm17WindowsArguments();
@@ -186,6 +185,27 @@ public final class ProcessLauncher {
 
         // JVM 9-16
         return bootstrap.getClientJvm9Arguments();
+    }
+
+    /**
+     * Checks if the current JVM is Java 17 or higher.
+     *
+     * @return true if running on Java 17+, false otherwise
+     */
+    private static boolean isJava17() {
+        String version = System.getProperty("java.version");
+        if (version.startsWith("1.")) {
+            // Pre-Java 9 format (e.g., "1.8.0_292")
+            return false;
+        }
+        // Java 9+ format (e.g., "11.0.11", "17.0.1")
+        int dotIndex = version.indexOf('.');
+        String majorVersion = dotIndex > 0 ? version.substring(0, dotIndex) : version;
+        try {
+            return Integer.parseInt(majorVersion) >= 17;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     // Private constructor to prevent instantiation
