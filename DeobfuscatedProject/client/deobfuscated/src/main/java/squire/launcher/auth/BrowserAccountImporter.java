@@ -144,7 +144,9 @@ public class BrowserAccountImporter {
      * Extracts auth code and continues the OAuth flow.
      */
     private static void processRedirectUrl(String url, Runnable callback) {
-        log.info("Processing redirect URL: {}", url.length() > 100 ? url.substring(0, 100) + "..." : url);
+        log.info("=== PROCESSING REDIRECT URL ===");
+        log.info("Full URL: {}", url);
+        log.info("URL length: {}", url.length());
 
         try {
             // Extract authorization code from URL
@@ -152,35 +154,49 @@ public class BrowserAccountImporter {
 
             // Try query parameter first (?code=XXX)
             if (url.contains("code=")) {
+                log.info("Found 'code=' in URL");
                 String query = url.contains("?") ? url.substring(url.indexOf("?") + 1) : url;
+                log.info("Query string: {}", query);
+
                 // Also handle fragments (#code=XXX)
                 if (query.contains("#")) {
                     query = query.replace("#", "&");
                 }
                 for (String param : query.split("&")) {
+                    log.info("Parsing param: {}", param.length() > 50 ? param.substring(0, 50) + "..." : param);
                     if (param.startsWith("code=")) {
                         code = param.substring(5);
                         // Remove any trailing parameters or fragments
                         if (code.contains("&")) code = code.substring(0, code.indexOf("&"));
                         if (code.contains("#")) code = code.substring(0, code.indexOf("#"));
+                        log.info("Raw code (before decode): {}", code);
                         code = URLDecoder.decode(code, StandardCharsets.UTF_8.name());
+                        log.info("Decoded code: {}", code);
                         break;
                     }
                 }
+            } else {
+                log.error("No 'code=' found in URL!");
             }
 
             if (code == null || code.isEmpty()) {
+                log.error("Code is null or empty!");
                 showError("Could not find authorization code in URL.\n\n" +
                     "Make sure you copied the entire URL after logging in.\n" +
                     "It should contain 'code=' in it.");
+                if (callback != null) callback.run();
                 return;
             }
 
-            log.info("Found auth code: {}...", code.substring(0, Math.min(20, code.length())));
+            log.info("=== AUTH CODE EXTRACTED ===");
+            log.info("Code length: {}", code.length());
+            log.info("Code preview: {}...", code.substring(0, Math.min(20, code.length())));
+
             processAuthCode(code, callback);
 
         } catch (Exception e) {
             log.error("Failed to parse URL", e);
+            e.printStackTrace();
             showError("Failed to parse URL: " + e.getMessage());
             if (callback != null) callback.run();
         }
@@ -190,52 +206,91 @@ public class BrowserAccountImporter {
      * Process the authorization code - exchange for tokens and get accounts.
      */
     private static void processAuthCode(String code, Runnable callback) {
-        log.info("Exchanging authorization code for tokens...");
+        log.info("=== EXCHANGING AUTH CODE FOR TOKENS ===");
+        log.info("Code to exchange: {}...", code.substring(0, Math.min(30, code.length())));
 
         try {
             // Exchange code for tokens
+            log.info("Calling token endpoint: {}", OAUTH_TOKEN_URL);
+            log.info("Using client_id: {}", OAUTH_AUTH_CLIENT_ID);
+            log.info("Using redirect_uri: {}", REDIRECT_URI);
+
             Map<String, Object> tokens = exchangeCodeForTokens(code);
+
+            log.info("=== TOKEN RESPONSE ===");
+            log.info("Response keys: {}", tokens.keySet());
 
             if (tokens.containsKey("error")) {
                 String error = (String) tokens.get("error");
                 String desc = (String) tokens.getOrDefault("error_description", "Unknown error");
-                log.error("Token exchange failed: {} - {}", error, desc);
+                log.error("TOKEN EXCHANGE FAILED!");
+                log.error("Error: {}", error);
+                log.error("Description: {}", desc);
                 showError("Failed to exchange code: " + desc);
+                if (callback != null) callback.run();
                 return;
             }
 
             String idToken = (String) tokens.get("id_token");
             String accessToken = (String) tokens.get("access_token");
+            String refreshToken = (String) tokens.get("refresh_token");
+
+            log.info("id_token present: {}", idToken != null);
+            log.info("access_token present: {}", accessToken != null);
+            log.info("refresh_token present: {}", refreshToken != null);
+
+            if (idToken != null) {
+                log.info("id_token length: {}", idToken.length());
+                log.info("id_token preview: {}...", idToken.substring(0, Math.min(50, idToken.length())));
+            }
 
             if (idToken == null) {
-                log.error("No ID token in response: {}", tokens);
+                log.error("NO ID TOKEN IN RESPONSE!");
+                log.error("Full response: {}", tokens);
                 showError("Failed to get ID token from Jagex.\nThe authorization code may have expired. Please try again.");
+                if (callback != null) callback.run();
                 return;
             }
 
-            log.info("Got tokens, creating game session...");
+            log.info("=== CREATING GAME SESSION ===");
+            log.info("Session endpoint: {}", GAME_SESSION_URL);
 
             // Create game session
             String sessionId = createGameSession(idToken);
+
             if (sessionId == null) {
-                log.error("Failed to create game session");
+                log.error("FAILED TO CREATE GAME SESSION - sessionId is null");
                 showError("Failed to create game session");
+                if (callback != null) callback.run();
                 return;
             }
 
-            log.info("Session created: {}...", sessionId.substring(0, Math.min(10, sessionId.length())));
+            log.info("Session created successfully!");
+            log.info("Session ID: {}...", sessionId.substring(0, Math.min(20, sessionId.length())));
+
+            log.info("=== GETTING LINKED ACCOUNTS ===");
+            log.info("Accounts endpoint: {}", GAME_ACCOUNTS_URL);
 
             // Get linked accounts
             List<Map<String, Object>> accounts = getLinkedAccounts(sessionId);
             log.info("Found {} linked accounts", accounts.size());
 
             if (accounts.isEmpty()) {
+                log.warn("No accounts found!");
                 showError("No game accounts found linked to this Jagex account.\n\n" +
                     "Make sure you have an OSRS character linked to your Jagex account.");
+                if (callback != null) callback.run();
                 return;
             }
 
+            // Log account details
+            for (int i = 0; i < accounts.size(); i++) {
+                Map<String, Object> acc = accounts.get(i);
+                log.info("Account {}: id={}, displayName={}", i, acc.get("accountId"), acc.get("displayName"));
+            }
+
             // Save accounts
+            log.info("=== SAVING ACCOUNTS ===");
             int imported = 0;
             for (Map<String, Object> account : accounts) {
                 String accountId = (String) account.get("accountId");
@@ -245,14 +300,20 @@ public class BrowserAccountImporter {
                     displayName = "Account-" + accountId.substring(0, Math.min(8, accountId.length()));
                 }
 
+                log.info("Saving account: {} ({})", displayName, accountId);
                 if (saveAccount(sessionId, accountId, displayName)) {
                     imported++;
-                    log.info("Imported account: {} ({})", displayName, accountId);
+                    log.info("Successfully saved!");
+                } else {
+                    log.info("Account already exists or failed to save");
                 }
             }
 
             // Show success
             int total = countSavedAccounts();
+            log.info("=== IMPORT COMPLETE ===");
+            log.info("Imported: {}, Total: {}", imported, total);
+
             String message = String.format(
                 "Successfully imported %d account(s)!\nTotal saved accounts: %d\n\n" +
                 "You can now run with --jagexlauncher to select an account.",
@@ -261,7 +322,10 @@ public class BrowserAccountImporter {
             JOptionPane.showMessageDialog(null, message, "Import Complete", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (Exception e) {
-            log.error("Failed to process auth code", e);
+            log.error("=== EXCEPTION DURING IMPORT ===");
+            log.error("Exception type: {}", e.getClass().getName());
+            log.error("Exception message: {}", e.getMessage());
+            e.printStackTrace();
             showError("Failed to import account: " + e.getMessage());
         } finally {
             if (callback != null) callback.run();
@@ -272,6 +336,8 @@ public class BrowserAccountImporter {
      * Exchange authorization code for OAuth tokens.
      */
     private static Map<String, Object> exchangeCodeForTokens(String code) throws IOException {
+        log.info("Building token request...");
+
         FormBody formBody = new FormBody.Builder()
             .add("grant_type", "authorization_code")
             .add("client_id", OAUTH_AUTH_CLIENT_ID)
@@ -284,9 +350,19 @@ public class BrowserAccountImporter {
             .post(formBody)
             .build();
 
+        log.info("Sending token request to: {}", OAUTH_TOKEN_URL);
+
         try (Response response = httpClient.newCall(request).execute()) {
+            int statusCode = response.code();
             String body = response.body().string();
-            log.debug("Token response: {}", body);
+
+            log.info("Token response status: {}", statusCode);
+            log.info("Token response body: {}", body);
+
+            if (statusCode != 200) {
+                log.error("Non-200 status code from token endpoint!");
+            }
+
             return gson.fromJson(body, new TypeToken<Map<String, Object>>(){}.getType());
         }
     }
@@ -296,6 +372,8 @@ public class BrowserAccountImporter {
      */
     private static String createGameSession(String idToken) throws IOException {
         String payload = "{\"idToken\":\"" + idToken + "\"}";
+        log.info("Session request payload length: {}", payload.length());
+
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), payload);
 
         Request request = new Request.Builder()
@@ -303,10 +381,27 @@ public class BrowserAccountImporter {
             .post(body)
             .build();
 
+        log.info("Sending session request to: {}", GAME_SESSION_URL);
+
         try (Response response = httpClient.newCall(request).execute()) {
+            int statusCode = response.code();
             String responseBody = response.body().string();
-            log.debug("Session response: {}", responseBody);
+
+            log.info("Session response status: {}", statusCode);
+            log.info("Session response body: {}", responseBody);
+
+            if (statusCode != 200) {
+                log.error("Non-200 status from session endpoint!");
+                log.error("This likely means the ID token is invalid or expired");
+            }
+
             Map<String, Object> result = gson.fromJson(responseBody, new TypeToken<Map<String, Object>>(){}.getType());
+
+            if (result.containsKey("error")) {
+                log.error("Session API returned error: {}", result.get("error"));
+                log.error("Error description: {}", result.get("message"));
+            }
+
             return (String) result.get("sessionId");
         }
     }
@@ -321,9 +416,20 @@ public class BrowserAccountImporter {
             .get()
             .build();
 
+        log.info("Sending accounts request to: {}", GAME_ACCOUNTS_URL);
+        log.info("Using session ID: {}...", sessionId.substring(0, Math.min(20, sessionId.length())));
+
         try (Response response = httpClient.newCall(request).execute()) {
+            int statusCode = response.code();
             String body = response.body().string();
-            log.debug("Accounts response: {}", body);
+
+            log.info("Accounts response status: {}", statusCode);
+            log.info("Accounts response body: {}", body);
+
+            if (statusCode != 200) {
+                log.error("Non-200 status from accounts endpoint!");
+            }
+
             return gson.fromJson(body, new TypeToken<List<Map<String, Object>>>(){}.getType());
         }
     }
