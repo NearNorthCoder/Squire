@@ -99,9 +99,67 @@ These plugins likely have similar `a.java`, `e.java`, `f.java`, `g.java` pattern
 
 ---
 
+## Client Core Deobfuscation Progress
+
+### Phase 9: Client Core Analysis & Initial Deobfuscation
+
+Location: `/DeobfuscatedProject/client/deobfuscated/`
+
+**Mapping Document Created**: `CLIENT_CORE_MAPPING.md` - Full analysis of all 39 files
+
+#### Deobfuscated Files (13 classes)
+
+| Original | Deobfuscated | Package | Purpose |
+|----------|--------------|---------|---------|
+| `G.java` | `OSType.java` | config | OS type enum |
+| `F.java` | `OperatingSystem.java` | config | OS detection utility |
+| `n.java` | `HardwareAccelerationMode.java` | config | GPU accel modes |
+| `H.java` | `JvmConfigManager.java` | config | JVM args & settings |
+| `k.java` | `ThemeColors.java` | util | UI color constants |
+| `p.java` | `ImageLoader.java` | util | Image loading utility |
+| `b.java` | `CookieJarImpl.java` | util | OkHttp CookieJar |
+| `w.java` | `TrustAllCertsManager.java` | util | SSL trust manager |
+| `m.java` | `FontManager.java` | util | Custom font loading |
+| `y.java` | `DesktopUtil.java` | util | URL/file opening |
+| `K.java` | `ClientThread.java` | process | Client launch thread |
+| `J.java` | `ClassLoaderLauncher.java` | process | ClassLoader setup |
+| `u.java` | `ProcessLauncher.java` | process | Process launching |
+
+#### Package Structure
+```
+client/deobfuscated/launcher/
+├── config/
+│   ├── OSType.java
+│   ├── OperatingSystem.java
+│   ├── HardwareAccelerationMode.java
+│   └── JvmConfigManager.java
+├── util/
+│   ├── ThemeColors.java
+│   ├── ImageLoader.java
+│   ├── CookieJarImpl.java
+│   ├── TrustAllCertsManager.java
+│   ├── FontManager.java
+│   └── DesktopUtil.java
+└── process/
+    ├── ClientThread.java
+    ├── ClassLoaderLauncher.java
+    └── ProcessLauncher.java
+```
+
+#### Remaining Client Core Files (26 files)
+
+| Category | Files | Priority |
+|----------|-------|----------|
+| Authentication | `a.java` | HIGH - OAuth/Discord SSO |
+| UI Panels | `z.java`, `q.java`, `c.java`, `L.java` | MEDIUM |
+| UI Components | `A.java`-`E.java`, `d.java`-`l.java` | LOW |
+| Switch Maps | `I.java`, `M.java`, `o.java`, `v.java`, `x.java` | LOW (auto-generated) |
+
+---
+
 ## Remaining Work Summary
 
-### 1. Client Core (39 files) - NOT STARTED
+### 1. Client Core - 26 FILES REMAINING
 ```bash
 # Location
 /home/user/Squire/DeobfuscatedProject/client/src/c/r/m/
@@ -174,6 +232,6 @@ head -50 /home/user/Squire/DeobfuscatedProject/client/src/c/r/m/a.java
 ---
 
 ## Git Branch
-Current: `claude/deobfuscate-squire-plugin-01E9CXx1GwiyvD98zJSxPE8R`
+Current: `claude/deobfuscate-squire-client-01CUUac3yns4Sz54HnFGSnr8`
 
-Latest Commit: `f51ff3971` - Phase 8: Complete SOTF step files deobfuscation
+Latest Commit: Phase 9 - Client core analysis and initial deobfuscation (13 files)
