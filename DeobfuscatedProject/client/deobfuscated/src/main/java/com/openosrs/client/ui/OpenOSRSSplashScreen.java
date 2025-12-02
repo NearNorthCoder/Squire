@@ -4,7 +4,7 @@
  * This replaces the original Squire splash screen to skip API authentication.
  * Any auth key entered will be accepted without network validation.
  *
- * The UI looks exactly the same - only the checkKey() method is bypassed.
+ * Uses the original UI components - only the authenticate() method is changed.
  */
 package com.openosrs.client.ui;
 
@@ -30,7 +30,6 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// Use the original UI components from the JAR - they will be loaded from squire-with-logging.jar
 import com.openosrs.client.ui.components.AuthenticationPanel;
 import com.openosrs.client.ui.components.InfoPanel;
 import com.openosrs.client.ui.components.MessagePanel;
@@ -39,8 +38,8 @@ import net.runelite.client.ui.ColorScheme;
 import gg.squire.client.Squire;
 
 /**
- * Bypassed OpenOSRSSplashScreen that accepts any auth key without API validation.
- * Uses the original UI components - only the authenticate() method is changed.
+ * Bypassed OpenOSRSSplashScreen that uses original UI components.
+ * Only the authenticate() method is changed to skip API validation.
  */
 public class OpenOSRSSplashScreen extends JFrame {
 
@@ -58,12 +57,7 @@ public class OpenOSRSSplashScreen extends JFrame {
         this.setSize(FRAME_SIZE);
         this.setLayout(new BorderLayout());
         this.setUndecorated(true);
-
-        try {
-            this.setIconImage(ClientUI.ICON);
-        } catch (Exception e) {
-            log.debug("Could not set icon: {}", e.getMessage());
-        }
+        this.setIconImage(ClientUI.ICON);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -78,7 +72,9 @@ public class OpenOSRSSplashScreen extends JFrame {
 
     /**
      * BYPASSED: Accepts any key without calling the Squire API.
-     * The original method called checkKey() which made an HTTP request.
+     * Original code called checkKey() which made HTTP request to:
+     * https://g0dp8zyku3.execute-api.eu-west-1.amazonaws.com/default/AuthenticateAlpha
+     *
      * This version skips that and just accepts the key directly.
      */
     public static void authenticate(String key) {
@@ -101,23 +97,17 @@ public class OpenOSRSSplashScreen extends JFrame {
         authenticated = true;
         log.info("Set authenticated = true");
 
-        // Hide auth panel
-        if (INSTANCE != null) {
-            INSTANCE.authPanel.setEnabled(false);
-            INSTANCE.authPanel.setVisible(false);
-            INSTANCE.getContentPane().add((Component) new InfoPanel(), BorderLayout.EAST);
-        }
+        // Hide auth panel and show info panel (same as original)
+        INSTANCE.authPanel.setEnabled(false);
+        INSTANCE.authPanel.setVisible(false);
+        INSTANCE.getContentPane().add((Component) new InfoPanel(), BorderLayout.EAST);
 
         // Generate a fake hardware ID
         String fakeAuth = byteArrayToHexString(("local:" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8));
 
         // Call Squire.setAuthentication to initialize the client properly
-        try {
-            Squire.setAuthentication(key, fakeAuth);
-            log.info("Called Squire.setAuthentication(key={}, auth={})", key, fakeAuth);
-        } catch (Exception e) {
-            log.warn("Could not call Squire.setAuthentication: {}", e.getMessage());
-        }
+        Squire.setAuthentication(key, fakeAuth);
+        log.info("Called Squire.setAuthentication(key={}, auth={})", key, fakeAuth);
 
         log.info("Authentication complete (API bypassed)");
     }
