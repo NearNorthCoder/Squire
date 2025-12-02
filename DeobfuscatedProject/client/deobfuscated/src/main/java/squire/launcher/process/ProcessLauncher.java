@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import net.runelite.launcher.Launcher;
 import net.runelite.launcher.beans.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,7 +162,7 @@ public final class ProcessLauncher {
         OSType os = OperatingSystem.getCurrent();
 
         // Check if using JVM 17+
-        if (Launcher.B()) {  // isJava17OrHigher()
+        if (isJava17()) {
             switch (os) {
                 case Windows:
                     String[] windowsArgs = bootstrap.getClientJvm17WindowsArguments();
@@ -186,6 +185,17 @@ public final class ProcessLauncher {
 
         // JVM 9-16
         return bootstrap.getClientJvm9Arguments();
+    }
+
+    /**
+     * Checks if the current JVM is Java 16 or higher.
+     * 16 has the same module restrictions as 17, so we use the 17 settings for it.
+     *
+     * @return true if running on Java 16+, false otherwise
+     */
+    private static boolean isJava17() {
+        // Matches RuneLite launcher implementation
+        return Runtime.version().feature() >= 16;
     }
 
     // Private constructor to prevent instantiation

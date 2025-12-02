@@ -305,7 +305,7 @@ class SidebarInfoPanel extends JPanel {
         textField.setBorder(new CompoundBorder(
                 new MatteBorder(1, 0, 0, 0, ThemeColors.BORDER_COLOR),
                 new EmptyBorder(0, 193, 0, 193)));
-        textField.addKeyListener(new HwidKeyListener(this, textField));
+        textField.addKeyListener(new HwidKeyListener(textField));
         return textField;
     }
 }

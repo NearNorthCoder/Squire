@@ -55,7 +55,7 @@ import squire.launcher.util.ThemeColors;
  * - Refresh button to sync profiles from server
  * - Progress bar for download/launch status
  */
-class ProfileSelectionPanel extends JPanel {
+public class ProfileSelectionPanel extends JPanel {
 
     // ==================== Dimensions ====================
 

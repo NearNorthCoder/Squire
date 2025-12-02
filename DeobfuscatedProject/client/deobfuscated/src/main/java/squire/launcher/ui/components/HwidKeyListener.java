@@ -37,6 +37,6 @@ public class HwidKeyListener extends KeyAdapter {
      */
     @Override
     public void keyReleased(KeyEvent e) {
-        Launcher.aM = textField.getText();  // Launcher.hwid field
+        Launcher.auth = textField.getText();
     }
 }
