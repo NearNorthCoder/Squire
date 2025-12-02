@@ -107,7 +107,7 @@ Location: `/DeobfuscatedProject/client/deobfuscated/`
 
 **Mapping Document Created**: `CLIENT_CORE_MAPPING.md` - Full analysis of all 39 files
 
-#### Deobfuscated Files (13 classes)
+#### Deobfuscated Files (26 classes)
 
 | Original | Deobfuscated | Package | Purpose |
 |----------|--------------|---------|---------|
@@ -124,15 +124,44 @@ Location: `/DeobfuscatedProject/client/deobfuscated/`
 | `K.java` | `ClientThread.java` | process | Client launch thread |
 | `J.java` | `ClassLoaderLauncher.java` | process | ClassLoader setup |
 | `u.java` | `ProcessLauncher.java` | process | Process launching |
+| `a.java` | `AuthenticationManager.java` | auth | OAuth/Discord SSO, session mgmt |
+| `L.java` | `LauncherFrame.java` | ui | Main launcher window |
+| `z.java` | `ProfileSelectionPanel.java` | ui | Profile dropdown, launch buttons |
+| `q.java` | `SidebarInfoPanel.java` | ui | Logo, version, links sidebar |
+| `c.java` | `LicenseValidationPanel.java` | ui | HWID/license key validation |
+| `f.java` | `ColorListCellRenderer.java` | ui/components | Color combobox renderer |
+| `g.java` | `ColorComboBoxEditor.java` | ui/components | Editable color combobox |
+| `l.java` | `CustomScrollBarUI.java` | ui/components | Custom scrollbar styling |
+| `t.java` | `HwidKeyListener.java` | ui/components | HWID text field listener |
+| `e.java` | `WrappingLabel.java` | ui/components | Auto-wrapping JLabel |
+| `d.java` | `ProgressBarUI.java` | ui/components | Progress bar styling |
+| `A.java`-`D.java` | `ButtonHoverAdapter.java` | ui/components | Mouse hover adapters |
+| `r.java`, `s.java` | `ClickableLabelAdapter.java` | ui/components | Link click adapters |
 
 #### Package Structure
 ```
 client/deobfuscated/launcher/
+├── auth/
+│   └── AuthenticationManager.java
 ├── config/
 │   ├── OSType.java
 │   ├── OperatingSystem.java
 │   ├── HardwareAccelerationMode.java
 │   └── JvmConfigManager.java
+├── ui/
+│   ├── LauncherFrame.java
+│   ├── ProfileSelectionPanel.java
+│   ├── SidebarInfoPanel.java
+│   ├── LicenseValidationPanel.java
+│   └── components/
+│       ├── ButtonHoverAdapter.java
+│       ├── ClickableLabelAdapter.java
+│       ├── ColorComboBoxEditor.java
+│       ├── ColorListCellRenderer.java
+│       ├── CustomScrollBarUI.java
+│       ├── HwidKeyListener.java
+│       ├── ProgressBarUI.java
+│       └── WrappingLabel.java
 ├── util/
 │   ├── ThemeColors.java
 │   ├── ImageLoader.java
@@ -146,24 +175,34 @@ client/deobfuscated/launcher/
     └── ProcessLauncher.java
 ```
 
-#### Remaining Client Core Files (26 files)
+#### Remaining Client Core Files (13 files)
 
 | Category | Files | Priority |
 |----------|-------|----------|
-| Authentication | `a.java` | HIGH - OAuth/Discord SSO |
-| UI Panels | `z.java`, `q.java`, `c.java`, `L.java` | MEDIUM |
-| UI Components | `A.java`-`E.java`, `d.java`-`l.java` | LOW |
-| Switch Maps | `I.java`, `M.java`, `o.java`, `v.java`, `x.java` | LOW (auto-generated) |
+| UI Helpers | `h.java`, `i.java`, `j.java` | LOW - Color chooser adapters |
+| UI Labels | `E.java` | LOW - Profile wrapping label |
+| Switch Maps | `I.java`, `M.java`, `o.java`, `v.java`, `x.java` | SKIP (compiler-generated) |
 
 ---
 
 ## Remaining Work Summary
 
-### 1. Client Core - 26 FILES REMAINING
+### 1. Client Core - 13 FILES REMAINING (was 26)
 ```bash
 # Location
 /home/user/Squire/DeobfuscatedProject/client/src/c/r/m/
 ```
+**Completed in Phase 10:**
+- `a.java` → `AuthenticationManager.java` (HIGH priority - OAuth/Discord SSO)
+- `L.java` → `LauncherFrame.java` (Main launcher window)
+- `z.java` → `ProfileSelectionPanel.java` (Profile dropdown, buttons)
+- `q.java` → `SidebarInfoPanel.java` (Logo, version, links)
+- `c.java` → `LicenseValidationPanel.java` (HWID validation)
+
+**Remaining (LOW priority):**
+- `h.java`, `i.java`, `j.java` - Color chooser adapters
+- `E.java` - Profile wrapping label
+- Switch maps (compiler-generated, skip)
 
 ### 2. Other Plugins with Similar Patterns
 Each plugin likely has its own `a.java`, `e.java`, `f.java`, `g.java` that follow the same patterns we decoded in SOTF.
@@ -232,6 +271,6 @@ head -50 /home/user/Squire/DeobfuscatedProject/client/src/c/r/m/a.java
 ---
 
 ## Git Branch
-Current: `claude/deobfuscate-squire-client-01CUUac3yns4Sz54HnFGSnr8`
+Current: `claude/deobfuscate-squire-client-01NUD2Zyj3Db52dRPZRsJxEL`
 
-Latest Commit: Phase 9 - Client core analysis and initial deobfuscation (13 files)
+Latest Commit: Phase 10 - Add 5 core UI panel classes (AuthenticationManager, LauncherFrame, ProfileSelectionPanel, SidebarInfoPanel, LicenseValidationPanel)
