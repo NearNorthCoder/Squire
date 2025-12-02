@@ -163,7 +163,7 @@ public final class ProcessLauncher {
         OSType os = OperatingSystem.getCurrent();
 
         // Check if using JVM 17+
-        if (Launcher.B()) {  // isJava17OrHigher()
+        if (Launcher.isJava17()) {
             switch (os) {
                 case Windows:
                     String[] windowsArgs = bootstrap.getClientJvm17WindowsArguments();
