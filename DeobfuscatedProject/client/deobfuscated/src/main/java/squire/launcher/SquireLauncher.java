@@ -216,7 +216,9 @@ public class SquireLauncher {
                 log.info("  Session ID:    {} chars", jagexAccountData.sessionId != null ? jagexAccountData.sessionId.length() : 0);
                 log.info("  Refresh Token: {} chars", jagexAccountData.refreshToken != null ? jagexAccountData.refreshToken.length() : 0);
 
-                // Try to refresh the token to get a fresh session
+                String idToken = jagexAccountData.sessionId;
+
+                // Try to refresh the token to get a fresh id_token
                 if (jagexAccountData.refreshToken != null && !jagexAccountData.refreshToken.isEmpty()) {
                     log.info("-------------------------------------------------------");
                     log.info("ATTEMPTING TOKEN REFRESH...");
@@ -227,16 +229,42 @@ public class SquireLauncher {
                     if (freshIdToken != null) {
                         log.info("TOKEN REFRESH SUCCESS!");
                         log.info("  New token length: {} chars", freshIdToken.length());
-                        jagexAccountData.sessionId = freshIdToken;
+                        idToken = freshIdToken;
                         // Update the stored token
                         BrowserAccountImporter.updateIdToken(jagexAccountData.displayName, freshIdToken);
                     } else {
-                        log.warn("TOKEN REFRESH FAILED - using stored token (may be expired)");
-                        log.warn("If login fails, try re-importing the account with --import-accounts");
+                        log.warn("TOKEN REFRESH FAILED - will try stored token");
                     }
+                }
+
+                // Now create a fresh game session from the id_token (JWT)
+                // The game client expects a 22-char game session, NOT the JWT
+                log.info("-------------------------------------------------------");
+                log.info("CREATING GAME SESSION FROM ID TOKEN...");
+                log.info("-------------------------------------------------------");
+
+                // Check if we have a JWT (long token) or already a game session (22-char)
+                if (idToken != null && idToken.length() > 50) {
+                    // This is a JWT - create a game session from it
+                    log.info("Token is JWT (length: {}), creating game session...", idToken.length());
+                    String gameSession = BrowserAccountImporter.createGameSessionFromToken(idToken);
+                    if (gameSession != null) {
+                        log.info("GAME SESSION CREATED!");
+                        log.info("  Game session: {} chars", gameSession.length());
+                        jagexAccountData.sessionId = gameSession;
+                    } else {
+                        log.error("FAILED to create game session from JWT!");
+                        log.error("The id_token may be expired. Try re-importing the account.");
+                        log.warn("Falling back to stored token (will likely fail)");
+                    }
+                } else if (idToken != null && idToken.length() == 22) {
+                    // This is already a 22-char game session (old format)
+                    log.warn("Token is already a 22-char game session (old format)");
+                    log.warn("This session may be expired. Re-import account for better reliability.");
+                    jagexAccountData.sessionId = idToken;
                 } else {
-                    log.warn("No refresh token available - using stored session token");
-                    log.warn("Token may be expired. If login fails, re-import the account.");
+                    log.error("No valid token available!");
+                    log.error("Please re-import the account with --import-accounts");
                 }
 
                 // Add account to client args (for compatibility)
