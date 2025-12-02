@@ -331,7 +331,11 @@ public class BrowserAccountImporter {
             }
 
             // Save accounts
+            // IMPORTANT: Store the realIdToken (JWT) as the session token, NOT the short game session ID
+            // The JX_ACCESS_TOKEN needs the actual JWT for authentication, not the 22-char session ID
             log.info("=== SAVING ACCOUNTS ===");
+            log.info("Using realIdToken as session (length: {} chars)", realIdToken.length());
+            log.info("Storing refreshToken for token refresh (length: {} chars)", refreshToken != null ? refreshToken.length() : 0);
             int imported = 0;
             for (Map<String, Object> account : accounts) {
                 String accountId = (String) account.get("accountId");
@@ -342,7 +346,9 @@ public class BrowserAccountImporter {
                 }
 
                 log.info("Saving account: {} ({})", displayName, accountId);
-                if (saveAccount(sessionId, accountId, displayName)) {
+                // Store realIdToken (JWT) AND refreshToken for authentication
+                // Format: ::idToken:refreshToken:accountId:displayName
+                if (saveAccount(realIdToken, refreshToken, accountId, displayName)) {
                     imported++;
                     log.info("Successfully saved!");
                 } else {
@@ -583,21 +589,23 @@ public class BrowserAccountImporter {
 
     /**
      * Save account to launcher.dat
-     * Format: ::sessionId:accountId:displayName
+     * Format: ::idToken:refreshToken:accountId:displayName
      * @return true if saved, false if already exists
      */
-    private static boolean saveAccount(String sessionId, String accountId, String displayName) {
+    private static boolean saveAccount(String idToken, String refreshToken, String accountId, String displayName) {
         SQUIRE_HOME.mkdirs();
 
         // Check if account already exists
         if (accountExists(accountId)) {
-            log.info("Account {} already exists, updating session", displayName);
-            updateAccountSession(accountId, sessionId);
+            log.info("Account {} already exists, updating tokens", displayName);
+            updateAccountTokens(accountId, idToken, refreshToken);
             return false;
         }
 
         try (FileWriter writer = new FileWriter(LAUNCHER_DATA, true)) {
-            writer.write(String.format("::%s:%s:%s%n", sessionId, accountId, displayName));
+            // New format: ::idToken:refreshToken:accountId:displayName
+            String refreshStr = refreshToken != null ? refreshToken : "";
+            writer.write(String.format("::%s:%s:%s:%s%n", idToken, refreshStr, accountId, displayName));
             return true;
         } catch (IOException e) {
             log.error("Failed to save account", e);
@@ -606,9 +614,10 @@ public class BrowserAccountImporter {
     }
 
     /**
-     * Update session ID for existing account.
+     * Update tokens for existing account.
+     * Format: ::idToken:refreshToken:accountId:displayName
      */
-    private static void updateAccountSession(String accountId, String newSessionId) {
+    private static void updateAccountTokens(String accountId, String newIdToken, String newRefreshToken) {
         if (!LAUNCHER_DATA.exists()) return;
 
         try {
@@ -617,11 +626,13 @@ public class BrowserAccountImporter {
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
                     if (line.contains(":" + accountId + ":")) {
-                        // Update session ID
+                        // Update tokens - preserve display name
                         String[] parts = line.split(":");
-                        if (parts.length >= 5) {
-                            line = String.format("::%s:%s:%s", newSessionId, parts[3], parts[4]);
-                        }
+                        // Old format: ::sessionId:accountId:displayName (5 parts)
+                        // New format: ::idToken:refreshToken:accountId:displayName (6 parts)
+                        String displayName = parts.length >= 6 ? parts[5] : (parts.length >= 5 ? parts[4] : "Unknown");
+                        String refreshStr = newRefreshToken != null ? newRefreshToken : "";
+                        line = String.format("::%s:%s:%s:%s", newIdToken, refreshStr, accountId, displayName);
                     }
                     lines.add(line);
                 }
@@ -633,7 +644,7 @@ public class BrowserAccountImporter {
                 }
             }
         } catch (IOException e) {
-            log.error("Failed to update account session", e);
+            log.error("Failed to update account tokens", e);
         }
     }
 
@@ -720,5 +731,169 @@ public class BrowserAccountImporter {
         SwingUtilities.invokeLater(() -> {
             JOptionPane.showMessageDialog(null, message, "Import Error", JOptionPane.ERROR_MESSAGE);
         });
+    }
+
+    /**
+     * Refresh tokens using the refresh_token.
+     * Returns the new id_token, or null if refresh failed.
+     */
+    public static String refreshTokens(String refreshToken) {
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            log.warn("No refresh token available");
+            return null;
+        }
+
+        log.info("Refreshing tokens using refresh_token...");
+
+        // Initialize HTTP client if needed
+        if (httpClient == null) {
+            httpClient = new OkHttpClient.Builder()
+                .followRedirects(false)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+        }
+
+        try {
+            // Stage 1: Refresh tokens from launcher client
+            FormBody formBody = new FormBody.Builder()
+                .add("grant_type", "refresh_token")
+                .add("client_id", OAUTH_AUTH_CLIENT_ID)
+                .add("refresh_token", refreshToken)
+                .build();
+
+            Request request = new Request.Builder()
+                .url(OAUTH_TOKEN_URL)
+                .post(formBody)
+                .build();
+
+            try (Response response = httpClient.newCall(request).execute()) {
+                String body = response.body().string();
+                log.info("Token refresh response status: {}", response.code());
+
+                if (response.code() != 200) {
+                    log.error("Failed to refresh tokens: {}", body);
+                    return null;
+                }
+
+                Map<String, Object> tokens = gson.fromJson(body, new TypeToken<Map<String, Object>>(){}.getType());
+
+                String newIdToken = (String) tokens.get("id_token");
+                String newAccessToken = (String) tokens.get("access_token");
+
+                if (newIdToken == null) {
+                    log.error("No id_token in refresh response");
+                    return null;
+                }
+
+                log.info("Got fresh id_token (length: {})", newIdToken.length());
+
+                // Stage 2: Get real id_token via consent flow
+                String consentUrl = buildConsentUrl(newIdToken);
+                log.info("Opening consent URL for fresh tokens...");
+
+                boolean browserOpened = openBrowser(consentUrl);
+                String realIdToken = showConsentDialog(browserOpened, consentUrl);
+
+                if (realIdToken != null) {
+                    log.info("Got fresh real id_token (length: {})", realIdToken.length());
+                    return realIdToken;
+                } else {
+                    log.warn("Failed to get real id_token from consent, using launcher id_token");
+                    return newIdToken;
+                }
+            }
+        } catch (Exception e) {
+            log.error("Failed to refresh tokens", e);
+            return null;
+        }
+    }
+
+    /**
+     * Get the stored refresh token for an account.
+     */
+    public static String getRefreshToken(String displayName) {
+        if (!LAUNCHER_DATA.exists()) return null;
+
+        try (Scanner scanner = new Scanner(LAUNCHER_DATA)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (!line.startsWith("::")) continue;
+
+                String[] parts = line.split(":");
+                // New format: ::idToken:refreshToken:accountId:displayName (6 parts counting empty first 2)
+                // Old format: ::sessionId:accountId:displayName (5 parts)
+
+                String lineDisplayName = null;
+                String refreshToken = null;
+
+                if (parts.length >= 6) {
+                    // New format
+                    lineDisplayName = parts[5];
+                    refreshToken = parts[3];
+                } else if (parts.length >= 5) {
+                    // Old format - no refresh token
+                    lineDisplayName = parts[4];
+                    refreshToken = null;
+                }
+
+                if (lineDisplayName != null && lineDisplayName.equalsIgnoreCase(displayName)) {
+                    return refreshToken;
+                }
+            }
+        } catch (IOException e) {
+            log.error("Failed to read refresh token", e);
+        }
+        return null;
+    }
+
+    /**
+     * Update the id_token for an account after refresh.
+     */
+    public static void updateIdToken(String displayName, String newIdToken) {
+        if (!LAUNCHER_DATA.exists()) return;
+
+        try {
+            List<String> lines = new ArrayList<>();
+            try (Scanner scanner = new Scanner(LAUNCHER_DATA)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    if (!line.startsWith("::")) {
+                        lines.add(line);
+                        continue;
+                    }
+
+                    String[] parts = line.split(":");
+                    String lineDisplayName = null;
+
+                    if (parts.length >= 6) {
+                        lineDisplayName = parts[5];
+                    } else if (parts.length >= 5) {
+                        lineDisplayName = parts[4];
+                    }
+
+                    if (lineDisplayName != null && lineDisplayName.equalsIgnoreCase(displayName)) {
+                        // Update the id_token
+                        if (parts.length >= 6) {
+                            // New format - update idToken, keep refreshToken
+                            line = String.format("::%s:%s:%s:%s", newIdToken, parts[3], parts[4], parts[5]);
+                        } else if (parts.length >= 5) {
+                            // Old format - convert to new format without refresh token
+                            line = String.format("::%s::%s:%s", newIdToken, parts[3], parts[4]);
+                        }
+                    }
+                    lines.add(line);
+                }
+            }
+
+            try (FileWriter writer = new FileWriter(LAUNCHER_DATA, false)) {
+                for (String line : lines) {
+                    writer.write(line + "\n");
+                }
+            }
+            log.info("Updated id_token for account: {}", displayName);
+        } catch (IOException e) {
+            log.error("Failed to update id_token", e);
+        }
     }
 }

@@ -211,9 +211,34 @@ public class SquireLauncher {
 
             if (jagexAccountData != null) {
                 log.info("SUCCESS: Found Jagex account data!");
-                log.info("  Display Name: {}", jagexAccountData.displayName);
-                log.info("  Account ID:   {}", jagexAccountData.accountId);
-                log.info("  Session ID:   {} chars", jagexAccountData.sessionId != null ? jagexAccountData.sessionId.length() : 0);
+                log.info("  Display Name:  {}", jagexAccountData.displayName);
+                log.info("  Account ID:    {}", jagexAccountData.accountId);
+                log.info("  Session ID:    {} chars", jagexAccountData.sessionId != null ? jagexAccountData.sessionId.length() : 0);
+                log.info("  Refresh Token: {} chars", jagexAccountData.refreshToken != null ? jagexAccountData.refreshToken.length() : 0);
+
+                // Try to refresh the token to get a fresh session
+                if (jagexAccountData.refreshToken != null && !jagexAccountData.refreshToken.isEmpty()) {
+                    log.info("-------------------------------------------------------");
+                    log.info("ATTEMPTING TOKEN REFRESH...");
+                    log.info("Tokens expire after ~1 hour. Refreshing to get fresh tokens.");
+                    log.info("-------------------------------------------------------");
+
+                    String freshIdToken = BrowserAccountImporter.refreshTokens(jagexAccountData.refreshToken);
+                    if (freshIdToken != null) {
+                        log.info("TOKEN REFRESH SUCCESS!");
+                        log.info("  New token length: {} chars", freshIdToken.length());
+                        jagexAccountData.sessionId = freshIdToken;
+                        // Update the stored token
+                        BrowserAccountImporter.updateIdToken(jagexAccountData.displayName, freshIdToken);
+                    } else {
+                        log.warn("TOKEN REFRESH FAILED - using stored token (may be expired)");
+                        log.warn("If login fails, try re-importing the account with --import-accounts");
+                    }
+                } else {
+                    log.warn("No refresh token available - using stored session token");
+                    log.warn("Token may be expired. If login fails, re-import the account.");
+                }
+
                 // Add account to client args (for compatibility)
                 clientArgs.add("--account=" + selectedAccount);
             } else {
@@ -334,7 +359,7 @@ public class SquireLauncher {
 
     /**
      * Loads accounts from launcher.dat
-     * @return List of [displayName, accountId, sessionId] arrays
+     * @return List of [displayName, accountId, sessionId, refreshToken] arrays
      */
     private static List<String[]> loadAccountsFromFile() {
         List<String[]> accounts = new ArrayList<>();
@@ -353,17 +378,28 @@ public class SquireLauncher {
                 String line = scanner.nextLine();
                 log.debug("Line {}: {} chars", lineNumber, line.length());
 
-                // Format: ::sessionId:accountId:displayName
+                // New format: ::idToken:refreshToken:accountId:displayName (6 parts)
+                // Old format: ::sessionId:accountId:displayName (5 parts)
                 String[] parts = line.split(":");
                 log.debug("Line {} split into {} parts", lineNumber, parts.length);
 
-                if (parts.length >= 5) {
+                if (parts.length >= 6) {
+                    // New format with refresh token
+                    String idToken = parts[2];
+                    String refreshToken = parts[3];
+                    String accountId = parts[4];
+                    String displayName = parts[5];
+                    log.debug("Parsed account (new format): displayName='{}', accountId='{}', idToken={}chars, refreshToken={}chars",
+                             displayName, accountId, idToken.length(), refreshToken != null ? refreshToken.length() : 0);
+                    accounts.add(new String[]{displayName, accountId, idToken, refreshToken});
+                } else if (parts.length >= 5) {
+                    // Old format without refresh token
                     String sessionId = parts[2];
                     String accountId = parts[3];
                     String displayName = parts[4];
-                    log.debug("Parsed account: displayName='{}', accountId='{}', sessionId={}chars",
+                    log.debug("Parsed account (old format): displayName='{}', accountId='{}', sessionId={}chars",
                              displayName, accountId, sessionId.length());
-                    accounts.add(new String[]{displayName, accountId, sessionId});
+                    accounts.add(new String[]{displayName, accountId, sessionId, null});
                 } else {
                     log.warn("Line {} has invalid format (expected 5+ parts, got {}): {}",
                             lineNumber, parts.length, line.substring(0, Math.min(50, line.length())) + "...");
@@ -380,7 +416,7 @@ public class SquireLauncher {
     /**
      * Looks up a Jagex account by display name and returns all account data.
      * @param displayName The display name to search for
-     * @return JagexAccountData containing sessionId, accountId, and displayName, or null if not found
+     * @return JagexAccountData containing sessionId, accountId, displayName, and refreshToken, or null if not found
      */
     public static JagexAccountData lookupJagexAccount(String displayName) {
         log.info("lookupJagexAccount() - Searching for: '{}'", displayName);
@@ -398,16 +434,18 @@ public class SquireLauncher {
             String accDisplayName = account[0];
             String accAccountId = account[1];
             String accSessionId = account[2];
+            String accRefreshToken = account.length > 3 ? account[3] : null;
 
             log.info("lookupJagexAccount() - Checking account {}: '{}' (id={})",
                     i + 1, accDisplayName, accAccountId);
 
             if (displayName.equals(accDisplayName)) {
                 log.info("lookupJagexAccount() - MATCH FOUND!");
-                log.info("  displayName: {}", accDisplayName);
-                log.info("  accountId:   {}", accAccountId);
-                log.info("  sessionId:   {} chars", accSessionId != null ? accSessionId.length() : 0);
-                return new JagexAccountData(accSessionId, accAccountId, accDisplayName);
+                log.info("  displayName:   {}", accDisplayName);
+                log.info("  accountId:     {}", accAccountId);
+                log.info("  sessionId:     {} chars", accSessionId != null ? accSessionId.length() : 0);
+                log.info("  refreshToken:  {} chars", accRefreshToken != null ? accRefreshToken.length() : 0);
+                return new JagexAccountData(accSessionId, accAccountId, accDisplayName, accRefreshToken);
             }
         }
 
@@ -422,19 +460,26 @@ public class SquireLauncher {
      * Data class holding Jagex account information for launching.
      */
     public static class JagexAccountData {
-        public final String sessionId;
+        public String sessionId;  // Mutable - can be refreshed
         public final String accountId;
         public final String displayName;
+        public final String refreshToken;
 
         public JagexAccountData(String sessionId, String accountId, String displayName) {
+            this(sessionId, accountId, displayName, null);
+        }
+
+        public JagexAccountData(String sessionId, String accountId, String displayName, String refreshToken) {
             this.sessionId = sessionId;
             this.accountId = accountId;
             this.displayName = displayName;
+            this.refreshToken = refreshToken;
         }
 
         @Override
         public String toString() {
-            return "JagexAccountData{displayName='" + displayName + "', accountId='" + accountId + "'}";
+            return "JagexAccountData{displayName='" + displayName + "', accountId='" + accountId +
+                   "', hasRefreshToken=" + (refreshToken != null && !refreshToken.isEmpty()) + "}";
         }
     }
 
