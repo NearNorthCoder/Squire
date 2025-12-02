@@ -288,6 +288,10 @@ public class LicenseValidationPanel extends JPanel {
     private void validateLicense(JTextField licenseField) {
         String licenseKey = licenseField.getText().trim();
 
+        // TODO: Re-enable auth validation later
+        // For now, bypass all authentication to test client loading
+
+        /*
         // Validate input
         if (licenseKey.isEmpty()) {
             JOptionPane.showMessageDialog(this,
@@ -327,37 +331,31 @@ public class LicenseValidationPanel extends JPanel {
         // License validated successfully - set authentication state
         Launcher.authenticated = true;
         Launcher.auth = hwid;
+        */
+
+        // BYPASS: Skip auth, just mark as authenticated
+        Launcher.authenticated = true;
+        Launcher.auth = "bypass-auth-for-testing";
 
         // Ensure Squire directory exists
         if (!SQUIRE_DIR.exists()) {
             SQUIRE_DIR.mkdirs();
         }
 
-        // Save the license key to hwid file (this marks the user as registered)
+        // Save a dummy hwid file (this marks the user as registered)
         File hwidFile = new File(SQUIRE_DIR, "hwid");
         try {
             hwidFile.createNewFile();
             try (FileWriter writer = new FileWriter(hwidFile)) {
-                // Save the license key - this is used to verify on subsequent launches
-                writer.write(licenseKey.trim());
+                // Save dummy value to bypass auth check on next launch
+                writer.write(licenseKey.isEmpty() ? "bypass-auth" : licenseKey.trim());
             }
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                    "Failed to save license. Please try again.",
-                    "Save Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
         }
 
         // Close the current launcher frame
         LauncherFrame.close();
-
-        // Show success message and reopen launcher with profile selection
-        JOptionPane.showMessageDialog(null,
-                "License activated successfully! The launcher will now restart.",
-                "Activation Successful",
-                JOptionPane.INFORMATION_MESSAGE);
 
         // Reopen the launcher - it will now show profile selection since hwid file exists
         LauncherFrame.open(null);
