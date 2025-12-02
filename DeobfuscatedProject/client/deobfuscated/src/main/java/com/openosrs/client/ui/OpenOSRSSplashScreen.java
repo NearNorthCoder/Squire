@@ -71,11 +71,15 @@ public class OpenOSRSSplashScreen extends JFrame {
     }
 
     /**
-     * BYPASSED: Accepts any key without calling the Squire API.
-     * Original code called checkKey() which made HTTP request to:
-     * https://g0dp8zyku3.execute-api.eu-west-1.amazonaws.com/default/AuthenticateAlpha
+     * Authenticates the user with the given key.
      *
-     * This version skips that and just accepts the key directly.
+     * TODO: Re-enable API authentication when ready
+     * Original API endpoint: https://g0dp8zyku3.execute-api.eu-west-1.amazonaws.com/default/AuthenticateAlpha?key=%s&mid=%s
+     * Original flow:
+     *   1. checkKey(key) makes HTTP GET to API with key and hardware ID
+     *   2. If response code != 200, show error and exit
+     *   3. If success, call Squire.setAuthentication(key, hardwareId)
+     *   4. Call Squire.setDiscordId(responseBody)
      */
     public static void authenticate(String key) {
         log.info("===========================================");
@@ -86,12 +90,18 @@ public class OpenOSRSSplashScreen extends JFrame {
             key = "local-bypass-key";
         }
 
-        // BYPASSED: Original code called checkKey() here which made API request
-        // String res = OpenOSRSSplashScreen.checkKey(key);
-        // if (res == null || !res.equals(key)) {
-        //     JOptionPane.showMessageDialog(INSTANCE, res == null ? "Invalid key for alpha usage" : res, "Error", 0);
-        //     System.exit(0);
-        // }
+        /*
+         * TODO: Re-enable this block when API authentication is needed
+         * ============================================================
+         * String res = checkKey(key);
+         * if (res == null || !res.equals(key)) {
+         *     JOptionPane.showMessageDialog(INSTANCE,
+         *         res == null ? "Invalid key for alpha usage" : res,
+         *         "Error", JOptionPane.ERROR_MESSAGE);
+         *     System.exit(0);
+         * }
+         * ============================================================
+         */
 
         // Set authenticated flag
         authenticated = true;
@@ -102,15 +112,53 @@ public class OpenOSRSSplashScreen extends JFrame {
         INSTANCE.authPanel.setVisible(false);
         INSTANCE.getContentPane().add((Component) new InfoPanel(), BorderLayout.EAST);
 
-        // Generate a fake hardware ID
+        // Generate a fake hardware ID (same format as original: SHA-1 hash of IP:UUID)
         String fakeAuth = byteArrayToHexString(("local:" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8));
 
-        // Call Squire.setAuthentication to initialize the client properly
+        // TODO: When re-enabling auth, this should use the real hardware ID from checkKey()
         Squire.setAuthentication(key, fakeAuth);
         log.info("Called Squire.setAuthentication(key={}, auth={})", key, fakeAuth);
 
+        // TODO: Re-enable Discord ID from API response
+        // Squire.setDiscordId(responseBody);
+
         log.info("Authentication complete (API bypassed)");
     }
+
+    /*
+     * TODO: Re-enable checkKey method when API authentication is needed
+     * ==================================================================
+     * private static String checkKey(String key) {
+     *     if (key == null) return null;
+     *     if (checkInstances(key)) return "Your authentication key is invalid";
+     *
+     *     String details = getIP() + ":" + getUUID();
+     *     String auth = byteArrayToHexString(details.getBytes(StandardCharsets.UTF_8));
+     *     log.info("Hardware ID: " + auth);
+     *
+     *     OkHttpClient client = new OkHttpClient();
+     *     Request request = new Request.Builder()
+     *         .url(String.format(
+     *             "https://g0dp8zyku3.execute-api.eu-west-1.amazonaws.com/default/AuthenticateAlpha?key=%s&mid=%s",
+     *             key, auth))
+     *         .get()
+     *         .build();
+     *
+     *     try (Response res = client.newCall(request).execute()) {
+     *         ResponseBody body = res.body();
+     *         if (res.code() == 200 && body != null) {
+     *             Squire.setAuthentication(key, auth);
+     *             Squire.setDiscordId(body.string());
+     *             return key;
+     *         }
+     *         return body != null ? body.string() : "Error connecting to servers";
+     *     } catch (IOException e) {
+     *         log.error("Authentication servers are down", e);
+     *         return null;
+     *     }
+     * }
+     * ==================================================================
+     */
 
     private static String byteArrayToHexString(byte[] b) {
         try {
