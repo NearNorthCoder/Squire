@@ -359,7 +359,7 @@ public class SquireLauncher {
 
     /**
      * Loads accounts from launcher.dat
-     * @return List of [displayName, accountId, sessionId, refreshToken] arrays
+     * @return List of [displayName, accountId, sessionId, accessToken, refreshToken] arrays
      */
     private static List<String[]> loadAccountsFromFile() {
         List<String[]> accounts = new ArrayList<>();
@@ -378,28 +378,40 @@ public class SquireLauncher {
                 String line = scanner.nextLine();
                 log.debug("Line {}: {} chars", lineNumber, line.length());
 
-                // New format: ::idToken:refreshToken:accountId:displayName (6 parts)
-                // Old format: ::sessionId:accountId:displayName (5 parts)
+                // New format: ::sessionId:accessToken:refreshToken:accountId:displayName (7 parts)
+                // Old format v2: ::idToken:refreshToken:accountId:displayName (6 parts)
+                // Old format v1: ::sessionId:accountId:displayName (5 parts)
                 String[] parts = line.split(":");
                 log.debug("Line {} split into {} parts", lineNumber, parts.length);
 
-                if (parts.length >= 6) {
-                    // New format with refresh token
+                if (parts.length >= 7) {
+                    // New format with sessionId + accessToken + refreshToken
+                    String sessionId = parts[2];
+                    String accessToken = parts[3];
+                    String refreshToken = parts[4];
+                    String accountId = parts[5];
+                    String displayName = parts[6];
+                    log.debug("Parsed account (v3): displayName='{}', sessionId={}chars, accessToken={}chars, refreshToken={}chars",
+                             displayName, sessionId.length(), accessToken.length(), refreshToken != null ? refreshToken.length() : 0);
+                    accounts.add(new String[]{displayName, accountId, sessionId, accessToken, refreshToken});
+                } else if (parts.length >= 6) {
+                    // Old format v2: idToken as sessionId, with refreshToken
                     String idToken = parts[2];
                     String refreshToken = parts[3];
                     String accountId = parts[4];
                     String displayName = parts[5];
-                    log.debug("Parsed account (new format): displayName='{}', accountId='{}', idToken={}chars, refreshToken={}chars",
-                             displayName, accountId, idToken.length(), refreshToken != null ? refreshToken.length() : 0);
-                    accounts.add(new String[]{displayName, accountId, idToken, refreshToken});
+                    log.debug("Parsed account (v2): displayName='{}', idToken={}chars (used as both sessionId and accessToken)",
+                             displayName, idToken.length());
+                    // Use idToken for both sessionId and accessToken
+                    accounts.add(new String[]{displayName, accountId, idToken, idToken, refreshToken});
                 } else if (parts.length >= 5) {
-                    // Old format without refresh token
+                    // Old format v1: sessionId only
                     String sessionId = parts[2];
                     String accountId = parts[3];
                     String displayName = parts[4];
-                    log.debug("Parsed account (old format): displayName='{}', accountId='{}', sessionId={}chars",
-                             displayName, accountId, sessionId.length());
-                    accounts.add(new String[]{displayName, accountId, sessionId, null});
+                    log.debug("Parsed account (v1): displayName='{}', sessionId={}chars",
+                             displayName, sessionId.length());
+                    accounts.add(new String[]{displayName, accountId, sessionId, sessionId, null});
                 } else {
                     log.warn("Line {} has invalid format (expected 5+ parts, got {}): {}",
                             lineNumber, parts.length, line.substring(0, Math.min(50, line.length())) + "...");
@@ -416,7 +428,7 @@ public class SquireLauncher {
     /**
      * Looks up a Jagex account by display name and returns all account data.
      * @param displayName The display name to search for
-     * @return JagexAccountData containing sessionId, accountId, displayName, and refreshToken, or null if not found
+     * @return JagexAccountData containing sessionId, accessToken, accountId, displayName, and refreshToken, or null if not found
      */
     public static JagexAccountData lookupJagexAccount(String displayName) {
         log.info("lookupJagexAccount() - Searching for: '{}'", displayName);
@@ -431,10 +443,12 @@ public class SquireLauncher {
 
         for (int i = 0; i < accounts.size(); i++) {
             String[] account = accounts.get(i);
+            // Format: [displayName, accountId, sessionId, accessToken, refreshToken]
             String accDisplayName = account[0];
             String accAccountId = account[1];
             String accSessionId = account[2];
-            String accRefreshToken = account.length > 3 ? account[3] : null;
+            String accAccessToken = account.length > 3 ? account[3] : null;
+            String accRefreshToken = account.length > 4 ? account[4] : null;
 
             log.info("lookupJagexAccount() - Checking account {}: '{}' (id={})",
                     i + 1, accDisplayName, accAccountId);
@@ -443,9 +457,10 @@ public class SquireLauncher {
                 log.info("lookupJagexAccount() - MATCH FOUND!");
                 log.info("  displayName:   {}", accDisplayName);
                 log.info("  accountId:     {}", accAccountId);
-                log.info("  sessionId:     {} chars", accSessionId != null ? accSessionId.length() : 0);
-                log.info("  refreshToken:  {} chars", accRefreshToken != null ? accRefreshToken.length() : 0);
-                return new JagexAccountData(accSessionId, accAccountId, accDisplayName, accRefreshToken);
+                log.info("  sessionId:     {} chars (JX_SESSION_ID)", accSessionId != null ? accSessionId.length() : 0);
+                log.info("  accessToken:   {} chars (JX_ACCESS_TOKEN)", accAccessToken != null ? accAccessToken.length() : 0);
+                log.info("  refreshToken:  {} chars (JX_REFRESH_TOKEN)", accRefreshToken != null ? accRefreshToken.length() : 0);
+                return new JagexAccountData(accSessionId, accAccessToken, accAccountId, accDisplayName, accRefreshToken);
             }
         }
 
@@ -460,17 +475,19 @@ public class SquireLauncher {
      * Data class holding Jagex account information for launching.
      */
     public static class JagexAccountData {
-        public String sessionId;  // Mutable - can be refreshed
+        public String sessionId;     // Short game session ID for JX_SESSION_ID
+        public String accessToken;   // JWT for JX_ACCESS_TOKEN
         public final String accountId;
         public final String displayName;
         public final String refreshToken;
 
         public JagexAccountData(String sessionId, String accountId, String displayName) {
-            this(sessionId, accountId, displayName, null);
+            this(sessionId, null, accountId, displayName, null);
         }
 
-        public JagexAccountData(String sessionId, String accountId, String displayName, String refreshToken) {
+        public JagexAccountData(String sessionId, String accessToken, String accountId, String displayName, String refreshToken) {
             this.sessionId = sessionId;
+            this.accessToken = accessToken;
             this.accountId = accountId;
             this.displayName = displayName;
             this.refreshToken = refreshToken;
@@ -479,7 +496,9 @@ public class SquireLauncher {
         @Override
         public String toString() {
             return "JagexAccountData{displayName='" + displayName + "', accountId='" + accountId +
-                   "', hasRefreshToken=" + (refreshToken != null && !refreshToken.isEmpty()) + "}";
+                   "', sessionId=" + (sessionId != null ? sessionId.length() : 0) + " chars" +
+                   ", accessToken=" + (accessToken != null ? accessToken.length() : 0) + " chars" +
+                   ", hasRefreshToken=" + (refreshToken != null && !refreshToken.isEmpty()) + "}";
         }
     }
 
