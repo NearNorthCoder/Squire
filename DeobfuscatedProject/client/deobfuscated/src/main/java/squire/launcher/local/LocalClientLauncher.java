@@ -211,7 +211,7 @@ public class LocalClientLauncher {
         log.info("Waiting for client to exit...");
 
         // Wait for the client process to complete
-        // This keeps the launcher alive so the shutdown hook doesn't kill the subprocess
+        // This keeps the launcher alive so it doesn't exit and kill the subprocess
         int exitCode = process.waitFor();
         log.info("Client exited with code: {}", exitCode);
     }

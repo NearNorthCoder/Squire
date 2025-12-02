@@ -331,7 +331,10 @@ public class BrowserAccountImporter {
             }
 
             // Save accounts
+            // IMPORTANT: Store the realIdToken (JWT) as the session token, NOT the short game session ID
+            // The JX_ACCESS_TOKEN needs the actual JWT for authentication, not the 22-char session ID
             log.info("=== SAVING ACCOUNTS ===");
+            log.info("Using realIdToken as session (length: {} chars)", realIdToken.length());
             int imported = 0;
             for (Map<String, Object> account : accounts) {
                 String accountId = (String) account.get("accountId");
@@ -342,7 +345,8 @@ public class BrowserAccountImporter {
                 }
 
                 log.info("Saving account: {} ({})", displayName, accountId);
-                if (saveAccount(sessionId, accountId, displayName)) {
+                // Store realIdToken (JWT) instead of short sessionId for proper authentication
+                if (saveAccount(realIdToken, accountId, displayName)) {
                     imported++;
                     log.info("Successfully saved!");
                 } else {
