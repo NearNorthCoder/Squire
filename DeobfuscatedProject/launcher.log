@@ -3917,3 +3917,458 @@ java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" beca
 2025-12-02 11:57:41.023 [pool-7-thread-1] INFO  g.s.c.c.loader.SquirePluginManager - ===========================================
 2025-12-02 11:57:41.279 [Squire-Client] INFO  net.runelite.client.RuneLite - Client initialization took 18872ms. Uptime: 24092ms
 2025-12-02 11:57:41.992 [pool-1-thread-1] INFO  n.r.client.discord.DiscordService - Discord RPC service is ready with user toxicgrinds.
+2025-12-02 12:56:15.456 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 12:56:15.457 [main] INFO  squire.launcher.SquireLauncher - Starting Squire v1.0.0-LOCAL
+2025-12-02 12:56:15.459 [main] INFO  squire.launcher.SquireLauncher - LOCAL MODE - No network downloads required
+2025-12-02 12:56:15.459 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 12:56:15.459 [main] DEBUG s.launcher.config.OperatingSystem - Detected operating system: Windows
+2025-12-02 12:56:15.459 [main] INFO  squire.launcher.SquireLauncher - Operating System: Windows
+2025-12-02 12:56:15.459 [main] INFO  squire.launcher.SquireLauncher - Java Version: 25+37-LTS-3491
+2025-12-02 12:56:15.460 [main] INFO  squire.launcher.SquireLauncher - Squire Home: C:\Users\mikeh\.squire
+2025-12-02 12:56:15.460 [main] WARN  squire.launcher.SquireLauncher - Launcher class not found, authentication bypass not needed
+2025-12-02 12:56:23.153 [main] INFO  squire.launcher.SquireLauncher - Selected account: Zeka767
+2025-12-02 12:56:23.156 [main] INFO  squire.launcher.SquireLauncher - Found 78 JAR files in repository
+2025-12-02 12:56:23.156 [main] INFO  squire.launcher.SquireLauncher - Found client JAR: runelite-client-1.1.12-SNAPSHOT.jar
+2025-12-02 12:56:23.156 [main] INFO  squire.launcher.SquireLauncher - Found Jagex account data: JagexAccountData{displayName='Zeka767', accountId='355624183'}
+2025-12-02 12:56:23.157 [main] INFO  squire.launcher.SquireLauncher - Launching client from local repository...
+2025-12-02 12:56:23.157 [main] INFO  squire.launcher.SquireLauncher - Client args: [--account=Zeka767]
+2025-12-02 12:56:23.157 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client from local repository: C:\Users\mikeh\.squire\repository2
+2025-12-02 12:56:23.158 [main] INFO  s.launcher.local.LocalClientLauncher - Found 78 JAR files in repository
+2025-12-02 12:56:23.158 [main] INFO  s.launcher.local.LocalClientLauncher - Launching with Jagex account: Zeka767
+2025-12-02 12:56:23.158 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client as subprocess with Jagex account environment variables...
+2025-12-02 12:56:23.158 [main] INFO  s.launcher.local.LocalClientLauncher - Added launcher JAR to classpath: G:\Freedom55\DeobfuscatedProject\client\deobfuscated\target\squire-launcher-1.0.0-SNAPSHOT.jar
+2025-12-02 12:56:23.159 [main] INFO  s.launcher.local.LocalClientLauncher - Subprocess command: java -cp <classpath> net.runelite.client.RuneLite --account=Zeka767
+2025-12-02 12:56:23.160 [main] INFO  s.launcher.local.LocalClientLauncher - Set Jagex environment variables:
+2025-12-02 12:56:23.161 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_SESSION_ID: 38AEL6yEivIQugFAvj45...
+2025-12-02 12:56:23.161 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_CHARACTER_ID: 355624183
+2025-12-02 12:56:23.161 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_DISPLAY_NAME: Zeka767
+2025-12-02 12:56:23.326 [main] INFO  s.launcher.local.LocalClientLauncher - Client subprocess started with PID: 44796
+2025-12-02 12:56:23.326 [main] INFO  s.launcher.local.LocalClientLauncher - Client is running. Close this window to terminate.
+2025-12-02 12:56:23.326 [main] INFO  squire.launcher.SquireLauncher - Client launched successfully!
+2025-12-02 12:56:24.462 [Thread-0] INFO  s.launcher.local.LocalClientLauncher - Terminating client subprocess...
+2025-12-02 12:57:19.217 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 12:57:19.218 [main] INFO  squire.launcher.SquireLauncher - Starting Squire v1.0.0-LOCAL
+2025-12-02 12:57:19.219 [main] INFO  squire.launcher.SquireLauncher - LOCAL MODE - No network downloads required
+2025-12-02 12:57:19.219 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 12:57:19.219 [main] DEBUG s.launcher.config.OperatingSystem - Detected operating system: Windows
+2025-12-02 12:57:19.219 [main] INFO  squire.launcher.SquireLauncher - Operating System: Windows
+2025-12-02 12:57:19.219 [main] INFO  squire.launcher.SquireLauncher - Java Version: 25+37-LTS-3491
+2025-12-02 12:57:19.220 [main] INFO  squire.launcher.SquireLauncher - Squire Home: C:\Users\mikeh\.squire
+2025-12-02 12:57:19.220 [main] WARN  squire.launcher.SquireLauncher - Launcher class not found, authentication bypass not needed
+2025-12-02 12:57:22.478 [main] INFO  squire.launcher.SquireLauncher - Selected account: Zeka767
+2025-12-02 12:57:22.479 [main] INFO  squire.launcher.SquireLauncher - Found 78 JAR files in repository
+2025-12-02 12:57:22.479 [main] INFO  squire.launcher.SquireLauncher - Found client JAR: runelite-client-1.1.12-SNAPSHOT.jar
+2025-12-02 12:57:22.480 [main] INFO  squire.launcher.SquireLauncher - Found Jagex account data: JagexAccountData{displayName='Zeka767', accountId='355624183'}
+2025-12-02 12:57:22.480 [main] INFO  squire.launcher.SquireLauncher - Launching client from local repository...
+2025-12-02 12:57:22.480 [main] INFO  squire.launcher.SquireLauncher - Client args: [--account=Zeka767]
+2025-12-02 12:57:22.481 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client from local repository: C:\Users\mikeh\.squire\repository2
+2025-12-02 12:57:22.482 [main] INFO  s.launcher.local.LocalClientLauncher - Found 78 JAR files in repository
+2025-12-02 12:57:22.482 [main] INFO  s.launcher.local.LocalClientLauncher - Launching with Jagex account: Zeka767
+2025-12-02 12:57:22.482 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client as subprocess with Jagex account environment variables...
+2025-12-02 12:57:22.482 [main] INFO  s.launcher.local.LocalClientLauncher - Added launcher JAR to classpath: G:\Freedom55\DeobfuscatedProject\client\deobfuscated\target\squire-launcher-1.0.0-SNAPSHOT.jar
+2025-12-02 12:57:22.483 [main] INFO  s.launcher.local.LocalClientLauncher - Subprocess command: java -cp <classpath> net.runelite.client.RuneLite --account=Zeka767
+2025-12-02 12:57:22.484 [main] INFO  s.launcher.local.LocalClientLauncher - Set Jagex environment variables:
+2025-12-02 12:57:22.484 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_SESSION_ID: 38AEL6yEivIQugFAvj45...
+2025-12-02 12:57:22.484 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_CHARACTER_ID: 355624183
+2025-12-02 12:57:22.484 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_DISPLAY_NAME: Zeka767
+2025-12-02 12:57:22.653 [main] INFO  s.launcher.local.LocalClientLauncher - Client subprocess started with PID: 58456
+2025-12-02 12:57:22.654 [main] INFO  s.launcher.local.LocalClientLauncher - Client is running. Close this window to terminate.
+2025-12-02 12:57:22.654 [main] INFO  squire.launcher.SquireLauncher - Client launched successfully!
+2025-12-02 12:57:23.778 [Thread-0] INFO  s.launcher.local.LocalClientLauncher - Terminating client subprocess...
+2025-12-02 12:58:19 [LauncherThread] INFO  net.runelite.launcher.Launcher - Squire Launcher version 2.7.8
+2025-12-02 12:58:19 [LauncherThread] INFO  net.runelite.launcher.Launcher - Setting hardware acceleration to DIRECTDRAW
+2025-12-02 12:58:20 [LauncherThread] INFO  net.runelite.launcher.Launcher - Failed grabbing bootstrap Response{protocol=http/1.1, code=502, message=Bad Gateway, url=https://6kvxsi2v4a3jozbz3qlc56uuxa0ecqrh.lambda-url.eu-west-1.on.aws/} - okhttp3.internal.http.RealResponseBody@5cd33c2d
+2025-12-02 12:58:20 [LauncherThread] ERROR net.runelite.launcher.Launcher - Failure during startup
+java.lang.NullPointerException: Cannot invoke "net.runelite.launcher.beans.Bootstrap.getArtifacts()" because "bootstrap" is null
+	at net.runelite.launcher.Launcher.launch(Launcher.java:668)
+	at net.runelite.launcher.Launcher.main(Launcher.java:311)
+	at net.runelite.launcher.LauncherWithLogging.lambda$main$1(LauncherWithLogging.java:71)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-12-02 13:01:39.485 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 13:01:39.487 [main] INFO  squire.launcher.SquireLauncher - Starting Squire v1.0.0-LOCAL
+2025-12-02 13:01:39.487 [main] INFO  squire.launcher.SquireLauncher - LOCAL MODE - No network downloads required
+2025-12-02 13:01:39.487 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 13:01:39.487 [main] DEBUG s.launcher.config.OperatingSystem - Detected operating system: Windows
+2025-12-02 13:01:39.487 [main] INFO  squire.launcher.SquireLauncher - Operating System: Windows
+2025-12-02 13:01:39.487 [main] INFO  squire.launcher.SquireLauncher - Java Version: 25+37-LTS-3491
+2025-12-02 13:01:39.488 [main] INFO  squire.launcher.SquireLauncher - Squire Home: C:\Users\mikeh\.squire
+2025-12-02 13:01:39.488 [main] WARN  squire.launcher.SquireLauncher - Launcher class not found, authentication bypass not needed
+2025-12-02 13:01:43.030 [main] INFO  squire.launcher.SquireLauncher - Selected account: Zeka767
+2025-12-02 13:01:43.031 [main] INFO  squire.launcher.SquireLauncher - Found 78 JAR files in repository
+2025-12-02 13:01:43.031 [main] INFO  squire.launcher.SquireLauncher - Found client JAR: runelite-client-1.1.12-SNAPSHOT.jar
+2025-12-02 13:01:43.032 [main] INFO  squire.launcher.SquireLauncher - Found Jagex account data: JagexAccountData{displayName='Zeka767', accountId='355624183'}
+2025-12-02 13:01:43.032 [main] INFO  squire.launcher.SquireLauncher - Launching client from local repository...
+2025-12-02 13:01:43.032 [main] INFO  squire.launcher.SquireLauncher - Client args: [--account=Zeka767]
+2025-12-02 13:01:43.032 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client from local repository: C:\Users\mikeh\.squire\repository2
+2025-12-02 13:01:43.034 [main] INFO  s.launcher.local.LocalClientLauncher - Found 78 JAR files in repository
+2025-12-02 13:01:43.035 [main] INFO  s.launcher.local.LocalClientLauncher - Launching with Jagex account: Zeka767
+2025-12-02 13:01:43.035 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client as subprocess with Jagex account environment variables...
+2025-12-02 13:01:43.035 [main] INFO  s.launcher.local.LocalClientLauncher - Added launcher JAR to classpath: G:\Freedom55\DeobfuscatedProject\client\deobfuscated\target\squire-launcher-1.0.0-SNAPSHOT.jar
+2025-12-02 13:01:43.035 [main] INFO  s.launcher.local.LocalClientLauncher - Subprocess command: java -cp <classpath> net.runelite.client.RuneLite --account=Zeka767
+2025-12-02 13:01:43.037 [main] INFO  s.launcher.local.LocalClientLauncher - Set Jagex environment variables:
+2025-12-02 13:01:43.037 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_SESSION_ID: 38AEL6yEivIQugFAvj45...
+2025-12-02 13:01:43.037 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_CHARACTER_ID: 355624183
+2025-12-02 13:01:43.037 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_DISPLAY_NAME: Zeka767
+2025-12-02 13:01:43.201 [main] INFO  s.launcher.local.LocalClientLauncher - Client subprocess started with PID: 40432
+2025-12-02 13:01:43.203 [main] INFO  s.launcher.local.LocalClientLauncher - Client is running. Close this window to terminate.
+2025-12-02 13:01:48.550 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - ===========================================
+2025-12-02 13:01:48.550 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - AUTHENTICATION - Processing key
+2025-12-02 13:01:48.550 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - ===========================================
+2025-12-02 13:01:48.550 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - >>> checkKey() ENTRY - key=BYPASS
+2025-12-02 13:01:48.551 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - API BYPASSED, accepting any key
+2025-12-02 13:01:48.551 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Generating hardware ID...
+2025-12-02 13:01:48.552 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Got bytes, calling byteArrayToHexString...
+2025-12-02 13:01:48.552 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Hardware ID generated: aaea97155a88b38eb338c7fa5b88dad0930df8e4
+2025-12-02 13:01:48.552 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - About to call Squire.setAuthentication(key=BYPASS, auth=aaea97155a88b38eb338c7fa5b88dad0930df8e4)
+2025-12-02 13:01:48.552 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Loading Squire class...
+2025-12-02 13:01:48.552 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Squire class loaded: gg.squire.client.Squire
+2025-12-02 13:01:48.552 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Calling Squire.setAuthentication...
+2025-12-02 13:02:01.267 [main] INFO  s.launcher.local.LocalClientLauncher - Client subprocess exited with code: 0
+2025-12-02 13:02:01.267 [main] INFO  squire.launcher.SquireLauncher - Client launched successfully!
+2025-12-02 13:11:52.078 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 13:11:52.079 [main] INFO  squire.launcher.SquireLauncher - Starting Squire v1.0.0-LOCAL
+2025-12-02 13:11:52.079 [main] INFO  squire.launcher.SquireLauncher - LOCAL MODE - No network downloads required
+2025-12-02 13:11:52.079 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 13:11:52.080 [main] DEBUG s.launcher.config.OperatingSystem - Detected operating system: Windows
+2025-12-02 13:11:52.080 [main] INFO  squire.launcher.SquireLauncher - Operating System: Windows
+2025-12-02 13:11:52.080 [main] INFO  squire.launcher.SquireLauncher - Java Version: 25+37-LTS-3491
+2025-12-02 13:11:52.080 [main] INFO  squire.launcher.SquireLauncher - Squire Home: C:\Users\mikeh\.squire
+2025-12-02 13:11:52.080 [main] WARN  squire.launcher.SquireLauncher - Launcher class not found, authentication bypass not needed
+2025-12-02 13:11:54.989 [main] INFO  squire.launcher.SquireLauncher - Selected account: Zeka767
+2025-12-02 13:11:54.991 [main] INFO  squire.launcher.SquireLauncher - Found 78 JAR files in repository
+2025-12-02 13:11:54.992 [main] INFO  squire.launcher.SquireLauncher - Found client JAR: runelite-client-1.1.12-SNAPSHOT.jar
+2025-12-02 13:11:54.992 [main] INFO  squire.launcher.SquireLauncher - Found Jagex account data: JagexAccountData{displayName='Zeka767', accountId='355624183'}
+2025-12-02 13:11:54.993 [main] INFO  squire.launcher.SquireLauncher - Launching client from local repository...
+2025-12-02 13:11:54.993 [main] INFO  squire.launcher.SquireLauncher - Client args: [--account=Zeka767]
+2025-12-02 13:11:54.993 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client from local repository: C:\Users\mikeh\.squire\repository2
+2025-12-02 13:11:54.995 [main] INFO  s.launcher.local.LocalClientLauncher - Found 78 JAR files in repository
+2025-12-02 13:11:54.995 [main] INFO  s.launcher.local.LocalClientLauncher - Launching with Jagex account: Zeka767
+2025-12-02 13:11:54.995 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client as subprocess with Jagex account environment variables...
+2025-12-02 13:11:54.995 [main] INFO  s.launcher.local.LocalClientLauncher - Added launcher JAR to classpath: G:\Freedom55\DeobfuscatedProject\client\deobfuscated\target\squire-launcher-1.0.0-SNAPSHOT.jar
+2025-12-02 13:11:54.996 [main] INFO  s.launcher.local.LocalClientLauncher - Subprocess command: java -cp <classpath> net.runelite.client.RuneLite --account=Zeka767
+2025-12-02 13:11:54.997 [main] INFO  s.launcher.local.LocalClientLauncher - Set Jagex environment variables:
+2025-12-02 13:11:54.997 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_SESSION_ID: 38AEL6yEivIQugFAvj45...
+2025-12-02 13:11:54.997 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_CHARACTER_ID: 355624183
+2025-12-02 13:11:54.997 [main] INFO  s.launcher.local.LocalClientLauncher -   JX_DISPLAY_NAME: Zeka767
+2025-12-02 13:11:55.166 [main] INFO  s.launcher.local.LocalClientLauncher - Client subprocess started with PID: 34848
+2025-12-02 13:11:55.166 [main] INFO  s.launcher.local.LocalClientLauncher - Client is running. Close this window to terminate.
+2025-12-02 13:11:58.739 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - ===========================================
+2025-12-02 13:11:58.740 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - AUTHENTICATION - Processing key
+2025-12-02 13:11:58.740 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - ===========================================
+2025-12-02 13:11:58.740 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - >>> checkKey() ENTRY - key=BYPASS
+2025-12-02 13:11:58.740 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - API BYPASSED, accepting any key
+2025-12-02 13:11:58.740 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Generating hardware ID...
+2025-12-02 13:11:58.741 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Got bytes, calling byteArrayToHexString...
+2025-12-02 13:11:58.741 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Hardware ID generated: 82d4a9e169c51562a04968422a67eb23f260984f
+2025-12-02 13:11:58.741 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - About to call Squire.setAuthentication(key=BYPASS, auth=82d4a9e169c51562a04968422a67eb23f260984f)
+2025-12-02 13:11:58.741 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Loading Squire class...
+2025-12-02 13:11:58.741 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Squire class loaded: gg.squire.client.Squire
+2025-12-02 13:11:58.741 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Calling Squire.setAuthentication...
+2025-12-02 13:11:58.742 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Squire.setAuthentication completed successfully
+2025-12-02 13:11:58.742 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - <<< checkKey() EXIT - returning key: BYPASS
+2025-12-02 13:11:58.742 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Set authenticated = true
+2025-12-02 13:11:58.753 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Authentication complete
+2025-12-02 13:11:58.760 [main] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version unknown) starting up, args: --account=Zeka767
+2025-12-02 13:11:58.768 [main] INFO  net.runelite.client.RuneLite - Java VM arguments: -Xmx512m -Djava.net.preferIPv4Stack=true
+2025-12-02 13:12:00.693 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-12-02 13:12:01.071 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-12-02 13:12:01.465 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-12-02 13:12:01.470 [main] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-12-02 13:12:01.472 [main] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-12-02 13:12:01.486 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-12-02 13:12:01.490 [pool-1-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-12-02 13:12:01.493 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-12-02 13:12:01.493 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-12-02 13:12:01.496 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-12-02 13:12:01.537 [pool-1-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-12-02 13:12:01.678 [main] INFO  org.jgroups.JChannel - local_addr: d40173fa-909d-4584-a674-19a8df59c443, name: 58d04875-be13-4bda-8ebf-96adcf4065a0
+2025-12-02 13:12:01.703 [main] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.63573
+2025-12-02 13:12:04.707 [main] INFO  org.jgroups.protocols.pbcast.GMS - 58d04875-be13-4bda-8ebf-96adcf4065a0: no members discovered after 3002 ms: creating cluster as coordinator
+2025-12-02 13:12:04.722 [main] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-12-02 13:12:05.032 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-12-02 13:12:05.149 [main] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-12-02 13:12:05.350 [main] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 1ms
+2025-12-02 13:12:05.434 [main] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-12-02 13:12:06.306 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-12-02 13:12:06.695 [main] INFO  net.runelite.client.RuneLite - Client initialization took 7927ms. Uptime: 11503ms
+2025-12-02 13:12:07.441 [pool-1-thread-1] INFO  n.r.client.discord.DiscordService - Discord RPC service is ready with user toxicgrinds.
+2025-12-02 13:12:08.062 [pool-7-thread-1] ERROR net.runelite.client.RuneLite - Uncaught exception:
+com.google.gson.JsonSyntaxException: Expected a com.google.gson.JsonArray but was com.google.gson.JsonPrimitive; at path $
+	at com.google.gson.internal.bind.TypeAdapters$34$1.read(TypeAdapters.java:1010)
+	at com.google.gson.Gson.fromJson(Gson.java:1227)
+	at com.google.gson.Gson.fromJson(Gson.java:1137)
+	at com.google.gson.Gson.fromJson(Gson.java:1047)
+	at com.google.gson.Gson.fromJson(Gson.java:982)
+	at gg.squire.client.core.loader.SquirePluginManager.loadRemotePlugins(SquirePluginManager.java:128)
+	at gg.squire.client.core.loader.SquirePluginManager.load(SquirePluginManager.java:232)
+	at gg.squire.client.core.loader.SquirePluginManager.lambda$reload$0(SquirePluginManager.java:211)
+	at gg.squire.client.core.loader.SquirePluginManager.lambda$unload$2(SquirePluginManager.java:320)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-12-02 13:14:05.360 [main] INFO  s.launcher.local.LocalClientLauncher - Client subprocess exited with code: 0
+2025-12-02 13:14:05.361 [main] INFO  squire.launcher.SquireLauncher - Client launched successfully!
+2025-12-02 13:21:18.928 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 13:21:18.931 [main] INFO  squire.launcher.SquireLauncher - Starting Squire v1.0.0-LOCAL
+2025-12-02 13:21:18.931 [main] INFO  squire.launcher.SquireLauncher - LOCAL MODE - No network downloads required
+2025-12-02 13:21:18.931 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 13:21:18.931 [main] DEBUG s.launcher.config.OperatingSystem - Detected operating system: Windows
+2025-12-02 13:21:18.932 [main] INFO  squire.launcher.SquireLauncher - Operating System: Windows
+2025-12-02 13:21:18.932 [main] INFO  squire.launcher.SquireLauncher - Java Version: 25+37-LTS-3491
+2025-12-02 13:21:18.932 [main] INFO  squire.launcher.SquireLauncher - Squire Home: C:\Users\mikeh\.squire
+2025-12-02 13:21:20.376 [main] INFO  squire.launcher.SquireLauncher - Bypassed Squire authentication (authenticated=true)
+2025-12-02 13:21:20.376 [main] INFO  squire.launcher.SquireLauncher - Set auth token to 'bypassed'
+2025-12-02 13:21:20.377 [main] DEBUG squire.launcher.SquireLauncher - Reading launcher.dat from: C:\Users\mikeh\.squire\launcher.dat
+2025-12-02 13:21:20.380 [main] DEBUG squire.launcher.SquireLauncher - Line 1: 45 chars
+2025-12-02 13:21:20.380 [main] DEBUG squire.launcher.SquireLauncher - Line 1 split into 5 parts
+2025-12-02 13:21:20.380 [main] DEBUG squire.launcher.SquireLauncher - Parsed account: displayName='Aloof kill', accountId='355383229', sessionId=22chars
+2025-12-02 13:21:20.380 [main] DEBUG squire.launcher.SquireLauncher - Line 2: 42 chars
+2025-12-02 13:21:20.380 [main] DEBUG squire.launcher.SquireLauncher - Line 2 split into 5 parts
+2025-12-02 13:21:20.380 [main] DEBUG squire.launcher.SquireLauncher - Parsed account: displayName='Zeka767', accountId='355624183', sessionId=22chars
+2025-12-02 13:21:20.380 [main] DEBUG squire.launcher.SquireLauncher - Loaded 2 accounts from launcher.dat
+2025-12-02 13:21:23.287 [main] INFO  squire.launcher.SquireLauncher - Selected account: Zeka767
+2025-12-02 13:21:23.288 [main] INFO  squire.launcher.SquireLauncher - Found 78 JAR files in repository
+2025-12-02 13:21:23.288 [main] INFO  squire.launcher.SquireLauncher - Found client JAR: runelite-client-1.1.12-SNAPSHOT.jar
+2025-12-02 13:21:23.288 [main] INFO  squire.launcher.SquireLauncher - =======================================================
+2025-12-02 13:21:23.288 [main] INFO  squire.launcher.SquireLauncher - LOOKING UP JAGEX ACCOUNT: Zeka767
+2025-12-02 13:21:23.288 [main] INFO  squire.launcher.SquireLauncher - =======================================================
+2025-12-02 13:21:23.288 [main] INFO  squire.launcher.SquireLauncher - Searching in launcher.dat: C:\Users\mikeh\.squire\launcher.dat
+2025-12-02 13:21:23.288 [main] INFO  squire.launcher.SquireLauncher - File exists: true
+2025-12-02 13:21:23.289 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - Searching for: 'Zeka767'
+2025-12-02 13:21:23.289 [main] DEBUG squire.launcher.SquireLauncher - Reading launcher.dat from: C:\Users\mikeh\.squire\launcher.dat
+2025-12-02 13:21:23.289 [main] DEBUG squire.launcher.SquireLauncher - Line 1: 45 chars
+2025-12-02 13:21:23.289 [main] DEBUG squire.launcher.SquireLauncher - Line 1 split into 5 parts
+2025-12-02 13:21:23.289 [main] DEBUG squire.launcher.SquireLauncher - Parsed account: displayName='Aloof kill', accountId='355383229', sessionId=22chars
+2025-12-02 13:21:23.289 [main] DEBUG squire.launcher.SquireLauncher - Line 2: 42 chars
+2025-12-02 13:21:23.290 [main] DEBUG squire.launcher.SquireLauncher - Line 2 split into 5 parts
+2025-12-02 13:21:23.291 [main] DEBUG squire.launcher.SquireLauncher - Parsed account: displayName='Zeka767', accountId='355624183', sessionId=22chars
+2025-12-02 13:21:23.291 [main] DEBUG squire.launcher.SquireLauncher - Loaded 2 accounts from launcher.dat
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - Found 2 accounts in launcher.dat
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - Checking account 1: 'Aloof kill' (id=355383229)
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - Checking account 2: 'Zeka767' (id=355624183)
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - MATCH FOUND!
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher -   displayName: Zeka767
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher -   accountId:   355624183
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher -   sessionId:   22 chars
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher - SUCCESS: Found Jagex account data!
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher -   Display Name: Zeka767
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher -   Account ID:   355624183
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher -   Session ID:   22 chars
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher - =======================================================
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher - Launching client from local repository...
+2025-12-02 13:21:23.291 [main] INFO  squire.launcher.SquireLauncher - Client args: [--account=Zeka767]
+2025-12-02 13:21:23.292 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client from local repository: C:\Users\mikeh\.squire\repository2
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - Found 78 JAR files in repository
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - Launching with Jagex account: Zeka767
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - =======================================================
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - JAGEX ACCOUNT LOGIN - SUBPROCESS LAUNCH
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - =======================================================
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - Account Display Name: Zeka767
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - Account ID: 355624183
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - Session ID Length: 22 chars
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - Repository: C:\Users\mikeh\.squire\repository2
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - JAR files: 78
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - Client args: [--account=Zeka767]
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - -------------------------------------------------------
+2025-12-02 13:21:23.293 [main] INFO  s.launcher.local.LocalClientLauncher - Added launcher JAR to classpath: G:\Freedom55\DeobfuscatedProject\client\deobfuscated\target\squire-launcher-1.0.0-SNAPSHOT.jar
+2025-12-02 13:21:23.294 [main] INFO  s.launcher.local.LocalClientLauncher - Subprocess command: java -cp <classpath> net.runelite.client.RuneLite --account=Zeka767
+2025-12-02 13:21:23.294 [main] INFO  s.launcher.local.LocalClientLauncher - -------------------------------------------------------
+2025-12-02 13:21:23.294 [main] INFO  s.launcher.local.LocalClientLauncher - SETTING JAGEX ENVIRONMENT VARIABLES
+2025-12-02 13:21:23.294 [main] INFO  s.launcher.local.LocalClientLauncher - -------------------------------------------------------
+2025-12-02 13:21:23.295 [main] INFO  s.launcher.local.LocalClientLauncher - JX_SESSION_ID:    38AEL6yEivIQugFAvj45... (length: 22)
+2025-12-02 13:21:23.295 [main] INFO  s.launcher.local.LocalClientLauncher - JX_CHARACTER_ID:  355624183
+2025-12-02 13:21:23.295 [main] INFO  s.launcher.local.LocalClientLauncher - JX_DISPLAY_NAME:  Zeka767
+2025-12-02 13:21:23.295 [main] INFO  s.launcher.local.LocalClientLauncher - JX_ACCESS_TOKEN:  (same as session ID)
+2025-12-02 13:21:23.295 [main] INFO  s.launcher.local.LocalClientLauncher - JX_REFRESH_TOKEN: (empty)
+2025-12-02 13:21:23.295 [main] INFO  s.launcher.local.LocalClientLauncher - -------------------------------------------------------
+2025-12-02 13:21:23.295 [main] INFO  s.launcher.local.LocalClientLauncher - STARTING CLIENT SUBPROCESS...
+2025-12-02 13:21:23.462 [main] INFO  s.launcher.local.LocalClientLauncher - SUCCESS: Client subprocess started with PID: 44200
+2025-12-02 13:21:23.463 [main] INFO  s.launcher.local.LocalClientLauncher - =======================================================
+2025-12-02 13:21:23.463 [main] INFO  s.launcher.local.LocalClientLauncher - Client is running. Close this window to terminate.
+2025-12-02 13:21:23.463 [main] INFO  squire.launcher.SquireLauncher - Client launched successfully!
+2025-12-02 13:21:24.593 [Thread-0] INFO  s.launcher.local.LocalClientLauncher - Terminating client subprocess...
+2025-12-02 13:26:32.099 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 13:26:32.100 [main] INFO  squire.launcher.SquireLauncher - Starting Squire v1.0.0-LOCAL
+2025-12-02 13:26:32.102 [main] INFO  squire.launcher.SquireLauncher - LOCAL MODE - No network downloads required
+2025-12-02 13:26:32.102 [main] INFO  squire.launcher.SquireLauncher - ==============================================
+2025-12-02 13:26:32.102 [main] DEBUG s.launcher.config.OperatingSystem - Detected operating system: Windows
+2025-12-02 13:26:32.102 [main] INFO  squire.launcher.SquireLauncher - Operating System: Windows
+2025-12-02 13:26:32.102 [main] INFO  squire.launcher.SquireLauncher - Java Version: 25+37-LTS-3491
+2025-12-02 13:26:32.103 [main] INFO  squire.launcher.SquireLauncher - Squire Home: C:\Users\mikeh\.squire
+2025-12-02 13:26:32.222 [main] INFO  squire.launcher.SquireLauncher - Bypassed Squire authentication (authenticated=true)
+2025-12-02 13:26:32.222 [main] INFO  squire.launcher.SquireLauncher - Set auth token to 'bypassed'
+2025-12-02 13:26:32.223 [main] DEBUG squire.launcher.SquireLauncher - Reading launcher.dat from: C:\Users\mikeh\.squire\launcher.dat
+2025-12-02 13:26:32.226 [main] DEBUG squire.launcher.SquireLauncher - Line 1: 45 chars
+2025-12-02 13:26:32.227 [main] DEBUG squire.launcher.SquireLauncher - Line 1 split into 5 parts
+2025-12-02 13:26:32.227 [main] DEBUG squire.launcher.SquireLauncher - Parsed account: displayName='Aloof kill', accountId='355383229', sessionId=22chars
+2025-12-02 13:26:32.227 [main] DEBUG squire.launcher.SquireLauncher - Line 2: 42 chars
+2025-12-02 13:26:32.227 [main] DEBUG squire.launcher.SquireLauncher - Line 2 split into 5 parts
+2025-12-02 13:26:32.227 [main] DEBUG squire.launcher.SquireLauncher - Parsed account: displayName='Zeka767', accountId='355624183', sessionId=22chars
+2025-12-02 13:26:32.227 [main] DEBUG squire.launcher.SquireLauncher - Loaded 2 accounts from launcher.dat
+2025-12-02 13:26:34.858 [main] INFO  squire.launcher.SquireLauncher - Selected account: Zeka767
+2025-12-02 13:26:34.859 [main] INFO  squire.launcher.SquireLauncher - Found 78 JAR files in repository
+2025-12-02 13:26:34.860 [main] INFO  squire.launcher.SquireLauncher - Found client JAR: runelite-client-1.1.12-SNAPSHOT.jar
+2025-12-02 13:26:34.860 [main] INFO  squire.launcher.SquireLauncher - =======================================================
+2025-12-02 13:26:34.860 [main] INFO  squire.launcher.SquireLauncher - LOOKING UP JAGEX ACCOUNT: Zeka767
+2025-12-02 13:26:34.860 [main] INFO  squire.launcher.SquireLauncher - =======================================================
+2025-12-02 13:26:34.860 [main] INFO  squire.launcher.SquireLauncher - Searching in launcher.dat: C:\Users\mikeh\.squire\launcher.dat
+2025-12-02 13:26:34.860 [main] INFO  squire.launcher.SquireLauncher - File exists: true
+2025-12-02 13:26:34.860 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - Searching for: 'Zeka767'
+2025-12-02 13:26:34.860 [main] DEBUG squire.launcher.SquireLauncher - Reading launcher.dat from: C:\Users\mikeh\.squire\launcher.dat
+2025-12-02 13:26:34.860 [main] DEBUG squire.launcher.SquireLauncher - Line 1: 45 chars
+2025-12-02 13:26:34.860 [main] DEBUG squire.launcher.SquireLauncher - Line 1 split into 5 parts
+2025-12-02 13:26:34.860 [main] DEBUG squire.launcher.SquireLauncher - Parsed account: displayName='Aloof kill', accountId='355383229', sessionId=22chars
+2025-12-02 13:26:34.860 [main] DEBUG squire.launcher.SquireLauncher - Line 2: 42 chars
+2025-12-02 13:26:34.860 [main] DEBUG squire.launcher.SquireLauncher - Line 2 split into 5 parts
+2025-12-02 13:26:34.860 [main] DEBUG squire.launcher.SquireLauncher - Parsed account: displayName='Zeka767', accountId='355624183', sessionId=22chars
+2025-12-02 13:26:34.860 [main] DEBUG squire.launcher.SquireLauncher - Loaded 2 accounts from launcher.dat
+2025-12-02 13:26:34.860 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - Found 2 accounts in launcher.dat
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - Checking account 1: 'Aloof kill' (id=355383229)
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - Checking account 2: 'Zeka767' (id=355624183)
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher - lookupJagexAccount() - MATCH FOUND!
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher -   displayName: Zeka767
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher -   accountId:   355624183
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher -   sessionId:   22 chars
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher - SUCCESS: Found Jagex account data!
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher -   Display Name: Zeka767
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher -   Account ID:   355624183
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher -   Session ID:   22 chars
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher - =======================================================
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher - Launching client from local repository...
+2025-12-02 13:26:34.861 [main] INFO  squire.launcher.SquireLauncher - Client args: [--account=Zeka767]
+2025-12-02 13:26:34.862 [main] INFO  s.launcher.local.LocalClientLauncher - Launching client from local repository: C:\Users\mikeh\.squire\repository2
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - Found 78 JAR files in repository
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - Launching with Jagex account: Zeka767
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - =======================================================
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - JAGEX ACCOUNT LOGIN - SUBPROCESS LAUNCH
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - =======================================================
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - Account Display Name: Zeka767
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - Account ID: 355624183
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - Session ID Length: 22 chars
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - Repository: C:\Users\mikeh\.squire\repository2
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - JAR files: 78
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - Client args: [--account=Zeka767]
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - -------------------------------------------------------
+2025-12-02 13:26:34.863 [main] INFO  s.launcher.local.LocalClientLauncher - Added launcher JAR to classpath: G:\Freedom55\DeobfuscatedProject\client\deobfuscated\target\squire-launcher-1.0.0-SNAPSHOT.jar
+2025-12-02 13:26:34.864 [main] INFO  s.launcher.local.LocalClientLauncher - Subprocess command: java -cp <classpath> net.runelite.client.RuneLite --account=Zeka767
+2025-12-02 13:26:34.864 [main] INFO  s.launcher.local.LocalClientLauncher - -------------------------------------------------------
+2025-12-02 13:26:34.864 [main] INFO  s.launcher.local.LocalClientLauncher - SETTING JAGEX ENVIRONMENT VARIABLES
+2025-12-02 13:26:34.864 [main] INFO  s.launcher.local.LocalClientLauncher - -------------------------------------------------------
+2025-12-02 13:26:34.865 [main] INFO  s.launcher.local.LocalClientLauncher - JX_SESSION_ID:    38AEL6yEivIQugFAvj45... (length: 22)
+2025-12-02 13:26:34.865 [main] INFO  s.launcher.local.LocalClientLauncher - JX_CHARACTER_ID:  355624183
+2025-12-02 13:26:34.865 [main] INFO  s.launcher.local.LocalClientLauncher - JX_DISPLAY_NAME:  Zeka767
+2025-12-02 13:26:34.865 [main] INFO  s.launcher.local.LocalClientLauncher - JX_ACCESS_TOKEN:  (same as session ID)
+2025-12-02 13:26:34.865 [main] INFO  s.launcher.local.LocalClientLauncher - JX_REFRESH_TOKEN: (empty)
+2025-12-02 13:26:34.865 [main] INFO  s.launcher.local.LocalClientLauncher - -------------------------------------------------------
+2025-12-02 13:26:34.866 [main] INFO  s.launcher.local.LocalClientLauncher - STARTING CLIENT SUBPROCESS...
+2025-12-02 13:26:35.029 [main] INFO  s.launcher.local.LocalClientLauncher - SUCCESS: Client subprocess started with PID: 43280
+2025-12-02 13:26:35.029 [main] INFO  s.launcher.local.LocalClientLauncher - =======================================================
+2025-12-02 13:26:35.029 [main] INFO  s.launcher.local.LocalClientLauncher - Waiting for client to exit...
+2025-12-02 13:26:38.554 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - ===========================================
+2025-12-02 13:26:38.554 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - AUTHENTICATION - Processing key
+2025-12-02 13:26:38.555 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - ===========================================
+2025-12-02 13:26:38.555 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - >>> checkKey() ENTRY - key=BYPASS
+2025-12-02 13:26:38.555 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - API BYPASSED, accepting any key
+2025-12-02 13:26:38.555 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Generating hardware ID...
+2025-12-02 13:26:38.556 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Got bytes, calling byteArrayToHexString...
+2025-12-02 13:26:38.556 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Hardware ID generated: f46135af5725bc57d06771a5bba3a1a820de29d9
+2025-12-02 13:26:38.556 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - About to call Squire.setAuthentication(key=BYPASS, auth=f46135af5725bc57d06771a5bba3a1a820de29d9)
+2025-12-02 13:26:38.556 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Loading Squire class...
+2025-12-02 13:26:38.556 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Squire class loaded: gg.squire.client.Squire
+2025-12-02 13:26:38.556 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Calling Squire.setAuthentication...
+2025-12-02 13:26:40.184 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - checkKey() - Squire.setAuthentication completed successfully
+2025-12-02 13:26:40.184 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - <<< checkKey() EXIT - returning key: BYPASS
+2025-12-02 13:26:40.184 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Set authenticated = true
+2025-12-02 13:26:40.195 [AWT-EventQueue-0] INFO  c.o.client.ui.OpenOSRSSplashScreen - Authentication complete
+2025-12-02 13:26:40.198 [main] INFO  net.runelite.client.RuneLite - RuneLite 1.10.36 (launcher version unknown) starting up, args: --account=Zeka767
+2025-12-02 13:26:40.204 [main] INFO  net.runelite.client.RuneLite - Java VM arguments: -Xmx512m -Djava.net.preferIPv4Stack=true
+2025-12-02 13:26:42.700 [Preloader] INFO  net.runelite.client.rs.ClientLoader - Using cached vanilla client
+2025-12-02 13:26:43.059 [Preloader] INFO  net.runelite.client.rs.ClientLoader - injected-client 1.1.12-SNAPSHOT
+2025-12-02 13:26:43.332 [pool-1-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loading transports
+2025-12-02 13:26:43.382 [pool-1-thread-1] INFO  n.u.a.m.pathfinder.TransportLoader - Loaded 5260 transports
+2025-12-02 13:26:43.420 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-12-02 13:26:43.425 [main] INFO  n.r.client.config.ConfigManager - Profile 'default' (sync: false, active: true, id: 967549554112900)
+2025-12-02 13:26:43.426 [main] INFO  n.r.client.config.ConfigManager - Using profile: default (967549554112900)
+2025-12-02 13:26:43.438 [main] INFO  n.r.client.account.SessionManager - No session file exists
+2025-12-02 13:26:43.442 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+2025-12-02 13:26:43.443 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+2025-12-02 13:26:43.444 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.6.0 in 'deployment' mode
+2025-12-02 13:26:43.617 [main] INFO  org.jgroups.JChannel - local_addr: 889a3b4b-a93a-46e2-94cf-cf9f3c845f27, name: c5bc6cb6-fe63-43ef-9861-9bfaf673a56f
+2025-12-02 13:26:43.642 [main] INFO  org.jgroups.protocols.FD_SOCK2 - server listening on *.55828
+2025-12-02 13:26:46.646 [main] INFO  org.jgroups.protocols.pbcast.GMS - c5bc6cb6-fe63-43ef-9861-9bfaf673a56f: no members discovered after 3002 ms: creating cluster as coordinator
+2025-12-02 13:26:46.660 [main] WARN  n.r.c.p.OPRSExternalPf4jPluginManager - No plugins
+2025-12-02 13:26:46.895 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NegativeArraySizeException: -211188125
+	at java.desktop/java.awt.image.DataBufferInt.<init>(DataBufferInt.java:76)
+	at java.desktop/java.awt.image.Raster.createPackedRaster(Raster.java:538)
+	at java.desktop/java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	at java.desktop/java.awt.image.BufferedImage.<init>(BufferedImage.java:331)
+	at net.runelite.client.game.ChatIconManager.loadRankIcons(ChatIconManager.java:224)
+	at net.runelite.client.game.ChatIconManager.lambda$new$0(ChatIconManager.java:84)
+	at net.runelite.client.callback.ClientThread.lambda$invokeLater$2(ClientThread.java:97)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-12-02 13:26:47.077 [main] INFO  n.r.c.plugins.kourendlibrary.Library - Library is now reset
+2025-12-02 13:26:47.257 [main] INFO  n.r.c.p.OPRSExternalPluginManager - External plugin instantiation took 1ms
+2025-12-02 13:26:47.342 [main] INFO  n.r.client.discord.DiscordService - Initializing Discord RPC service.
+2025-12-02 13:26:48.016 [Client] ERROR n.r.client.callback.ClientThread - Exception in invoke
+java.lang.NullPointerException: Cannot invoke "[Ljava.lang.String;.clone()" because the return value of "net.runelite.api.EnumComposition.getStringVals()" is null
+	at net.runelite.client.plugins.slayer.SlayerPlugin.lambda$startUp$1(SlayerPlugin.java:232)
+	at net.runelite.client.callback.ClientThread.invokeList(ClientThread.java:136)
+	at net.runelite.client.callback.ClientThread.invoke(ClientThread.java:118)
+	at net.runelite.client.callback.Hooks.tick(Hooks.java:216)
+	at client.doCycle(Client.java:2977)
+	at client.bf(Client.java)
+	at bm.bo(GameEngine.java:463)
+	at bm.run(GameEngine.java:439)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-12-02 13:26:48.648 [main] INFO  net.runelite.client.RuneLite - Client initialization took 8443ms. Uptime: 13594ms
+2025-12-02 13:26:49.349 [pool-1-thread-1] INFO  n.r.client.discord.DiscordService - Discord RPC service is ready with user toxicgrinds.
+2025-12-02 13:26:51.182 [pool-8-thread-1] ERROR net.runelite.client.RuneLite - Uncaught exception:
+com.google.gson.JsonSyntaxException: Expected a com.google.gson.JsonArray but was com.google.gson.JsonPrimitive; at path $
+	at com.google.gson.internal.bind.TypeAdapters$34$1.read(TypeAdapters.java:1010)
+	at com.google.gson.Gson.fromJson(Gson.java:1227)
+	at com.google.gson.Gson.fromJson(Gson.java:1137)
+	at com.google.gson.Gson.fromJson(Gson.java:1047)
+	at com.google.gson.Gson.fromJson(Gson.java:982)
+	at gg.squire.client.core.loader.SquirePluginManager.loadRemotePlugins(SquirePluginManager.java:128)
+	at gg.squire.client.core.loader.SquirePluginManager.load(SquirePluginManager.java:232)
+	at gg.squire.client.core.loader.SquirePluginManager.lambda$reload$0(SquirePluginManager.java:211)
+	at gg.squire.client.core.loader.SquirePluginManager.lambda$unload$2(SquirePluginManager.java:320)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-12-02 13:27:10.632 [main] INFO  s.launcher.local.LocalClientLauncher - Client exited with code: 0
+2025-12-02 13:27:10.632 [main] INFO  squire.launcher.SquireLauncher - Client launched successfully!
