@@ -40,16 +40,24 @@ fi
 echo ""
 echo "Patching JAR with bypassed classes..."
 
-# Update the JAR with our bypassed OpenOSRSSplashScreen
 cd "$TARGET_DIR/classes"
-jar uf "$CLIENT_JAR" com/openosrs/client/ui/OpenOSRSSplashScreen.class
 
+# Update the JAR with our bypassed OpenOSRSSplashScreen (auth bypass)
+jar uf "$CLIENT_JAR" com/openosrs/client/ui/OpenOSRSSplashScreen.class
 echo "✓ Patched: com/openosrs/client/ui/OpenOSRSSplashScreen.class"
 
-# Verify the patch
+# Update the JAR with our bypassed SquirePluginManager (local plugin loading)
+if [ -f "gg/squire/client/core/loader/SquirePluginManager.class" ]; then
+    jar uf "$CLIENT_JAR" gg/squire/client/core/loader/SquirePluginManager.class
+    echo "✓ Patched: gg/squire/client/core/loader/SquirePluginManager.class"
+else
+    echo "⚠ SquirePluginManager.class not found - skipping plugin loader patch"
+fi
+
+# Verify the patches
 echo ""
-echo "Verifying patch..."
-unzip -l "$CLIENT_JAR" | grep "OpenOSRSSplashScreen.class"
+echo "Verifying patches..."
+unzip -l "$CLIENT_JAR" | grep -E "(OpenOSRSSplashScreen|SquirePluginManager).class"
 
 echo ""
 echo "==========================================="

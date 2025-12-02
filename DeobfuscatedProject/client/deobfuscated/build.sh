@@ -41,9 +41,15 @@ CLASSPATH="$CLASSPATH:$REPO_DIR/okio-jvm-3.0.0.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/kotlin-stdlib-1.6.21.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/kotlin-stdlib-common-1.6.21.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/annotations-22.0.0.jar"
+# Dependency injection
+CLASSPATH="$CLASSPATH:$REPO_DIR/guice-5.0.1.jar"
+CLASSPATH="$CLASSPATH:$REPO_DIR/javax.inject-1.jar"
+# Plugin framework
+CLASSPATH="$CLASSPATH:$REPO_DIR/pf4j-3.6.0.jar"
+CLASSPATH="$CLASSPATH:$REPO_DIR/pf4j-update-2.3.0.jar"
 # Include original Squire launcher for AccountImporter
 CLASSPATH="$CLASSPATH:$LIB_DIR/squire-with-logging.jar"
-# Include client JAR for OpenOSRSSplashScreen bypass
+# Include client JAR for OpenOSRSSplashScreen bypass and other classes
 CLASSPATH="$CLASSPATH:$REPO_DIR/runelite-client-1.1.12-SNAPSHOT.jar"
 
 # Clean and create target directory
