@@ -72,12 +72,27 @@ public class LocalClientLauncher {
         });
 
         // Build URL array for classloader
-        URL[] urls = new URL[jarFiles.length];
-        for (int i = 0; i < jarFiles.length; i++) {
-            File jar = jarFiles[i];
-            urls[i] = jar.toURI().toURL();
+        // IMPORTANT: Include our launcher JAR FIRST so our bypassed classes take precedence
+        List<URL> urlList = new ArrayList<>();
+
+        // Add our launcher JAR first (contains bypassed OpenOSRSSplashScreen, etc.)
+        try {
+            // Get the JAR that contains this class (squire-launcher-local.jar)
+            URL launcherJarUrl = LocalClientLauncher.class.getProtectionDomain()
+                .getCodeSource().getLocation();
+            urlList.add(launcherJarUrl);
+            log.info("Added launcher JAR first (for bypassed classes): {}", launcherJarUrl);
+        } catch (Exception e) {
+            log.warn("Could not add launcher JAR to client classpath: {}", e.getMessage());
+        }
+
+        // Then add all repository JARs
+        for (File jar : jarFiles) {
+            urlList.add(jar.toURI().toURL());
             log.debug("Adding to classpath: {}", jar.getName());
         }
+
+        URL[] urls = urlList.toArray(new URL[0]);
 
         // Create classloader with platform classloader as parent
         // This isolates the client from the launcher's classpath
