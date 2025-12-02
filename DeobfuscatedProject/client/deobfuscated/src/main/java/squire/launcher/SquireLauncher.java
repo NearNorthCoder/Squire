@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import squire.launcher.config.OperatingSystem;
 import squire.launcher.config.OSType;
 import squire.launcher.ui.LauncherFrame;
+import net.runelite.launcher.Launcher;
 
 /**
  * Main entry point for the Squire launcher.
@@ -65,7 +66,7 @@ public class SquireLauncher {
      *             --profile <name> : Launch with specified profile
      *             --first-launch   : Force first-launch mode (license validation)
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         log.info("Starting {} v{}", APP_NAME, VERSION);
         log.info("Operating System: {}", OperatingSystem.getCurrent());
         log.info("Java Version: {}", Runtime.version());
@@ -77,24 +78,14 @@ public class SquireLauncher {
             SQUIRE_HOME.mkdirs();
         }
 
-        // Parse command line arguments
-        String profileName = parseProfileArg(args);
-        boolean forceFirstLaunch = hasArg(args, "--first-launch");
+        // BYPASS: Skip all UI, set auth and launch client directly
+        log.info("Bypassing authentication - launching client directly...");
+        Launcher.authenticated = true;
+        Launcher.auth = "bypass-auth-for-testing";
 
-        // Set look and feel
-        try {
-            setLookAndFeel();
-        } catch (Exception e) {
-            log.warn("Failed to set look and feel", e);
-        }
-
-        // Launch the UI
-        log.info("Launching UI...");
-        if (forceFirstLaunch) {
-            LauncherFrame.open("FirstLaunch");
-        } else {
-            LauncherFrame.open(profileName);
-        }
+        // Call the original Squire launcher main method directly
+        // This bypasses our UI and goes straight to client loading
+        Launcher.main(args);
     }
 
     /**
