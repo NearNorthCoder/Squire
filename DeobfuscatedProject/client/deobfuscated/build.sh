@@ -41,6 +41,9 @@ CLASSPATH="$CLASSPATH:$REPO_DIR/okio-jvm-3.0.0.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/kotlin-stdlib-1.6.21.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/kotlin-stdlib-common-1.6.21.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/annotations-22.0.0.jar"
+# JNA for Windows DPAPI access
+CLASSPATH="$CLASSPATH:$REPO_DIR/jna-5.9.0.jar"
+CLASSPATH="$CLASSPATH:$REPO_DIR/jna-platform-5.9.0.jar"
 # Dependency injection
 CLASSPATH="$CLASSPATH:$REPO_DIR/guice-5.0.1.jar"
 CLASSPATH="$CLASSPATH:$REPO_DIR/javax.inject-1.jar"

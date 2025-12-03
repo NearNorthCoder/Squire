@@ -203,7 +203,7 @@ public class TempleTrekkingQuestStep implements QuestStep {
         if (!buyingItems) {
             // Close GE if open
             if (GrandExchange.isOpen()) {
-                b.g();
+                GrandExchangeUtil.closeGrandExchange();
             }
 
             handleRewardClaiming(rewardPreference);
@@ -219,13 +219,13 @@ public class TempleTrekkingQuestStep implements QuestStep {
             if (!cityArea.contains(Players.getLocal().getWorldLocation()) &&
                 !swampArea.contains(Players.getLocal().getWorldLocation()) &&
                 !hasRequiredItems() &&
-                Players.getLocal().getWorldLocation().distanceTo(b.I) > DISTANCE_7) {
-                Movement.walkTo(b.I);
+                Players.getLocal().getWorldLocation().distanceTo(GrandExchangeUtil.GE_LOCATION) > DISTANCE_7) {
+                Movement.walkTo(GrandExchangeUtil.GE_LOCATION);
                 Time.sleepTicks(SLEEP_1_TICK);
             }
 
             // Handle banking if needed
-            if (!hasRequiredItems() && Players.getLocal().getWorldLocation().distanceTo(b.I) < DISTANCE_14) {
+            if (!hasRequiredItems() && Players.getLocal().getWorldLocation().distanceTo(GrandExchangeUtil.GE_LOCATION) < DISTANCE_14) {
                 handleBanking();
             }
 
@@ -500,7 +500,7 @@ public class TempleTrekkingQuestStep implements QuestStep {
             (TileObjects.getNearest(obj -> obj.getName().contains("bridge")) != null ||
              TileObjects.getNearest(obj -> obj.getName().contains("Swamp tree")) != null)) {
 
-            if (Players.getLocal().getWorldLocation().distanceTo(b.I) > DISTANCE_10) {
+            if (Players.getLocal().getWorldLocation().distanceTo(GrandExchangeUtil.GE_LOCATION) > DISTANCE_10) {
                 TileObject evadeObject = TileObjects.getNearest("Bog");
                 if (evadeObject != null) {
                     bogAnchorPoint = null;
