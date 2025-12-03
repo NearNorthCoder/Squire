@@ -266,8 +266,8 @@ public class JagexCredentialDecryptor {
      *
      * Format: IV:Base64(EncryptedData)
      * Where:
-     * - IV is 16 ASCII characters (used as initialization vector)
-     * - EncryptedData is AES-256-GCM encrypted JSON
+     * - IV is a 16-character Base64 string that decodes to 12 bytes (GCM nonce)
+     * - EncryptedData is Base64(ciphertext + 16-byte GCM tag)
      */
     private static List<JagexCredentials> decryptCredentialsFile(String content, byte[] aesKey) {
         List<JagexCredentials> credentials = new ArrayList<>();
@@ -283,38 +283,80 @@ public class JagexCredentialDecryptor {
             String ivString = content.substring(0, colonIndex);
             String encryptedB64 = content.substring(colonIndex + 1).trim();
 
-            log.info("IV: {} (length: {})", ivString, ivString.length());
+            log.info("IV string: {} (length: {})", ivString, ivString.length());
             log.info("Encrypted data length: {} (Base64)", encryptedB64.length());
 
-            // Decode the encrypted data
+            // The IV string is Base64-encoded and decodes to 12 bytes (GCM nonce)
+            byte[] nonce;
+            try {
+                nonce = Base64.getDecoder().decode(ivString);
+                log.info("Decoded nonce: {} bytes (hex: {})", nonce.length, bytesToHex(nonce));
+            } catch (IllegalArgumentException e) {
+                // Fallback: use IV as raw ASCII bytes
+                log.warn("IV is not valid Base64, using as raw ASCII");
+                nonce = ivString.getBytes(StandardCharsets.US_ASCII);
+            }
+
+            // Decode the encrypted data (contains ciphertext + GCM tag)
             byte[] encryptedData = Base64.getDecoder().decode(encryptedB64);
             log.info("Encrypted data length: {} bytes (decoded)", encryptedData.length);
 
             // Try different decryption methods
             String decrypted = null;
 
-            // Method 1: AES-GCM with provided key
+            // Method 1: AES-GCM with provided key and Base64-decoded nonce
             if (aesKey != null && aesKey.length == 32) {
-                decrypted = decryptAESGCM(encryptedData, aesKey, ivString.getBytes(StandardCharsets.US_ASCII));
+                log.info("Attempting AES-256-GCM with DPAPI key...");
+                log.info("  Key length: {} bytes", aesKey.length);
+                log.info("  Nonce length: {} bytes", nonce.length);
+
+                decrypted = decryptAESGCMWithNonce(encryptedData, aesKey, nonce);
                 if (decrypted != null) {
-                    log.info("Decrypted using AES-GCM with DPAPI key");
+                    log.info("SUCCESS: Decrypted using AES-GCM with DPAPI key and Base64-decoded nonce");
                 }
             }
 
-            // Method 2: Try DPAPI directly on the encrypted blob (in case whole blob is DPAPI encrypted)
+            // Method 2: Try AES-GCM with nonce truncated/padded to 12 bytes
+            if (decrypted == null && aesKey != null && aesKey.length == 32 && nonce.length != 12) {
+                log.info("Attempting AES-GCM with nonce adjusted to 12 bytes...");
+                byte[] adjustedNonce = new byte[12];
+                System.arraycopy(nonce, 0, adjustedNonce, 0, Math.min(nonce.length, 12));
+                decrypted = decryptAESGCMWithNonce(encryptedData, aesKey, adjustedNonce);
+                if (decrypted != null) {
+                    log.info("SUCCESS: Decrypted using AES-GCM with adjusted nonce");
+                }
+            }
+
+            // Method 3: Try DPAPI directly on the encrypted blob
             if (decrypted == null && Platform.isWindows()) {
+                log.info("Attempting direct DPAPI decryption...");
                 byte[] dpapiDecrypted = decryptWithDPAPI(encryptedData);
                 if (dpapiDecrypted != null) {
                     decrypted = new String(dpapiDecrypted, StandardCharsets.UTF_8);
-                    log.info("Decrypted using direct DPAPI");
+                    log.info("SUCCESS: Decrypted using direct DPAPI");
                 }
             }
 
-            // Method 3: AES-CBC with IV as key derivation input
+            // Method 4: AES-CBC fallback
             if (decrypted == null && aesKey != null) {
-                decrypted = decryptAESCBC(encryptedData, aesKey, ivString.getBytes(StandardCharsets.US_ASCII));
+                log.info("Attempting AES-CBC fallback...");
+                // For CBC, use 16-byte IV (pad nonce if needed)
+                byte[] iv16 = new byte[16];
+                System.arraycopy(nonce, 0, iv16, 0, Math.min(nonce.length, 16));
+                decrypted = decryptAESCBC(encryptedData, aesKey, iv16);
                 if (decrypted != null) {
-                    log.info("Decrypted using AES-CBC");
+                    log.info("SUCCESS: Decrypted using AES-CBC");
+                }
+            }
+
+            // Method 5: AES-CTR fallback
+            if (decrypted == null && aesKey != null) {
+                log.info("Attempting AES-CTR fallback...");
+                byte[] iv16 = new byte[16];
+                System.arraycopy(nonce, 0, iv16, 0, Math.min(nonce.length, 16));
+                decrypted = decryptAESCTR(encryptedData, aesKey, iv16);
+                if (decrypted != null) {
+                    log.info("SUCCESS: Decrypted using AES-CTR");
                 }
             }
 
@@ -323,6 +365,8 @@ public class JagexCredentialDecryptor {
             }
 
             log.warn("All decryption methods failed");
+            log.warn("Please ensure you're running on Windows with the same user account that installed the Jagex Launcher");
+            log.warn("The DPAPI key is tied to the Windows user profile");
             return credentials;
 
         } catch (Exception e) {
@@ -332,54 +376,154 @@ public class JagexCredentialDecryptor {
     }
 
     /**
-     * Decrypts using AES-256-GCM (Chromium's preferred method).
+     * Convert bytes to hex string for logging.
      */
-    private static String decryptAESGCM(byte[] encryptedData, byte[] key, byte[] ivFromFile) {
-        try {
-            // For AES-GCM, the first 12 bytes of encrypted data are the nonce
-            // But in this format, the IV is separate, so try both approaches
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
 
-            // Approach 1: IV from file as nonce (padded/truncated to 12 bytes)
-            byte[] nonce = new byte[GCM_NONCE_LENGTH];
-            System.arraycopy(ivFromFile, 0, nonce, 0, Math.min(ivFromFile.length, GCM_NONCE_LENGTH));
+    /**
+     * Decrypts using AES-256-GCM with provided nonce.
+     * Tries multiple data format variations to handle different encryption implementations.
+     */
+    private static String decryptAESGCMWithNonce(byte[] encryptedData, byte[] key, byte[] nonce) {
+        // Ensure nonce is exactly 12 bytes for GCM
+        byte[] gcmNonce = nonce;
+        if (nonce.length != GCM_NONCE_LENGTH) {
+            log.info("Adjusting nonce from {} to {} bytes", nonce.length, GCM_NONCE_LENGTH);
+            gcmNonce = new byte[GCM_NONCE_LENGTH];
+            System.arraycopy(nonce, 0, gcmNonce, 0, Math.min(nonce.length, GCM_NONCE_LENGTH));
+        }
 
-            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-            SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-            GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH, nonce);
+        log.info("AES-GCM decryption attempt:");
+        log.info("  Nonce (hex): {}", bytesToHex(gcmNonce));
+        log.info("  Key (first 8 bytes hex): {}", bytesToHex(Arrays.copyOf(key, 8)));
+        log.info("  Encrypted data: {} bytes", encryptedData.length);
 
-            cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmSpec);
-            byte[] decrypted = cipher.doFinal(encryptedData);
-            return new String(decrypted, StandardCharsets.UTF_8);
+        // Try multiple format variations
+        String[] attempts = {
+            "Standard format (ciphertext || tag)",
+            "Tag at beginning (tag || ciphertext)",
+            "Skip first 16 bytes header (header || ciphertext || tag)",
+            "Nonce embedded (skip first 12 bytes)",
+            "Nonce embedded (skip first 16 bytes)"
+        };
 
-        } catch (Exception e) {
-            // Try approach 2: Nonce embedded in encrypted data
+        for (int attempt = 0; attempt < attempts.length; attempt++) {
             try {
-                if (encryptedData.length < GCM_NONCE_LENGTH) {
-                    return null;
+                byte[] dataToDecrypt;
+                byte[] nonceToUse = gcmNonce;
+
+                switch (attempt) {
+                    case 0:
+                        // Standard: ciphertext || tag (tag at end)
+                        dataToDecrypt = encryptedData;
+                        break;
+
+                    case 1:
+                        // Tag at beginning: tag || ciphertext -> ciphertext || tag
+                        if (encryptedData.length < 16) continue;
+                        byte[] tag = Arrays.copyOfRange(encryptedData, 0, 16);
+                        byte[] ciphertext = Arrays.copyOfRange(encryptedData, 16, encryptedData.length);
+                        dataToDecrypt = new byte[encryptedData.length];
+                        System.arraycopy(ciphertext, 0, dataToDecrypt, 0, ciphertext.length);
+                        System.arraycopy(tag, 0, dataToDecrypt, ciphertext.length, 16);
+                        break;
+
+                    case 2:
+                        // Header at beginning: skip first 16 bytes
+                        if (encryptedData.length < 32) continue;
+                        dataToDecrypt = Arrays.copyOfRange(encryptedData, 16, encryptedData.length);
+                        break;
+
+                    case 3:
+                        // 12-byte nonce embedded at start of data
+                        if (encryptedData.length < 12) continue;
+                        nonceToUse = Arrays.copyOfRange(encryptedData, 0, 12);
+                        dataToDecrypt = Arrays.copyOfRange(encryptedData, 12, encryptedData.length);
+                        break;
+
+                    case 4:
+                        // 16-byte IV embedded at start (use first 12 as nonce)
+                        if (encryptedData.length < 16) continue;
+                        nonceToUse = Arrays.copyOfRange(encryptedData, 0, 12);
+                        dataToDecrypt = Arrays.copyOfRange(encryptedData, 16, encryptedData.length);
+                        break;
+
+                    default:
+                        continue;
                 }
 
-                byte[] nonce = Arrays.copyOfRange(encryptedData, 0, GCM_NONCE_LENGTH);
-                byte[] ciphertext = Arrays.copyOfRange(encryptedData, GCM_NONCE_LENGTH, encryptedData.length);
+                log.info("  Trying: {}", attempts[attempt]);
+                log.info("    Data length: {} bytes, Nonce: {}", dataToDecrypt.length, bytesToHex(nonceToUse));
 
                 Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
                 SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-                GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH, nonce);
+                GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH, nonceToUse);
 
                 cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmSpec);
-                byte[] decrypted = cipher.doFinal(ciphertext);
-                return new String(decrypted, StandardCharsets.UTF_8);
+                byte[] decrypted = cipher.doFinal(dataToDecrypt);
 
-            } catch (Exception e2) {
-                log.debug("AES-GCM decryption failed: {}", e2.getMessage());
-                return null;
+                String result = new String(decrypted, StandardCharsets.UTF_8);
+
+                // Validate result looks like JSON
+                if (result.trim().startsWith("[") || result.trim().startsWith("{")) {
+                    log.info("SUCCESS with: {}", attempts[attempt]);
+                    log.info("Decrypted {} chars, starts with: {}", result.length(),
+                            result.substring(0, Math.min(100, result.length())));
+                    return result;
+                } else {
+                    log.info("Decryption produced non-JSON output, continuing to next attempt...");
+                }
+
+            } catch (javax.crypto.AEADBadTagException e) {
+                log.debug("  {} - Tag mismatch", attempts[attempt]);
+            } catch (Exception e) {
+                log.debug("  {} - {}: {}", attempts[attempt], e.getClass().getSimpleName(), e.getMessage());
             }
         }
+
+        log.warn("All AES-GCM format variations failed");
+        return null;
+    }
+
+    /**
+     * Decrypts using AES-256-GCM (legacy method for compatibility).
+     */
+    private static String decryptAESGCM(byte[] encryptedData, byte[] key, byte[] ivFromFile) {
+        return decryptAESGCMWithNonce(encryptedData, key, ivFromFile);
     }
 
     /**
      * Decrypts using AES-256-CBC (fallback method).
+     * Tries multiple IV interpretations.
      */
     private static String decryptAESCBC(byte[] encryptedData, byte[] key, byte[] iv) {
+        log.info("Attempting AES-CBC decryption...");
+
+        // Try standard CBC with provided IV
+        String result = tryAESCBC(encryptedData, key, iv);
+        if (result != null) return result;
+
+        // Try with IV embedded at start of encrypted data
+        if (encryptedData.length > 16) {
+            byte[] embeddedIv = Arrays.copyOfRange(encryptedData, 0, 16);
+            byte[] ciphertext = Arrays.copyOfRange(encryptedData, 16, encryptedData.length);
+            result = tryAESCBC(ciphertext, key, embeddedIv);
+            if (result != null) {
+                log.info("AES-CBC succeeded with embedded IV");
+                return result;
+            }
+        }
+
+        return null;
+    }
+
+    private static String tryAESCBC(byte[] encryptedData, byte[] key, byte[] iv) {
         try {
             // Ensure IV is 16 bytes
             byte[] ivBytes = new byte[16];
@@ -391,10 +535,49 @@ public class JagexCredentialDecryptor {
 
             cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
             byte[] decrypted = cipher.doFinal(encryptedData);
-            return new String(decrypted, StandardCharsets.UTF_8);
+            String result = new String(decrypted, StandardCharsets.UTF_8);
+
+            // Validate it looks like JSON
+            if (result.trim().startsWith("[") || result.trim().startsWith("{")) {
+                log.info("AES-CBC decryption successful!");
+                return result;
+            }
+            return null;
 
         } catch (Exception e) {
             log.debug("AES-CBC decryption failed: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Decrypts using AES-256-CTR (another fallback method).
+     */
+    private static String decryptAESCTR(byte[] encryptedData, byte[] key, byte[] iv) {
+        log.info("Attempting AES-CTR decryption...");
+
+        try {
+            // Ensure IV is 16 bytes
+            byte[] ivBytes = new byte[16];
+            System.arraycopy(iv, 0, ivBytes, 0, Math.min(iv.length, 16));
+
+            Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
+            SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+            javax.crypto.spec.IvParameterSpec ivSpec = new javax.crypto.spec.IvParameterSpec(ivBytes);
+
+            cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+            byte[] decrypted = cipher.doFinal(encryptedData);
+            String result = new String(decrypted, StandardCharsets.UTF_8);
+
+            // Validate it looks like JSON
+            if (result.trim().startsWith("[") || result.trim().startsWith("{")) {
+                log.info("AES-CTR decryption successful!");
+                return result;
+            }
+            return null;
+
+        } catch (Exception e) {
+            log.debug("AES-CTR decryption failed: {}", e.getMessage());
             return null;
         }
     }
@@ -493,29 +676,95 @@ public class JagexCredentialDecryptor {
     }
 
     /**
+     * Test decryption with a provided key (for testing without DPAPI).
+     *
+     * @param credsFile Path to the creds file
+     * @param hexKey The AES key as a hex string (64 hex chars = 32 bytes)
+     * @return List of decrypted credentials
+     */
+    public static List<JagexCredentials> readCredentialsWithKey(File credsFile, String hexKey) {
+        byte[] aesKey = hexStringToBytes(hexKey);
+        if (aesKey == null || aesKey.length != 32) {
+            log.error("Invalid key: must be 64 hex characters (32 bytes)");
+            return new ArrayList<>();
+        }
+
+        try {
+            String content = Files.readString(credsFile.toPath(), StandardCharsets.UTF_8);
+            return decryptCredentialsFile(content, aesKey);
+        } catch (IOException e) {
+            log.error("Failed to read credentials file", e);
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Convert hex string to byte array.
+     */
+    private static byte[] hexStringToBytes(String hex) {
+        if (hex == null || hex.length() % 2 != 0) {
+            return null;
+        }
+        hex = hex.toLowerCase().replaceAll("\\s+", "");
+        byte[] bytes = new byte[hex.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int index = i * 2;
+            int value = Integer.parseInt(hex.substring(index, index + 2), 16);
+            bytes[i] = (byte) value;
+        }
+        return bytes;
+    }
+
+    /**
      * Main method for testing decryption.
+     *
+     * Usage:
+     *   java JagexCredentialDecryptor                        # Use default location with DPAPI
+     *   java JagexCredentialDecryptor <creds_file>           # Use specific creds file with DPAPI
+     *   java JagexCredentialDecryptor <creds_file> <local_state>  # Use specific files with DPAPI
+     *   java JagexCredentialDecryptor <creds_file> --key <hex_key> # Use hex key directly
      */
     public static void main(String[] args) {
         System.out.println("=== Jagex Credential Decryptor Test ===");
         System.out.println("Platform: " + System.getProperty("os.name"));
         System.out.println("Jagex Launcher Dir: " + getJagexLauncherDir());
         System.out.println("Has Credentials: " + hasJagexLauncherCredentials());
+        System.out.println();
 
-        if (args.length > 0) {
-            // Test with specific file
+        List<JagexCredentials> creds;
+
+        if (args.length >= 3 && args[1].equals("--key")) {
+            // Test with specific creds file and hex key
+            File credsFile = new File(args[0]);
+            String hexKey = args[2];
+            System.out.println("Using creds file: " + credsFile.getAbsolutePath());
+            System.out.println("Using hex key: " + hexKey.substring(0, Math.min(16, hexKey.length())) + "...");
+            creds = readCredentialsWithKey(credsFile, hexKey);
+        } else if (args.length > 0) {
+            // Test with specific files
             File credsFile = new File(args[0]);
             File localStateFile = args.length > 1 ? new File(args[1]) : null;
-            List<JagexCredentials> creds = readCredentials(credsFile, localStateFile);
-            System.out.println("Found " + creds.size() + " credentials");
-            for (JagexCredentials cred : creds) {
-                System.out.println("  " + cred);
+            System.out.println("Using creds file: " + credsFile.getAbsolutePath());
+            if (localStateFile != null) {
+                System.out.println("Using Local State file: " + localStateFile.getAbsolutePath());
             }
+            creds = readCredentials(credsFile, localStateFile);
         } else {
             // Try default location
-            List<JagexCredentials> creds = readCredentials();
-            System.out.println("Found " + creds.size() + " credentials");
-            for (JagexCredentials cred : creds) {
-                System.out.println("  " + cred);
+            System.out.println("Using default Jagex Launcher location");
+            creds = readCredentials();
+        }
+
+        System.out.println();
+        System.out.println("=== Results ===");
+        System.out.println("Found " + creds.size() + " credential(s)");
+        for (JagexCredentials cred : creds) {
+            System.out.println("  " + cred);
+            if (cred.accessToken != null) {
+                System.out.println("    Access Token: " + cred.accessToken.substring(0, Math.min(50, cred.accessToken.length())) + "...");
+            }
+            if (cred.refreshToken != null) {
+                System.out.println("    Refresh Token: " + cred.refreshToken.substring(0, Math.min(50, cred.refreshToken.length())) + "...");
             }
         }
     }
