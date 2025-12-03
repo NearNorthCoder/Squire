@@ -219,29 +219,44 @@ public class SquireLauncher {
             log.warn("Warning: No runelite-client JAR found in repository");
         }
 
-        // For Jagex accounts, just pass --account=displayName
-        // The client reads launcher.dat directly (like Squire's original approach)
-        // NO environment variables needed - the client handles authentication
+        // For Jagex accounts, look up the session from launcher.dat and set JX_* env vars
+        // The game client reads JX_ACCESS_TOKEN, JX_SESSION_ID, etc. for authentication
+        JagexAccountData jagexAccountData = null;
         if (selectedAccount != null && !selectedAccount.isEmpty()) {
             log.info("=======================================================");
             log.info("JAGEX ACCOUNT LOGIN: {}", selectedAccount);
             log.info("=======================================================");
-            log.info("Using Squire's original approach:");
-            log.info("  - Passing --account={} to client", selectedAccount);
-            log.info("  - Client reads launcher.dat directly");
-            log.info("  - No JX_* environment variables (client handles auth)");
-            clientArgs.add("--account=" + selectedAccount);
+
+            // Look up the account data from launcher.dat
+            jagexAccountData = lookupJagexAccount(selectedAccount);
+
+            if (jagexAccountData != null) {
+                log.info("Found account data in launcher.dat:");
+                log.info("  displayName:   {}", jagexAccountData.displayName);
+                log.info("  accountId:     {}", jagexAccountData.accountId);
+                log.info("  sessionId:     {} chars", jagexAccountData.sessionId != null ? jagexAccountData.sessionId.length() : 0);
+                log.info("  accessToken:   {} chars", jagexAccountData.accessToken != null ? jagexAccountData.accessToken.length() : 0);
+                log.info("  refreshToken:  {} chars", jagexAccountData.refreshToken != null ? jagexAccountData.refreshToken.length() : 0);
+
+                // Add --account arg for the client's SettingsManager
+                clientArgs.add("--account=" + selectedAccount);
+                log.info("Will launch with JX_* environment variables set");
+            } else {
+                log.error("Could not find account '{}' in launcher.dat!", selectedAccount);
+                log.error("Available accounts can be listed with --list-accounts");
+                log.error("Import accounts with --import-accounts");
+                System.exit(1);
+            }
             log.info("=======================================================");
         }
 
-        // Launch the client locally (no JagexAccountData - client reads launcher.dat)
+        // Launch the client with Jagex account data (sets JX_* env vars) or without
         log.info("Launching client from local repository...");
         log.info("Client args: {}", clientArgs);
 
         try {
-            // Use the simple launch method - no env vars needed
-            // The client reads launcher.dat directly like Squire's original
-            LocalClientLauncher.launch(repoDir, clientArgs);
+            // Pass JagexAccountData to launcher - it will set JX_* environment variables
+            LocalClientLauncher.launch(repoDir, clientArgs, jagexAccountData);
             log.info("Client launched successfully!");
         } catch (Exception e) {
             log.error("Failed to launch client", e);
