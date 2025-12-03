@@ -358,7 +358,8 @@ public class CEFAccountImporter {
 
     /**
      * Save account to launcher.dat
-     * Format: ::sessionId:accessToken:refreshToken:accountId:displayName
+     * Format: ::sessionId:accountId:displayName (5 parts - matches Squire's original format)
+     * The client reads this file directly and uses sessionId for authentication.
      */
     private static boolean saveAccount(String sessionId, String accessToken, String refreshToken,
                                         String accountId, String displayName) {
@@ -371,11 +372,10 @@ public class CEFAccountImporter {
         }
 
         try (FileWriter writer = new FileWriter(LAUNCHER_DATA, true)) {
-            String accessStr = accessToken != null ? accessToken : "";
-            String refreshStr = refreshToken != null ? refreshToken : "";
-            writer.write(String.format("::%s:%s:%s:%s:%s%n",
-                sessionId, accessStr, refreshStr, accountId, displayName));
-            log.info("Saved account: {}", displayName);
+            // Use Squire's 5-part format: ::sessionId:accountId:displayName
+            // This is what the client expects to read directly
+            writer.write(String.format("::%s:%s:%s%n", sessionId, accountId, displayName));
+            log.info("Saved account: {} (sessionId: {} chars)", displayName, sessionId.length());
             return true;
         } catch (IOException e) {
             log.error("Failed to save account", e);
