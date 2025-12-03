@@ -219,96 +219,29 @@ public class SquireLauncher {
             log.warn("Warning: No runelite-client JAR found in repository");
         }
 
-        // Look up full Jagex account data if account is specified
-        JagexAccountData jagexAccountData = null;
+        // For Jagex accounts, just pass --account=displayName
+        // The client reads launcher.dat directly (like Squire's original approach)
+        // NO environment variables needed - the client handles authentication
         if (selectedAccount != null && !selectedAccount.isEmpty()) {
             log.info("=======================================================");
-            log.info("LOOKING UP JAGEX ACCOUNT: {}", selectedAccount);
+            log.info("JAGEX ACCOUNT LOGIN: {}", selectedAccount);
             log.info("=======================================================");
-            log.info("Searching in launcher.dat: {}", LAUNCHER_DATA_FILE.getAbsolutePath());
-            log.info("File exists: {}", LAUNCHER_DATA_FILE.exists());
-
-            jagexAccountData = lookupJagexAccount(selectedAccount);
-
-            if (jagexAccountData != null) {
-                log.info("SUCCESS: Found Jagex account data!");
-                log.info("  Display Name:  {}", jagexAccountData.displayName);
-                log.info("  Account ID:    {}", jagexAccountData.accountId);
-                log.info("  Session ID:    {} chars", jagexAccountData.sessionId != null ? jagexAccountData.sessionId.length() : 0);
-                log.info("  Access Token:  {} chars", jagexAccountData.accessToken != null ? jagexAccountData.accessToken.length() : 0);
-                log.info("  Refresh Token: {} chars", jagexAccountData.refreshToken != null ? jagexAccountData.refreshToken.length() : 0);
-
-                // Use accessToken (JWT) for creating game session, NOT sessionId (which may be old 22-char session)
-                String idToken = jagexAccountData.accessToken != null ? jagexAccountData.accessToken : jagexAccountData.sessionId;
-
-                // Try to refresh the token to get a fresh id_token
-                if (jagexAccountData.refreshToken != null && !jagexAccountData.refreshToken.isEmpty()) {
-                    log.info("-------------------------------------------------------");
-                    log.info("ATTEMPTING TOKEN REFRESH...");
-                    log.info("Tokens expire after ~1 hour. Refreshing to get fresh tokens.");
-                    log.info("-------------------------------------------------------");
-
-                    String freshIdToken = BrowserAccountImporter.refreshTokens(jagexAccountData.refreshToken);
-                    if (freshIdToken != null) {
-                        log.info("TOKEN REFRESH SUCCESS!");
-                        log.info("  New token length: {} chars", freshIdToken.length());
-                        // Update both: accessToken (JWT for JX_ACCESS_TOKEN) and idToken (for game session creation)
-                        jagexAccountData.accessToken = freshIdToken;
-                        idToken = freshIdToken;
-                        // Update the stored token
-                        BrowserAccountImporter.updateIdToken(jagexAccountData.displayName, freshIdToken);
-                    } else {
-                        log.warn("TOKEN REFRESH FAILED - will try stored token");
-                    }
-                }
-
-                // Now create a fresh game session from the id_token (JWT)
-                // The game client expects a 22-char game session, NOT the JWT
-                log.info("-------------------------------------------------------");
-                log.info("CREATING GAME SESSION FROM ID TOKEN...");
-                log.info("-------------------------------------------------------");
-
-                // Check if we have a JWT (long token) or already a game session (22-char)
-                if (idToken != null && idToken.length() > 50) {
-                    // This is a JWT - create a game session from it
-                    log.info("Token is JWT (length: {}), creating game session...", idToken.length());
-                    String gameSession = BrowserAccountImporter.createGameSessionFromToken(idToken);
-                    if (gameSession != null) {
-                        log.info("GAME SESSION CREATED!");
-                        log.info("  Game session: {} chars", gameSession.length());
-                        jagexAccountData.sessionId = gameSession;
-                    } else {
-                        log.error("FAILED to create game session from JWT!");
-                        log.error("The id_token may be expired. Try re-importing the account.");
-                        log.warn("Falling back to stored token (will likely fail)");
-                    }
-                } else if (idToken != null && idToken.length() == 22) {
-                    // This is already a 22-char game session (old format)
-                    log.warn("Token is already a 22-char game session (old format)");
-                    log.warn("This session may be expired. Re-import account for better reliability.");
-                    jagexAccountData.sessionId = idToken;
-                } else {
-                    log.error("No valid token available!");
-                    log.error("Please re-import the account with --import-accounts");
-                }
-
-                // Add account to client args (for compatibility)
-                clientArgs.add("--account=" + selectedAccount);
-            } else {
-                log.error("FAILED: Could not find account data for '{}' in launcher.dat", selectedAccount);
-                log.error("This WILL cause login issues. Make sure the account was imported correctly.");
-                log.error("Use --list-accounts to see available accounts.");
-                clientArgs.add("--account=" + selectedAccount);
-            }
+            log.info("Using Squire's original approach:");
+            log.info("  - Passing --account={} to client", selectedAccount);
+            log.info("  - Client reads launcher.dat directly");
+            log.info("  - No JX_* environment variables (client handles auth)");
+            clientArgs.add("--account=" + selectedAccount);
             log.info("=======================================================");
         }
 
-        // Launch the client locally
+        // Launch the client locally (no JagexAccountData - client reads launcher.dat)
         log.info("Launching client from local repository...");
         log.info("Client args: {}", clientArgs);
 
         try {
-            LocalClientLauncher.launch(repoDir, clientArgs, jagexAccountData);
+            // Use the simple launch method - no env vars needed
+            // The client reads launcher.dat directly like Squire's original
+            LocalClientLauncher.launch(repoDir, clientArgs);
             log.info("Client launched successfully!");
         } catch (Exception e) {
             log.error("Failed to launch client", e);
@@ -538,6 +471,7 @@ public class SquireLauncher {
 
     /**
      * Saves an account to launcher.dat.
+     * Format: ::sessionId:accountId:displayName (5 parts - Squire's original format)
      *
      * @return true if saved (new account), false if already exists
      */
@@ -555,11 +489,11 @@ public class SquireLauncher {
             }
         }
 
-        // Append to file
+        // Append to file using Squire's 5-part format
+        // The client reads this directly - no env vars needed
         try (java.io.FileWriter writer = new java.io.FileWriter(LAUNCHER_DATA_FILE, true)) {
-            String accessStr = accessToken != null ? accessToken : "";
-            String refreshStr = refreshToken != null ? refreshToken : "";
-            writer.write(String.format("::%s:%s:%s:%s:%s%n", sessionId, accessStr, refreshStr, accountId, displayName));
+            writer.write(String.format("::%s:%s:%s%n", sessionId, accountId, displayName));
+            log.info("Saved account: {} (sessionId: {} chars)", displayName, sessionId.length());
             return true;
         } catch (java.io.IOException e) {
             log.error("Failed to save account: {}", e.getMessage());
