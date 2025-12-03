@@ -24,6 +24,7 @@ import squire.launcher.config.OSType;
 import squire.launcher.local.LocalClientLauncher;
 import squire.launcher.ui.LauncherFrame;
 import squire.launcher.auth.BrowserAccountImporter;
+import squire.launcher.auth.CEFAccountImporter;
 import squire.launcher.auth.JagexCredentialDecryptor;
 import squire.launcher.auth.JagexCredentialDecryptor.JagexCredentials;
 import squire.launcher.tools.SquireAntiTamperPatcher;
@@ -339,16 +340,17 @@ public class SquireLauncher {
 
     /**
      * Opens the account importer to import Jagex accounts via OAuth2
-     * Uses browser-based OAuth flow (no JCEF/CEF dependencies required)
+     * Uses CEF embedded browser for seamless experience (like Squire's original)
+     * Falls back to system browser if CEF fails
      */
     private static void importJagexAccounts() {
         try {
-            // Use browser-based importer (opens system browser for OAuth)
-            // This avoids JCEF native library requirements
+            // Use CEF-based importer for seamless embedded browser experience
+            // This matches Squire's original behavior
             final Object lock = new Object();
             final boolean[] done = {false};
 
-            BrowserAccountImporter.importAccounts(() -> {
+            CEFAccountImporter.importAccounts(() -> {
                 log.info("Account import callback triggered");
                 synchronized (lock) {
                     done[0] = true;
@@ -400,12 +402,18 @@ public class SquireLauncher {
         List<JagexCredentials> credentials = JagexCredentialDecryptor.readCredentials();
 
         if (credentials.isEmpty()) {
-            log.warn("Could not decrypt credentials.");
+            log.warn("Could not decrypt credentials from Jagex Launcher.");
             log.info("This may happen if:");
             log.info("  1. Running on a different machine than where credentials were created");
             log.info("  2. Running under a different Windows user account");
             log.info("  3. Credentials are in an unsupported format");
-            return 0;
+            log.info("");
+            log.info("Falling back to OAuth import (embedded browser)...");
+            log.info("This will open a browser window for you to log in once.");
+
+            // Fall back to CEF-based OAuth import
+            importJagexAccounts();
+            return countSavedAccounts();
         }
 
         log.info("Successfully decrypted {} credential set(s)", credentials.size());
@@ -599,6 +607,13 @@ public class SquireLauncher {
         );
 
         return selected;
+    }
+
+    /**
+     * Count saved accounts in launcher.dat
+     */
+    private static int countSavedAccounts() {
+        return loadAccountsFromFile().size();
     }
 
     /**
