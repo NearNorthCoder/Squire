@@ -24,6 +24,8 @@ import squire.launcher.config.OSType;
 import squire.launcher.local.LocalClientLauncher;
 import squire.launcher.ui.LauncherFrame;
 import squire.launcher.auth.BrowserAccountImporter;
+import squire.launcher.auth.JagexCredentialDecryptor;
+import squire.launcher.auth.JagexCredentialDecryptor.JagexCredentials;
 import squire.launcher.tools.SquireAntiTamperPatcher;
 // import net.runelite.launcher.AccountImporter; // JCEF-based, requires native libs
 
@@ -90,6 +92,7 @@ public class SquireLauncher {
      *             --account <name>      : Launch with specified Jagex account
      *             --jagexlauncher       : Show account selection dialog
      *             --import-accounts     : Import Jagex accounts via OAuth2
+     *             --import-jagex-creds  : Import credentials from official Jagex Launcher
      *             --list-accounts       : List imported accounts and exit
      *             --debug               : Enable debug logging
      *             Additional args are passed to the RuneLite client
@@ -121,6 +124,7 @@ public class SquireLauncher {
         String selectedAccount = null;
         boolean showAccountSelector = false;
         boolean importAccounts = false;
+        boolean importJagexCreds = false;
         boolean listAccounts = false;
 
         for (int i = 0; i < args.length; i++) {
@@ -135,6 +139,8 @@ public class SquireLauncher {
                 showAccountSelector = true;
             } else if ("--import-accounts".equals(arg)) {
                 importAccounts = true;
+            } else if ("--import-jagex-creds".equals(arg)) {
+                importJagexCreds = true;
             } else if ("--list-accounts".equals(arg)) {
                 listAccounts = true;
             } else if ("--debug".equals(arg)) {
@@ -148,6 +154,20 @@ public class SquireLauncher {
         // Handle --list-accounts
         if (listAccounts) {
             listSavedAccounts();
+            System.exit(0);
+        }
+
+        // Handle --import-jagex-creds (from official Jagex Launcher)
+        if (importJagexCreds) {
+            log.info("Importing credentials from official Jagex Launcher...");
+            int imported = importFromJagexLauncher();
+            if (imported > 0) {
+                log.info("Successfully imported {} account(s) from Jagex Launcher.", imported);
+            } else {
+                log.warn("No credentials found or import failed.");
+                log.info("Make sure the Jagex Launcher is installed and you have logged in at least once.");
+            }
+            log.info("Run with --list-accounts to see imported accounts.");
             System.exit(0);
         }
 
@@ -344,6 +364,198 @@ public class SquireLauncher {
             }
         } catch (Exception e) {
             log.error("Failed to import accounts", e);
+        }
+    }
+
+    /**
+     * Imports credentials directly from the official Jagex Launcher.
+     *
+     * The Jagex Launcher stores encrypted credentials at:
+     * Windows: %LOCALAPPDATA%\Jagex Launcher\auth\creds
+     *
+     * This decrypts the credentials and saves them to launcher.dat
+     * for use with Squire.
+     *
+     * @return Number of accounts imported
+     */
+    private static int importFromJagexLauncher() {
+        log.info("=======================================================");
+        log.info("IMPORTING FROM OFFICIAL JAGEX LAUNCHER");
+        log.info("=======================================================");
+
+        // Check if Jagex Launcher is installed
+        if (!JagexCredentialDecryptor.hasJagexLauncherCredentials()) {
+            log.warn("Jagex Launcher credentials not found.");
+            log.info("Expected location: {}", JagexCredentialDecryptor.getCredentialsPath());
+            log.info("Make sure:");
+            log.info("  1. Jagex Launcher is installed");
+            log.info("  2. You have logged in at least once");
+            log.info("  3. You did NOT log out (credentials are deleted on logout)");
+            return 0;
+        }
+
+        log.info("Found Jagex Launcher credentials at: {}", JagexCredentialDecryptor.getCredentialsPath());
+
+        // Read and decrypt credentials
+        List<JagexCredentials> credentials = JagexCredentialDecryptor.readCredentials();
+
+        if (credentials.isEmpty()) {
+            log.warn("Could not decrypt credentials.");
+            log.info("This may happen if:");
+            log.info("  1. Running on a different machine than where credentials were created");
+            log.info("  2. Running under a different Windows user account");
+            log.info("  3. Credentials are in an unsupported format");
+            return 0;
+        }
+
+        log.info("Successfully decrypted {} credential set(s)", credentials.size());
+
+        // Save each credential to launcher.dat
+        int imported = 0;
+        for (JagexCredentials cred : credentials) {
+            log.info("Processing credential for account: {}", cred.sub);
+
+            // We need to create a game session from the id_token
+            String idToken = cred.idToken != null ? cred.idToken : cred.accessToken;
+            if (idToken == null || idToken.isEmpty()) {
+                log.warn("No id_token or access_token found for account {}", cred.sub);
+                continue;
+            }
+
+            // Try to create a game session from the id_token
+            log.info("Creating game session from id_token...");
+            String sessionId = BrowserAccountImporter.createGameSessionFromToken(idToken);
+
+            if (sessionId == null) {
+                log.warn("Failed to create game session for account {}", cred.sub);
+                log.info("The token may be expired. Trying with access_token...");
+
+                // Try refresh if we have a refresh token
+                if (cred.refreshToken != null && !cred.refreshToken.isEmpty()) {
+                    log.info("Attempting token refresh...");
+                    String refreshedToken = BrowserAccountImporter.refreshTokens(cred.refreshToken);
+                    if (refreshedToken != null) {
+                        sessionId = BrowserAccountImporter.createGameSessionFromToken(refreshedToken);
+                        idToken = refreshedToken;
+                    }
+                }
+
+                if (sessionId == null) {
+                    log.error("Could not create game session. Account {} skipped.", cred.sub);
+                    continue;
+                }
+            }
+
+            log.info("Game session created: {} chars", sessionId.length());
+
+            // Get linked game accounts for this Jagex account
+            try {
+                // Use the session to get linked accounts
+                List<String[]> linkedAccounts = getLinkedGameAccounts(sessionId);
+
+                if (linkedAccounts.isEmpty()) {
+                    log.warn("No linked game accounts found for Jagex account {}", cred.sub);
+                    continue;
+                }
+
+                // Save each linked account
+                for (String[] linkedAccount : linkedAccounts) {
+                    String accountId = linkedAccount[0];
+                    String displayName = linkedAccount[1];
+
+                    log.info("Saving account: {} ({})", displayName, accountId);
+
+                    if (saveAccountToFile(sessionId, idToken, cred.refreshToken, accountId, displayName)) {
+                        imported++;
+                        log.info("Successfully imported: {}", displayName);
+                    } else {
+                        log.info("Account {} already exists or could not be saved", displayName);
+                    }
+                }
+
+            } catch (Exception e) {
+                log.error("Failed to get linked accounts for {}: {}", cred.sub, e.getMessage());
+            }
+        }
+
+        log.info("=======================================================");
+        log.info("IMPORT COMPLETE: {} account(s) imported", imported);
+        log.info("=======================================================");
+
+        return imported;
+    }
+
+    /**
+     * Gets linked game accounts using a session ID.
+     */
+    private static List<String[]> getLinkedGameAccounts(String sessionId) throws Exception {
+        List<String[]> accounts = new ArrayList<>();
+
+        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient.Builder()
+                .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                .build();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url("https://auth.runescape.com/game-session/v1/accounts")
+                .header("Authorization", "Bearer " + sessionId)
+                .get()
+                .build();
+
+        try (okhttp3.Response response = client.newCall(request).execute()) {
+            if (response.code() != 200) {
+                log.error("Failed to get linked accounts: HTTP {}", response.code());
+                return accounts;
+            }
+
+            String body = response.body().string();
+            log.debug("Linked accounts response: {}", body);
+
+            com.google.gson.Gson gson = new com.google.gson.Gson();
+            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<List<java.util.Map<String, Object>>>(){}.getType();
+            List<java.util.Map<String, Object>> accountList = gson.fromJson(body, listType);
+
+            for (java.util.Map<String, Object> acc : accountList) {
+                String accountId = (String) acc.get("accountId");
+                String displayName = (String) acc.get("displayName");
+                if (displayName == null || displayName.isEmpty()) {
+                    displayName = "Account-" + accountId.substring(0, Math.min(8, accountId.length()));
+                }
+                accounts.add(new String[]{accountId, displayName});
+            }
+        }
+
+        return accounts;
+    }
+
+    /**
+     * Saves an account to launcher.dat.
+     *
+     * @return true if saved (new account), false if already exists
+     */
+    private static boolean saveAccountToFile(String sessionId, String accessToken, String refreshToken,
+                                              String accountId, String displayName) {
+        // Ensure directory exists
+        SQUIRE_HOME.mkdirs();
+
+        // Check if account already exists
+        List<String[]> existing = loadAccountsFromFile();
+        for (String[] acc : existing) {
+            if (acc[1].equals(accountId)) {
+                log.debug("Account {} already exists", displayName);
+                return false;
+            }
+        }
+
+        // Append to file
+        try (java.io.FileWriter writer = new java.io.FileWriter(LAUNCHER_DATA_FILE, true)) {
+            String accessStr = accessToken != null ? accessToken : "";
+            String refreshStr = refreshToken != null ? refreshToken : "";
+            writer.write(String.format("::%s:%s:%s:%s:%s%n", sessionId, accessStr, refreshStr, accountId, displayName));
+            return true;
+        } catch (java.io.IOException e) {
+            log.error("Failed to save account: {}", e.getMessage());
+            return false;
         }
     }
 
