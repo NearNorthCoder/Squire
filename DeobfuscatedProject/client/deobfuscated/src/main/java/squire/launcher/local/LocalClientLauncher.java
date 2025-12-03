@@ -166,48 +166,52 @@ public class LocalClientLauncher {
         pb.inheritIO(); // Redirect stdout/stderr to parent process
 
         // Set Jagex account environment variables
+        // sessionId (22 chars) for JX_SESSION_ID
+        // accessToken (JWT ~1357 chars) for JX_ACCESS_TOKEN
         log.info("-------------------------------------------------------");
-        log.info("SETTING JAGEX ENVIRONMENT VARIABLES");
+        log.info("SETTING JAGEX ENVIRONMENT VARIABLES (WITH JWT)");
         log.info("-------------------------------------------------------");
         Map<String, String> env = pb.environment();
 
         String sessionId = jagexAccount.sessionId;
-        String accessToken = jagexAccount.accessToken;
-        String refreshToken = jagexAccount.refreshToken;
         String accountId = jagexAccount.accountId;
         String displayName = jagexAccount.displayName;
+        String accessToken = jagexAccount.accessToken;  // JWT for JX_ACCESS_TOKEN
 
         // Validate required values
         if (sessionId == null || sessionId.isEmpty()) {
-            log.error("ERROR: JX_SESSION_ID is null or empty!");
+            log.error("ERROR: Session ID is null or empty!");
             throw new IllegalStateException("Session ID is required for Jagex account login");
         }
         if (accountId == null || accountId.isEmpty()) {
-            log.error("ERROR: JX_CHARACTER_ID (accountId) is null or empty!");
+            log.error("ERROR: Account ID is null or empty!");
             throw new IllegalStateException("Account ID is required for Jagex account login");
         }
         if (displayName == null || displayName.isEmpty()) {
-            log.error("ERROR: JX_DISPLAY_NAME is null or empty!");
+            log.error("ERROR: Display name is null or empty!");
             throw new IllegalStateException("Display name is required for Jagex account login");
         }
+        if (accessToken == null || accessToken.isEmpty()) {
+            log.error("ERROR: Access token (JWT) is null or empty!");
+            log.error("This will cause login to fail. Re-import credentials with --import-jagex-creds");
+            throw new IllegalStateException("Access token (JWT) is required. Re-import credentials.");
+        }
 
-        // Set all JX_* environment variables
+        // Set JX_* environment variables
+        // sessionId for JX_SESSION_ID, accessToken (JWT) for JX_ACCESS_TOKEN
         env.put("JX_SESSION_ID", sessionId);
         env.put("JX_CHARACTER_ID", accountId);
         env.put("JX_DISPLAY_NAME", displayName);
-        // accessToken is the JWT for JX_ACCESS_TOKEN
-        env.put("JX_ACCESS_TOKEN", accessToken != null ? accessToken : sessionId);
-        // refreshToken for JX_REFRESH_TOKEN (may be empty)
-        env.put("JX_REFRESH_TOKEN", refreshToken != null ? refreshToken : "");
+        env.put("JX_ACCESS_TOKEN", accessToken);  // JWT - required by client!
+        env.put("JX_REFRESH_TOKEN", "");  // Not needed
 
         log.info("JX_SESSION_ID:    {} (length: {} chars)",
                  sessionId.substring(0, Math.min(20, sessionId.length())) + "...", sessionId.length());
         log.info("JX_CHARACTER_ID:  {}", accountId);
         log.info("JX_DISPLAY_NAME:  {}", displayName);
-        log.info("JX_ACCESS_TOKEN:  {} (length: {} chars)",
-                 accessToken != null ? accessToken.substring(0, Math.min(20, accessToken.length())) + "..." : "(using sessionId)",
-                 accessToken != null ? accessToken.length() : sessionId.length());
-        log.info("JX_REFRESH_TOKEN: {} chars", refreshToken != null ? refreshToken.length() : 0);
+        log.info("JX_ACCESS_TOKEN:  JWT ({} chars, starts with '{}')",
+                 accessToken.length(),
+                 accessToken.substring(0, Math.min(10, accessToken.length())));
         log.info("-------------------------------------------------------");
 
         // Start the subprocess

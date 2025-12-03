@@ -225,7 +225,15 @@ public class Squire {
         return false;
     }
 
+    /**
+     * TODO: Re-enable IP check via API when ready
+     * Original: Makes HTTP request to http://checkip.amazonaws.com/
+     */
     public static String amazonCheck() {
+        // BYPASSED: Network call disabled for local development
+        System.out.println("[BYPASS] Squire.amazonCheck() - returning 'LOCAL'");
+        return "LOCAL";
+        /*
         try {
             java.net.HttpURLConnection connection = (java.net.HttpURLConnection)
                 new java.net.URL("http://checkip.amazonaws.com/").openConnection();
@@ -241,6 +249,7 @@ public class Squire {
         } catch (IOException e) {
             return "Unknown";
         }
+        */
     }
 
     public static java.util.List<String> check() {

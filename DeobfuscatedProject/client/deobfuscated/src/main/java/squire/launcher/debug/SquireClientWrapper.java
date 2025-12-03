@@ -6,9 +6,11 @@
 package squire.launcher.debug;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.UUID;
 
 /**
  * Wrapper main class that initializes comprehensive logging before
@@ -76,6 +78,14 @@ public class SquireClientWrapper {
                     logWriter.close();
                 }
             }));
+
+            log("");
+            log("============================================================");
+            log("AUTO-AUTHENTICATING SQUIRE");
+            log("============================================================");
+
+            // Auto-authenticate before launching client
+            autoAuthenticateSquire();
 
             log("");
             log("============================================================");
@@ -295,6 +305,89 @@ public class SquireClientWrapper {
             cause = cause.getCause();
             depth++;
         }
+    }
+
+    /**
+     * Auto-authenticate Squire to bypass the auth panel when launching as subprocess.
+     * This sets all necessary authentication flags so the client starts directly.
+     */
+    private static void autoAuthenticateSquire() {
+        log("=== AUTO-AUTHENTICATION ===");
+
+        // 1. Set net.runelite.launcher.Launcher.authenticated = true
+        try {
+            Class<?> launcherClass = Class.forName("net.runelite.launcher.Launcher");
+            Field authenticatedField = launcherClass.getDeclaredField("authenticated");
+            authenticatedField.setAccessible(true);
+            authenticatedField.setBoolean(null, true);
+            log("Set net.runelite.launcher.Launcher.authenticated = true");
+
+            // Also set auth token
+            Field authField = launcherClass.getDeclaredField("auth");
+            authField.setAccessible(true);
+            authField.set(null, "local-bypass-key");
+            log("Set net.runelite.launcher.Launcher.auth = 'local-bypass-key'");
+        } catch (ClassNotFoundException e) {
+            log("Launcher class not found - may not be needed");
+        } catch (NoSuchFieldException e) {
+            log("Launcher fields not found: " + e.getMessage());
+        } catch (Exception e) {
+            log("Error setting Launcher auth: " + e.getMessage());
+        }
+
+        // 2. Set com.openosrs.client.ui.OpenOSRSSplashScreen.authenticated = true
+        try {
+            Class<?> splashClass = Class.forName("com.openosrs.client.ui.OpenOSRSSplashScreen");
+            Field authenticatedField = splashClass.getDeclaredField("authenticated");
+            authenticatedField.setAccessible(true);
+            authenticatedField.setBoolean(null, true);
+            log("Set OpenOSRSSplashScreen.authenticated = true");
+        } catch (ClassNotFoundException e) {
+            log("OpenOSRSSplashScreen not found - may not be needed");
+        } catch (NoSuchFieldException e) {
+            log("OpenOSRSSplashScreen.authenticated field not found: " + e.getMessage());
+        } catch (Exception e) {
+            log("Error setting OpenOSRSSplashScreen.authenticated: " + e.getMessage());
+        }
+
+        // 3. Set gg.squire.client.Squire fields directly
+        try {
+            Class<?> squireClass = Class.forName("gg.squire.client.Squire");
+
+            // Set Squire.key
+            Field keyField = squireClass.getDeclaredField("key");
+            keyField.setAccessible(true);
+            keyField.set(null, "local-bypass-key");
+            log("Set Squire.key = 'local-bypass-key'");
+
+            // Set Squire.identifier
+            Field identifierField = squireClass.getDeclaredField("identifier");
+            identifierField.setAccessible(true);
+            identifierField.set(null, "local-identifier");
+            log("Set Squire.identifier = 'local-identifier'");
+
+            // Set Squire.uuid
+            Field uuidField = squireClass.getDeclaredField("uuid");
+            uuidField.setAccessible(true);
+            uuidField.set(null, UUID.randomUUID());
+            log("Set Squire.uuid = random UUID");
+
+            // Create instance
+            Field instanceField = squireClass.getDeclaredField("instance");
+            instanceField.setAccessible(true);
+            Object instance = squireClass.getDeclaredConstructor().newInstance();
+            instanceField.set(null, instance);
+            log("Created Squire instance");
+
+        } catch (ClassNotFoundException e) {
+            log("Squire class not found - may not be needed");
+        } catch (NoSuchFieldException e) {
+            log("Squire field not found: " + e.getMessage());
+        } catch (Exception e) {
+            log("Error setting Squire fields: " + e.getMessage());
+        }
+
+        log("=== AUTO-AUTHENTICATION COMPLETE ===");
     }
 
     /**

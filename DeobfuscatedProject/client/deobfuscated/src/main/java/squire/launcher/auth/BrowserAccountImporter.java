@@ -773,7 +773,13 @@ public class BrowserAccountImporter {
 
     /**
      * Refresh tokens using the refresh_token.
-     * Returns the new id_token, or null if refresh failed.
+     * Returns the new GAME id_token (not launcher id_token), or null if refresh failed.
+     *
+     * This performs a TWO-STAGE refresh:
+     * 1. Refresh with launcher client → get launcher id_token
+     * 2. Use launcher id_token as hint for consent flow → get GAME id_token
+     *
+     * The game id_token is required for creating game sessions.
      */
     public static String refreshTokens(String refreshToken) {
         if (refreshToken == null || refreshToken.isEmpty()) {
@@ -781,7 +787,7 @@ public class BrowserAccountImporter {
             return null;
         }
 
-        log.info("Refreshing tokens using refresh_token...");
+        log.info("=== REFRESHING TOKENS ===");
 
         // Initialize HTTP client if needed
         if (httpClient == null) {
@@ -793,7 +799,9 @@ public class BrowserAccountImporter {
         }
 
         try {
-            // Stage 1: Refresh tokens from launcher client
+            // Refresh tokens from launcher client
+            log.info("Refreshing with launcher client...");
+
             FormBody formBody = new FormBody.Builder()
                 .add("grant_type", "refresh_token")
                 .add("client_id", OAUTH_AUTH_CLIENT_ID)
@@ -805,6 +813,8 @@ public class BrowserAccountImporter {
                 .post(formBody)
                 .build();
 
+            String launcherIdToken = null;
+
             try (Response response = httpClient.newCall(request).execute()) {
                 String body = response.body().string();
                 log.info("Token refresh response status: {}", response.code());
@@ -815,34 +825,92 @@ public class BrowserAccountImporter {
                 }
 
                 Map<String, Object> tokens = gson.fromJson(body, new TypeToken<Map<String, Object>>(){}.getType());
+                launcherIdToken = (String) tokens.get("id_token");
 
-                String newIdToken = (String) tokens.get("id_token");
-                String newAccessToken = (String) tokens.get("access_token");
-
-                if (newIdToken == null) {
+                if (launcherIdToken == null) {
                     log.error("No id_token in refresh response");
                     return null;
                 }
 
-                log.info("Got fresh id_token (length: {})", newIdToken.length());
-
-                // Stage 2: Get real id_token via consent flow
-                String consentUrl = buildConsentUrl(newIdToken);
-                log.info("Opening consent URL for fresh tokens...");
-
-                boolean browserOpened = openBrowser(consentUrl);
-                String realIdToken = showConsentDialog(browserOpened, consentUrl);
-
-                if (realIdToken != null) {
-                    log.info("Got fresh real id_token (length: {})", realIdToken.length());
-                    return realIdToken;
-                } else {
-                    log.warn("Failed to get real id_token from consent, using launcher id_token");
-                    return newIdToken;
-                }
+                log.info("Got fresh id_token (length: {})", launcherIdToken.length());
             }
+
+            // Try to use the launcher id_token directly to create a game session
+            // This may work if the game session API accepts launcher tokens
+            log.info("Trying launcher id_token directly for game session...");
+            String testSession = createGameSessionFromToken(launcherIdToken);
+            if (testSession != null) {
+                log.info("SUCCESS! Launcher id_token works for game session!");
+                return launcherIdToken;
+            }
+
+            // Launcher token didn't work - try silent consent for game token
+            log.info("Launcher token didn't work, trying silent consent...");
+            String gameIdToken = tryGetGameIdTokenSilent(launcherIdToken);
+
+            if (gameIdToken != null) {
+                log.info("Got game id_token silently (length: {})", gameIdToken.length());
+                return gameIdToken;
+            }
+
+            // Silent consent failed - return launcher token anyway as last resort
+            // The caller will get an error when trying to create session
+            log.warn("Silent consent failed. Returning launcher id_token as fallback.");
+            log.warn("You may need to re-import the account with --import-jagex-creds");
+            return launcherIdToken;
+
         } catch (Exception e) {
             log.error("Failed to refresh tokens", e);
+            return null;
+        }
+    }
+
+    /**
+     * Try to get game id_token silently (without user interaction).
+     * Uses prompt=none to auto-consent if already authorized.
+     *
+     * @param launcherIdToken The launcher id_token to use as hint
+     * @return The game id_token, or null if silent consent not possible
+     */
+    private static String tryGetGameIdTokenSilent(String launcherIdToken) {
+        try {
+            // Build consent URL with prompt=none for silent consent
+            String silentConsentUrl = OAUTH_AUTH_URL + "?" +
+                "id_token_hint=" + encodeUrl(launcherIdToken) +
+                "&nonce=" + OAUTH_NONCE +
+                "&prompt=none" +  // Try silent consent
+                "&redirect_uri=" + encodeUrl(REDIRECT_URI_LOCALHOST) +
+                "&response_type=" + encodeUrl("id_token code") +
+                "&state=" + OAUTH_STATE +
+                "&client_id=" + OAUTH_GAME_CLIENT_ID +
+                "&scope=" + encodeUrl(OAUTH_GAME_SCOPE);
+
+            log.info("Trying silent consent...");
+
+            // Make request - it should redirect to localhost with tokens in fragment
+            Request request = new Request.Builder()
+                .url(silentConsentUrl)
+                .get()
+                .build();
+
+            try (Response response = httpClient.newCall(request).execute()) {
+                log.info("Silent consent response: {} {}", response.code(), response.message());
+
+                // Check for redirect
+                String location = response.header("Location");
+                if (location != null && location.startsWith("http://localhost")) {
+                    log.info("Got redirect to localhost: {}", location.length() > 100 ? location.substring(0, 100) + "..." : location);
+
+                    // Extract id_token from fragment
+                    return extractIdTokenFromFragment(location);
+                }
+
+                // No redirect - silent consent not available
+                log.info("No redirect received - silent consent not available");
+                return null;
+            }
+        } catch (Exception e) {
+            log.debug("Silent consent failed: {}", e.getMessage());
             return null;
         }
     }
@@ -932,6 +1000,88 @@ public class BrowserAccountImporter {
             log.info("Updated id_token for account: {}", displayName);
         } catch (IOException e) {
             log.error("Failed to update id_token", e);
+        }
+    }
+
+    /**
+     * Update the session ID for an account after creating a new game session.
+     * This saves the 22-char game session back to launcher.dat so it can be reused.
+     * Format: ::sessionId:accessToken:refreshToken:accountId:displayName
+     *
+     * @param displayName The account display name
+     * @param newSessionId The new 22-char game session ID
+     * @param newAccessToken The new access token (id_token from OAuth)
+     */
+    public static void updateSessionId(String displayName, String newSessionId, String newAccessToken) {
+        if (!LAUNCHER_DATA.exists()) return;
+
+        log.info("Updating session for account: {}", displayName);
+        log.info("  New sessionId: {} chars", newSessionId != null ? newSessionId.length() : 0);
+        log.info("  New accessToken: {} chars", newAccessToken != null ? newAccessToken.length() : 0);
+
+        try {
+            List<String> lines = new ArrayList<>();
+            boolean updated = false;
+
+            try (Scanner scanner = new Scanner(LAUNCHER_DATA)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    if (!line.startsWith("::")) {
+                        lines.add(line);
+                        continue;
+                    }
+
+                    String[] parts = line.split(":");
+                    String lineDisplayName = null;
+                    String refreshToken = "";
+
+                    // Extract display name and refresh token based on format
+                    if (parts.length >= 7) {
+                        // New format: ::sessionId:accessToken:refreshToken:accountId:displayName
+                        lineDisplayName = parts[6];
+                        refreshToken = parts[4];
+                    } else if (parts.length >= 6) {
+                        // Old format v2: ::idToken:refreshToken:accountId:displayName
+                        lineDisplayName = parts[5];
+                        refreshToken = parts[3];
+                    } else if (parts.length >= 5) {
+                        // Old format v1: ::sessionId:accountId:displayName
+                        lineDisplayName = parts[4];
+                    }
+
+                    if (lineDisplayName != null && lineDisplayName.equalsIgnoreCase(displayName)) {
+                        // Rebuild with new session ID and access token
+                        String accountId = null;
+                        if (parts.length >= 7) {
+                            accountId = parts[5];
+                        } else if (parts.length >= 6) {
+                            accountId = parts[4];
+                        } else if (parts.length >= 5) {
+                            accountId = parts[3];
+                        }
+
+                        String accessStr = newAccessToken != null ? newAccessToken : "";
+                        line = String.format("::%s:%s:%s:%s:%s",
+                            newSessionId, accessStr, refreshToken, accountId, lineDisplayName);
+                        updated = true;
+                        log.info("Updated line for account: {}", lineDisplayName);
+                    }
+                    lines.add(line);
+                }
+            }
+
+            if (updated) {
+                try (FileWriter writer = new FileWriter(LAUNCHER_DATA, false)) {
+                    for (String line : lines) {
+                        writer.write(line + "\n");
+                    }
+                }
+                log.info("Session ID saved to launcher.dat for: {}", displayName);
+            } else {
+                log.warn("Account not found in launcher.dat: {}", displayName);
+            }
+        } catch (IOException e) {
+            log.error("Failed to update session ID", e);
         }
     }
 }

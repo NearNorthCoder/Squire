@@ -83,6 +83,13 @@
             <artifactId>jna-platform</artifactId>
             <version>5.14.0</version>
         </dependency>
+
+        <!-- JCEF Maven for embedded browser (OAuth flow) -->
+        <dependency>
+            <groupId>me.friwi</groupId>
+            <artifactId>jcefmaven</artifactId>
+            <version>122.1.10</version>
+        </dependency>
     </dependencies>
 
     <build>

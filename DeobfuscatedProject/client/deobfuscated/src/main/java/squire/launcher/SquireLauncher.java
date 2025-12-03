@@ -232,73 +232,26 @@ public class SquireLauncher {
 
             if (jagexAccountData != null) {
                 log.info("SUCCESS: Found Jagex account data!");
-                log.info("  Display Name:  {}", jagexAccountData.displayName);
-                log.info("  Account ID:    {}", jagexAccountData.accountId);
-                log.info("  Session ID:    {} chars", jagexAccountData.sessionId != null ? jagexAccountData.sessionId.length() : 0);
-                log.info("  Access Token:  {} chars", jagexAccountData.accessToken != null ? jagexAccountData.accessToken.length() : 0);
-                log.info("  Refresh Token: {} chars", jagexAccountData.refreshToken != null ? jagexAccountData.refreshToken.length() : 0);
+                log.info("  Display Name: {}", jagexAccountData.displayName);
+                log.info("  Account ID:   {}", jagexAccountData.accountId);
+                log.info("  Session ID:   {} chars", jagexAccountData.sessionId != null ? jagexAccountData.sessionId.length() : 0);
 
-                // Use accessToken (JWT) for creating game session, NOT sessionId (which may be old 22-char session)
-                String idToken = jagexAccountData.accessToken != null ? jagexAccountData.accessToken : jagexAccountData.sessionId;
-
-                // Try to refresh the token to get a fresh id_token
-                if (jagexAccountData.refreshToken != null && !jagexAccountData.refreshToken.isEmpty()) {
-                    log.info("-------------------------------------------------------");
-                    log.info("ATTEMPTING TOKEN REFRESH...");
-                    log.info("Tokens expire after ~1 hour. Refreshing to get fresh tokens.");
-                    log.info("-------------------------------------------------------");
-
-                    String freshIdToken = BrowserAccountImporter.refreshTokens(jagexAccountData.refreshToken);
-                    if (freshIdToken != null) {
-                        log.info("TOKEN REFRESH SUCCESS!");
-                        log.info("  New token length: {} chars", freshIdToken.length());
-                        // Update both: accessToken (JWT for JX_ACCESS_TOKEN) and idToken (for game session creation)
-                        jagexAccountData.accessToken = freshIdToken;
-                        idToken = freshIdToken;
-                        // Update the stored token
-                        BrowserAccountImporter.updateIdToken(jagexAccountData.displayName, freshIdToken);
-                    } else {
-                        log.warn("TOKEN REFRESH FAILED - will try stored token");
-                    }
-                }
-
-                // Now create a fresh game session from the id_token (JWT)
-                // The game client expects a 22-char game session, NOT the JWT
+                // REAL SQUIRE BEHAVIOR:
+                // The sessionId stored during import is LONG-LIVED.
+                // No refresh needed! Just use it directly.
                 log.info("-------------------------------------------------------");
-                log.info("CREATING GAME SESSION FROM ID TOKEN...");
+                log.info("REAL SQUIRE MODE: Using stored sessionId directly");
+                log.info("No token refresh needed - session is long-lived!");
                 log.info("-------------------------------------------------------");
 
-                // Check if we have a JWT (long token) or already a game session (22-char)
-                if (idToken != null && idToken.length() > 50) {
-                    // This is a JWT - create a game session from it
-                    log.info("Token is JWT (length: {}), creating game session...", idToken.length());
-                    String gameSession = BrowserAccountImporter.createGameSessionFromToken(idToken);
-                    if (gameSession != null) {
-                        log.info("GAME SESSION CREATED!");
-                        log.info("  Game session: {} chars", gameSession.length());
-                        jagexAccountData.sessionId = gameSession;
-                    } else {
-                        log.error("FAILED to create game session from JWT!");
-                        log.error("The id_token may be expired. Try re-importing the account.");
-                        log.warn("Falling back to stored token (will likely fail)");
-                    }
-                } else if (idToken != null && idToken.length() == 22) {
-                    // This is already a 22-char game session (old format)
-                    log.warn("Token is already a 22-char game session (old format)");
-                    log.warn("This session may be expired. Re-import account for better reliability.");
-                    jagexAccountData.sessionId = idToken;
-                } else {
-                    log.error("No valid token available!");
-                    log.error("Please re-import the account with --import-accounts");
-                }
-
-                // Add account to client args (for compatibility)
-                clientArgs.add("--account=" + selectedAccount);
+                // Note: Don't add --jagexlauncher to client args - client doesn't accept it
+                // The JX_* environment variables are set by LocalClientLauncher
+                // and the client reads launcher.dat directly
             } else {
                 log.error("FAILED: Could not find account data for '{}' in launcher.dat", selectedAccount);
                 log.error("This WILL cause login issues. Make sure the account was imported correctly.");
                 log.error("Use --list-accounts to see available accounts.");
-                clientArgs.add("--account=" + selectedAccount);
+                log.error("Use --import-accounts to import accounts via OAuth.");
             }
             log.info("=======================================================");
         }
@@ -537,7 +490,10 @@ public class SquireLauncher {
     }
 
     /**
-     * Saves an account to launcher.dat.
+     * Saves an account to launcher.dat in REAL SQUIRE FORMAT.
+     *
+     * Format: ::sessionId:accountId:displayName (5 parts when split by :)
+     * This is the exact format the real Squire uses!
      *
      * @return true if saved (new account), false if already exists
      */
@@ -555,11 +511,12 @@ public class SquireLauncher {
             }
         }
 
-        // Append to file
+        // Append to file in REAL SQUIRE FORMAT
         try (java.io.FileWriter writer = new java.io.FileWriter(LAUNCHER_DATA_FILE, true)) {
-            String accessStr = accessToken != null ? accessToken : "";
-            String refreshStr = refreshToken != null ? refreshToken : "";
-            writer.write(String.format("::%s:%s:%s:%s:%s%n", sessionId, accessStr, refreshStr, accountId, displayName));
+            // REAL SQUIRE FORMAT: ::sessionId:accountId:displayName
+            // That's it! No access tokens, no refresh tokens!
+            writer.write(String.format("::%s:%s:%s%n", sessionId, accountId, displayName));
+            log.info("Saved account in REAL SQUIRE format: {}", displayName);
             return true;
         } catch (java.io.IOException e) {
             log.error("Failed to save account: {}", e.getMessage());
@@ -618,7 +575,12 @@ public class SquireLauncher {
 
     /**
      * Loads accounts from launcher.dat
-     * @return List of [displayName, accountId, sessionId, accessToken, refreshToken] arrays
+     *
+     * NEW FORMAT: ::sessionId:idToken:accountId:displayName (6 parts when split by :)
+     * - sessionId (22 chars) is used for JX_SESSION_ID
+     * - idToken (JWT ~1357 chars) is used for JX_ACCESS_TOKEN
+     *
+     * @return List of [displayName, accountId, sessionId, idToken] arrays
      */
     private static List<String[]> loadAccountsFromFile() {
         List<String[]> accounts = new ArrayList<>();
@@ -637,40 +599,36 @@ public class SquireLauncher {
                 String line = scanner.nextLine();
                 log.debug("Line {}: {} chars", lineNumber, line.length());
 
-                // New format: ::sessionId:accessToken:refreshToken:accountId:displayName (7 parts)
-                // Old format v2: ::idToken:refreshToken:accountId:displayName (6 parts)
-                // Old format v1: ::sessionId:accountId:displayName (5 parts)
+                // NEW FORMAT: ::sessionId:idToken:accountId:displayName (6 parts)
+                // OLD FORMAT: ::sessionId:accountId:displayName (5 parts) - no JWT!
                 String[] parts = line.split(":");
                 log.debug("Line {} split into {} parts", lineNumber, parts.length);
 
-                if (parts.length >= 7) {
-                    // New format with sessionId + accessToken + refreshToken
+                if (parts.length == 6) {
+                    // NEW FORMAT with JWT for ACCESS_TOKEN
                     String sessionId = parts[2];
-                    String accessToken = parts[3];
-                    String refreshToken = parts[4];
-                    String accountId = parts[5];
-                    String displayName = parts[6];
-                    log.debug("Parsed account (v3): displayName='{}', sessionId={}chars, accessToken={}chars, refreshToken={}chars",
-                             displayName, sessionId.length(), accessToken.length(), refreshToken != null ? refreshToken.length() : 0);
-                    accounts.add(new String[]{displayName, accountId, sessionId, accessToken, refreshToken});
-                } else if (parts.length >= 6) {
-                    // Old format v2: idToken as sessionId, with refreshToken
-                    String idToken = parts[2];
-                    String refreshToken = parts[3];
+                    String idToken = parts[3];  // JWT for JX_ACCESS_TOKEN
                     String accountId = parts[4];
                     String displayName = parts[5];
-                    log.debug("Parsed account (v2): displayName='{}', idToken={}chars (used as both sessionId and accessToken)",
-                             displayName, idToken.length());
-                    // Use idToken for both sessionId and accessToken
-                    accounts.add(new String[]{displayName, accountId, idToken, idToken, refreshToken});
-                } else if (parts.length >= 5) {
-                    // Old format v1: sessionId only
+                    log.debug("Parsed account (with JWT): displayName='{}', sessionId={}chars, idToken={}chars",
+                             displayName, sessionId.length(), idToken.length());
+                    accounts.add(new String[]{displayName, accountId, sessionId, idToken});
+                } else if (parts.length == 5) {
+                    // OLD FORMAT - no JWT, will cause crash on login!
                     String sessionId = parts[2];
                     String accountId = parts[3];
                     String displayName = parts[4];
-                    log.debug("Parsed account (v1): displayName='{}', sessionId={}chars",
+                    log.warn("Parsed account (OLD FORMAT - no JWT!): displayName='{}'. Re-import needed!",
+                             displayName);
+                    accounts.add(new String[]{displayName, accountId, sessionId, null});
+                } else if (parts.length >= 7) {
+                    // Legacy complex format
+                    String sessionId = parts[2];
+                    String accountId = parts[5];
+                    String displayName = parts[6];
+                    log.debug("Parsed account (legacy v3): displayName='{}', sessionId={}chars",
                              displayName, sessionId.length());
-                    accounts.add(new String[]{displayName, accountId, sessionId, sessionId, null});
+                    accounts.add(new String[]{displayName, accountId, sessionId, null});
                 } else {
                     log.warn("Line {} has invalid format (expected 5+ parts, got {}): {}",
                             lineNumber, parts.length, line.substring(0, Math.min(50, line.length())) + "...");
@@ -686,8 +644,13 @@ public class SquireLauncher {
 
     /**
      * Looks up a Jagex account by display name and returns all account data.
+     *
+     * Format: [displayName, accountId, sessionId, idToken]
+     * - sessionId (22 chars) is used for JX_SESSION_ID
+     * - idToken (JWT ~1357 chars) is used for JX_ACCESS_TOKEN
+     *
      * @param displayName The display name to search for
-     * @return JagexAccountData containing sessionId, accessToken, accountId, displayName, and refreshToken, or null if not found
+     * @return JagexAccountData containing sessionId, accountId, displayName, accessToken, or null if not found
      */
     public static JagexAccountData lookupJagexAccount(String displayName) {
         log.info("lookupJagexAccount() - Searching for: '{}'", displayName);
@@ -702,24 +665,30 @@ public class SquireLauncher {
 
         for (int i = 0; i < accounts.size(); i++) {
             String[] account = accounts.get(i);
-            // Format: [displayName, accountId, sessionId, accessToken, refreshToken]
+            // NEW FORMAT: [displayName, accountId, sessionId, idToken]
             String accDisplayName = account[0];
             String accAccountId = account[1];
             String accSessionId = account[2];
-            String accAccessToken = account.length > 3 ? account[3] : null;
-            String accRefreshToken = account.length > 4 ? account[4] : null;
+            String accIdToken = account.length > 3 ? account[3] : null;  // JWT for JX_ACCESS_TOKEN
 
             log.info("lookupJagexAccount() - Checking account {}: '{}' (id={})",
                     i + 1, accDisplayName, accAccountId);
 
             if (displayName.equals(accDisplayName)) {
                 log.info("lookupJagexAccount() - MATCH FOUND!");
-                log.info("  displayName:   {}", accDisplayName);
-                log.info("  accountId:     {}", accAccountId);
-                log.info("  sessionId:     {} chars (JX_SESSION_ID)", accSessionId != null ? accSessionId.length() : 0);
-                log.info("  accessToken:   {} chars (JX_ACCESS_TOKEN)", accAccessToken != null ? accAccessToken.length() : 0);
-                log.info("  refreshToken:  {} chars (JX_REFRESH_TOKEN)", accRefreshToken != null ? accRefreshToken.length() : 0);
-                return new JagexAccountData(accSessionId, accAccessToken, accAccountId, accDisplayName, accRefreshToken);
+                log.info("  displayName: {}", accDisplayName);
+                log.info("  accountId:   {}", accAccountId);
+                log.info("  sessionId:   {} chars (for JX_SESSION_ID)", accSessionId != null ? accSessionId.length() : 0);
+                log.info("  idToken:     {} chars (for JX_ACCESS_TOKEN)", accIdToken != null ? accIdToken.length() : 0);
+
+                JagexAccountData data = new JagexAccountData(accSessionId, accAccountId, accDisplayName);
+                data.accessToken = accIdToken;  // Set the JWT for JX_ACCESS_TOKEN
+
+                if (accIdToken == null || accIdToken.isEmpty()) {
+                    log.warn("WARNING: No JWT found! Re-import credentials with --import-jagex-creds");
+                }
+
+                return data;
             }
         }
 
@@ -732,32 +701,31 @@ public class SquireLauncher {
 
     /**
      * Data class holding Jagex account information for launching.
+     *
+     * REAL SQUIRE FORMAT: Only stores sessionId, accountId, displayName.
+     * The sessionId is long-lived and reused for every launch.
+     * No accessToken or refreshToken needed!
      */
     public static class JagexAccountData {
-        public String sessionId;     // Short game session ID for JX_SESSION_ID
-        public String accessToken;   // JWT for JX_ACCESS_TOKEN
-        public final String accountId;
-        public final String displayName;
-        public final String refreshToken;
+        public final String sessionId;     // Long-lived game session ID (22 chars)
+        public final String accountId;     // Character/account ID
+        public final String displayName;   // Display name shown in game
+
+        // Legacy fields - kept for compatibility with LocalClientLauncher
+        // but not populated in new format
+        public String accessToken = null;
+        public String refreshToken = null;
 
         public JagexAccountData(String sessionId, String accountId, String displayName) {
-            this(sessionId, null, accountId, displayName, null);
-        }
-
-        public JagexAccountData(String sessionId, String accessToken, String accountId, String displayName, String refreshToken) {
             this.sessionId = sessionId;
-            this.accessToken = accessToken;
             this.accountId = accountId;
             this.displayName = displayName;
-            this.refreshToken = refreshToken;
         }
 
         @Override
         public String toString() {
             return "JagexAccountData{displayName='" + displayName + "', accountId='" + accountId +
-                   "', sessionId=" + (sessionId != null ? sessionId.length() : 0) + " chars" +
-                   ", accessToken=" + (accessToken != null ? accessToken.length() : 0) + " chars" +
-                   ", hasRefreshToken=" + (refreshToken != null && !refreshToken.isEmpty()) + "}";
+                   "', sessionId=" + (sessionId != null ? sessionId.length() : 0) + " chars}";
         }
     }
 

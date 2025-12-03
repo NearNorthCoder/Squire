@@ -181,19 +181,34 @@ public class CEFAccountImporter {
 
                         log.info("Real id_token captured: {} chars", idToken.length());
 
-                        // Create session and save accounts
+                        // MATCH REAL SQUIRE BEHAVIOR:
+                        // 1. Create game session from id_token (gets 22-char sessionId)
+                        // 2. Use session to get linked accounts
+                        // 3. Store in simple format: ::sessionId:accountId:displayName
                         SwingUtilities.invokeLater(() -> {
                             browser.close(true);
                             frame.setVisible(false);
 
                             try {
+                                // Step 1: Create game session (this uses the id_token)
+                                log.info("Creating game session from id_token...");
                                 String sessionId = createGameSession(idToken, client);
-                                if (sessionId != null) {
-                                    getAndSaveAccounts(sessionId, idToken, refreshToken, client);
+
+                                if (sessionId == null || sessionId.isEmpty()) {
+                                    showError("Failed to create game session");
+                                    if (callback != null) callback.run();
+                                    return;
                                 }
+
+                                log.info("Game session created: {} chars", sessionId.length());
+
+                                // Step 2: Get linked accounts using the session
+                                // Pass idToken (JWT) along with sessionId - client needs JWT for JX_ACCESS_TOKEN
+                                getAndSaveAccountsRealFormat(sessionId, idToken, client);
+
                             } catch (Exception e) {
-                                log.error("Failed to create session", e);
-                                showError("Failed to create game session: " + e.getMessage());
+                                log.error("Failed to import account", e);
+                                showError("Failed to import account: " + e.getMessage());
                             }
 
                             if (callback != null) callback.run();
@@ -201,7 +216,8 @@ public class CEFAccountImporter {
                     }
 
                     // Stage 1: Capture launcher redirect with code
-                    if (title.contains("Launcher Redirect") || currentUrl.contains("launcher-redirect")) {
+                    // Check if URL STARTS WITH the redirect URI (not just contains - redirect_uri param contains it too!)
+                    if (title.contains("Launcher Redirect") || currentUrl.startsWith(REDIRECT_URI)) {
                         log.info("=== STAGE 1 COMPLETE: Got launcher redirect ===");
 
                         // Extract code from URL
@@ -415,5 +431,185 @@ public class CEFAccountImporter {
     private static void showError(String msg) {
         SwingUtilities.invokeLater(() ->
             JOptionPane.showMessageDialog(null, msg, "Import Error", JOptionPane.ERROR_MESSAGE));
+    }
+
+    /**
+     * Get linked accounts and save with JWT for JX_ACCESS_TOKEN.
+     * Format: ::sessionId:idToken:accountId:displayName (6 parts when split by :)
+     *
+     * The sessionId is used for JX_SESSION_ID.
+     * The idToken (JWT) is used for JX_ACCESS_TOKEN - required by the client!
+     */
+    private static void getAndSaveAccountsRealFormat(String sessionId, String idToken, OkHttpClient client) {
+        try {
+            log.info("=== FETCHING ACCOUNTS (WITH JWT FOR ACCESS_TOKEN) ===");
+            log.info("Using sessionId as Bearer token: {} chars", sessionId.length());
+            log.info("JWT idToken for ACCESS_TOKEN: {} chars", idToken != null ? idToken.length() : 0);
+
+            Request request = new Request.Builder()
+                .url(GAME_ACCOUNTS_URL)
+                .header("Authorization", "Bearer " + sessionId)
+                .get()
+                .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                String body = response.body().string();
+                log.info("Accounts response: {} - {}", response.code(), body);
+
+                if (!response.isSuccessful()) {
+                    showError("Failed to get accounts: HTTP " + response.code());
+                    return;
+                }
+
+                List<Map<String, Object>> accounts = gson.fromJson(body,
+                    new TypeToken<List<Map<String, Object>>>(){}.getType());
+
+                log.info("Found {} linked accounts", accounts.size());
+
+                if (accounts.isEmpty()) {
+                    showError("No game accounts found.\nMake sure you have an OSRS character linked.");
+                    return;
+                }
+
+                // Clear existing accounts and write fresh
+                SQUIRE_HOME.mkdirs();
+
+                int imported = 0;
+                try (FileWriter writer = new FileWriter(LAUNCHER_DATA, false)) {  // false = overwrite
+                    for (Map<String, Object> account : accounts) {
+                        String accountId = (String) account.get("accountId");
+                        String displayName = (String) account.get("displayName");
+
+                        if (displayName == null || displayName.isEmpty()) {
+                            displayName = "Account-" + accountId.substring(0, Math.min(8, accountId.length()));
+                        }
+
+                        // NEW FORMAT with JWT: ::sessionId:idToken:accountId:displayName
+                        // idToken is the JWT needed for JX_ACCESS_TOKEN!
+                        String line = String.format("::%s:%s:%s:%s%n", sessionId, idToken, accountId, displayName);
+                        writer.write(line);
+
+                        log.info("Saved account: {} (id={}) with JWT ({} chars)", displayName, accountId, idToken != null ? idToken.length() : 0);
+                        imported++;
+                    }
+                }
+
+                log.info("=== IMPORT COMPLETE ===");
+                log.info("Saved {} accounts in format ::sessionId:idToken:accountId:displayName", imported);
+                log.info("SessionId ({} chars) for JX_SESSION_ID", sessionId.length());
+                log.info("JWT idToken ({} chars) for JX_ACCESS_TOKEN", idToken != null ? idToken.length() : 0);
+
+                JOptionPane.showMessageDialog(null,
+                    String.format("Imported %d account(s)!\n\nJWT saved for JX_ACCESS_TOKEN.\nSession saved for JX_SESSION_ID.\n\nReady to launch!",
+                        imported),
+                    "Import Complete", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            log.error("Failed to get/save accounts", e);
+            showError("Failed to get accounts: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Extract display name (nickname) from JWT token.
+     */
+    private static String extractDisplayNameFromJwt(String jwt) {
+        try {
+            String[] parts = jwt.split("\\.");
+            if (parts.length != 3) return null;
+
+            String payload = new String(Base64.getUrlDecoder().decode(parts[1]));
+            Map<String, Object> claims = gson.fromJson(payload, new TypeToken<Map<String, Object>>(){}.getType());
+
+            // Try nickname first, then sub
+            if (claims.containsKey("nickname")) {
+                String nickname = (String) claims.get("nickname");
+                // Remove the #xxxx suffix if present
+                if (nickname != null && nickname.contains("#")) {
+                    nickname = nickname.substring(0, nickname.indexOf("#"));
+                }
+                return nickname;
+            }
+            return null;
+        } catch (Exception e) {
+            log.warn("Failed to extract display name from JWT", e);
+            return null;
+        }
+    }
+
+    /**
+     * Extract account ID (sub) from JWT token.
+     */
+    private static String extractAccountIdFromJwt(String jwt) {
+        try {
+            String[] parts = jwt.split("\\.");
+            if (parts.length != 3) return null;
+
+            String payload = new String(Base64.getUrlDecoder().decode(parts[1]));
+            Map<String, Object> claims = gson.fromJson(payload, new TypeToken<Map<String, Object>>(){}.getType());
+
+            if (claims.containsKey("sub")) {
+                return (String) claims.get("sub");
+            }
+            return null;
+        } catch (Exception e) {
+            log.warn("Failed to extract account ID from JWT", e);
+            return null;
+        }
+    }
+
+    /**
+     * Save account directly without calling API.
+     * Format: ::sessionId:accessToken:refreshToken:accountId:displayName
+     */
+    private static boolean saveAccountDirect(String sessionId, String accessToken, String refreshToken,
+                                              String accountId, String displayName) {
+        SQUIRE_HOME.mkdirs();
+
+        // Remove existing account with same display name
+        removeExistingAccount(displayName);
+
+        try (FileWriter writer = new FileWriter(LAUNCHER_DATA, true)) {
+            String accessStr = accessToken != null ? accessToken : "";
+            String refreshStr = refreshToken != null ? refreshToken : "";
+            writer.write(String.format("::%s:%s:%s:%s:%s%n",
+                sessionId, accessStr, refreshStr, accountId, displayName));
+            log.info("Saved account: {} (id={})", displayName, accountId);
+            return true;
+        } catch (IOException e) {
+            log.error("Failed to save account", e);
+            return false;
+        }
+    }
+
+    /**
+     * Remove existing account with given display name.
+     */
+    private static void removeExistingAccount(String displayName) {
+        if (!LAUNCHER_DATA.exists()) return;
+
+        try {
+            List<String> lines = new ArrayList<>();
+            try (Scanner scanner = new Scanner(LAUNCHER_DATA)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    // Keep line if it doesn't end with this display name
+                    if (!line.endsWith(":" + displayName)) {
+                        lines.add(line);
+                    } else {
+                        log.info("Removing existing account: {}", displayName);
+                    }
+                }
+            }
+
+            // Rewrite file
+            try (FileWriter writer = new FileWriter(LAUNCHER_DATA)) {
+                for (String line : lines) {
+                    writer.write(line + "\n");
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Failed to remove existing account", e);
+        }
     }
 }
