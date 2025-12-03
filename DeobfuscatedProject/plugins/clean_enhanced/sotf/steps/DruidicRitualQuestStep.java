@@ -62,7 +62,7 @@ public class DruidicRitualQuestStep implements QuestStep {
     // Quest state tracking
     static int questStepCounter;
     static boolean buyingItems;
-    public static List<d> itemRequirements;
+    public static List<ShopItem> itemRequirements;
 
     // Additional flags
     static boolean questInitialized;
@@ -165,7 +165,7 @@ public class DruidicRitualQuestStep implements QuestStep {
         // Handle buying items if needed
         if (buyingItems) {
             AccBuilderSotf.c = "Buying items";
-            b.a(itemRequirements);
+            GrandExchangeUtil.buyItems(itemRequirements);
             if (itemRequirements.size() < 1) {
                 System.out.println("Finished buying items, switching back to quest");
                 buyingItems = false;

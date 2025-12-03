@@ -34,7 +34,7 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
     public static int STAMINA_POTION_ID;
     public static int SUMMER_PIE_ID;
     public static boolean hasStartedTraining;
-    public static List<d> buyList;
+    public static List<ShopItem> buyList;
 
     // World areas for agility courses
     static WorldArea VARROCK_COURSE_PLANE_0;
@@ -190,7 +190,7 @@ public class AgilityTrainingMultiCourseStep implements QuestStep {
         // Handle buying phase
         if (hasStartedTraining) {
             AccBuilderSotf.c = STATUS_BUYING;
-            b.a(buyList);
+            GrandExchangeUtil.buyItems(buyList);
             if (buyList.size() < 1) {
                 System.out.println(STATUS_FINISHED_BUYING);
                 hasStartedTraining = false;
