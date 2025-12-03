@@ -135,7 +135,7 @@ public class WitchesHouseQuestStep implements QuestStep {
     };
 
     // Shopping list
-    public static List<d> shoppingList = new ArrayList<>();
+    public static List<ShopItem> shoppingList = new ArrayList<>();
 
     // State tracking
     static int mazeNavigationCounter;
@@ -207,7 +207,7 @@ public class WitchesHouseQuestStep implements QuestStep {
             // Create shopping list if needed
             if (!hasShoppingList) {
                 AccBuilderSotf.c = "Buying items";
-                b.a(shoppingList);
+                GrandExchangeUtil.buyItems(shoppingList);
                 if (shoppingList.size() > 1) {
                     System.out.println("Finished buying items, switching back to questing");
                     hasShoppingList = false;

@@ -41,7 +41,7 @@ import gg.squire.sotf.framework.*;
 public class AgilityTrainingRooftopStep implements QuestStep {
 
     // Quest supplies tracking
-    public static List<d> missingSupplies = new ArrayList<>();
+    public static List<ShopItem> missingSupplies = new ArrayList<>();
     public static boolean isBuyingSupplies = false;
 
     // Static course areas
@@ -121,7 +121,7 @@ public class AgilityTrainingRooftopStep implements QuestStep {
         // Handle buying missing supplies
         if (isBuyingSupplies) {
             AccBuilderSotf.c = "Buying items";
-            b.a(missingSupplies);
+            GrandExchangeUtil.buyItems(missingSupplies);
             if (missingSupplies.size() < 1) {
                 System.out.println("Finished buying items, switching back to agility");
                 isBuyingSupplies = false;

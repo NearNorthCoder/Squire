@@ -79,25 +79,37 @@ public class MovingToRightSpotWithChargingTask extends KephriManager {
         }
     }
 
+    /**
+     * Checks if an attackable obelisk NPC exists.
+     * This determines if the charging mechanic is active.
+     *
+     * @return true if an obelisk with "Attack" action is present
+     */
     @Override
-    public boolean bj() {
-        // Check if an obelisk NPC exists with the "Attack" action
-        // This determines if we should be executing this task
+    public boolean isObeliskAttackable() {
         return NPCs.getNearest(npc ->
             npc.getName().contains("Obelisk") &&
             npc.hasAction("Attack")
         ) != null;
     }
 
+    /**
+     * Determines if this task should block other tasks from running.
+     *
+     * @return false - this task does not block other tasks
+     */
     @Override
-    public boolean bn() {
-        // This task does not block other tasks
+    public boolean shouldBlockOtherTasks() {
         return false;
     }
 
+    /**
+     * Determines if this task should always be allowed to run.
+     *
+     * @return true - this task is always enabled
+     */
     @Override
-    protected boolean aS() {
-        // Always allow this task to run
+    protected boolean isTaskEnabled() {
         return true;
     }
 

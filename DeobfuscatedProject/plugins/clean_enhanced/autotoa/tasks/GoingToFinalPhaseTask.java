@@ -99,8 +99,14 @@ public class GoingToFinalPhaseTask extends KephriManager {
         return true;
     }
 
+    /**
+     * Gets the gear swap configuration for this task.
+     * Returns null as no equipment swap is needed for phase transition.
+     *
+     * @return null - no gear swap required
+     */
     @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
+    public ConfigStorageBox<EquipmentSetup> getGearSwap() {
         return null;  // No special equipment setup needed
     }
 }

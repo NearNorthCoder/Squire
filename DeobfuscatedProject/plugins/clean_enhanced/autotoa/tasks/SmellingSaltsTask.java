@@ -44,8 +44,8 @@ public class SmellingSaltsTask extends KephriManager {
 
     @Override
     public boolean run() {
-        // Don't use if currently in combat
-        if (bc()) {
+        // Don't use if currently in combat area
+        if (isInCombatArea()) {
             return false;
         }
 
@@ -74,7 +74,7 @@ public class SmellingSaltsTask extends KephriManager {
                 .getOrDefault(TOAItemType.SMELLING_SALTS, 0);
 
             // Don't use if already used and not in special situations
-            if (usageCount < 1 && !aq() && !this.config.dehydration()) {
+            if (usageCount < 1 && !isInSpecialWeaponMode() && !this.config.dehydration()) {
                 return false;
             }
         }
@@ -96,7 +96,7 @@ public class SmellingSaltsTask extends KephriManager {
         // Don't use if strength boost is sufficient (less than threshold drain)
         // AND (not in special weapon mode OR not dehydrated)
         if (strengthBoost > STRENGTH_DRAIN_THRESHOLD &&
-            (!aq() || !this.config.dehydration())) {
+            (!isInSpecialWeaponMode() || !this.config.dehydration())) {
             return false;
         }
 

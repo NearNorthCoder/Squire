@@ -79,7 +79,7 @@ public class CookingTrainingStep implements QuestStep {
     public static final WorldPoint ALTERNATIVE_LOCATION = new WorldPoint(3272, 3148, 0);
 
     // Shopping list for items to buy when out of supplies
-    public static List<d> shoppingList;
+    public static List<ShopItem> shoppingList;
 
     // Flag to indicate if we need to switch to buying mode
     public static boolean needsToBuySupplies;
@@ -116,7 +116,7 @@ public class CookingTrainingStep implements QuestStep {
     private static final int COINS_PRICE = 25540;
 
     static {
-        shoppingList = new ArrayList<d>();
+        shoppingList = new ArrayList<>();
     }
 
     /**
@@ -190,7 +190,7 @@ public class CookingTrainingStep implements QuestStep {
         // Handle buying mode
         if (needsToBuySupplies) {
             AccBuilderSotf.c = MSG_BUYING_ITEMS;
-            b.a(shoppingList);
+            GrandExchangeUtil.buyItems(shoppingList);
 
             if (shoppingList.size() < 1) {
                 System.out.println(MSG_FINISHED_BUYING);

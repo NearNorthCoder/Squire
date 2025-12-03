@@ -45,7 +45,7 @@ public class DroppingUnnecessarySuppliesTask extends KephriManager {
     @Override
     public boolean run() {
         // Only drop if in special weapon mode and has health
-        if (!aq() || getRemainingHealth() <= 0) {
+        if (!isInSpecialWeaponMode() || getRemainingHealth() <= 0) {
             return false;
         }
 
@@ -85,7 +85,7 @@ public class DroppingUnnecessarySuppliesTask extends KephriManager {
             int ambrosiaCount = this.consumableManager.getSupplyQuantity()
                 .getOrDefault(TOAItemType.AMBROSIA, 0);
 
-            if (ambrosiaCount > 0 && be() && !Inventory.contains(item ->
+            if (ambrosiaCount > 0 && isBossIdle() && !Inventory.contains(item ->
                 TOAItemType.AMBROSIA.hasItemId(item.getId()))) {
 
                 // Drink tears if prayer is low, otherwise drop
@@ -112,7 +112,7 @@ public class DroppingUnnecessarySuppliesTask extends KephriManager {
             int ambrosiaCount = this.consumableManager.getSupplyQuantity()
                 .getOrDefault(TOAItemType.AMBROSIA, 0);
 
-            if (ambrosiaCount > 0 && be() && !Inventory.contains(item ->
+            if (ambrosiaCount > 0 && isBossIdle() && !Inventory.contains(item ->
                 TOAItemType.AMBROSIA.hasItemId(item.getId()))) {
 
                 // Drink nectar if health is low, otherwise drop

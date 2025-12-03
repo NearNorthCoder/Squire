@@ -54,7 +54,7 @@ public class AnimalMagnetismStep implements QuestStep {
     static WorldPoint MALCOLM_LOCATION;
 
     // Quest state
-    public static List<d> itemsToBuy;
+    public static List<ShopItem> itemsToBuy;
     static boolean needsToBuyItems;
     static boolean hasIncrementedQuest;
     private static String questStepDescription;
@@ -292,7 +292,7 @@ public class AnimalMagnetismStep implements QuestStep {
     public static void executeQuestStep() {
         // Handle shopping list
         if (needsToBuyItems) {
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
             if (itemsToBuy.size() < 1) {
                 System.out.println("Finished buying items, switching back to quest");
                 needsToBuyItems = false;

@@ -88,7 +88,7 @@ public class ImpCatcherQuestStep implements QuestStep {
 
     // State management
     public static boolean needsToBuyItems = false;
-    public static List<d> itemsToBuy = new ArrayList<>();
+    public static List<ShopItem> itemsToBuy = new ArrayList<>();
     static int dialogState = 0;
     static int completionState = 0;
     static boolean questStarted = false;
@@ -407,7 +407,7 @@ public class ImpCatcherQuestStep implements QuestStep {
         // Handle buying items from GE
         if (needsToBuyItems) {
             AccBuilderSotf.c = "Buying items";
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
 
             if (itemsToBuy.size() < 1) {
                 System.out.println("Finished buying items, switching back to questing");

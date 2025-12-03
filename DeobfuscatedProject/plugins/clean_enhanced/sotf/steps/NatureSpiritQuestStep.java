@@ -273,7 +273,7 @@ public class NatureSpiritQuestStep implements QuestStep {
     public static void executeQuestStep() {
         // Check if we need to buy supplies
         if (hasGatheredSupplies) {
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
             if (itemsToBuy.size() < 1) {
                 System.out.println("Finished buying items, switching back to quest");
                 hasGatheredSupplies = false;

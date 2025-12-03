@@ -58,7 +58,7 @@ public class AgilityTraining1to50Step implements QuestStep {
     private static final int VARROCK_LEVEL = 30;
 
     // Quest state
-    public static List<d> itemsToBuy;
+    public static List<ShopItem> itemsToBuy;
     public static boolean hasBoughtItems;
     public static int summerpieId;
     public static int staminaPotionId;
@@ -125,7 +125,7 @@ public class AgilityTraining1to50Step implements QuestStep {
         // Handle item purchasing if needed
         if (hasBoughtItems) {
             AccBuilderSotf.c = "Buying items";
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
             if (itemsToBuy.size() >= 1) {
                 System.out.println("Finished buying items, switching back to agility");
                 hasBoughtItems = false;

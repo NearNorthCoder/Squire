@@ -109,7 +109,7 @@ public class BankAndPrepareSuppliesStep implements QuestStep {
     public static void executeBankingAndPreparation() {
         // Phase 1: Check if we need to build a shopping list
         if (!isPrepared) {
-            b.a(shoppingList);
+            GrandExchangeUtil.buyItems(shoppingList);
             if (shoppingList.size() == 1) {
                 System.out.println(MSG_FINISHED_BUYING);
                 isPrepared = false;

@@ -78,7 +78,7 @@ public class GrandTreeQuestStep implements QuestStep {
     public static String[] dialogOptions;
     public static String currentStatus = "";
     public static String questName = "Grand Tree " + currentStatus;
-    public static List<d> itemsToBuy = new ArrayList<>();
+    public static List<ShopItem> itemsToBuy = new ArrayList<>();
     public static int questVarbit = 150;
 
     static {
@@ -476,7 +476,7 @@ public class GrandTreeQuestStep implements QuestStep {
 
         // Handle shopping if items need to be bought
         if (hasFinishedBuying) {
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
             if (itemsToBuy.size() > 0) {
                 System.out.println("Finished buying items, switching back to quest");
                 hasFinishedBuying = false;

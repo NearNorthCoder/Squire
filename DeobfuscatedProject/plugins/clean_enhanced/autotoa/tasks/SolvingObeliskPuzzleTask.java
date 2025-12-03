@@ -65,23 +65,35 @@ public class SolvingObeliskPuzzleTask extends KephriManager {
         this.cycleCounter = 0;
     }
 
+    /**
+     * Checks if the puzzle is inactive (no obelisks nearby).
+     *
+     * @return true if no obelisks are present
+     */
     @Override
-    public boolean bj() {
-        // Check if task should be inactive (no obelisks nearby)
+    public boolean isPuzzleInactive() {
         return NPCs.getNearest(INACTIVE_OBELISK_ID) == null;
     }
 
+    /**
+     * Checks if obelisks are reachable and the puzzle is active.
+     *
+     * @return true if at least one obelisk is interactable
+     */
     @Override
-    public boolean bk() {
-        // Check if task is active (obelisks are reachable)
+    public boolean areObelisksReachable() {
         return NPCs.getAll(INACTIVE_OBELISK_ID).stream()
             .anyMatch(Reachable::isInteractable);
     }
 
+    /**
+     * Main puzzle solving logic.
+     * Handles weapon switching, avoiding danger tiles, and hitting obelisks in sequence.
+     *
+     * @return true if an action was taken
+     */
     @Override
-    public boolean bY() {
-        // Main puzzle solving logic
-
+    protected boolean shouldExecute() {
         // Ensure we have the right weapon equipped
         if (!hasCorrectWeaponEquipped()) {
             return false;
@@ -264,20 +276,32 @@ public class SolvingObeliskPuzzleTask extends KephriManager {
         this.cycleCounter = 0;
     }
 
+    /**
+     * Gets the X coordinate of the nearest obelisk for positioning.
+     *
+     * @return X coordinate of nearest obelisk, or 0 if none found
+     */
     @Override
-    public int bZ() {
-        // Get X coordinate of nearest obelisk for positioning
+    public int getObeliskXPosition() {
         NPC obelisk = NPCs.getNearest("Obelisk");
         return obelisk != null ? obelisk.getWorldLocation().getX() : 0;
     }
 
-    public List<WorldPoint> ce() {
-        // Get list of successfully hit obelisk locations
+    /**
+     * Gets the list of successfully hit obelisk locations.
+     *
+     * @return list of world points where obelisks were successfully hit
+     */
+    public List<WorldPoint> getSuccessfulObeliskLocations() {
         return this.successfulObeliskLocations;
     }
 
-    public int cf() {
-        // Get current sequence index
+    /**
+     * Gets the current sequence index in the puzzle.
+     *
+     * @return current index in the obelisk hitting sequence
+     */
+    public int getSequenceIndex() {
         return this.obeliskSequenceIndex;
     }
 }

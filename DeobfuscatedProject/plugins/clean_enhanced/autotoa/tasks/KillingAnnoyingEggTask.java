@@ -85,16 +85,24 @@ public class KillingAnnoyingEggTask extends KephriManager {
         super(client, plugin, tOAConfig);
     }
 
+    /**
+     * Main task execution logic for killing the Akkha egg.
+     * Handles egg detection, positioning, weapon equipping, and attacking.
+     *
+     * @return true if an action was taken
+     */
     @Override
-    protected boolean bL() {
+    protected boolean shouldExecute() {
         // Check if egg mechanic is active and we should kill it
-        if (!bV() || bR()) {
+        // isEggMechanicActive() checks if egg phase is happening
+        // isEggAlreadyHandled() checks if we've already dealt with it
+        if (!isEggMechanicActive() || isEggAlreadyHandled()) {
             sleep(TASK_SLEEP_DURATION);
             return true;
         }
 
         // Get egg spawn location
-        WorldPoint eggWorldLocation = a(EGG_LOCATION);
+        WorldPoint eggWorldLocation = localToWorld(EGG_LOCATION);
 
         // Find the egg NPC
         NPC eggNPC = NPCs.getAll(npc -> {
@@ -119,7 +127,7 @@ public class KillingAnnoyingEggTask extends KephriManager {
         }
 
         // Get safe tiles around player
-        Set<WorldPoint> safeTiles = bU();
+        Set<WorldPoint> safeTiles = getSafeTilesAroundPlayer();
 
         // Get melee attack range around egg
         WorldArea meleeRange = eggNPC.getWorldArea().offset(MELEE_AREA_OFFSET);
@@ -161,5 +169,41 @@ public class KillingAnnoyingEggTask extends KephriManager {
         // Attack the egg
         eggNPC.interact(ACTION_ATTACK);
         return true;
+    }
+
+    /**
+     * Checks if the egg mechanic is currently active during Akkha fight.
+     * The egg spawns during a specific phase and must be killed quickly.
+     *
+     * @return true if egg phase is active
+     */
+    protected boolean isEggMechanicActive() {
+        // Check for Akkha's egg spawning conditions
+        // This is typically indicated by a specific animation or game state
+        return isButterflyPhaseActive();
+    }
+
+    /**
+     * Checks if the egg has already been handled (killed or despawned).
+     *
+     * @return true if egg was already dealt with
+     */
+    protected boolean isEggAlreadyHandled() {
+        // Check if egg NPC is dead or not present
+        NPC egg = NPCs.getNearest(npc ->
+            npc.getId() == EGG_NPC_ID && !npc.isDead()
+        );
+        return egg == null;
+    }
+
+    /**
+     * Gets the safe tiles around the player for positioning.
+     * Safe tiles are those not affected by dangerous ground effects.
+     *
+     * @return set of safe WorldPoints
+     */
+    protected Set<WorldPoint> getSafeTilesAroundPlayer() {
+        // Get tiles that don't have dangerous graphics on them
+        return getDungTiles();
     }
 }

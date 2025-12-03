@@ -119,7 +119,7 @@ public class DarknessOfHallowvale implements QuestStep {
     public static String currentAction = "";
     public static String questName = "In Aid of the Myreque";
     public static boolean questComplete = true;
-    public static List<d> questSteps = new ArrayList<>();
+    public static List<ShopItem> questSteps = new ArrayList<>();
 
     private static boolean preparedForVyrewatch = false;
     private static boolean hasTinderbox = false;
@@ -153,7 +153,7 @@ public class DarknessOfHallowvale implements QuestStep {
     public static void execute() {
         // Check if we need to load quest steps from the quest repository
         if (questComplete) {
-            b.a(questSteps);  // Load quest steps
+            GrandExchangeUtil.buyItems(questSteps);  // Load quest steps
             if (questSteps.isEmpty()) {
                 System.out.println("Finished buying items, switching back to quest");
                 questComplete = false;

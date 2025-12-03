@@ -49,9 +49,14 @@ public class LootingChestRoomTask extends KephriManager {
         super(client, plugin, tOAConfig);
     }
 
+    /**
+     * Checks if reward collection has been completed.
+     * Returns true when the reward chest is no longer available and we've interacted with the interface.
+     *
+     * @return true if reward collection is complete
+     */
     @Override
-    public boolean bj() {
-        // Check if we should validate this task (are we in the chest room?)
+    public boolean hasCompletedRewardCollection() {
         TileObject rewardChest = TileObjects.getNearest(obj ->
             obj.getId() == REWARD_CHEST_ID && obj.hasAction("Open")
         );
@@ -59,9 +64,13 @@ public class LootingChestRoomTask extends KephriManager {
         return rewardChest == null && this.hasInteractedWithRewardInterface;
     }
 
+    /**
+     * Checks if we are currently in the chest room area.
+     *
+     * @return true if in the chest room
+     */
     @Override
-    public boolean bk() {
-        // Check if task is active (we're in the room with the entrance object)
+    public boolean isInChestRoom() {
         return TileObjects.getNearest(ENTRANCE_ROOM_OBJECT_ID) != null;
     }
 
@@ -137,10 +146,14 @@ public class LootingChestRoomTask extends KephriManager {
         return true;
     }
 
+    /**
+     * Handles dialog with the Osmumten NPC for exiting the raid.
+     * Processes dialog options and initiates the leave interaction.
+     *
+     * @return true if dialog was handled or exit was initiated
+     */
     @Override
-    public boolean bn() {
-        // Handle dialog with Osmumten NPC for exiting
-
+    public boolean handleExitDialog() {
         if (Dialog.isViewingOptions()) {
             // Choose "Yes" to confirm exit
             Dialog.chooseOption("Yes");
@@ -170,13 +183,24 @@ public class LootingChestRoomTask extends KephriManager {
         this.hasInteractedWithRewardInterface = false;
     }
 
+    /**
+     * Gets the gear swap configuration for this task.
+     * Returns null as no equipment swap is needed for looting.
+     *
+     * @return null - no gear swap required
+     */
     @Override
-    public ConfigStorageBox<EquipmentSetup> br() {
+    public ConfigStorageBox<EquipmentSetup> getGearSwap() {
         return null;  // No equipment setup required for looting
     }
 
+    /**
+     * Gets the room marker object ID used to detect if we're in this room.
+     *
+     * @return the entrance room object ID
+     */
     @Override
-    public int bi() {
+    public int getRoomObjectId() {
         return ENTRANCE_ROOM_OBJECT_ID;
     }
 }
