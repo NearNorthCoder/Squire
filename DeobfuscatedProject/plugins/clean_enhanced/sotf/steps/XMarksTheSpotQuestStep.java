@@ -58,7 +58,7 @@ public class XMarksTheSpotQuestStep implements QuestStep {
     private static final String DIALOG_YES = "Yes.";
 
     // State variables
-    public static List<d> itemsToBuy;
+    public static List<ShopItem> itemsToBuy;
     public static boolean isBuying;
     static WorldPoint questStartLocation;
     static int questVarbitValue;
@@ -77,7 +77,7 @@ public class XMarksTheSpotQuestStep implements QuestStep {
     public static void execute() {
         // Handle GE buying if needed
         if (isBuying) {
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
             if (itemsToBuy.size() < TICK_DELAY_SHORT) {
                 System.out.println(MSG_FINISHED_BUYING);
                 isBuying = false;

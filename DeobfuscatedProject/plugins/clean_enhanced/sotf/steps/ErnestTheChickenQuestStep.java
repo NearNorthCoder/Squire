@@ -80,7 +80,7 @@ public class ErnestTheChickenQuestStep implements QuestStep {
     public static boolean questComplete;
 
     // Shopping list for quest items
-    public static List<d> shoppingList;
+    public static List<ShopItem> shoppingList;
 
     // Dialog options for quest
     static String[] veronicaDialog;
@@ -145,7 +145,7 @@ public class ErnestTheChickenQuestStep implements QuestStep {
     public static void executeQuestStep() {
         // Handle item shopping if needed
         if (shouldBuyItems) {
-            b.a(shoppingList);
+            GrandExchangeUtil.buyItems(shoppingList);
             if (shoppingList.size() <= 1) {
                 System.out.println("Finished buying items, switching back to quest");
                 shouldBuyItems = false;

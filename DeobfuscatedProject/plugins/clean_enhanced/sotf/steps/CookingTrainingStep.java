@@ -116,7 +116,7 @@ public class CookingTrainingStep implements QuestStep {
     private static final int COINS_PRICE = 25540;
 
     static {
-        shoppingList = new ArrayList<d>();
+        shoppingList = new ArrayList<>();
     }
 
     /**

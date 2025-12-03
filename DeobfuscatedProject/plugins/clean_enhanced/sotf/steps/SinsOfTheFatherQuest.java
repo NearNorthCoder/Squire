@@ -124,7 +124,7 @@ public class SinsOfTheFatherQuest implements QuestStep {
     private static String ALMERA_NPC = "Almera";
 
     // State tracking
-    public static List<d> buyingItemsList = new ArrayList<>();
+    public static List<ShopItem> buyingItemsList = new ArrayList<>();
     public static boolean enableQuesting = true;
     private static int questStep = 0;
     private static int failedAttempts = 0;
@@ -179,7 +179,7 @@ public class SinsOfTheFatherQuest implements QuestStep {
         // Check if we need to buy items first
         if (enableQuesting) {
             AccBuilderSotf.c = "Buying items";
-            b.a(buyingItemsList);
+            GrandExchangeUtil.buyItems(buyingItemsList);
             if (buyingItemsList.size() == 1) {
                 System.out.println("Finished buying items, switching back to questing");
                 enableQuesting = false;

@@ -50,7 +50,7 @@ public class NmzRangeQuestStep implements QuestStep {
     static String questName;
 
     // Item requirements list
-    public static List<d> itemRequirements;
+    public static List<ShopItem> itemRequirements;
 
     // Buying items flag
     public static boolean buyingItems;

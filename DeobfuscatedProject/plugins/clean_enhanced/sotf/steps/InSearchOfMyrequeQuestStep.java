@@ -51,7 +51,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
     public static String currentSubtask = "";
     public static boolean shouldBuyItems = false;
     public static String questName;
-    public static List<d> shoppingList;
+    public static List<ShopItem> shoppingList;
     private static int bridgeState;
     private static boolean initializedBridge;
 
@@ -170,7 +170,7 @@ public class InSearchOfMyrequeQuestStep implements QuestStep {
     public static void runQuestLogic() {
         // Handle shopping if needed
         if (shouldBuyItems) {
-            b.a(shoppingList);
+            GrandExchangeUtil.buyItems(shoppingList);
             if (shoppingList.size() < 1) {
                 System.out.println("Finished buying items, switching back to quest");
                 shouldBuyItems = false;

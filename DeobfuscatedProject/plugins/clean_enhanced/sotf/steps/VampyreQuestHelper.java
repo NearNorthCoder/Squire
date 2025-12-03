@@ -794,7 +794,7 @@ public static void prepareForQuest() {
                             block293: {
                                 block292: {
                                     if ((isInCombat)) {
-                                        b.a(questSteps);
+                                        GrandExchangeUtil.buyItems(questSteps);
                                         if (questSteps.size() < 1 {
                                             System.out.println("Finished buying items, switching back to quest");
                                             isInCombat = 0;

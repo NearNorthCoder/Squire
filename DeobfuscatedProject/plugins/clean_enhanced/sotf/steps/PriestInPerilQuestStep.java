@@ -77,7 +77,7 @@ public class PriestInPerilQuestStep implements QuestStep {
     public static final WorldPoint DREZEL_FINAL_LOCATION = new WorldPoint(3440, 9895, 0);
 
     // Quest state tracking
-    public static List<d> itemsToBuy = new ArrayList<>();
+    public static List<ShopItem> itemsToBuy = new ArrayList<>();
     public static boolean hasCheckedBank = false;
     public static boolean talkedToDrezelAboutBlessingWater = false;
     static boolean hasInitializedEssenceCounter = false;
@@ -154,7 +154,7 @@ public class PriestInPerilQuestStep implements QuestStep {
     public static void executeQuestLogic() {
         // First check if we need to buy items
         if (hasCheckedBank) {
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
             if (itemsToBuy.size() < 1) {
                 System.out.println("Finished buying items, switching back to quest");
                 hasCheckedBank = false;

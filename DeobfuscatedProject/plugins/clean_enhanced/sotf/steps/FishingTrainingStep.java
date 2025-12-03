@@ -221,7 +221,7 @@ public class FishingTrainingStep implements QuestStep {
      * List of items to buy from the Grand Exchange if missing.
      * Populated when checking bank and finding insufficient supplies.
      */
-    public static List<d> shoppingList;
+    public static List<ShopItem> shoppingList;
 
     /**
      * Flag indicating whether we need to buy items from GE.
@@ -363,7 +363,7 @@ public class FishingTrainingStep implements QuestStep {
         // Handle buying mode
         if (needsToBuyItems) {
             AccBuilderSotf.c = STATUS_BUYING_ITEMS;
-            b.a(shoppingList);
+            GrandExchangeUtil.buyItems(shoppingList);
 
             // If shopping list is empty, we're done buying
             if (shoppingList.size() < 1) {
@@ -612,7 +612,7 @@ public class FishingTrainingStep implements QuestStep {
         // Handle buying mode
         if (needsToBuyItems) {
             AccBuilderSotf.c = STATUS_BUYING_ITEMS;
-            b.a(shoppingList);
+            GrandExchangeUtil.buyItems(shoppingList);
 
             if (shoppingList.size() < 1) {
                 System.out.println(STATUS_FINISHED_BUYING);

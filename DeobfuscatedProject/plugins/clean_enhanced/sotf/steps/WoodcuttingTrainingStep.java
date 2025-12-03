@@ -83,7 +83,7 @@ public class WoodcuttingTrainingStep implements QuestStep {
     private static final String ITEM_PREFIX_RING_OF_WEALTH = "ring of wealth (";
 
     // State
-    public static List<d> itemsToBuy;
+    public static List<ShopItem> itemsToBuy;
     public static boolean isBuying;
 
     static {
@@ -175,7 +175,7 @@ public class WoodcuttingTrainingStep implements QuestStep {
         // Handle GE buying
         if (isBuying) {
             AccBuilderSotf.c = MSG_BUYING_ITEMS;
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
 
             if (itemsToBuy.size() < TICK_DELAY_SHORT) {
                 System.out.println(MSG_FINISHED_BUYING);

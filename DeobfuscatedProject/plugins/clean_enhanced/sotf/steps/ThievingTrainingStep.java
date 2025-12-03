@@ -122,7 +122,7 @@ public class ThievingTrainingStep implements QuestStep {
     private static final String ITEM_JUG = "Jug";
 
     // State
-    public static List<d> itemsToBuy;
+    public static List<ShopItem> itemsToBuy;
     public static boolean isBuying;
     static long lastStunTime;
     static int failCount;
@@ -178,7 +178,7 @@ public class ThievingTrainingStep implements QuestStep {
         // Handle GE buying
         if (isBuying) {
             AccBuilderSotf.c = MSG_BUYING_ITEMS;
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
 
             if (itemsToBuy.size() < 1) {
                 System.out.println(MSG_FINISHED_BUYING);

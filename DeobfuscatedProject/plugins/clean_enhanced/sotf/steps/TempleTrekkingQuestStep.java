@@ -141,7 +141,7 @@ public class TempleTrekkingQuestStep implements QuestStep {
     public static String rewardPreference;
     public static long bogStartTime;
     public static boolean buyingItems;
-    public static List<d> itemsToBuy;
+    public static List<ShopItem> itemsToBuy;
 
     static {
         itemsToBuy = new ArrayList<>();
@@ -193,7 +193,7 @@ public class TempleTrekkingQuestStep implements QuestStep {
         // Handle initial item buying if needed
         if (buyingItems) {
             AccBuilderSotf.c = "Buying items";
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
             if (itemsToBuy.size() == 1) {
                 System.out.println("Finished buying items, switching back to agility");
                 buyingItems = false;
@@ -1252,7 +1252,7 @@ public class TempleTrekkingQuestStep implements QuestStep {
     /**
      * Adds items to the buying list.
      */
-    public static void addItemsToBuy(List<d> items) {
+    public static void addItemsToBuy(List<ShopItem> items) {
         for (d item : items) {
             itemsToBuy.add(item);
         }

@@ -70,7 +70,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
     // Equipment and supply lists
     public static int[] LOW_LEVEL_EQUIPMENT;
     public static int[] HIGH_LEVEL_EQUIPMENT;
-    public static List<d> ITEMS_TO_BUY;
+    public static List<ShopItem> ITEMS_TO_BUY;
     public static boolean IS_BUYING_MODE;
 
     static {
@@ -167,7 +167,7 @@ public class MeleeTraining75Attack75Strength60DefenceQuestStep implements QuestS
         // Handle buying mode
         if (IS_BUYING_MODE) {
             AccBuilderSotf.c = "Buying items";
-            b.a(ITEMS_TO_BUY);
+            GrandExchangeUtil.buyItems(ITEMS_TO_BUY);
             if (ITEMS_TO_BUY.size() < 1) {
                 System.out.println("Finished buying items, switching back to melee training");
                 IS_BUYING_MODE = false;
