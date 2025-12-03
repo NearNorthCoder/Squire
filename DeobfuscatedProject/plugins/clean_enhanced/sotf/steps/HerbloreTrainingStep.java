@@ -15,6 +15,8 @@ import net.unethicalite.api.widgets.Widgets;
 import gg.squire.sotf.framework.ShopItem;
 import gg.squire.sotf.framework.QuestStep;
 import gg.squire.sotf.framework.GameStateUtil;
+import gg.squire.sotf.framework.BankingUtil;
+import gg.squire.sotf.framework.GrandExchangeUtil;
 
 /**
  * Trains Herblore by making potions and cutting gems.
@@ -74,7 +76,7 @@ public class HerbloreTrainingStep implements QuestStep {
     private static final String ITEM_NAME_CHISEL = "Chisel";
 
     // State
-    public static List<d> itemsToBuy;
+    public static List<ShopItem> itemsToBuy;
     public static boolean isBuying;
 
     static {
@@ -194,7 +196,7 @@ public class HerbloreTrainingStep implements QuestStep {
         // Handle GE buying
         if (isBuying) {
             AccBuilderSotf.c = MSG_BUYING_ITEMS;
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
 
             if (itemsToBuy.size() < TICK_DELAY_SHORT) {
                 System.out.println(MSG_FINISHED_BUYING);
@@ -256,14 +258,14 @@ public class HerbloreTrainingStep implements QuestStep {
         int herbloreLevel = Skills.getLevel(Skill.HERBLORE);
 
         if (herbloreLevel < LEVEL_THRESHOLD_LOW) {
-            z.a(VIAL_OF_WATER_ID, BASE_POTION_QUANTITY);
-            z.a(GUAM_LEAF_ID, BASE_POTION_QUANTITY);
+            BankingUtil.withdrawItem(VIAL_OF_WATER_ID, BASE_POTION_QUANTITY);
+            BankingUtil.withdrawItem(GUAM_LEAF_ID, BASE_POTION_QUANTITY);
         } else if (herbloreLevel >= LEVEL_THRESHOLD_LOW && herbloreLevel < LEVEL_THRESHOLD_MID) {
-            z.a(MARRENTILL_ID, BASE_POTION_QUANTITY);
-            z.a(TARROMIN_ID, BASE_POTION_QUANTITY);
+            BankingUtil.withdrawItem(MARRENTILL_ID, BASE_POTION_QUANTITY);
+            BankingUtil.withdrawItem(TARROMIN_ID, BASE_POTION_QUANTITY);
         } else if (herbloreLevel >= LEVEL_THRESHOLD_MID) {
-            z.a(VIAL_OF_WATER_ID, BASE_POTION_QUANTITY);
-            z.a(UNCUT_SAPPHIRE_ID, BASE_POTION_QUANTITY);
+            BankingUtil.withdrawItem(VIAL_OF_WATER_ID, BASE_POTION_QUANTITY);
+            BankingUtil.withdrawItem(UNCUT_SAPPHIRE_ID, BASE_POTION_QUANTITY);
         }
     }
 

@@ -92,7 +92,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
     private static int elvargPhase = 0;
 
     // Shopping list
-    public static List<d> itemsToBuy = new ArrayList<>();
+    public static List<ShopItem> itemsToBuy = new ArrayList<>();
 
     // Dialog options
     public static String[] questDialogOptions = new String[] {
@@ -147,7 +147,7 @@ public class DragonSlayerQuestHandler implements QuestStep {
         // Handle item buying
         if (needToBuyItems) {
             AccBuilderSotf.c = "Buying items";
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
             if (itemsToBuy.size() < 1) {
                 System.out.println("Finished buying items, switching back to quest");
                 needToBuyItems = false;

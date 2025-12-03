@@ -98,7 +98,7 @@ public class CombatTrainingStep implements QuestStep {
     private static final String SKILL_NAME = "Combat";
 
     // State
-    public static List<d> itemsToBuy;
+    public static List<ShopItem> itemsToBuy;
     public static boolean isBuying;
     private final int COMBAT_WIDGET_ID = 536;
 
@@ -174,7 +174,7 @@ public class CombatTrainingStep implements QuestStep {
         // Handle GE buying
         if (isBuying) {
             AccBuilderSotf.c = MSG_BUYING_ITEMS;
-            b.a(itemsToBuy);
+            GrandExchangeUtil.buyItems(itemsToBuy);
 
             if (itemsToBuy.size() < 1) {
                 System.out.println(MSG_FINISHED_BUYING);
