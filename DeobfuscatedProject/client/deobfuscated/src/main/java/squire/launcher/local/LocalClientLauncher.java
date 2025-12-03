@@ -191,6 +191,28 @@ public class LocalClientLauncher {
             throw new IllegalStateException("Display name is required for Jagex account login");
         }
 
+        // Validate JWT format for accessToken
+        // JWT format: header.payload.signature (each part is base64url encoded)
+        boolean accessTokenIsJwt = accessToken != null &&
+                                   accessToken.startsWith("eyJ") &&
+                                   accessToken.contains(".") &&
+                                   accessToken.length() > 100;
+
+        if (!accessTokenIsJwt) {
+            log.error("=======================================================");
+            log.error("WARNING: JX_ACCESS_TOKEN does not appear to be a JWT!");
+            log.error("  accessToken is null: {}", accessToken == null);
+            if (accessToken != null) {
+                log.error("  accessToken length: {} chars", accessToken.length());
+                log.error("  starts with 'eyJ': {}", accessToken.startsWith("eyJ"));
+                log.error("  contains '.': {}", accessToken.contains("."));
+                log.error("  first 50 chars: {}", accessToken.substring(0, Math.min(50, accessToken.length())));
+            }
+            log.error("This will likely cause 'JX_ACCESS_TOKEN does not look like a JWT' error!");
+            log.error("Please re-import your account using --import-accounts");
+            log.error("=======================================================");
+        }
+
         // Set all JX_* environment variables
         env.put("JX_SESSION_ID", sessionId);
         env.put("JX_CHARACTER_ID", accountId);

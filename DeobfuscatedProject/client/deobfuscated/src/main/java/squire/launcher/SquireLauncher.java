@@ -504,11 +504,16 @@ public class SquireLauncher {
             }
         }
 
-        // Append to file using Squire's 5-part format
-        // The client reads this directly - no env vars needed
+        // Append to file using full 7-part format
+        // Format: ::sessionId:accessToken:refreshToken:accountId:displayName
+        // This ensures JX_ACCESS_TOKEN gets the JWT, not the sessionId
         try (java.io.FileWriter writer = new java.io.FileWriter(LAUNCHER_DATA_FILE, true)) {
-            writer.write(String.format("::%s:%s:%s%n", sessionId, accountId, displayName));
-            log.info("Saved account: {} (sessionId: {} chars)", displayName, sessionId.length());
+            String safeAccessToken = accessToken != null ? accessToken : "";
+            String safeRefreshToken = refreshToken != null ? refreshToken : "";
+            writer.write(String.format("::%s:%s:%s:%s:%s%n",
+                sessionId, safeAccessToken, safeRefreshToken, accountId, displayName));
+            log.info("Saved account: {} (sessionId: {} chars, accessToken: {} chars)",
+                displayName, sessionId.length(), safeAccessToken.length());
             return true;
         } catch (java.io.IOException e) {
             log.error("Failed to save account: {}", e.getMessage());
@@ -613,13 +618,18 @@ public class SquireLauncher {
                     // Use idToken for both sessionId and accessToken
                     accounts.add(new String[]{displayName, accountId, idToken, idToken, refreshToken});
                 } else if (parts.length >= 5) {
-                    // Old format v1: sessionId only
+                    // Old format v1: sessionId only (NO JWT accessToken!)
+                    // This format is DEPRECATED - using sessionId for both will cause
+                    // "JX_ACCESS_TOKEN does not look like a JWT" error
                     String sessionId = parts[2];
                     String accountId = parts[3];
                     String displayName = parts[4];
-                    log.debug("Parsed account (v1): displayName='{}', sessionId={}chars",
+                    log.warn("Parsed account (v1 DEPRECATED): displayName='{}', sessionId={}chars",
                              displayName, sessionId.length());
-                    accounts.add(new String[]{displayName, accountId, sessionId, sessionId, null});
+                    log.warn("Account '{}' uses old format WITHOUT JWT accessToken!", displayName);
+                    log.warn("This will cause authentication failure. Please re-import with --import-accounts");
+                    // Set accessToken to empty string (not sessionId) so validation will catch it
+                    accounts.add(new String[]{displayName, accountId, sessionId, "", null});
                 } else {
                     log.warn("Line {} has invalid format (expected 5+ parts, got {}): {}",
                             lineNumber, parts.length, line.substring(0, Math.min(50, line.length())) + "...");
