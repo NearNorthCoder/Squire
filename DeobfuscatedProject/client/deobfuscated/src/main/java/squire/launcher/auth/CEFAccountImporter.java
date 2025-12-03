@@ -358,8 +358,14 @@ public class CEFAccountImporter {
 
     /**
      * Save account to launcher.dat
-     * Format: ::sessionId:accountId:displayName (5 parts - matches Squire's original format)
-     * The client reads this file directly and uses sessionId for authentication.
+     * Format: ::sessionId:accessToken:refreshToken:accountId:displayName (7 parts)
+     *
+     * The game client needs:
+     * - JX_SESSION_ID: sessionId (22-char game session from auth.runescape.com)
+     * - JX_ACCESS_TOKEN: accessToken (JWT starting with "eyJ")
+     * - JX_REFRESH_TOKEN: refreshToken (for refreshing expired tokens)
+     * - JX_CHARACTER_ID: accountId
+     * - JX_DISPLAY_NAME: displayName
      */
     private static boolean saveAccount(String sessionId, String accessToken, String refreshToken,
                                         String accountId, String displayName) {
@@ -372,10 +378,13 @@ public class CEFAccountImporter {
         }
 
         try (FileWriter writer = new FileWriter(LAUNCHER_DATA, true)) {
-            // Use Squire's 5-part format: ::sessionId:accountId:displayName
-            // This is what the client expects to read directly
-            writer.write(String.format("::%s:%s:%s%n", sessionId, accountId, displayName));
-            log.info("Saved account: {} (sessionId: {} chars)", displayName, sessionId.length());
+            // Save full 7-part format with accessToken (JWT) and refreshToken
+            // Format: ::sessionId:accessToken:refreshToken:accountId:displayName
+            String safRefreshToken = refreshToken != null ? refreshToken : "";
+            writer.write(String.format("::%s:%s:%s:%s:%s%n",
+                sessionId, accessToken, safRefreshToken, accountId, displayName));
+            log.info("Saved account: {} (sessionId: {} chars, accessToken: {} chars)",
+                displayName, sessionId.length(), accessToken != null ? accessToken.length() : 0);
             return true;
         } catch (IOException e) {
             log.error("Failed to save account", e);
