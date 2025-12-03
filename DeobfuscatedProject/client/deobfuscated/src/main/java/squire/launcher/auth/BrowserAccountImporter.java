@@ -735,6 +735,43 @@ public class BrowserAccountImporter {
     }
 
     /**
+     * Create a game session from an ID token.
+     * This is the public wrapper for createGameSession().
+     *
+     * @param idToken The JWT id_token from OAuth flow
+     * @return The 22-character game session ID, or null if creation failed
+     */
+    public static String createGameSessionFromToken(String idToken) {
+        if (idToken == null || idToken.isEmpty()) {
+            log.warn("Cannot create game session: idToken is null or empty");
+            return null;
+        }
+
+        // Initialize HTTP client if needed
+        if (httpClient == null) {
+            httpClient = new OkHttpClient.Builder()
+                .followRedirects(false)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+        }
+
+        try {
+            log.info("Creating game session from id_token (length: {} chars)", idToken.length());
+            String sessionId = createGameSession(idToken);
+            if (sessionId != null) {
+                log.info("Created game session: {} chars", sessionId.length());
+            } else {
+                log.error("Failed to create game session - returned null");
+            }
+            return sessionId;
+        } catch (IOException e) {
+            log.error("Failed to create game session", e);
+            return null;
+        }
+    }
+
+    /**
      * Refresh tokens using the refresh_token.
      * Returns the new id_token, or null if refresh failed.
      */
