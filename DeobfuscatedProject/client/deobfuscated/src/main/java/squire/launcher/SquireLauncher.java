@@ -214,9 +214,11 @@ public class SquireLauncher {
                 log.info("  Display Name:  {}", jagexAccountData.displayName);
                 log.info("  Account ID:    {}", jagexAccountData.accountId);
                 log.info("  Session ID:    {} chars", jagexAccountData.sessionId != null ? jagexAccountData.sessionId.length() : 0);
+                log.info("  Access Token:  {} chars", jagexAccountData.accessToken != null ? jagexAccountData.accessToken.length() : 0);
                 log.info("  Refresh Token: {} chars", jagexAccountData.refreshToken != null ? jagexAccountData.refreshToken.length() : 0);
 
-                String idToken = jagexAccountData.sessionId;
+                // Use accessToken (JWT) for creating game session, NOT sessionId (which may be old 22-char session)
+                String idToken = jagexAccountData.accessToken != null ? jagexAccountData.accessToken : jagexAccountData.sessionId;
 
                 // Try to refresh the token to get a fresh id_token
                 if (jagexAccountData.refreshToken != null && !jagexAccountData.refreshToken.isEmpty()) {
