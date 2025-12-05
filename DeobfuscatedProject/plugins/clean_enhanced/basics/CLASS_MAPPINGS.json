@@ -1,0 +1,485 @@
+{
+  "metadata": {
+    "project": "Squire OSRS Bot - Basics Collection Plugin",
+    "deobfuscation_date": "2025-12-05",
+    "source_directory": "/home/user/Squire/DeobfuscatedProject/plugins/src/4d97445a-f331-4d37-a32a-a78260ee3d07/gg/squire/basics/",
+    "output_directory": "/home/user/Squire/DeobfuscatedProject/plugins/clean_enhanced/basics/",
+    "description": "Class mappings for the Basics Collection magic utilities and miscellaneous plugins"
+  },
+  "magic_plugins": {
+    "MageArenaOne": {
+      "original_package": "gg.squire.basics.magic",
+      "deobfuscated_package": "gg.squire.basics.magic",
+      "original_class": "MageArenaOne",
+      "deobfuscated_class": "MageArenaOne",
+      "description": "Automatically casts god spells on Kolodion during Mage Arena minigame",
+      "config_class": "MageArenaOneConfig",
+      "tasks": [],
+      "obfuscated_fields": {
+        "eM": "config",
+        "bA": "configManager",
+        "llIlllII": "String array for encrypted strings",
+        "llIlllIl": "int array for obfuscated constants"
+      },
+      "decrypted_strings": {
+        "llIlllII[0]": "Attack",
+        "llIlllII[1]": "Kolodion"
+      },
+      "constants": {
+        "llIlllIl[0]": "-1 (NOT_ANIMATING)",
+        "llIlllIl[1]": "0",
+        "llIlllIl[2]": "1",
+        "llIlllIl[3]": "2",
+        "llIlllIl[4]": "8"
+      }
+    },
+    "SquireTelegrab": {
+      "original_package": "gg.squire.basics.magic.grab",
+      "deobfuscated_package": "gg.squire.basics.magic.grab",
+      "original_class": "SquireTelegrab",
+      "deobfuscated_class": "SquireTelegrab",
+      "description": "Automatically casts Telekinetic Grab on configured items",
+      "config_class": "SquireTelegrabConfig",
+      "tasks": ["TelegrabTask"],
+      "obfuscated_fields": {
+        "lIlIIllI": "int array for obfuscated constants"
+      },
+      "constants": {
+        "lIlIIllI[0]": "1",
+        "lIlIIllI[1]": "0"
+      }
+    },
+    "StunAlchTeleport": {
+      "original_package": "gg.squire.basics.magic.stunalchtp",
+      "deobfuscated_package": "gg.squire.basics.magic.stunalchtp",
+      "original_class": "StunAlchTeleport",
+      "deobfuscated_class": "StunAlchTeleport",
+      "description": "Performs stun on guards, alchs items, and teleports to Ardougne for magic training",
+      "config_class": "SquireAlchTeleportConfig",
+      "tasks": ["StunTask", "AlchTask", "TeleportTask"],
+      "obfuscated_fields": {
+        "eR": "startingMagicXp",
+        "eQ": "shouldTeleport",
+        "lIIlllII": "int array for obfuscated constants",
+        "lIIllIll": "String array for encrypted strings"
+      },
+      "decrypted_strings": {
+        "lIIllIll[0]": "StunAlchTP Started",
+        "lIIllIll[1]": "StunAlchTP Stopped"
+      },
+      "constants": {
+        "lIIlllII[0]": "0",
+        "lIIlllII[1]": "3",
+        "lIIlllII[2]": "1",
+        "lIIlllII[3]": "2"
+      }
+    },
+    "SquireTeleporter": {
+      "original_package": "gg.squire.basics.magic.teleporter",
+      "deobfuscated_package": "gg.squire.basics.magic.teleporter",
+      "original_class": "SquireTeleporter",
+      "deobfuscated_class": "SquireTeleporter",
+      "description": "Automatically casts teleportation spells for magic experience",
+      "config_class": "SquireTeleporterConfig",
+      "tasks": ["TeleporterTask"],
+      "obfuscated_fields": {
+        "llIlllIII": "int array for obfuscated constants"
+      },
+      "constants": {
+        "llIlllIII[0]": "1",
+        "llIlllIII[1]": "0"
+      }
+    }
+  },
+  "task_classes": {
+    "aR": {
+      "original_package": "i.i.b.s.c.q.r.s.s.-.u.a.e",
+      "deobfuscated_package": "gg.squire.basics.tasks",
+      "original_class": "aR",
+      "deobfuscated_class": "TelegrabTask",
+      "description": "Task for casting Telekinetic Grab on ground items",
+      "task_annotation": {
+        "name": "Grabbing"
+      },
+      "obfuscated_fields": {
+        "eN": "config",
+        "llIlIllll": "int array for obfuscated constants",
+        "llIlIlllI": "String array for encrypted strings"
+      },
+      "decrypted_strings": {
+        "llIlIlllI[0]": "Unable to find widget for Telekinetic Grab"
+      },
+      "constants": {
+        "llIlIllll[0]": "1",
+        "llIlIllll[1]": "0",
+        "llIlIllll[2]": "52 (SLEEP_AFTER_CAST_MS)",
+        "llIlIllll[3]": "-1",
+        "llIlIllll[4]": "8",
+        "llIlIllll[5]": "2"
+      }
+    },
+    "aS": {
+      "original_package": "i.i.b.s.c.q.r.s.s.-.u.a.e",
+      "deobfuscated_package": "gg.squire.basics.tasks",
+      "original_class": "aS",
+      "deobfuscated_class": "AlchTask",
+      "description": "Task for casting high/low alchemy on inventory items",
+      "task_annotation": {
+        "name": "Alching",
+        "priority": 2
+      },
+      "obfuscated_fields": {
+        "eP": "config",
+        "eO": "plugin",
+        "lIllIlI": "int array for obfuscated constants"
+      },
+      "constants": {
+        "lIllIlI[0]": "0",
+        "lIllIlI[1]": "-1 (NOT_ANIMATING)",
+        "lIllIlI[2]": "55 (HIGH_ALCH_LEVEL)",
+        "lIllIlI[3]": "1",
+        "lIllIlI[4]": "27 (INVENTORY_SLOT_ALCHS)"
+      }
+    },
+    "aT": {
+      "original_package": "i.i.b.s.c.q.r.s.s.-.u.a.e",
+      "deobfuscated_package": "gg.squire.basics.tasks",
+      "original_class": "aT",
+      "deobfuscated_class": "StunTask",
+      "description": "Task for casting stun spells on NPCs",
+      "task_annotation": {
+        "name": "Stunning",
+        "priority": 3,
+        "register": true
+      },
+      "obfuscated_fields": {
+        "eU": "config",
+        "eS": "plugin",
+        "eT": "constant (NOT_ANIMATING)",
+        "eW": "spellXpValues (List<Integer>)",
+        "eV": "stunSpells (List<Spell>)",
+        "llIIIIlIl": "String array for encrypted strings",
+        "llIIIIllI": "int array for obfuscated constants"
+      },
+      "decrypted_strings": {
+        "llIIIIlIl[0]": "Guard",
+        "llIIIIlIl[1]": "Kolodion"
+      },
+      "constants": {
+        "llIIIIllI[0]": "180 (XP_STUN)",
+        "llIIIIllI[1]": "83 (XP_ENFEEBLE)",
+        "llIIIIllI[2]": "76 (XP_VULNERABILITY)",
+        "llIIIIllI[3]": "29 (XP_CURSE)",
+        "llIIIIllI[4]": "21 (XP_WEAKEN)",
+        "llIIIIllI[5]": "13 (XP_CONFUSE)",
+        "llIIIIllI[6]": "0",
+        "llIIIIllI[7]": "-1 (NOT_ANIMATING)",
+        "llIIIIllI[8]": "1 (SLEEP_AFTER_CAST_MS)",
+        "llIIIIllI[9]": "2",
+        "llIIIIllI[10]": "8"
+      }
+    },
+    "aU": {
+      "original_package": "i.i.b.s.c.q.r.s.s.-.u.a.e",
+      "deobfuscated_package": "gg.squire.basics.tasks",
+      "original_class": "aU",
+      "deobfuscated_class": "TeleportTask",
+      "description": "Task for casting teleportation spells in stun-alch-tp rotation",
+      "task_annotation": {
+        "name": "Teleporting"
+      },
+      "obfuscated_fields": {
+        "fa": "stunTeleports (List<Spell>)",
+        "fb": "alchTeleports (List<Spell>)",
+        "fc": "lastTeleportTick (static)",
+        "eY": "constant (ANIMATION_STANDARD_TELEPORT)",
+        "eZ": "constant (ANIMATION_ANCIENT_TELEPORT)",
+        "eX": "plugin",
+        "fd": "config",
+        "lIllIlIlI": "int array for obfuscated constants"
+      },
+      "constants": {
+        "lIllIlIlI[0]": "8939 (ANIMATION_STANDARD_TELEPORT)",
+        "lIllIlIlI[1]": "9606 (ANIMATION_ANCIENT_TELEPORT)",
+        "lIllIlIlI[2]": "0",
+        "lIllIlIlI[3]": "2 (TICK_DELAY_AFTER_TELEPORT)",
+        "lIllIlIlI[4]": "1"
+      }
+    },
+    "aV": {
+      "original_package": "i.i.b.s.c.q.r.s.s.-.u.a.e",
+      "deobfuscated_package": "gg.squire.basics.tasks",
+      "original_class": "aV",
+      "deobfuscated_class": "TeleporterTask",
+      "description": "Task for standalone teleporter plugin",
+      "task_annotation": {
+        "name": "Teleporting"
+      },
+      "obfuscated_fields": {
+        "fe": "config",
+        "lIlIlIlII": "int array for obfuscated constants"
+      },
+      "constants": {
+        "lIlIlIlII[0]": "0",
+        "lIlIlIlII[1]": "8939 (ANIMATION_STANDARD_TELEPORT)",
+        "lIlIlIlII[2]": "9606 (ANIMATION_ANCIENT_TELEPORT)",
+        "lIlIlIlII[3]": "-1 (ANIMATION_HOME_TELEPORT)",
+        "lIlIlIlII[4]": "1"
+      }
+    }
+  },
+  "enum_classes": {
+    "aW": {
+      "original_package": "i.i.b.s.c.q.r.s.s.-.u.a.e",
+      "deobfuscated_package": "gg.squire.basics.enums",
+      "original_class": "aW",
+      "deobfuscated_class": "TeleportSpell",
+      "description": "Enumeration of teleportation spells with level requirements",
+      "enum_values": {
+        "VARROCK": {
+          "spell": "SpellBook.Standard.VARROCK_TELEPORT",
+          "level": 25
+        },
+        "LUMBRIDGE": {
+          "spell": "SpellBook.Standard.LUMBRIDGE_TELEPORT",
+          "level": 31
+        },
+        "FALADOR": {
+          "spell": "SpellBook.Standard.FALADOR_TELEPORT",
+          "level": 37
+        },
+        "CAMELOT": {
+          "spell": "SpellBook.Standard.CAMELOT_TELEPORT",
+          "level": 45
+        },
+        "PROGRESSIVE": {
+          "spell": "SpellBook.Standard.HOME_TELEPORT",
+          "level": 0,
+          "description": "Automatically selects highest level teleport available"
+        }
+      },
+      "obfuscated_fields": {
+        "level": "levelRequired",
+        "spell": "spell",
+        "lIllIIlI": "String array for encrypted strings",
+        "lIllIIll": "int array for obfuscated constants"
+      }
+    }
+  },
+  "pvm_boss_plugins": {
+    "SquireCerberus": {
+      "original_package": "gg.squire.basics.cerberus",
+      "deobfuscated_package": "gg.squire.basics.cerberus",
+      "original_class": "SquireCerberus",
+      "deobfuscated_class": "SquireCerberus",
+      "description": "Automated Cerberus boss killing with banking, looting, and combat management",
+      "config_class": "SquireCerberusConfig",
+      "overlay_class": "CerberusOverlay",
+      "tasks": ["u", "j", "t", "w", "r", "v", "n", "k", "q", "o", "m", "A", "z", "l", "y", "s", "x"],
+      "support_classes": {
+        "a": "CerberusManager",
+        "h": "LootItem"
+      },
+      "config_values": {
+        "eatAtHealth": 69,
+        "drinkAtPrayerGhost": 83,
+        "drinkAtPrayer": 51,
+        "bankUnderAmount": 2,
+        "forceTeleportAtHp": 25
+      },
+      "decrypted_strings": {
+        "kill_count_message": "Your Cerberus kill count"
+      }
+    },
+    "SquireDagannothKings": {
+      "original_package": "gg.squire.basics.dagannothkings",
+      "deobfuscated_package": "gg.squire.basics.dagannothkings",
+      "original_class": "SquireDagannothKings",
+      "deobfuscated_class": "SquireDagannothKings",
+      "description": "Dagannoth Kings helper for tracking loot and managing combat",
+      "config_class": "DagannothKingConfig",
+      "tasks": ["ai", "ah", "ak", "ag"],
+      "support_classes": {
+        "aH": "DKLootItem",
+        "ad": "DKManager1",
+        "ae": "DKManager2"
+      },
+      "config_values": {
+        "eatMissingHealth": 40,
+        "restorePrayerLevel": 20,
+        "flickPiety": true
+      },
+      "decrypted_strings": {
+        "excluded_item": "Coins"
+      }
+    },
+    "SquireCoxHelper": {
+      "original_package": "gg.squire.basics.cox",
+      "deobfuscated_package": "gg.squire.basics.cox",
+      "original_class": "SquireCoxHelper",
+      "deobfuscated_class": "SquireCoxHelper",
+      "description": "Chambers of Xeric helper plugin stub (placeholder)",
+      "config_class": "SquireCoxConfig",
+      "tasks": [],
+      "note": "Hidden plugin with no active functionality"
+    }
+  },
+  "skilling_plugins": {
+    "SquireEcto": {
+      "original_package": "gg.squire.basics.ectofuntus",
+      "deobfuscated_package": "gg.squire.basics.ectofuntus",
+      "original_class": "SquireEcto",
+      "deobfuscated_class": "SquireEcto",
+      "description": "Automated Ectofuntus prayer training with bone grinding, slime collecting, and worshiping",
+      "config_class": "SquireEctoConfig",
+      "overlay_class": "EctoOverlay",
+      "tasks": ["aq", "ap", "at", "au", "ar"],
+      "support_classes": {
+        "an": "BankItemEnum",
+        "ao": "BonesEnum"
+      },
+      "item_ids": {
+        "ITEM_BONEMEAL": 4255,
+        "ITEM_BUCKET_SLIME": 4257
+      },
+      "decrypted_strings": {
+        "action_worship": "Worship",
+        "action_use": "Use",
+        "log_starting": "Starting",
+        "log_missing_items": "Unable to worship, we are missing bonemeal or slime."
+      }
+    },
+    "SandWorms": {
+      "original_package": "gg.squire.basics.favor",
+      "deobfuscated_package": "gg.squire.basics.favor",
+      "original_class": "SandWorms",
+      "deobfuscated_class": "SandWorms",
+      "description": "Sandworm collection for Hosidius house favor",
+      "tasks": [],
+      "note": "Uses event-based logic instead of task system",
+      "item_ids": {
+        "ITEM_SPADE": 11876,
+        "ITEM_BUCKET": 11877,
+        "ITEM_SANDWORMS": 11878
+      },
+      "locations": {
+        "sandworm_area": "WorldPoint(1783, 3491, 0)"
+      },
+      "decrypted_strings": {
+        "object_sandworms": "Sandworms spawn point",
+        "npc_trader": "Arnold",
+        "action_dig": "Dig"
+      }
+    },
+    "SoldierHealer": {
+      "original_package": "gg.squire.basics.favor",
+      "deobfuscated_package": "gg.squire.basics.favor",
+      "original_class": "SoldierHealer",
+      "deobfuscated_class": "SoldierHealer",
+      "description": "Heals Shayzien soldiers for house favor",
+      "tasks": [],
+      "note": "Uses event-based logic instead of task system",
+      "item_ids": {
+        "ITEM_HEALING": 6979
+      },
+      "animation_ids": {
+        "ANIMATION_WOUNDED": 6982
+      },
+      "decrypted_strings": {
+        "item_healing": "Shayzien medpack",
+        "npc_soldier": "Wounded Soldier",
+        "object_crate": "Crate"
+      }
+    }
+  },
+  "utility_plugins": {
+    "DebugPlugin": {
+      "original_package": "gg.squire.basics.debug",
+      "deobfuscated_package": "gg.squire.basics.debug",
+      "original_class": "DebugPlugin",
+      "deobfuscated_class": "DebugPlugin",
+      "description": "Debugging utility plugin for development",
+      "config_class": "DebugConfig",
+      "tasks": [],
+      "note": "Hidden plugin for testing purposes"
+    },
+    "SquireTyper": {
+      "original_package": "gg.squire.basics.debug.typer",
+      "deobfuscated_package": "gg.squire.basics.debug.typer",
+      "original_class": "SquireTyper",
+      "deobfuscated_class": "SquireTyper",
+      "description": "Auto-typer plugin for automated message sending",
+      "config_class": "SquireTyperConfig",
+      "tasks": ["al"],
+      "support_classes": {
+        "al": "TypingTask"
+      },
+      "config_values": {
+        "tickDelay": 60,
+        "msg": "Hello World!"
+      }
+    },
+    "GearLoadoutPlugin": {
+      "original_package": "gg.squire.basics.gearloadouts",
+      "deobfuscated_package": "gg.squire.basics.gearloadouts",
+      "original_class": "GearLoadoutPlugin",
+      "deobfuscated_class": "GearLoadoutPlugin",
+      "description": "Gear loadout management for quick equipment switching with keybinds",
+      "config_class": "GearLoadoutConfig",
+      "support_classes": {
+        "av": "LoadoutPanel",
+        "ay": "LoadoutKeyListener"
+      },
+      "security_note": "Contains anti-analysis code that terminates application in testing environments",
+      "constants": {
+        "MIN_DELAY_MINUTES": 5,
+        "MAX_DELAY_MINUTES": 35
+      }
+    },
+    "InventoryAssistant": {
+      "original_package": "gg.squire.basics.inventory",
+      "deobfuscated_package": "gg.squire.basics.inventory",
+      "original_class": "InventoryAssistant",
+      "deobfuscated_class": "InventoryAssistant",
+      "description": "Automated inventory management with item dropping when threshold reached",
+      "config_class": "InventoryAsisstantConfig",
+      "tasks": [],
+      "note": "Uses event-based logic, drops up to 8 items per tick",
+      "constants": {
+        "MAX_DROPS_PER_TICK": 8
+      },
+      "config_values": {
+        "amountToDrop": 12,
+        "itemsToDrop": "13571,5343"
+      }
+    }
+  },
+  "common_obfuscation_patterns": {
+    "bitwise_operations": {
+      "description": "Constants are obfuscated using bitwise XOR and AND operations",
+      "examples": [
+        "llIlllIl[1] = (0xC2 ^ 0x85) & ~(0x47 ^ 0) = 0",
+        "llIlIIllI[1] = (0xFE ^ 0xBC) & ~(0x79 ^ 0x3B) = 0",
+        "lIllIlI[2] = 0xBC ^ 0x8B = 55",
+        "0xF5 ^ 0xB4 = 69",
+        "0x2F ^ 0x33 = 12"
+      ]
+    },
+    "string_encryption": {
+      "description": "Strings are encrypted using XOR cipher with Base64 encoding or DES/Blowfish encryption",
+      "methods": [
+        "XOR cipher with Base64",
+        "DES encryption",
+        "Blowfish encryption"
+      ]
+    },
+    "method_obfuscation": {
+      "description": "Method names are obfuscated using similar-looking characters",
+      "examples": [
+        "lIllIIIllII - string decryption method",
+        "lIllIIIlllI - constant array initialization",
+        "llIIIlIIIll - boolean comparison methods"
+      ]
+    }
+  }
+}

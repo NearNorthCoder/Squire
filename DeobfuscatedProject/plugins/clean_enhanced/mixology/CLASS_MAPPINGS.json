@@ -1,22 +1,257 @@
 {
-  "a": "HerbTypeHighLevel",
-  "b": "HerbTypeAll",
-  "c": "HerbTypeMidLevel",
-  "d": "PluginMode",
-  "e": "HerbTypeLowLevel",
-  "f": "PotionStrategy",
-  "g": "MixologyOverlay",
-  "h": "BankForStaminasTask",
-  "i": "DepositHopperTask",
-  "j": "AgitatorTask",
-  "k": "HandleAlembicTask",
-  "l": "RetortTask",
-  "m": "MakePasteTask",
-  "n": "MixingVesselTask",
-  "o": "OperateLeversTask",
-  "p": "TalkToSupervisorTask",
-  "q": "TurningInPotionTask",
-  "r": "MixologyConstants",
-  "s": "MixologyHelper",
-  "t": "Potion"
+  "plugin_info": {
+    "name": "SquireMixology",
+    "description": "Automated Mixology minigame plugin for Squire OSRS bot",
+    "obfuscated_path": "/home/user/Squire/DeobfuscatedProject/plugins/src/37ff9308-5bb6-4332-83e0-8ab13e118f7a/",
+    "deobfuscated_path": "/home/user/Squire/DeobfuscatedProject/plugins/clean_enhanced/mixology/"
+  },
+  "class_mappings": {
+    "a.java": "HighTierHerbType.java",
+    "b.java": "AllHerbType.java",
+    "c.java": "MidTierHerbType.java",
+    "d.java": "PluginMode.java",
+    "e.java": "LowTierHerbType.java",
+    "f.java": "PotionStrategy.java",
+    "g.java": "overlay/MixologyOverlay.java",
+    "h.java": "tasks/BankForStaminasTask.java",
+    "i.java": "tasks/DepositHopperTask.java",
+    "j.java": "tasks/AgitatorTask.java",
+    "k.java": "tasks/HandleAlembicTask.java",
+    "l.java": "tasks/RetortTask.java",
+    "m.java": "tasks/MakePasteTask.java",
+    "n.java": "tasks/MixingVesselTask.java",
+    "o.java": "tasks/OperateLeversTask.java",
+    "p.java": "tasks/TalkToSupervisorTask.java",
+    "q.java": "tasks/TurnInPotionTask.java",
+    "r.java": "MixologyConstants.java",
+    "s.java": "MixologyUtils.java",
+    "t.java": "PotionType.java"
+  },
+  "main_classes": {
+    "SquireMixology.java": {
+      "package": "gg.squire.mixology",
+      "description": "Main plugin class managing Mixology minigame automation",
+      "type": "PluginBootstrap"
+    },
+    "SquireMixologyConfig.java": {
+      "package": "gg.squire.mixology",
+      "description": "Configuration interface for plugin settings",
+      "type": "Config"
+    }
+  },
+  "overlay_classes": {
+    "MixologyInfoBox.java": {
+      "package": "gg.squire.mixology.overlay",
+      "description": "Info box overlay displaying plugin status and statistics",
+      "type": "Overlay"
+    },
+    "MixologyOverlay.java": {
+      "obfuscated": "g.java",
+      "package": "gg.squire.mixology.overlay",
+      "description": "Overlay for highlighting NPCs and objects",
+      "type": "Overlay"
+    }
+  },
+  "enum_classes": {
+    "PluginMode.java": {
+      "obfuscated": "d.java",
+      "package": "gg.squire.mixology",
+      "values": ["MINIGAME", "CREATE_PASTE"],
+      "description": "Plugin operating modes"
+    },
+    "PotionStrategy.java": {
+      "obfuscated": "f.java",
+      "package": "gg.squire.mixology",
+      "values": ["SINGLE_ORDER", "MULTI_ORDER"],
+      "description": "Potion creation strategies"
+    },
+    "PotionType.java": {
+      "obfuscated": "t.java",
+      "package": "gg.squire.mixology",
+      "values": [
+        "LIPLACK_LIQUOR",
+        "ALCO_AUGMENTATOR",
+        "MAMMOTH_MIGHT",
+        "MYSTIC_MANA_AMALGAM",
+        "MARLEYS_MOONLIGHT",
+        "AZURE_AURA_MIX",
+        "AQUALUX_AMALGAM",
+        "MEGALITE_LIQUID",
+        "ANTI_LEECH_LOTION",
+        "MIXALOT"
+      ],
+      "description": "All potion types with IDs, lever values, and XP rewards"
+    },
+    "LowTierHerbType.java": {
+      "obfuscated": "e.java",
+      "package": "gg.squire.mixology",
+      "description": "Low-tier herbs (Guam, Marrentill, Tarromin, Harralander)"
+    },
+    "MidTierHerbType.java": {
+      "obfuscated": "c.java",
+      "package": "gg.squire.mixology",
+      "description": "Mid-tier herbs (Ranarr, Toadflax, Avantoe, Kwuarm, Snapdragon)"
+    },
+    "HighTierHerbType.java": {
+      "obfuscated": "a.java",
+      "package": "gg.squire.mixology",
+      "description": "High-tier herbs (Irit, Cadantine, Lantadyme, Dwarf weed, Torstol)"
+    },
+    "AllHerbType.java": {
+      "obfuscated": "b.java",
+      "package": "gg.squire.mixology",
+      "description": "All herb types from low to high tier"
+    }
+  },
+  "utility_classes": {
+    "MixologyConstants.java": {
+      "obfuscated": "r.java",
+      "package": "gg.squire.mixology",
+      "description": "Constants used throughout the plugin"
+    },
+    "MixologyUtils.java": {
+      "obfuscated": "s.java",
+      "package": "gg.squire.mixology",
+      "description": "Utility methods for potion management, lever operation, and state tracking"
+    }
+  },
+  "task_classes": {
+    "BankForStaminasTask.java": {
+      "obfuscated": "h.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "Bank for staminas",
+      "description": "Banks for stamina potions when energy is low"
+    },
+    "DepositHopperTask.java": {
+      "obfuscated": "i.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "Deposit hopper",
+      "description": "Deposits herbs into hoppers based on varbit states"
+    },
+    "AgitatorTask.java": {
+      "obfuscated": "j.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "Agitator task",
+      "station_id": 5674,
+      "description": "Interacts with the agitator station"
+    },
+    "HandleAlembicTask.java": {
+      "obfuscated": "k.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "Handle alembic",
+      "station_id": 5675,
+      "description": "Interacts with the alembic station"
+    },
+    "RetortTask.java": {
+      "obfuscated": "l.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "Retort task",
+      "station_id": 5672,
+      "description": "Interacts with the retort station"
+    },
+    "MakePasteTask.java": {
+      "obfuscated": "m.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "Make paste task",
+      "description": "Creates herb paste from herbs"
+    },
+    "MixingVesselTask.java": {
+      "obfuscated": "n.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "Mixing vessel",
+      "description": "Interacts with the mixing vessel"
+    },
+    "OperateLeversTask.java": {
+      "obfuscated": "o.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "Operate levers",
+      "description": "Operates levers for potion configuration (supports multi-order)"
+    },
+    "TalkToSupervisorTask.java": {
+      "obfuscated": "p.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "talk to supervisor",
+      "description": "Talks to the Mixology supervisor NPC"
+    },
+    "TurnInPotionTask.java": {
+      "obfuscated": "q.java",
+      "package": "gg.squire.mixology.tasks",
+      "task_name": "Turning in potion task",
+      "description": "Turns in completed potions for rewards"
+    }
+  },
+  "obfuscation_techniques": {
+    "string_encryption": {
+      "methods": [
+        "DES encryption with Base64 encoding",
+        "Blowfish encryption with Base64 encoding",
+        "XOR cipher with Base64 encoding"
+      ],
+      "description": "All string literals were encrypted using one of three cipher methods"
+    },
+    "constant_obfuscation": {
+      "method": "Bitwise operations (XOR, AND, NOT)",
+      "example": "(0xC9 ^ 0xA9) & ~(0xF7 ^ 0x97) = 0",
+      "description": "Numeric constants were obfuscated using complex bitwise expressions"
+    },
+    "name_obfuscation": {
+      "classes": "Single letter names (a.java through t.java)",
+      "methods": "Pattern: lIIlIllIIIIlIl (mix of lowercase L, uppercase I, and lowercase i)",
+      "variables": "Pattern: lllllllllllllllIIlIIIIIIIIIIllll (long sequences of l and I)",
+      "description": "All identifiers used confusing character combinations to make code unreadable"
+    }
+  },
+  "game_mechanics": {
+    "widget_ids": {
+      "potion_widget": 31030,
+      "widget_child": 2
+    },
+    "varbit_ids": {
+      "lever_1": 11819,
+      "lever_2": 11821,
+      "lever_3": 11822,
+      "hopper_1": 11648,
+      "hopper_2": 11672,
+      "hopper_3": 11729,
+      "retort": 11839,
+      "alembic": 11844,
+      "agitator": 11845
+    },
+    "npc_ids": {
+      "supervisor_1": 28140,
+      "supervisor_2": 28159,
+      "supervisor_3": 28158
+    },
+    "station_ids": {
+      "retort": 5672,
+      "agitator": 5674,
+      "alembic": 5675,
+      "mixing_vessel": 55365
+    },
+    "mixology_area": {
+      "x": 2776,
+      "y": 9656,
+      "width": 17,
+      "height": 32,
+      "plane": 0
+    }
+  },
+  "deobfuscation_summary": {
+    "total_files_deobfuscated": 13,
+    "enums": 6,
+    "overlays": 1,
+    "utilities": 2,
+    "tasks_identified": 10,
+    "main_classes": 2,
+    "encryption_methods_decrypted": 3,
+    "bitwise_constants_evaluated": "All",
+    "completion_status": "Core files deobfuscated with full documentation"
+  },
+  "notes": {
+    "multi_order_mode": "The plugin supports both single-order and multi-order strategies. Multi-order processes multiple potions simultaneously for increased efficiency.",
+    "lever_mechanics": "Each potion requires specific lever configurations (values 1-3 for each of three levers). The OperateLeversTask handles this complex logic.",
+    "stamina_usage": "Optional stamina potion support for maintaining run energy during the minigame.",
+    "paste_creation": "The plugin can operate in CREATE_PASTE mode to only make herb paste without running the full minigame.",
+    "malware_analysis": "This code is a bot/automation tool for Old School RuneScape. While it automates gameplay (which violates game ToS), it does not contain malicious code that harms the user's system. The obfuscation was likely to prevent detection and analysis, not to hide malicious behavior."
+  }
 }

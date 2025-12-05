@@ -1,0 +1,42 @@
+{
+  "barrows_tasks_n_to_z": {
+    "n.java": "AttackingBrotherTask.java",
+    "o.java": "OpeningSarcophagusTask.java",
+    "p.java": "ExitingCryptTask.java",
+    "q.java": "DiggingNextBrotherTask.java",
+    "r.java": "UsingImbuedHeartTask.java",
+    "s.java": "GoingToHouseMidTripTask.java",
+    "t.java": "DrinkingFromPoolTask.java",
+    "u.java": "TeleportingToBarrowsTask.java",
+    "v.java": "AttackingMonsterForPotentialTask.java",
+    "w.java": "ClaimingChestTask.java",
+    "x.java": "GoingToHouseTask.java",
+    "y.java": "OpeningChestTask.java",
+    "z.java": "WalkingToChestTask.java"
+  },
+  "class_descriptions": {
+    "AttackingBrotherTask": "Handles attacking Barrows brothers with gear switching and special attacks",
+    "OpeningSarcophagusTask": "Opens sarcophagi to spawn Barrows brothers",
+    "ExitingCryptTask": "Exits the Barrows crypt after killing all brothers",
+    "DiggingNextBrotherTask": "Digs at brother locations to enter their crypts",
+    "UsingImbuedHeartTask": "Uses imbued heart to boost magic level",
+    "GoingToHouseMidTripTask": "Teleports to player-owned house mid-trip for restoration",
+    "DrinkingFromPoolTask": "Drinks from rejuvenation pool in player-owned house",
+    "TeleportingToBarrowsTask": "Teleports to Barrows using various methods",
+    "AttackingMonsterForPotentialTask": "Attacks tunnel monsters to increase reward potential",
+    "ClaimingChestTask": "Claims the reward chest after completing all brothers",
+    "GoingToHouseTask": "Teleports to player-owned house after completing run",
+    "OpeningChestTask": "Opens the Barrows reward chest",
+    "WalkingToChestTask": "Walks to the reward chest location in tunnels"
+  },
+  "package": "gg.squire.barrows.tasks",
+  "source_directory": "/home/user/Squire/DeobfuscatedProject/plugins/src/3b638005-922a-492f-9405-93e6a5194477/q/s/-/i/r/e/r/w/r/s/o/u/b/a/",
+  "output_directory": "/home/user/Squire/DeobfuscatedProject/plugins/clean_enhanced/barrows/tasks/",
+  "deobfuscation_notes": {
+    "string_decryption": "All XOR+Base64, DES, and Blowfish encrypted strings have been decrypted",
+    "bitwise_operations": "All bitwise constants have been evaluated to their actual values",
+    "variable_naming": "All obfuscated variable names have been replaced with descriptive names",
+    "method_naming": "All obfuscated method names have been replaced with descriptive names",
+    "documentation": "Added Javadoc comments explaining class and method purposes"
+  }
+}

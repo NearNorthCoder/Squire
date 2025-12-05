@@ -1,21 +1,13 @@
 /*
  * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  gg.squire.client.plugins.fw.Task
- *  gg.squire.client.plugins.fw.TaskDesc
- *  javax.inject.Inject
- *  net.runelite.api.DialogOption
- *  net.runelite.api.NPC
- *  net.runelite.api.TileObject
- *  net.unethicalite.api.entities.NPCs
- *  net.unethicalite.api.entities.Players
- *  net.unethicalite.api.entities.TileObjects
- *  net.unethicalite.api.widgets.Dialog
+ * Deobfuscated for Squire Barrows Plugin
+ *
+ * This task handles opening sarcophagi to start fighting Barrows brothers.
  */
 package gg.squire.barrows.tasks;
 
 import gg.squire.barrows.SquireBarrows;
+import gg.squire.barrows.tasks.GameEnum2;
 import gg.squire.client.plugins.fw.Task;
 import gg.squire.client.plugins.fw.TaskDesc;
 import javax.inject.Inject;
@@ -26,148 +18,67 @@ import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.widgets.Dialog;
-import gg.squire.barrows.tasks.GameEnum2;
 
+/**
+ * Task for opening Barrows sarcophagi.
+ * Handles dialogs and searching/opening the sarcophagus to trigger brother spawns.
+ */
 @TaskDesc(name="Opening sarcophagus", priority=250, blocking=true)
-public class OpeningSarcophagusTask
-extends Task {
+public class OpeningSarcophagusTask extends Task {
 
-    private final  SquireBarrows V;
-
-        catch (Exception var8) {
-            var8.printStackTrace();
-            return null;
-        }
-    }
-
-    private static boolean var9(int n2) {
-        return n2 != 0;
-    }
-
-    private static boolean var10(int n2, int n3) {
-        return n2 >= n3;
-    }
-
-    private static void var11() {
-        var2 = new int[7];
-        o.var2[0] = 1;
-        o.var2[1] = 2 & (2 ^ -1);
-        o.var2[2] = 2;
-        o.var2[3] = 0x48 ^ 0x2F ^ (0x3D ^ 0x5F);
-        o.var2[4] = 0x74 ^ 0x72;
-        o.var2[5] = 3;
-        o.var2[6] = 5 ^ 0x4E ^ (0x2E ^ 0x6D);
-    }
-
-    private static boolean var12(Object object) {
-        return object != null;
-    }
-
-        catch (Exception var18) {
-            var18.printStackTrace();
-            return null;
-        }
-    }
-
-    private static boolean M() {
-        String[] stringArray = new String[var2[0]];
-        stringArray[o.var2[1]] = var1[var2[1]];
-        TileObject tileObject = TileObjects.getNearest((String[])stringArray);
-        if (o.var19(tileObject)) {
-            return var2[1];
-        }
-        String[] stringArray2 = new String[var2[2]];
-        stringArray2[o.var2[1]] = var1[var2[0]];
-        stringArray2[o.var2[0]] = var1[var2[2]];
-        tileObject.interact(stringArray2);
-        return var2[0];
-    }
-
-    private static boolean var20(Object object, Object object2) {
-        return object == object2;
-    }
-
-    private static boolean var21(int n2, int n3) {
-        return n2 != n3;
-    }
-
-    static {
-        o.var11();
-        o.var22();
-    }
-
-    private static boolean var23(int n2, int n3) {
-        return n2 < n3;
-    }
-
-    private static boolean var19(Object object) {
-        return object == null;
-    }
-
-    public boolean run() {
-        o var24;
-        if (o.var25(this.V.h() ? 1 : 0)) {
-            return var2[1];
-        }
-        if (o.var9(Dialog.isOpen() ? 1 : 0)) {
-            var24.V.k();
-            if (o.var10(var24.V.e(), var2[3])) {
-                DialogOption[] dialogOptionArray = new DialogOption[var2[2]];
-                dialogOptionArray[o.var2[1]] = DialogOption.PLAIN_CONTINUE;
-                dialogOptionArray[o.var2[0]] = DialogOption.CHAT_OPTION_ONE;
-                Dialog.invokeDialog((DialogOption[])dialogOptionArray);
-                return var2[0];
-            }
-            return var2[1];
-        }
-        if (o.var9(var24.V.i() ? 1 : 0) && o.var21(var24.V.e(), var2[4])) {
-            return var2[1];
-        }
-        if (o.var20((Object)var24.V.r(), (Object)var24.V.s()) && o.var23(var24.V.e(), var2[3])) {
-            return var2[1];
-        }
-        NPC var26 = NPCs.getNearest(d::a);
-        if (o.var12(var26) && o.var20(var26.getInteracting(), Players.getLocal())) {
-            return var2[1];
-        }
-        return o.M();
-    }
+    private final SquireBarrows plugin;
 
     @Inject
-    public OpeningSarcophagusTask(SquireBarrows squireBarrows) {
-        this.V = squireBarrows;
+    public OpeningSarcophagusTask(SquireBarrows plugin) {
+        this.plugin = plugin;
     }
 
-    private static void var22() {
-        var1 = new String[var2[5]];
-        o.var1[o.var2[1]] = "Sarcophagus";
-        o.var1[o.var2[0]] = "Search";
-        o.var1[o.var2[2]] = "Open";
-    }
-
-    private static boolean var25(int n2) {
-        return n2 == 0;
-    }
-
-    private static String var27(String var28, String var29) {
-        var28 = new String(Base64.getDecoder().decode(var28.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        StringBuilder var30 = new StringBuilder();
-        char[] var31 = var29.toCharArray();
-        int var32 = var2[1];
-        char[] var33 = var28.toCharArray();
-        int var34 = var33.length;
-        int var35 = var2[1];
-        while (o.var23(var35, var34)) {
-            char var36 = var33[var35];
-            var30.append((char)(var36 ^ var31[var32 % var31.length]));
-            0;
-            ++var32;
-            ++var35;
-            0;
-            if (-1 < 0) continue;
-            return null;
+    @Override
+    public boolean run() {
+        if (!plugin.isInHouse()) {
+            return false;
         }
-        return String.valueOf(var30);
+
+        // Handle any dialogs that appear
+        if (Dialog.isOpen()) {
+            plugin.incrementBrothersKilledCount();
+            if (plugin.getBrothersKilledCount() >= 6) {
+                DialogOption[] options = new DialogOption[]{DialogOption.PLAIN_CONTINUE, DialogOption.CHAT_OPTION_ONE};
+                Dialog.invokeDialog(options);
+                return true;
+            }
+            return false;
+        }
+
+        // Don't open if banking or if less than 6 brothers killed
+        if (plugin.isBanking() && plugin.getBrothersKilledCount() != 6) {
+            return false;
+        }
+
+        // Don't open if we just opened current brother and killed count is low
+        if (plugin.getLastOpenedBrother() == plugin.getCurrentBrother() && plugin.getBrothersKilledCount() < 6) {
+            return false;
+        }
+
+        // Check if a brother NPC is already active
+        NPC brotherNpc = NPCs.getNearest(GameEnum2::isBrother);
+        if (brotherNpc != null && brotherNpc.getInteracting() == Players.getLocal()) {
+            return false;
+        }
+
+        return openSarcophagus();
+    }
+
+    /**
+     * Opens the nearest sarcophagus
+     */
+    private static boolean openSarcophagus() {
+        TileObject sarcophagus = TileObjects.getNearest("Sarcophagus");
+        if (sarcophagus == null) {
+            return false;
+        }
+
+        sarcophagus.interact("Search", "Open");
+        return true;
     }
 }
-

@@ -1,81 +1,201 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.runelite.client.config.Config
- *  net.runelite.client.config.ConfigGroup
- *  net.runelite.client.config.ConfigItem
- *  net.runelite.client.config.ConfigSection
- *  net.runelite.client.config.ConfigStorageBox
- *  net.runelite.client.plugins.squire.bankloadouts.BankLoadout
- */
 package gg.squire.mining;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.ConfigSection;
-import net.runelite.client.config.ConfigStorageBox;
+import net.runelite.client.config.*;
 import net.runelite.client.plugins.squire.bankloadouts.BankLoadout;
 
-@ConfigGroup(value="squiremlm")
-public interface SquireMinerConfig
-extends Config {
-    @ConfigSection(name="Mining Settings", description="Settings", position=0)
-    public static final  String MINING_SETTINGS;
+/**
+ * Configuration for the Squire Miner plugin.
+ */
+@ConfigGroup("squiremlm")
+public interface SquireMinerConfig extends Config {
+    String MINING_SETTINGS = "Mining Settings";
 
-    @ConfigItem(position=4, keyName="sandstoneArea", name="Quarry Area", description="Where to mine in the quarry", hidden=true, unhide="activity", unhideValue="SANDSTONE")
-    default public e area() {
-        return e.WEST_FOUR;
+    /**
+     * Gets the selected mining activity.
+     *
+     * @return the mining activity
+     */
+    @ConfigItem(
+        keyName = "activity",
+        name = "Mining Activity",
+        description = "What do you want to mine?",
+        position = 1,
+        section = MINING_SETTINGS
+    )
+    default MiningActivity activity() {
+        return MiningActivity.MOTHERLODE_MINE;
     }
 
-    @ConfigItem(keyName="motherlodeDepositUpstairs", name="Deposit upstairs", description="Deposit upstairs?", position=3, section="Mining Settings", hidden=true, unhide="motherlodeMineArea", unhideValue="UPPER_FLOOR")
-    default public boolean depositUpstairs() {
-        return ((0xC3 ^ 0x8E) & ~(0x4D ^ 0)) != 0;
+    /**
+     * Gets the Motherlode Mine area to mine in.
+     *
+     * @return the MLM area
+     */
+    @ConfigItem(
+        keyName = "motherlodeMineArea",
+        name = "Area to mine",
+        description = "What area do you want to mine?",
+        position = 2,
+        section = MINING_SETTINGS,
+        hidden = true,
+        unhide = "activity",
+        unhideValue = "MOTHERLODE_MINE"
+    )
+    default MotherlodeMineArea mlmArea() {
+        return MotherlodeMineArea.UPPER_FLOOR;
     }
 
-    @ConfigItem(position=11, keyName="humidify", name="Humidify", description="Use Humidify to refill waterskins", hidden=true, unhide="activity", unhideValue="GRANITE||SANDSTONE")
-    default public boolean humidify() {
-        return 1 != 0;
+    /**
+     * Whether to hop worlds periodically in MLM.
+     *
+     * @return true to hop worlds
+     */
+    @ConfigItem(
+        keyName = "motherlodeHop",
+        name = "Hop Worlds",
+        description = "Hop worlds every 250 ore veins mined to prevent reports?",
+        position = 3,
+        section = MINING_SETTINGS,
+        hidden = true,
+        unhide = "activity",
+        unhideValue = "MOTHERLODE_MINE"
+    )
+    default boolean hop() {
+        return true;
     }
 
-    @ConfigItem(position=14, keyName="deposit", name="Deposit Sandstone", description="Deposits the sandstone when your inventory is full", hidden=true, unhide="activity", unhideValue="SANDSTONE")
-    default public boolean deposit() {
-        return 1 != 0;
+    /**
+     * Whether to deposit upstairs in MLM upper floor.
+     *
+     * @return true to deposit upstairs
+     */
+    @ConfigItem(
+        keyName = "motherlodeDepositUpstairs",
+        name = "Deposit upstairs",
+        description = "Deposit upstairs?",
+        position = 3,
+        section = MINING_SETTINGS,
+        hidden = true,
+        unhide = "motherlodeMineArea",
+        unhideValue = "UPPER_FLOOR"
+    )
+    default boolean depositUpstairs() {
+        return false;
     }
 
-    @ConfigItem(keyName="activity", name="Mining Activity", description="What do you want to mine?", position=1, section="Mining Settings")
-    default public a activity() {
-        return a.MOTHERLODE_MINE;
+    /**
+     * Gets the sandstone/gem quarry area.
+     *
+     * @return the quarry area
+     */
+    @ConfigItem(
+        keyName = "sandstoneArea",
+        name = "Quarry Area",
+        description = "Where to mine in the quarry",
+        position = 4,
+        hidden = true,
+        unhide = "activity",
+        unhideValue = "SANDSTONE"
+    )
+    default GemRockArea area() {
+        return GemRockArea.WEST_FOUR;
     }
 
-    @ConfigItem(keyName="bankLoadout", name="Bank Loadout", description="What do you want to bank?", position=4, section="Mining Settings", hidden=true, unhide="activity", unhideValue="SUPERHEAT_MINE")
-    default public ConfigStorageBox<BankLoadout> bankLoadout() {
-        return new ConfigStorageBox("bankloadout", "None");
+    /**
+     * Gets the bank loadout for superheat mining.
+     *
+     * @return the bank loadout
+     */
+    @ConfigItem(
+        keyName = "bankLoadout",
+        name = "Bank Loadout",
+        description = "What do you want to bank?",
+        position = 4,
+        section = MINING_SETTINGS,
+        hidden = true,
+        unhide = "activity",
+        unhideValue = "SUPERHEAT_MINE"
+    )
+    default ConfigStorageBox<BankLoadout> bankLoadout() {
+        return new ConfigStorageBox<>("bankloadout", "None");
     }
 
-    @ConfigItem(position=13, keyName="amount of waterskins", name="Amount Of Waterskins", description="Amount Of Waterskins", hidden=true, unhide="activity", unhideValue="SANDSTONE||GRANITE")
-    default public int waterskins() {
-        return 0x26 ^ 0x2C;
+    /**
+     * Whether to use humidify spell for waterskins.
+     *
+     * @return true to use humidify
+     */
+    @ConfigItem(
+        keyName = "humidify",
+        name = "Humidify",
+        description = "Use Humidify to refill waterskins",
+        position = 11,
+        hidden = true,
+        unhide = "activity",
+        unhideValue = "GRANITE||SANDSTONE"
+    )
+    default boolean humidify() {
+        return true;
     }
 
-    @ConfigItem(position=1, keyName="chisel", name="Craft amethyst item", hidden=true, unhide="activity", unhideValue="AMETHYST", description="Do you want to craft them into amethyst items?")
-    default public b craft() {
-        return b.DISABLE;
+    /**
+     * Gets the number of waterskins to bring.
+     *
+     * @return number of waterskins
+     */
+    @ConfigItem(
+        keyName = "amount of waterskins",
+        name = "Amount Of Waterskins",
+        description = "Amount Of Waterskins",
+        position = 13,
+        hidden = true,
+        unhide = "activity",
+        unhideValue = "SANDSTONE||GRANITE"
+    )
+    default int waterskins() {
+        return 10;
     }
 
-    @ConfigItem(keyName="motherlodeMineArea", name="Area to mine", description="What area do you want to mine?", position=2, section="Mining Settings", hidden=true, unhide="activity", unhideValue="MOTHERLODE_MINE")
-    default public d mlmArea() {
-        return d.UPPER_FLOOR;
+    /**
+     * Whether to deposit sandstone when inventory is full.
+     *
+     * @return true to deposit
+     */
+    @ConfigItem(
+        keyName = "deposit",
+        name = "Deposit Sandstone",
+        description = "Deposits the sandstone when your inventory is full",
+        position = 14,
+        hidden = true,
+        unhide = "activity",
+        unhideValue = "SANDSTONE"
+    )
+    default boolean deposit() {
+        return true;
     }
 
-    static {
-        MINING_SETTINGS = "Mining Settings";
+    /**
+     * Gets the amethyst crafting option.
+     *
+     * @return the gem type to craft
+     */
+    @ConfigItem(
+        keyName = "chisel",
+        name = "Craft amethyst item",
+        description = "Do you want to craft them into amethyst items?",
+        position = 1,
+        hidden = true,
+        unhide = "activity",
+        unhideValue = "AMETHYST"
+    )
+    default GemType craft() {
+        return GemType.DISABLE;
     }
 
-    @ConfigItem(keyName="motherlodeHop", name="Hop Worlds", description="Hop worlds every 250 ore veins mined to prevent reports?", position=3, section="Mining Settings", hidden=true, unhide="activity", unhideValue="MOTHERLODE_MINE")
-    default public boolean hop() {
-        return 1 != 0;
-    }
+    @ConfigSection(
+        name = "Mining Settings",
+        description = "Settings",
+        position = 0
+    )
+    String SECTION_MINING = "Mining Settings";
 }
-

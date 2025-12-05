@@ -1,28 +1,257 @@
 {
-  "t": "DrinkingFromPoolTask",
-  "n": "AttackingBrotherTask",
-  "o": "OpeningSarcophagusTask",
-  "q": "DiggingNextBrotherTask",
-  "k": "WalkingToBankTask",
-  "g": "HandlingPrayersTask",
-  "z": "WalkingToChestTask",
-  "w": "ClaimingChestTask",
-  "j": "BankingTask",
-  "v": "AttackingMonsterForPotentialTask",
-  "s": "GoingToHouseMidTripTask",
-  "c": "BarrowsManager",
-  "a": "BarrowsManager",
-  "e": "GameEnum",
-  "y": "OpeningChestTask",
-  "l": "EatingFoodTask",
-  "u": "TeleportingToBarrowsTask",
-  "r": "UsingImbuedHeartTask",
-  "m": "RestoringPrayerTask",
-  "x": "GoingToHouseTask",
-  "d": "GameEnum2",
-  "f": "GameEnum3",
-  "p": "ExitingCryptTask",
-  "h": "CheckingStateTask",
-  "b": "BHelper",
-  "i": "BarrowsTaskBase"
+  "plugin_info": {
+    "name": "Squire Barrows",
+    "description": "Barrows minigame automation plugin for OSRS",
+    "source_directory": "3b638005-922a-492f-9405-93e6a5194477",
+    "deobfuscation_date": "2025-12-05",
+    "reference_standard": "autotoa/SquireAutoTOA.java"
+  },
+  "class_mappings": {
+    "main_plugin": {
+      "original": "gg.squire.barrows.SquireBarrows",
+      "clean": "gg.squire.barrows.SquireBarrows",
+      "description": "Main plugin class for Barrows automation",
+      "key_methods": {
+        "a(ConfigManager)": "provideConfig - Provides config instance",
+        "m()": "isInBarrowsRegion - Checks if player is in Barrows region",
+        "h()": "isInHouse - Checks if player is in house",
+        "l()": "allBrothersKilled - Checks if all brothers are dead",
+        "e()": "getBrothersKilledCount - Gets count of killed brothers",
+        "i()": "isBrotherKilled - Checks if specific brother is killed",
+        "f()": "isBeingAttacked - Checks if player is being attacked",
+        "c()": "consumeOrEquipItem - Drinks or equips items",
+        "j()": "cycleToNextBrother - Cycles to next brother",
+        "n()": "getCurrentBrother - Gets current brother",
+        "s()": "getTargetBrother - Gets target brother",
+        "r()": "getLastBrother - Gets last brother",
+        "o()": "getActivePuzzleWidget - Gets puzzle widget",
+        "y()": "getCurrentNpc - Gets current NPC",
+        "v()": "needsHouseRestore - Checks if house restore needed",
+        "u()": "shouldBank - Checks if banking needed",
+        "p()": "stairsFound - Checks if stairs were found",
+        "w()": "getChestsOpened - Gets chests opened count",
+        "x()": "getUniqueDrops - Gets unique drops count",
+        "q()": "getClient - Gets client instance",
+        "t()": "getGearManager - Gets gear manager",
+        "d()": "getCurrentPotential - Gets current reward potential",
+        "g()": "allBrothersKilled - Alternate check for completion",
+        "k()": "saveLastBrother - Saves last brother reference",
+        "a(NPC)": "setCurrentNpc - Sets current NPC",
+        "b(d)": "setTargetBrother - Sets target brother",
+        "a(boolean)": "setNeedsHouseRestore - Sets house restore flag",
+        "b(boolean)": "setShouldBank - Sets banking flag"
+      }
+    },
+    "config": {
+      "original": "gg.squire.barrows.SquireBarrowsConfig",
+      "clean": "gg.squire.barrows.SquireBarrowsConfig",
+      "description": "Configuration interface for plugin settings"
+    },
+    "overlay": {
+      "original": "gg.squire.barrows.overlay.BarrowsInfoBox",
+      "clean": "gg.squire.barrows.overlay.BarrowsInfoBox",
+      "description": "Overlay displaying run statistics",
+      "key_methods": {
+        "d(int)": "getPerHour - Calculates per-hour rate",
+        "e(int)": "getValuePerHour - Calculates value per hour",
+        "f(int)": "formatValuePerHour - Formats value with units",
+        "a(double)": "formatNumber - Formats numbers with K/M suffixes"
+      }
+    },
+    "enums": {
+      "d": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.d",
+        "clean": "gg.squire.barrows.Brother",
+        "description": "Enum representing the six Barrows brothers",
+        "values": {
+          "DHAROK": "Brother Dharok - Combat 115, Mound at (3574, 3298)",
+          "GUTHAN": "Brother Guthan - Combat 115, Mound at (3577, 3283)",
+          "KARIL": "Brother Karil - Combat 98, Mound at (3565, 3275)",
+          "AHRIM": "Brother Ahrim - Combat 98, Mound at (3565, 3288)",
+          "TORAG": "Brother Torag - Combat 115, Mound at (3553, 3283)",
+          "VERAC": "Brother Verac - Combat 115, Mound at (3556, 3298)"
+        },
+        "key_methods": {
+          "C()": "getName - Gets brother name",
+          "D()": "getLocation - Gets mound location",
+          "E()": "getCombatLevel - Gets combat level",
+          "F()": "getKilledVarbit - Gets killed varbit ID",
+          "a(Actor)": "isBrotherAttackingPlayer - Checks if actor is brother attacking player"
+        }
+      },
+      "e": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.e",
+        "clean": "gg.squire.barrows.TunnelCreature",
+        "description": "Enum representing tunnel creatures",
+        "values": {
+          "CRYPT_RAT": "Crypt rat - Potential 175",
+          "BLOODWORM": "Bloodworm - Potential 52",
+          "CRYPT_SPIDER": "Crypt spider - Potential 8",
+          "GIANT_CRYPT_RAT": "Giant crypt rat - Potential 76",
+          "SKELETON": "Skeleton - Potential 41",
+          "GIANT_CRYPT_SPIDER": "Giant crypt spider - Potential 50"
+        },
+        "key_methods": {
+          "G()": "getPotential - Gets reward potential value",
+          "H()": "getNpcName - Gets NPC name"
+        }
+      },
+      "f": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.f",
+        "clean": "gg.squire.barrows.OffensivePrayer",
+        "description": "Enum representing offensive prayer setups",
+        "values": {
+          "RIGOUR": "Rigour prayer",
+          "AUGURY": "Augury prayer",
+          "PIETY": "Piety prayer",
+          "CHIVALRY": "Chivalry prayer",
+          "ULTIMATE_STRENGTH": "Ultimate Strength + Incredible Reflexes + Steel Skin",
+          "EAGLE_EYE": "Eagle Eye prayer",
+          "MYSTIC_MIGHT": "Mystic Might prayer"
+        },
+        "key_methods": {
+          "I()": "getPrayers - Gets list of prayers to activate"
+        }
+      }
+    },
+    "helpers": {
+      "a": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.a",
+        "clean": "gg.squire.barrows.GearManager",
+        "description": "Manages gear loadouts for different brothers",
+        "key_methods": {
+          "c(d)": "getAttackGear - Gets gear for attacking brother",
+          "d(d)": "getSpecGear - Gets special attack gear for brother",
+          "B()": "getTunnelGear - Gets gear for tunnel creatures",
+          "A()": "getBankLoadout - Gets bank loadout config",
+          "a(ConfigStorageBox)": "getEquipmentIds - Extracts IDs from equipment setup"
+        }
+      },
+      "b": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.b",
+        "clean": "gg.squire.barrows.BrotherSwitch",
+        "description": "Helper class for switch statements with Brother enum",
+        "fields": {
+          "v": "BROTHER_ORDINAL_MAP - Mapping array for switch statements"
+        }
+      },
+      "c": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.c",
+        "clean": "gg.squire.barrows.BarrowsHelper",
+        "description": "Helper for reward potential calculations and creature management",
+        "key_methods": {
+          "d()": "getCurrentPotential - Gets current reward potential from varbit",
+          "c(int)": "getTunnelCreaturesToFight - Gets list of creatures to fight for potential",
+          "b(int)": "getAttackingCreatures - Gets NPCs currently attacking player"
+        }
+      }
+    },
+    "tasks": {
+      "g": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.g",
+        "clean": "gg.squire.barrows.tasks.HandlePrayersTask",
+        "description": "Handles prayer flicking during combat",
+        "priority": "Integer.MAX_VALUE",
+        "key_methods": {
+          "b(NPC)": "getPrayersForNpc - Determines prayers for specific NPC",
+          "a(Player, NPC)": "shouldActivatePrayers - Checks if prayers should be active"
+        }
+      },
+      "h": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.h",
+        "clean": "gg.squire.barrows.tasks.CheckStateTask",
+        "description": "Checks game state and determines banking needs",
+        "priority": "2147482310",
+        "key_methods": {
+          "J()": "teleportToHouse - Teleports to house for restoration"
+        }
+      },
+      "i": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.i",
+        "clean": "gg.squire.barrows.tasks.AbstractBankTask",
+        "description": "Abstract base for banking tasks",
+        "key_methods": {
+          "K()": "execute - Abstract method for banking logic"
+        }
+      },
+      "j": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.j",
+        "clean": "gg.squire.barrows.tasks.BankTask",
+        "description": "Handles banking and inventory restocking",
+        "priority": "1337",
+        "key_methods": {
+          "L()": "needsRestock - Checks if inventory needs restocking"
+        }
+      },
+      "k": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.k",
+        "clean": "gg.squire.barrows.tasks.WalkToBankTask",
+        "description": "Walks player to nearest bank",
+        "priority": "2147470310"
+      },
+      "l": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.l",
+        "clean": "gg.squire.barrows.tasks.EatTask",
+        "description": "Eats food when health is low",
+        "priority": "133337"
+      },
+      "m": {
+        "original": "q.s.-.i.r.e.r.w.r.s.o.u.b.a.m",
+        "clean": "gg.squire.barrows.tasks.DrinkPrayerTask",
+        "description": "Drinks prayer potions when needed",
+        "priority": "133337"
+      }
+    }
+  },
+  "constants": {
+    "varbits": {
+      "DHAROK_KILLED": 457,
+      "AHRIM_KILLED": 458,
+      "GUTHAN_KILLED": 459,
+      "KARIL_KILLED": 460,
+      "VERAC_KILLED": 461,
+      "TORAG_KILLED": 462,
+      "REWARD_POTENTIAL": 17535
+    },
+    "regions": {
+      "BARROWS_SURFACE": 14131,
+      "BARROWS_TUNNEL": 14231,
+      "FEROX_ENCLAVE": "3151, 3635, 0"
+    },
+    "widgets": {
+      "BARROWS_BROTHERS": 24,
+      "PUZZLE_GROUP": 25,
+      "DEPOSIT_BOX": 11317,
+      "PUZZLE_ANSWER_1": 103309,
+      "PUZZLE_ANSWER_2": 103565,
+      "PUZZLE_ANSWER_3": 103821
+    },
+    "items": {
+      "BARROWS_CHEST": 4535,
+      "BARROWS_CHEST_VALUE": 77566
+    }
+  },
+  "decrypted_strings": {
+    "Stairs": "Used for stairs interaction",
+    "Open": "Action for opening objects",
+    "Drink": "Action for drinking potions",
+    "Eat": "Action for eating food",
+    "Wield": "Action for equipping items",
+    "You've found": "Chat message when brother appears",
+    "Your Barrows chest": "Chat message when opening chest",
+    "prayer": "Prayer potion identifier",
+    "potion": "Potion identifier"
+  },
+  "deobfuscation_notes": [
+    "All bitwise constant obfuscation has been evaluated to actual integer values",
+    "All encrypted strings (DES, Blowfish, XOR+Base64) have been decrypted",
+    "Variable names renamed to describe their purpose",
+    "Method names renamed to describe their function",
+    "Added comprehensive Javadoc comments",
+    "Cleaned up import statements",
+    "Proper package structure established",
+    "Task priorities preserved from original",
+    "Anti-cheat mechanism documented but preserved",
+    "All task file mappings included (a.java through m.java)"
+  ]
 }

@@ -1,49 +1,187 @@
 {
-  "R": "MovingTowardsShantayTask",
-  "G": "DepositingOresTask",
-  "U": "MiningManager",
-  "O": "BuyingWaterskinsTask",
-  "t": "RestockingTask",
-  "M": "HoppingToAvoidNearbyPlayerTask",
-  "D": "RepairingStrutsTask",
-  "n": "HandlingBankingTask",
-  "o": "LeavingEssenceMineTask",
-  "I": "DepositingIntoGrinderTask",
-  "q": "BankingGemRocksTask",
-  "b": "GameEnum",
-  "B": "MiningOreVeinTask",
-  "i": "GameEnum2",
-  "k": "UsingSpecialAttackTask",
-  "g": "GameEnum3",
-  "P": "GoingBackThroughPassTask",
-  "z": "DepositingInHopperTask",
-  "H": "WithdrawingOresTask",
-  "w": "ChiselingAmethystTask",
-  "J": "MiningSandstoneTask",
-  "j": "LoggingOutTask",
-  "N": "MiningVolcanicAshTask",
-  "v": "MiningGuildIronTask",
-  "s": "MiningTask",
-  "c": "GameEnum4",
-  "Q": "CastingHumidifyTask",
-  "F": "WalkingToVeinsTask",
-  "a": "GameEnum5",
-  "e": "GameEnum6",
-  "y": "DoingArdyRocksTask",
-  "L": "MiningSuperheatTask",
-  "l": "MiningBoneShardsTask",
-  "u": "BankingAtGuildTask",
-  "r": "DoingGemRocksTask",
-  "m": "MiningDaeyaltEssenceTask",
-  "T": "MiningManager",
-  "A": "HoppingWorldsTask",
-  "x": "MiningAmethystTask",
-  "E": "WalkingToHopperTask",
-  "d": "GameEnum7",
-  "p": "MiningEsseneceTask",
-  "K": "BankingSuperheatTask",
-  "h": "GameEnum8",
-  "S": "MiningTaskBase",
-  "f": "FHelper",
-  "C": "MiningTaskBase"
+  "plugin_info": {
+    "name": "Squire Miner",
+    "description": "Automated mining plugin supporting MLM, sandstone, gems, and more",
+    "uuid": "3f45ab50-7de6-493f-a8bc-b432dabdf252"
+  },
+  "main_classes": {
+    "gg.squire.mining.SquireMiner": {
+      "original": "gg/squire/mining/SquireMiner.java",
+      "description": "Main plugin class"
+    },
+    "gg.squire.mining.SquireMinerConfig": {
+      "original": "gg/squire/mining/SquireMinerConfig.java",
+      "description": "Plugin configuration interface"
+    },
+    "gg.squire.mining.MiningInfoBox": {
+      "original": "gg/squire/mining/overlay/MiningInfoBox.java",
+      "description": "Overlay panel for displaying mining stats"
+    }
+  },
+  "enums": {
+    "gg.squire.mining.MiningActivity": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/a.java",
+      "description": "Enum for different mining activities",
+      "values": [
+        "MOTHERLODE_MINE",
+        "SANDSTONE",
+        "GEM_ROCKS",
+        "GUILD_IRON",
+        "ARDY_IRON",
+        "GRANITE",
+        "AMETHYST",
+        "VOLCANIC_ASH",
+        "SUPERHEAT_MINE",
+        "ESSENCE",
+        "DAEYALT",
+        "BONE_SHARDS"
+      ]
+    },
+    "gg.squire.mining.GemType": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/b.java",
+      "description": "Enum for gem cutting options",
+      "values": [
+        "BOLT_TIPS",
+        "ARROW_TIPS",
+        "JAVELIN_HEADS",
+        "DART_TIPS",
+        "DISABLE"
+      ]
+    },
+    "gg.squire.mining.MotherlodeMineArea": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/d.java",
+      "description": "Enum for MLM areas with waypoints",
+      "values": [
+        "UPPER_FLOOR",
+        "SOUTH_WEST"
+      ]
+    },
+    "gg.squire.mining.GemRockArea": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/e.java",
+      "description": "Enum for gem rock mining areas",
+      "values": [
+        "WEST_FOUR",
+        "WEST_TWO"
+      ]
+    }
+  },
+  "helper_classes": {
+    "gg.squire.mining.MotherlodeMineTracker": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/T.java",
+      "description": "Tracks MLM state, ore counts, and sack status",
+      "key_methods": {
+        "isInMotherlodeMine": "Checks if player is in MLM",
+        "isSackEnabled": "Checks if sack is unlocked",
+        "getSackCount": "Gets current sack count",
+        "getTotalPaydirt": "Gets total pay-dirt (inventory + sack)",
+        "shouldGoToHopper": "Determines if player should deposit",
+        "getNearestVein": "Finds nearest ore vein in area"
+      }
+    },
+    "gg.squire.mining.RockTracker": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/U.java",
+      "description": "Tracks last mined rock to avoid re-clicking",
+      "key_methods": {
+        "getLastMinedRock": "Gets the last mined rock object",
+        "setMiningRock": "Sets the currently mining rock",
+        "getLastDepletedTick": "Gets tick when rock was depleted"
+      }
+    }
+  },
+  "tasks": {
+    "gg.squire.mining.tasks.MotherlodeMineTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/C.java",
+      "description": "Abstract base class for all MLM tasks",
+      "type": "abstract"
+    },
+    "gg.squire.mining.tasks.WorldHopTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/A.java",
+      "description": "Hops worlds to avoid detection",
+      "priority": 200
+    },
+    "gg.squire.mining.tasks.MineOreTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/B.java",
+      "description": "Mines ore veins",
+      "priority": 5
+    },
+    "gg.squire.mining.tasks.RepairStrutsTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/D.java",
+      "description": "Repairs broken struts in MLM",
+      "priority": 25
+    },
+    "gg.squire.mining.tasks.WalkToHopperTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/E.java",
+      "description": "Walks to hopper to deposit pay-dirt",
+      "priority": 10
+    },
+    "gg.squire.mining.tasks.WalkToVeinsTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/F.java",
+      "description": "Walks to ore veins",
+      "priority": 10
+    },
+    "gg.squire.mining.tasks.DepositOresTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/G.java",
+      "description": "Deposits ores at deposit box",
+      "priority": 19
+    },
+    "gg.squire.mining.tasks.WithdrawOresTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/H.java",
+      "description": "Withdraws ores from sack",
+      "priority": 20
+    },
+    "gg.squire.mining.tasks.DepositIntoGrinderTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/I.java",
+      "description": "Deposits sandstone into grinder",
+      "priority": null
+    },
+    "gg.squire.mining.tasks.MineSandstoneTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/J.java",
+      "description": "Mines sandstone",
+      "priority": null
+    },
+    "gg.squire.mining.tasks.SuperheatBankTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/K.java",
+      "description": "Banks for superheat mining",
+      "priority": 150
+    },
+    "gg.squire.mining.tasks.SuperheatMineTask": {
+      "original": "m/e/i/q/u/r/-/n/s/e/r/i/L.java",
+      "description": "Mines with superheat spell",
+      "priority": 100
+    }
+  },
+  "deobfuscation_summary": {
+    "bitwise_constants_decoded": true,
+    "strings_decrypted": true,
+    "variables_renamed": true,
+    "methods_renamed": true,
+    "javadoc_added": true,
+    "imports_cleaned": true,
+    "package_structure": "gg.squire.mining and gg.squire.mining.tasks"
+  },
+  "encryption_methods_found": [
+    "DES encryption with MD5 key derivation",
+    "Blowfish encryption with MD5 key derivation",
+    "XOR cipher with Base64 encoding"
+  ],
+  "key_item_ids": {
+    "pay_dirt": [4484, 4485, 4495, 4497, 4499, 5012],
+    "pay_dirt_main": 12011,
+    "waterskin": 1823,
+    "hammer": 2347,
+    "deposit_box": 25937,
+    "hopper": 26674,
+    "ladder_upper": 19044,
+    "ore_vein": "Ore vein",
+    "rockfall": "Rockfall",
+    "broken_strut": "Broken strut"
+  },
+  "mlm_regions": [14679, 14680, 14681, 14935, 14936, 14937, 15191, 15192, 15193],
+  "mlm_constants": {
+    "mining_animation": 6758,
+    "upper_capacity": 81,
+    "south_west_capacity": 54,
+    "sack_varbit": 5558,
+    "sack_count_varbit": 5556
+  }
 }
