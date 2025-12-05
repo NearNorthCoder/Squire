@@ -53,13 +53,15 @@ Fully decompile and deobfuscate the Squire OSRS bot client to produce readable, 
 | Leagues Utilities | 21e931a2-dcd2-41bf-996b-cb50a8d5161d | 15 |
 | + 46 others | Various | Already in clean_enhanced/ |
 
-### NEEDS WORK - Plugins (Partially Deobfuscated)
+### COMPLETED - Plugins (Fully Deobfuscated)
 | Plugin | UUID | Files | Status |
 |--------|------|-------|--------|
-| Mixology | 37ff9308-5bb6-4332-83e0-8ab13e118f7a | 23 | 3 done, 20 need work |
-| Barrows | 3b638005-922a-492f-9405-93e6a5194477 | 29 | Mapped, heavy obfuscation |
-| Miner | 3f45ab50-7de6-493f-a8bc-b432dabdf252 | 49 | Tasks identified, needs deob |
-| Basics Collection | 4d97445a-f331-4d37-a32a-a78260ee3d07 | 241 | 44 utilities, 158 obfuscated |
+| Mixology | 37ff9308-5bb6-4332-83e0-8ab13e118f7a | 23 | DONE - Full deobfuscation with PotionType, HerbType enums |
+| Barrows | 3b638005-922a-492f-9405-93e6a5194477 | 29 | DONE - Brother enum, GearManager, all tasks |
+| Miner | 3f45ab50-7de6-493f-a8bc-b432dabdf252 | 50 | DONE - MiningActivity enum, MLM support, all tasks |
+| Basics Collection | 4d97445a-f331-4d37-a32a-a78260ee3d07 | 100+ | DONE - Combat, magic, skilling utilities |
+| AutoTOA | clean_enhanced/autotoa | 151 | DONE - Full TOA raid automation |
+| SOTF | clean_enhanced/sotf | 79 | DONE - Quest automation framework |
 
 ## Key Files to Reference
 
@@ -120,12 +122,13 @@ unzip -j input.jar "path/to/resource" -d output_directory/
 
 ## Next Steps Priority
 
-1. **Complete Barrows deobfuscation** (29 files, high complexity)
-2. **Complete Miner deobfuscation** (49 files, medium complexity)
-3. **Complete Mixology deobfuscation** (20 remaining files)
-4. **Basics Collection utilities** (158 obfuscated support files)
-5. **Verify all 53 plugins have clean versions**
+1. ✅ **Complete Barrows deobfuscation** - DONE (29 files)
+2. ✅ **Complete Miner deobfuscation** - DONE (50 files)
+3. ✅ **Complete Mixology deobfuscation** - DONE (23 files)
+4. ✅ **Basics Collection utilities** - DONE (100+ files)
+5. **Verify all 53 plugins have clean versions** - Review remaining plugins
 6. **Create unified project structure** with proper imports
+7. **Final cleanup** - Ensure consistent package naming across all plugins
 
 ## Tips for Success
 
@@ -137,7 +140,16 @@ unzip -j input.jar "path/to/resource" -d output_directory/
 6. **Preserve package structure** - Keep `gg.squire.*` package naming
 
 ## Git Branch
-Working branch: `claude/create-regions-walkability-file-01ST3f8cdpAeaZNWFQJw13g6`
+Working branch: `claude/squire-decompilation-01DrJZqeyaZ42BEoa7ktJTWL`
+
+## Session Summary (Dec 5, 2025)
+- Deployed 8 parallel agents to deobfuscate remaining plugins
+- All 4 priority plugins fully deobfuscated:
+  - Barrows: 29 files → clean classes, enums, and tasks
+  - Miner: 50 files → MLM support, mining activities
+  - Mixology: 23 files → potion types, herb tiers
+  - Basics: 100+ files → combat, magic, skilling utilities
+- 101 files changed, 10,674 insertions, 2,390 deletions
 
 ---
 
