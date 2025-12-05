@@ -1,0 +1,2 @@
+Summary for /home/user/Squire/DeobfuscatedProject/repository2/runelite-jshell-1.1.12-SNAPSHOT.jar
+Decompiled with CFR 0.152
